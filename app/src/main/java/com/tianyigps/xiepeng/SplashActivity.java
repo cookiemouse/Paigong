@@ -21,7 +21,7 @@ public class SplashActivity extends Activity {
 
     private SharedpreferenceManager mSharedpreferenceManager;
 
-    private static final int DELAY = 4000;
+    private static final int DELAY = 500;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +67,7 @@ public class SplashActivity extends Activity {
                     return;
                 }
                 toWorker();
+//                toManager();
             }
         };
     }

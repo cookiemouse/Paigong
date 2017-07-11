@@ -5,4 +5,24 @@
     <color name="colorAccent">#FF4081</color>
 
     <color name="color_cut_line">#e2f3ff</color>
+
+    <!--原有色彩-->
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="colorBlack">#000000</color>
+    <color name="colorGrayBlack">#222222</color>
+    <color name="colorLoginGray">#656b81</color>
+    <color name="colorText">#656b81</color>
+    <color name="colorTextSelect">#3cabfa</color>
+    <color name="colorLine">#c9c9c9</color>
+    <color name="material_green_300">#42bd41</color>
+    <color name="material_light_blue_a700">#0091ea</color>
+    <color name="material_light_blue_a100">#80d8ff</color>
+    <color name="material_red_300">#f36c60</color>
+    <color name="textbluecolor">#017CFC</color>
+
+    <!-- <color name="main_red">#E44C36</color> -->
+    <color name="main_red">#E72020</color>
+
+    <color name="text_color_dialog">#ffffff</color>
+
 </resources>

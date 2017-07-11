@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_item">
+
+    <TextView
+        android:id="@+id/tv_adapter_pending_order"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:lines="1"
+        android:text="@string/app_name"
+        android:textColor="@color/colorGrayBlack"
+        android:textSize="@dimen/sp_20" />
+
+    <ImageView
+        android:id="@+id/iv_adapter_pending_name"
+        android:layout_width="@dimen/dp_48"
+        android:layout_height="@dimen/dp_48"
+        android:layout_marginTop="@dimen/dp_8"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/tv_adapter_pending_order"
+        app:srcCompat="@mipmap/ic_launcher" />
+
+    <TextView
+        android:id="@+id/tv_adapter_pending_name"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dp_48"
+        android:layout_below="@+id/tv_adapter_pending_order"
+        android:layout_marginLeft="@dimen/dp_2"
+        android:layout_marginRight="@dimen/dp_2"
+        android:layout_marginTop="@dimen/dp_8"
+        android:layout_toEndOf="@+id/iv_adapter_pending_name"
+        android:layout_toRightOf="@+id/iv_adapter_pending_name"
+        android:gravity="center"
+        android:lines="1"
+        android:text="TextView"
+        android:textSize="@dimen/sp_18" />
+
+    <ImageView
+        android:id="@+id/iv_adapter_pending_call"
+        android:layout_width="@dimen/dp_48"
+        android:layout_height="@dimen/dp_48"
+        android:layout_marginTop="@dimen/dp_8"
+        android:layout_below="@+id/tv_adapter_pending_order"
+        android:layout_toEndOf="@+id/tv_adapter_pending_name"
+        android:layout_toRightOf="@+id/tv_adapter_pending_name"
+        app:srcCompat="@mipmap/ic_launcher" />
+
+    <ImageView
+        android:id="@+id/iv_adapter_pending_locate"
+        android:layout_width="@dimen/dp_48"
+        android:layout_height="@dimen/dp_48"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/iv_adapter_pending_name"
+        android:layout_marginTop="@dimen/dp_8"
+        app:srcCompat="@mipmap/ic_launcher" />
+
+    <TextView
+        android:id="@+id/tv_adapter_pending_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:lines="1"
+        android:layout_alignTop="@+id/iv_adapter_pending_locate"
+        android:layout_toEndOf="@+id/iv_adapter_pending_locate"
+        android:layout_toRightOf="@+id/iv_adapter_pending_locate"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/tv_adapter_pending_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:lines="1"
+        android:layout_alignBottom="@+id/iv_adapter_pending_locate"
+        android:layout_toEndOf="@+id/iv_adapter_pending_locate"
+        android:layout_toRightOf="@+id/iv_adapter_pending_locate"
+        android:text="TextView" />
+
+    <ImageView
+        android:layout_width="@dimen/dp_48"
+        android:layout_height="@dimen/dp_48"
+        android:layout_marginTop="@dimen/dp_8"
+        app:srcCompat="@mipmap/ic_launcher"
+        android:layout_below="@+id/iv_adapter_pending_locate"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/iv_adapter_pending_setting" />
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/iv_adapter_pending_setting"
+        android:layout_toRightOf="@+id/iv_adapter_pending_setting"
+        android:layout_toEndOf="@+id/iv_adapter_pending_setting"
+        android:id="@+id/tv_adapter_pending_order_type" />
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_adapter_pending_setting_content"
+        android:layout_alignBottom="@+id/iv_adapter_pending_setting"
+        android:layout_toRightOf="@+id/iv_adapter_pending_setting"
+        android:layout_toEndOf="@+id/iv_adapter_pending_setting" />
+
+    <TextView
+        android:text="@string/sign"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_8"
+        android:layout_below="@+id/tv_adapter_pending_setting_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:background="@drawable/bg_sign"
+        android:id="@+id/btn_adapter_pending_sign" />
+
+</RelativeLayout>
