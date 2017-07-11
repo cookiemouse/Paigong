@@ -1,6 +1,10 @@
 package com.tianyigps.xiepeng.adapter;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.tianyigps.xiepeng.R;
+import com.tianyigps.xiepeng.activity.LocateActivity;
 import com.tianyigps.xiepeng.data.AdapterPendingData;
 
 import java.util.List;
@@ -49,7 +54,7 @@ public class PendingAdapter extends BaseAdapter {
 
         ViewHolder viewHolder = null;
 
-        if (null == view){
+        if (null == view) {
             viewHolder = new ViewHolder();
             view = LayoutInflater.from(context).inflate(R.layout.adapter_pending, null);
 
@@ -64,7 +69,7 @@ public class PendingAdapter extends BaseAdapter {
             viewHolder.buttonSign = view.findViewById(R.id.btn_adapter_pending_sign);
 
             view.setTag(viewHolder);
-        }else {
+        } else {
             viewHolder = (ViewHolder) view.getTag();
         }
 
@@ -80,6 +85,10 @@ public class PendingAdapter extends BaseAdapter {
             public void onClick(View view) {
                 // TODO: 2017/7/11 拨打电话
 //                data.getPhoneNumber();
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_DIAL);
+                intent.setData(Uri.parse("tel:" + "123456789"));
+                context.startActivity(intent);
             }
         });
 
@@ -87,13 +96,15 @@ public class PendingAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 // TODO: 2017/7/11 定位
+                Intent intent = new Intent(context, LocateActivity.class);
+                context.startActivity(intent);
             }
         });
 
         viewHolder.buttonSign.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: 2017/7/11 签到
+                showSignDialog();
             }
         });
 
@@ -107,10 +118,32 @@ public class PendingAdapter extends BaseAdapter {
         return view;
     }
 
-    private class ViewHolder{
+    private class ViewHolder {
         private ImageView imageViewCall, imageViewLocate;
-        private TextView textViewOrder, textViewName, textViewTime
-                , textViewAddress, textViewOrderType, textViewOrderContent;
+        private TextView textViewOrder, textViewName, textViewTime, textViewAddress, textViewOrderType, textViewOrderContent;
         private TextView buttonSign;
+    }
+
+    //  确认签到对话框
+    private void showSignDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        View viewDialog = LayoutInflater.from(context).inflate(R.layout.layout_dialog_sign, null);
+        TextView textViewEnsure = viewDialog.findViewById(R.id.tv_layout_dialog_sign_ensure);
+        TextView textViewCancel = viewDialog.findViewById(R.id.tv_layout_dialog_sign_cancel);
+        textViewEnsure.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO: 2017/7/11 确认 [
+            }
+        });
+        textViewCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO: 2017/7/11 取消
+            }
+        });
+        builder.setView(viewDialog);
+        Dialog dialog = builder.create();
+        dialog.show();
     }
 }

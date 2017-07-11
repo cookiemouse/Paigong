@@ -7,20 +7,55 @@
     android:orientation="vertical"
     tools:context="com.tianyigps.xiepeng.base.BaseActivity">
 
-    <FrameLayout
+    <RelativeLayout
         android:id="@+id/fl_activity_base_title"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_64"
+        android:layout_height="@dimen/dp_72"
+        android:background="@color/material_light_blue_a700"
         android:clipToPadding="true"
         android:fitsSystemWindows="true"
-        android:background="@color/material_light_blue_a700">
-    </FrameLayout>
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/iv_activity_base_left"
+            android:layout_width="@dimen/dp_48"
+            android:layout_height="@dimen/dp_48"
+            android:layout_marginBottom="@dimen/dp_4"
+            android:padding="@dimen/dp_2"
+            android:src="@color/colorAccent"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <ImageView
+            android:id="@+id/iv_activity_base_right"
+            android:layout_width="@dimen/dp_48"
+            android:layout_height="@dimen/dp_48"
+            android:baselineAlignBottom="true"
+            android:padding="@dimen/dp_2"
+            android:layout_marginBottom="@dimen/dp_4"
+            android:src="@color/colorAccent"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+
+        <TextView
+            android:id="@+id/tv_activity_base_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/app_name"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/sp_18"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="11dp" />
+
+    </RelativeLayout>
 
     <FrameLayout
         android:id="@+id/fl_activity_base_content"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
-    </FrameLayout>
+        android:layout_weight="1"></FrameLayout>
 
 </LinearLayout>

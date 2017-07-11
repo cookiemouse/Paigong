@@ -59,7 +59,6 @@ public class PendingFragment extends Fragment {
         mListView = view.findViewById(R.id.lv_fragment_pending);
 
         mEditTextSearch.clearFocus();
-        mEditTextSearch.setCursorVisible(false);
 
         mSwipeRefreshLayout.setColorSchemeColors(0xff3cabfa);
 
