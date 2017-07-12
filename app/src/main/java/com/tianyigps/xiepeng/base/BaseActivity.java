@@ -43,7 +43,7 @@ public class BaseActivity extends Activity {
         mImageViewRight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (null == mOnTitleRightClickListener){
+                if (null == mOnTitleRightClickListener) {
                     return;
                 }
                 mOnTitleRightClickListener.onClick();
@@ -57,6 +57,7 @@ public class BaseActivity extends Activity {
         View.inflate(this, layoutResID, mFrameLayout);
         onContentChanged();
     }
+
     @Override
     public void setContentView(View view) {
         mFrameLayout.removeAllViews();
@@ -71,11 +72,20 @@ public class BaseActivity extends Activity {
         onContentChanged();
     }
 
-    public interface OnTitleRightClickListener{
+    public interface OnTitleRightClickListener {
         void onClick();
     }
 
-    public void setOnTitleRightClickListener(OnTitleRightClickListener listener){
+    public void setOnTitleRightClickListener(OnTitleRightClickListener listener) {
         this.mOnTitleRightClickListener = listener;
+    }
+
+    //  设置标题右按钮是否可见
+    public void setTitleRightButtonVisibilite(boolean visibilite) {
+        if (visibilite) {
+            mImageViewRight.setVisibility(View.VISIBLE);
+            return;
+        }
+        mImageViewRight.setVisibility(View.GONE);
     }
 }

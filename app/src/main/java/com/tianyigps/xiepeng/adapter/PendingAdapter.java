@@ -13,7 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.tianyigps.xiepeng.R;
-import com.tianyigps.xiepeng.activity.LocateActivity;
+import com.tianyigps.xiepeng.activity.OrderDetailsActivity;
 import com.tianyigps.xiepeng.data.AdapterPendingData;
 
 import java.util.List;
@@ -96,8 +96,6 @@ public class PendingAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 // TODO: 2017/7/11 定位
-                Intent intent = new Intent(context, LocateActivity.class);
-                context.startActivity(intent);
             }
         });
 
@@ -112,6 +110,8 @@ public class PendingAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 // TODO: 2017/7/11 Item点击事件
+                Intent intent = new Intent(context, OrderDetailsActivity.class);
+                context.startActivity(intent);
             }
         });
 
@@ -130,6 +130,8 @@ public class PendingAdapter extends BaseAdapter {
         View viewDialog = LayoutInflater.from(context).inflate(R.layout.layout_dialog_sign, null);
         TextView textViewEnsure = viewDialog.findViewById(R.id.tv_layout_dialog_sign_ensure);
         TextView textViewCancel = viewDialog.findViewById(R.id.tv_layout_dialog_sign_cancel);
+        builder.setView(viewDialog);
+        final Dialog dialog = builder.create();
         textViewEnsure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -140,10 +142,9 @@ public class PendingAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 // TODO: 2017/7/11 取消
+                dialog.dismiss();
             }
         });
-        builder.setView(viewDialog);
-        Dialog dialog = builder.create();
         dialog.show();
     }
 }

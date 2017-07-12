@@ -1,5 +1,6 @@
 package com.tianyigps.xiepeng.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -14,6 +15,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.tianyigps.xiepeng.R;
+import com.tianyigps.xiepeng.activity.LocateActivity;
 import com.tianyigps.xiepeng.adapter.PendingAdapter;
 import com.tianyigps.xiepeng.data.AdapterPendingData;
 
@@ -92,6 +94,14 @@ public class OrderFragment extends Fragment {
                 return mListView.getChildCount() > 0 &&
                         (mListView.getFirstVisiblePosition() > 0
                                 || mListView.getChildAt(0).getTop() < mListView.getPaddingTop());
+            }
+        });
+
+        mImageViewTitleRight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), LocateActivity.class);
+                startActivity(intent);
             }
         });
     }
