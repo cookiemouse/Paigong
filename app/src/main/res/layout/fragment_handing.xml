@@ -44,7 +44,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="@dimen/dp_8"
                     android:layout_marginRight="@dimen/dp_8"
-                    android:background="@color/colorBlack" />
+                    android:background="@color/color_cut_line" />
 
                 <TextView
                     android:id="@+id/tv_fragment_handing_manager"

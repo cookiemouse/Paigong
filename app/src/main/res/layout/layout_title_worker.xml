@@ -7,14 +7,15 @@
     android:paddingLeft="@dimen/dp_2"
     android:paddingRight="@dimen/dp_2"
     android:paddingBottom="@dimen/dp_2"
-    android:background="@android:color/transparent">
+    android:background="@color/colorNull">
 
     <ImageView
         android:id="@+id/iv_layout_title_worker_right"
-        android:layout_width="@dimen/dp_48"
+        android:layout_width="@dimen/dp_32"
         android:layout_height="@dimen/dp_48"
-        android:padding="@dimen/dp_2"
-        android:src="@color/colorAccent"
+        android:layout_marginRight="@dimen/dp_8"
+        android:layout_marginEnd="@dimen/dp_8"
+        android:src="@drawable/ic_locate"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />

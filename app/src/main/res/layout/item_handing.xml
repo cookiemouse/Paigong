@@ -22,7 +22,7 @@
         android:layout_height="@dimen/dp_1"
         android:layout_below="@+id/tv_item_handing_number"
         android:layout_marginTop="@dimen/dp_8"
-        android:background="@color/colorBlack" />
+        android:background="@color/color_cut_line" />
 
     <TextView
         android:id="@+id/tv_item_handing_time"
@@ -83,7 +83,7 @@
                 android:id="@+id/iv_item_handing_phone"
                 android:layout_width="@dimen/dp_32"
                 android:layout_height="@dimen/dp_32"
-                android:src="@color/colorAccent" />
+                android:src="@drawable/ic_phone_blue" />
 
             <TextView
                 android:id="@+id/tv_item_handing_phone_name"
@@ -105,7 +105,7 @@
                 android:id="@+id/iv_item_handing_start"
                 android:layout_width="@dimen/dp_32"
                 android:layout_height="@dimen/dp_32"
-                android:src="@color/colorAccent" />
+                android:src="@drawable/ic_start_blue" />
 
             <TextView
                 android:layout_width="wrap_content"

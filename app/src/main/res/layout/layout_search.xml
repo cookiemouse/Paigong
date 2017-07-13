@@ -19,7 +19,7 @@
         android:layout_width="@dimen/dp_32"
         android:layout_height="@dimen/dp_32"
         android:layout_marginRight="@dimen/dp_8"
-        android:src="@color/colorAccent"
+        android:src="@drawable/ic_search_gray"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
