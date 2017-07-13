@@ -8,6 +8,7 @@
 
     <!--原有色彩-->
     <color name="colorWhite">#FFFFFF</color>
+    <color name="colorGrayWhite">#eeeeee</color>
     <color name="colorBlack">#000000</color>
     <color name="colorGrayBlack">#222222</color>
     <color name="colorLoginGray">#656b81</color>
