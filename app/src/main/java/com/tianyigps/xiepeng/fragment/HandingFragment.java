@@ -1,10 +1,13 @@
 package com.tianyigps.xiepeng.fragment;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +25,9 @@ import java.util.List;
  * Created by djc on 2017/7/13.
  */
 
-public class HandingFragment extends Fragment {
+public class HandingFragment extends Fragment implements View.OnClickListener {
+
+    private final static String TAG = "HandingFragment";
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private TextView mTextViewHead, mTextViewManager;
@@ -42,6 +47,23 @@ public class HandingFragment extends Fragment {
         setEventListener();
 
         return viewRoot;
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.tv_fragment_handing_head: {
+                toCall("1234567890");
+                break;
+            }
+            case R.id.tv_fragment_handing_manager: {
+                toCall("1234567891");
+                break;
+            }
+            default: {
+                Log.i(TAG, "onClick: default");
+            }
+        }
     }
 
     private void init(View view) {
@@ -69,6 +91,10 @@ public class HandingFragment extends Fragment {
     }
 
     private void setEventListener() {
+
+        mTextViewHead.setOnClickListener(this);
+        mTextViewManager.setOnClickListener(this);
+
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -91,5 +117,13 @@ public class HandingFragment extends Fragment {
                                 || mListViewHanding.getChildAt(0).getTop() < mListViewHanding.getPaddingTop());
             }
         });
+    }
+
+    //  拨打电话
+    private void toCall(String number) {
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_DIAL);
+        intent.setData(Uri.parse("tel:" + number));
+        startActivity(intent);
     }
 }

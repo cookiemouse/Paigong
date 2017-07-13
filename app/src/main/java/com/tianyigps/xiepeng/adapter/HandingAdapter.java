@@ -59,6 +59,7 @@ public class HandingAdapter extends BaseAdapter {
             viewHolder.textViewId = contentView.findViewById(R.id.tv_item_handing_id);
             viewHolder.textViewNumber = contentView.findViewById(R.id.tv_item_handing_number);
             viewHolder.textViewPhoneName = contentView.findViewById(R.id.tv_item_handing_phone_name);
+            viewHolder.textViewModify = contentView.findViewById(R.id.tv_item_handing_modify);
 
             viewHolder.imageViewCall = contentView.findViewById(R.id.iv_item_handing_phone);
             viewHolder.imageViewStart = contentView.findViewById(R.id.iv_item_handing_start);
@@ -74,6 +75,12 @@ public class HandingAdapter extends BaseAdapter {
         viewHolder.textViewId.setText(data.getId());
         viewHolder.textViewNumber.setText("安装：有线" + data.getOnline() + "个，无线" + data.getLineless() + "个");
         viewHolder.textViewPhoneName.setText(data.getCallName());
+
+        if (data.isModify()) {
+            viewHolder.textViewModify.setVisibility(View.VISIBLE);
+        } else {
+            viewHolder.textViewModify.setVisibility(View.GONE);
+        }
 
         viewHolder.imageViewCall.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,7 +104,7 @@ public class HandingAdapter extends BaseAdapter {
     }
 
     private class ViewHolder {
-        private TextView textViewName, textViewTime, textViewAddress, textViewId, textViewNumber, textViewPhoneName;
+        private TextView textViewName, textViewTime, textViewAddress, textViewId, textViewNumber, textViewPhoneName, textViewModify;
         private ImageView imageViewCall, imageViewStart;
     }
 }

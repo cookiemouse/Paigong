@@ -1,5 +1,6 @@
 package com.tianyigps.xiepeng.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,6 +26,10 @@ import com.tianyigps.xiepeng.R;
 import com.tianyigps.xiepeng.base.BaseActivity;
 import com.tianyigps.xiepeng.manager.LocateManager;
 import com.tianyigps.xiepeng.utils.TimerU;
+
+import static com.tianyigps.xiepeng.data.Data.DATA_SCANNER;
+import static com.tianyigps.xiepeng.data.Data.DATA_SCANNER_REQUEST;
+import static com.tianyigps.xiepeng.data.Data.DATA_SCANNER_RESULT;
 
 public class LocateActivity extends BaseActivity implements View.OnClickListener {
 
@@ -73,10 +78,20 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == DATA_SCANNER_REQUEST && resultCode == DATA_SCANNER_RESULT){
+            Log.i(TAG, "onActivityResult: qrcode-->" + data.getStringExtra(DATA_SCANNER));
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_activity_locate_imei: {
                 // TODO: 2017/7/12 跳转到二维码页面
+                Intent intent = new Intent(LocateActivity.this, ScannerActivity.class);
+                startActivityForResult(intent, DATA_SCANNER_REQUEST);
                 break;
             }
             case R.id.iv_layout_map_control_locate: {

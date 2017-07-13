@@ -117,4 +117,16 @@
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/tv_item_handing_modify"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_8"
+        android:layout_alignTop="@+id/tv_item_handing_time"
+        android:layout_toEndOf="@+id/tv_item_handing_time"
+        android:layout_toRightOf="@+id/tv_item_handing_time"
+        android:visibility="gone"
+        android:text="@string/modify"
+        android:textColor="@color/colorRed"/>
+
 </RelativeLayout>

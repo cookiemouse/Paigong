@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Paigong</string>
     <string name="mine">我的</string>
-    <string name="history_order">历史订单</string>
+    <string name="handled_order">完成订单</string>
     <string name="handling">进行中</string>
     <string name="order_task">订单任务</string>
     <string name="handled">已处理</string>
@@ -11,4 +11,5 @@
     <string name="satellite">卫星</string>
     <string name="map">地图</string>
     <string name="start">开始</string>
+    <string name="modify">(改)</string>
 </resources>

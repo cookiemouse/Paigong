@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.tianyigps.xiepeng.R;
 import com.tianyigps.xiepeng.fragment.HandingFragment;
+import com.tianyigps.xiepeng.fragment.HandledFragment;
 import com.tianyigps.xiepeng.fragment.OrderFragment;
 
 public class WorkerFragmentContentActivity extends AppCompatActivity implements View.OnClickListener {
@@ -30,6 +31,7 @@ public class WorkerFragmentContentActivity extends AppCompatActivity implements 
 
     private OrderFragment mOrderFragment;
     private HandingFragment mHandingFragment;
+    private HandledFragment mHandledFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +72,8 @@ public class WorkerFragmentContentActivity extends AppCompatActivity implements 
             case R.id.ll_fragment_content_bottom_history: {
                 mImageViewHistory.setImageResource(R.drawable.ic_tab_history_selected);
                 mTextViewHistory.setTextColor(getResources().getColor(R.color.colorTextSelect));
+
+                showFragment(mHandledFragment);
                 break;
             }
             case R.id.ll_fragment_content_bottom_mine: {
@@ -106,6 +110,7 @@ public class WorkerFragmentContentActivity extends AppCompatActivity implements 
 
         mOrderFragment = new OrderFragment();
         mHandingFragment = new HandingFragment();
+        mHandledFragment = new HandledFragment();
 
         showFragment(mOrderFragment);
     }

@@ -15,7 +15,7 @@
         android:gravity="center"/>
 
     <ImageView
-        android:id="@+id/iv_fragment_search"
+        android:id="@+id/iv_layout_search"
         android:layout_width="@dimen/dp_32"
         android:layout_height="@dimen/dp_32"
         android:layout_marginRight="@dimen/dp_8"

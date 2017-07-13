@@ -53,7 +53,7 @@ public class PendingFragment extends Fragment {
         mSwipeRefreshLayout = view.findViewById(R.id.srl_fragment_pending);
         mImageViewTitleLeft = view.findViewById(R.id.iv_layout_title_manager_left);
         mImageViewTitleRight = view.findViewById(R.id.iv_layout_title_manager_right);
-        mImageViewSearch = view.findViewById(R.id.iv_fragment_search);
+        mImageViewSearch = view.findViewById(R.id.iv_layout_search);
         mEditTextSearch = view.findViewById(R.id.et_layout_search);
         mTextViewTitle = view.findViewById(R.id.tv_layout_title_manager_middle);
         mListView = view.findViewById(R.id.lv_fragment_pending);

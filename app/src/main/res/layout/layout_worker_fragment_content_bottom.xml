@@ -90,7 +90,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/dp_2"
-                android:text="@string/history_order"
+                android:text="@string/handled_order"
                 android:textSize="12sp" />
         </LinearLayout>
 
