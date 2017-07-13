@@ -14,6 +14,9 @@
     <color name="colorText">#656b81</color>
     <color name="colorTextSelect">#3cabfa</color>
     <color name="colorLine">#c9c9c9</color>
+    <color name="colorBlue">#017CFC</color>
+
+    <color name="colorNull">#00000000</color>
 
     <color name="colorAlphaBlue">#a80091ea</color>
 

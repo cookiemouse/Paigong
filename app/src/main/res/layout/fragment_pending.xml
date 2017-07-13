@@ -32,7 +32,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="@dimen/dp_8"
                 android:scrollbars="none"
-                android:divider="#00000000"
+                android:divider="@color/colorNull"
                 android:dividerHeight="@dimen/dp_8"
                 >
             </ListView>

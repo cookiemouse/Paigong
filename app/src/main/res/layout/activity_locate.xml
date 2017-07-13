@@ -42,7 +42,7 @@
             android:layout_marginLeft="@dimen/dp_4"
             android:layout_marginRight="@dimen/dp_16"
             android:layout_marginStart="@dimen/dp_4"
-            app:srcCompat="@mipmap/ic_launcher" />
+            android:src="@mipmap/ic_launcher" />
 
     </LinearLayout>
 

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_item">
+
+    <TextView
+        android:id="@+id/tv_item_handing_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_8"
+        android:layout_marginRight="@dimen/dp_8"
+        android:lines="1"
+        android:text="@string/app_name"
+        android:textColor="@color/colorGrayBlack"
+        android:textSize="@dimen/sp_20" />
+
+    <View
+        android:id="@+id/line_item_handing_1"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_1"
+        android:layout_below="@+id/tv_item_handing_number"
+        android:layout_marginTop="@dimen/dp_8"
+        android:background="@color/colorBlack" />
+
+    <TextView
+        android:id="@+id/tv_item_handing_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tv_item_handing_name"
+        android:layout_alignStart="@+id/tv_item_handing_name"
+        android:layout_below="@+id/tv_item_handing_name"
+        android:layout_marginTop="@dimen/dp_8"
+        android:text="time" />
+
+    <TextView
+        android:id="@+id/tv_item_handing_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tv_item_handing_time"
+        android:layout_alignStart="@+id/tv_item_handing_time"
+        android:layout_below="@+id/tv_item_handing_time"
+        android:text="address" />
+
+    <TextView
+        android:id="@+id/tv_item_handing_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tv_item_handing_address"
+        android:layout_alignStart="@+id/tv_item_handing_address"
+        android:layout_below="@+id/tv_item_handing_address"
+        android:layout_marginTop="@dimen/dp_8"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/tv_item_handing_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tv_item_handing_id"
+        android:layout_alignStart="@+id/tv_item_handing_id"
+        android:layout_below="@+id/tv_item_handing_id"
+        android:text="TextView" />
+
+    <LinearLayout
+        android:id="@+id/ll_item_handing_"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/line_item_handing_1"
+        android:layout_marginTop="@dimen/dp_8"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/iv_item_handing_phone"
+                android:layout_width="@dimen/dp_32"
+                android:layout_height="@dimen/dp_32"
+                android:src="@color/colorAccent" />
+
+            <TextView
+                android:id="@+id/tv_item_handing_phone_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_4"
+                android:text="@string/app_name" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/iv_item_handing_start"
+                android:layout_width="@dimen/dp_32"
+                android:layout_height="@dimen/dp_32"
+                android:src="@color/colorAccent" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_4"
+                android:text="@string/start" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

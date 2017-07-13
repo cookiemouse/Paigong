@@ -6,50 +6,50 @@
     android:padding="@dimen/dp_24">
 
     <TextView
-        android:text="@string/satellite"
+        android:id="@+id/tv_layout_map_control_satellite"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_map_control"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
         android:layout_marginTop="@dimen/dp_16"
-        android:id="@+id/tv_layout_map_control_satellite" />
+        android:background="@drawable/bg_map_control"
+        android:text="@string/satellite" />
 
     <TextView
-        android:text="@string/map"
+        android:id="@+id/tv_layout_map_control_normal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="@dimen/dp_1"
-        android:background="@drawable/bg_map_control_select"
         android:layout_alignTop="@+id/tv_layout_map_control_satellite"
+        android:layout_marginRight="@dimen/dp_1"
         android:layout_toLeftOf="@+id/tv_layout_map_control_satellite"
         android:layout_toStartOf="@+id/tv_layout_map_control_satellite"
-        android:id="@+id/tv_layout_map_control_normal" />
+        android:background="@drawable/bg_map_control_select"
+        android:text="@string/map" />
 
     <TextView
         android:id="@+id/tv_layout_map_control_flush"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal"
         android:background="@color/material_light_blue_a700"
-        android:paddingTop="@dimen/dp_8"
         android:paddingBottom="@dimen/dp_8"
         android:paddingLeft="@dimen/dp_64"
         android:paddingRight="@dimen/dp_64"
+        android:paddingTop="@dimen/dp_8"
         android:text="TextView"
         android:textColor="@color/colorWhite"
-        android:textSize="@dimen/sp_18"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:textSize="@dimen/sp_18" />
 
     <ImageView
+        android:id="@+id/iv_layout_map_control_locate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@mipmap/ic_launcher"
-        android:id="@+id/iv_layout_map_control_locate"
-        android:layout_marginBottom="@dimen/dp_16"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="@dimen/dp_8"
+        android:src="@mipmap/ic_launcher" />
 </RelativeLayout>

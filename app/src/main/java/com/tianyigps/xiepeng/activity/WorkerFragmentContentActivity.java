@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.tianyigps.xiepeng.R;
+import com.tianyigps.xiepeng.fragment.HandingFragment;
 import com.tianyigps.xiepeng.fragment.OrderFragment;
 
 public class WorkerFragmentContentActivity extends AppCompatActivity implements View.OnClickListener {
@@ -28,6 +29,7 @@ public class WorkerFragmentContentActivity extends AppCompatActivity implements 
     private TextView mTextViewOrder, mTextViewHandling, mTextViewHistory, mTextViewMine;
 
     private OrderFragment mOrderFragment;
+    private HandingFragment mHandingFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,11 +56,15 @@ public class WorkerFragmentContentActivity extends AppCompatActivity implements 
             case R.id.ll_fragment_content_bottom_order: {
                 mImageViewOrder.setImageResource(R.drawable.ic_tab_task_selected);
                 mTextViewOrder.setTextColor(getResources().getColor(R.color.colorTextSelect));
+
+                showFragment(mOrderFragment);
                 break;
             }
             case R.id.ll_fragment_content_bottom_handling: {
                 mImageViewHandling.setImageResource(R.drawable.ic_tab_doing_selected);
                 mTextViewHandling.setTextColor(getResources().getColor(R.color.colorTextSelect));
+
+                showFragment(mHandingFragment);
                 break;
             }
             case R.id.ll_fragment_content_bottom_history: {
@@ -99,6 +105,8 @@ public class WorkerFragmentContentActivity extends AppCompatActivity implements 
         mTextViewOrder.setTextColor(getResources().getColor(R.color.colorTextSelect));
 
         mOrderFragment = new OrderFragment();
+        mHandingFragment = new HandingFragment();
+
         showFragment(mOrderFragment);
     }
 

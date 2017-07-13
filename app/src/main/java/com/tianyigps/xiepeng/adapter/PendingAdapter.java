@@ -56,7 +56,7 @@ public class PendingAdapter extends BaseAdapter {
 
         if (null == view) {
             viewHolder = new ViewHolder();
-            view = LayoutInflater.from(context).inflate(R.layout.adapter_pending, null);
+            view = LayoutInflater.from(context).inflate(R.layout.item_pending, null);
 
             viewHolder.imageViewCall = view.findViewById(R.id.iv_adapter_pending_call);
             viewHolder.imageViewLocate = view.findViewById(R.id.iv_adapter_pending_locate);
