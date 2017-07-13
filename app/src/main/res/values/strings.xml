@@ -6,10 +6,11 @@
     <string name="order_task">订单任务</string>
     <string name="handled">已处理</string>
     <string name="pending">待处理</string>
-    <string name="sign">签 到</string>
+    <string name="sign">签到</string>
     <string name="imei_number">IMEI号：</string>
     <string name="satellite">卫星</string>
     <string name="map">地图</string>
     <string name="start">开始</string>
     <string name="modify">(改)</string>
+    <string name="look_map">查看地图</string>
 </resources>

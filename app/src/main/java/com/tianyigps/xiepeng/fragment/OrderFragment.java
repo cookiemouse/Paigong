@@ -16,8 +16,8 @@ import android.widget.TextView;
 
 import com.tianyigps.xiepeng.R;
 import com.tianyigps.xiepeng.activity.LocateActivity;
-import com.tianyigps.xiepeng.adapter.PendingAdapter;
-import com.tianyigps.xiepeng.data.AdapterPendingData;
+import com.tianyigps.xiepeng.adapter.OrderAdapter;
+import com.tianyigps.xiepeng.data.AdapterOrderData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,8 +35,8 @@ public class OrderFragment extends Fragment {
     private EditText mEditTextSearch;
     private ListView mListView;
 
-    private List<AdapterPendingData> mAdapterPendingDataList;
-    private PendingAdapter mPendingAdapter;
+    private List<AdapterOrderData> mAdapterOrderDataList;
+    private OrderAdapter mOrderAdapter;
 
     @Nullable
     @Override
@@ -62,15 +62,21 @@ public class OrderFragment extends Fragment {
 
         mSwipeRefreshLayout.setColorSchemeColors(0xff3cabfa);
 
-        mAdapterPendingDataList = new ArrayList<>();
+        mAdapterOrderDataList = new ArrayList<>();
         for (int i = 0; i < 6; i++) {
-            mAdapterPendingDataList.add(new AdapterPendingData("order", "name", "phoneNumber", "time"
-                    , "address", "orderType", i, 2));
+            mAdapterOrderDataList.add(new AdapterOrderData("万惠南宁"
+                    , "2017-01-02 17:30"
+                    , "上海市浦东区东方路985号一百杉杉大厦"
+                    , "TY2017010215542001"
+                    , "南柱赫"
+                    , "1234567890"
+                    , "orderType"
+                    , i, 2));
         }
 
-        mPendingAdapter = new PendingAdapter(getContext(), mAdapterPendingDataList);
+        mOrderAdapter = new OrderAdapter(getContext(), mAdapterOrderDataList);
 
-        mListView.setAdapter(mPendingAdapter);
+        mListView.setAdapter(mOrderAdapter);
     }
 
     private void setEventListener() {
