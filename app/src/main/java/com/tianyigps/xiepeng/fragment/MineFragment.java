@@ -15,7 +15,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.tianyigps.xiepeng.R;
-import com.tianyigps.xiepeng.activity.ModifyPasswordActivity;
+import com.tianyigps.xiepeng.activity.LoginActivity;
 import com.tianyigps.xiepeng.activity.StatisticsActivity;
 import com.tianyigps.xiepeng.adapter.MineAdapter;
 import com.tianyigps.xiepeng.data.AdapterMineData;
@@ -102,7 +102,8 @@ public class MineFragment extends Fragment {
                     }
                     case 1: {
                         // TODO: 2017/7/13 修改密码
-                        Intent intent = new Intent(getContext(), ModifyPasswordActivity.class);
+//                        Intent intent = new Intent(getContext(), ModifyPasswordActivity.class);
+                        Intent intent = new Intent(getContext(), LoginActivity.class);
                         startActivity(intent);
                         break;
                     }
