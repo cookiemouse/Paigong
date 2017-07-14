@@ -27,11 +27,13 @@ import java.util.List;
 public class PendingFragment extends Fragment {
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    private ImageView mImageViewTitleLeft, mImageViewTitleRight;
-    private TextView mTextViewTitle;
     private ImageView mImageViewSearch;
     private EditText mEditTextSearch;
     private ListView mListView;
+
+    //  标题栏
+    private ImageView mImageViewTitleLeft, mImageViewTitleRight;
+    private TextView mTextViewTitle;
 
     private List<AdapterPendingData> mAdapterPendingDataList;
     private PendingAdapter mPendingAdapter;
@@ -50,12 +52,14 @@ public class PendingFragment extends Fragment {
     }
 
     private void init(View view) {
+        mImageViewTitleLeft = view.findViewById(R.id.iv_layout_title_base_left);
+        mImageViewTitleRight = view.findViewById(R.id.iv_layout_title_base_right);
+        mTextViewTitle = view.findViewById(R.id.tv_layout_title_base_middle);
+        initTitle();
+
         mSwipeRefreshLayout = view.findViewById(R.id.srl_fragment_pending);
-        mImageViewTitleLeft = view.findViewById(R.id.iv_layout_title_manager_left);
-        mImageViewTitleRight = view.findViewById(R.id.iv_layout_title_manager_right);
         mImageViewSearch = view.findViewById(R.id.iv_layout_search);
         mEditTextSearch = view.findViewById(R.id.et_layout_search);
-        mTextViewTitle = view.findViewById(R.id.tv_layout_title_manager_middle);
         mListView = view.findViewById(R.id.lv_fragment_pending);
 
         mEditTextSearch.clearFocus();
@@ -71,6 +75,12 @@ public class PendingFragment extends Fragment {
         mPendingAdapter = new PendingAdapter(getContext(), mAdapterPendingDataList);
 
         mListView.setAdapter(mPendingAdapter);
+    }
+
+    private void initTitle() {
+        mTextViewTitle.setText(R.string.pending);
+        mImageViewTitleLeft.setImageResource(R.drawable.ic_switch_account);
+        mImageViewTitleRight.setVisibility(View.GONE);
     }
 
     private void setEventListener() {
