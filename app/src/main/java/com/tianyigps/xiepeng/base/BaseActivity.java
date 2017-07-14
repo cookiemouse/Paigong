@@ -40,7 +40,7 @@ public class BaseActivity extends Activity {
         mTextViewTitle = findViewById(R.id.tv_layout_title_base_middle);
         mLinearLayoutTitleAll = findViewById(R.id.ll_layout_title_base_all);
 
-        this.setTitleBackground(R.color.material_light_blue_a700);
+        this.setTitleBackground(R.color.colorBlueTheme);
         this.setTitleRightButtonVisibilite(false);
         mImageViewLeft.setImageResource(R.drawable.ic_back);
 
@@ -108,6 +108,10 @@ public class BaseActivity extends Activity {
     //  设置标题内容
     public void setTitleText(String title) {
         mTextViewTitle.setText(title);
+    }
+
+    public void setTitleText(int title) {
+        mTextViewTitle.setText(getResources().getText(title));
     }
 
     //  设置标题栏背景

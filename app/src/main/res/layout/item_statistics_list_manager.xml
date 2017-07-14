@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingBottom="@dimen/dp_16"
+    android:paddingTop="@dimen/dp_16">
+
+    <TextView
+        android:id="@+id/tv_item_statistics_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:text="@string/engineer" />
+
+    <TextView
+        android:id="@+id/tv_item_statistics_door"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="@string/door" />
+
+    <TextView
+        android:id="@+id/tv_item_statistics_car_number"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="@string/car" />
+
+    <TextView
+        android:id="@+id/tv_item_statistics_online"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="@string/online" />
+
+    <TextView
+        android:id="@+id/tv_item_statistics_offline"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="@string/lineless" />
+
+</LinearLayout>

@@ -1,5 +1,6 @@
 package com.tianyigps.xiepeng.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,6 +15,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.tianyigps.xiepeng.R;
+import com.tianyigps.xiepeng.activity.ModifyPasswordActivity;
+import com.tianyigps.xiepeng.activity.StatisticsActivity;
 import com.tianyigps.xiepeng.adapter.MineAdapter;
 import com.tianyigps.xiepeng.data.AdapterMineData;
 
@@ -93,10 +96,14 @@ public class MineFragment extends Fragment {
                 switch (position) {
                     case 0: {
                         // TODO: 2017/7/13 质量统计
+                        Intent intent = new Intent(getContext(), StatisticsActivity.class);
+                        startActivity(intent);
                         break;
                     }
                     case 1: {
                         // TODO: 2017/7/13 修改密码
+                        Intent intent = new Intent(getContext(), ModifyPasswordActivity.class);
+                        startActivity(intent);
                         break;
                     }
                     default: {

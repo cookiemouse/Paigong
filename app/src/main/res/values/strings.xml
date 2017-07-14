@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Paigong</string>
+    <string name="app_name">派工</string>
     <string name="mine">我的</string>
     <string name="handled_order">完成订单</string>
     <string name="handling">进行中</string>
@@ -13,4 +13,35 @@
     <string name="start">开始</string>
     <string name="modify">(改)</string>
     <string name="look_map">查看地图</string>
+    <string name="password_old">原密码：</string>
+    <string name="password_new_ensure">确认新密码：</string>
+    <string name="password_new">新密码：</string>
+    <string name="ensure">确认</string>
+    <string name="choice_date">选择年月：</string>
+    <string name="statistics">质量统计</string>
+    <string name="type">类型</string>
+    <string name="number">数量</string>
+    <string name="tai">台</string>
+    <string name="door">上门</string>
+    <string name="car">车辆</string>
+    <string name="online">有线</string>
+    <string name="lineless">无线</string>
+    <string name="engineer">工程师</string>
+    <string name="choice">请选择</string>
+    <string name="cancel">取消</string>
+
+    <array name="picker_month">
+        <item>01 月</item>
+        <item>02 月</item>
+        <item>03 月</item>
+        <item>04 月</item>
+        <item>05 月</item>
+        <item>06 月</item>
+        <item>07 月</item>
+        <item>08 月</item>
+        <item>09 月</item>
+        <item>10 月</item>
+        <item>11 月</item>
+        <item>12 月</item>
+    </array>
 </resources>

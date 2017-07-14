@@ -33,8 +33,8 @@
     <!-- SD卡读取权限，用户写入离线定位数据 -->
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
 
-    <!--相机权限-->
-    <uses-permission android:name="android.permission.CAMERA"/>
+    <!-- 相机权限 -->
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:allowBackup="true"
@@ -65,7 +65,10 @@
             android:enabled="true"
             android:process=":remote" />
 
-        <activity android:name=".activity.ScannerActivity"></activity>
+        <activity android:name=".activity.ScannerActivity" />
+        <activity android:name=".activity.ModifyPasswordActivity" />
+        <activity android:name=".activity.StatisticsActivity" />
+        <activity android:name=".activity.LoginActivity"></activity>
     </application>
 
 </manifest>
