@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.tianyigps.xiepeng.R;
 
@@ -14,7 +16,10 @@ public class BaseActivity extends Activity {
 
     private FrameLayout mFrameLayout;
 
+    private TextView mTextViewTitle;
     private ImageView mImageViewLeft, mImageViewRight;
+    private LinearLayout mLinearLayoutTitleAll;
+
     private OnTitleRightClickListener mOnTitleRightClickListener;
 
     @Override
@@ -30,8 +35,14 @@ public class BaseActivity extends Activity {
 
         mFrameLayout = (FrameLayout) findViewById(R.id.fl_activity_base_content);
 
-        mImageViewLeft = findViewById(R.id.iv_activity_base_left);
-        mImageViewRight = findViewById(R.id.iv_activity_base_right);
+        mImageViewLeft = findViewById(R.id.iv_layout_title_base_left);
+        mImageViewRight = findViewById(R.id.iv_layout_title_base_right);
+        mTextViewTitle = findViewById(R.id.tv_layout_title_base_middle);
+        mLinearLayoutTitleAll = findViewById(R.id.ll_layout_title_base_all);
+
+        this.setTitleBackground(R.color.material_light_blue_a700);
+        this.setTitleRightButtonVisibilite(false);
+        mImageViewLeft.setImageResource(R.drawable.ic_back);
 
         mImageViewLeft.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,5 +98,20 @@ public class BaseActivity extends Activity {
             return;
         }
         mImageViewRight.setVisibility(View.GONE);
+    }
+
+    //  设置右按钮图标
+    public void setTitleRightButtonResource(int resourceid) {
+        mImageViewRight.setImageResource(resourceid);
+    }
+
+    //  设置标题内容
+    public void setTitleText(String title) {
+        mTextViewTitle.setText(title);
+    }
+
+    //  设置标题栏背景
+    public void setTitleBackground(int resouceid) {
+        mLinearLayoutTitleAll.setBackgroundResource(resouceid);
     }
 }

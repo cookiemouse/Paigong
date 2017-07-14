@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.tianyigps.xiepeng.R;
 import com.tianyigps.xiepeng.adapter.HandledAdapter;
@@ -30,6 +31,10 @@ public class HandledFragment extends Fragment {
     private EditText mEditTextSearch;
     private ListView mListViewHandled;
 
+    //  标题栏
+    private ImageView mImageViewTitleLeft, mImageViewTitleRight;
+    private TextView mTextViewTitle;
+
     private List<AdapterHandledData> mAdapterHandledDataList;
     private HandledAdapter mHandledAdapter;
 
@@ -46,6 +51,11 @@ public class HandledFragment extends Fragment {
     }
 
     private void init(View view) {
+        mImageViewTitleLeft = view.findViewById(R.id.iv_layout_title_base_left);
+        mImageViewTitleRight = view.findViewById(R.id.iv_layout_title_base_right);
+        mTextViewTitle = view.findViewById(R.id.tv_layout_title_base_middle);
+        initTitle();
+
         mSwipeRefreshLayout = view.findViewById(R.id.srl_fragment_worker_handled);
         mImageViewSearch = view.findViewById(R.id.iv_layout_search);
         mEditTextSearch = view.findViewById(R.id.et_layout_search);
@@ -67,6 +77,12 @@ public class HandledFragment extends Fragment {
         mHandledAdapter = new HandledAdapter(getContext(), mAdapterHandledDataList);
 
         mListViewHandled.setAdapter(mHandledAdapter);
+    }
+
+    private void initTitle() {
+        mTextViewTitle.setText(R.string.handled);
+        mImageViewTitleLeft.setImageResource(R.drawable.ic_switch_account);
+        mImageViewTitleRight.setVisibility(View.GONE);
     }
 
     private void setEventListener() {

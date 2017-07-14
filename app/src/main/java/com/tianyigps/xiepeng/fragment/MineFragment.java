@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -27,11 +28,14 @@ public class MineFragment extends Fragment {
 
     private static final String TAG = "MineFragment";
 
-    private ImageView mImageViewSwitchAccount;
-
     private ListView mListViewMine;
     private List<AdapterMineData> mAdapterMineDataList;
     private MineAdapter mMineAdapter;
+
+    //  标题栏
+    private LinearLayout mLinearLayoutTitle;
+    private ImageView mImageViewTitleLeft, mImageViewTitleRight;
+    private TextView mTextViewTitle;
 
     private TextView mTextViewExit;
 
@@ -49,7 +53,12 @@ public class MineFragment extends Fragment {
     }
 
     private void init(View view) {
-        mImageViewSwitchAccount = view.findViewById(R.id.iv_layout_mine_left);
+        mLinearLayoutTitle = view.findViewById(R.id.ll_layout_title_base_all);
+        mImageViewTitleLeft = view.findViewById(R.id.iv_layout_title_base_left);
+        mImageViewTitleRight = view.findViewById(R.id.iv_layout_title_base_right);
+        mTextViewTitle = view.findViewById(R.id.tv_layout_title_base_middle);
+        initTitle();
+
         mListViewMine = view.findViewById(R.id.lv_fragment_mine);
         mTextViewExit = view.findViewById(R.id.tv_fragment_mine);
 
@@ -62,9 +71,16 @@ public class MineFragment extends Fragment {
         mListViewMine.setAdapter(mMineAdapter);
     }
 
+    private void initTitle() {
+        mTextViewTitle.setText(R.string.mine);
+        mImageViewTitleLeft.setImageResource(R.drawable.ic_switch_account);
+        mImageViewTitleRight.setVisibility(View.GONE);
+        mLinearLayoutTitle.setBackgroundResource(R.color.colorBlueTheme);
+    }
+
     private void setEventListener() {
 
-        mImageViewSwitchAccount.setOnClickListener(new View.OnClickListener() {
+        mImageViewTitleLeft.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // TODO: 2017/7/13 切换用户

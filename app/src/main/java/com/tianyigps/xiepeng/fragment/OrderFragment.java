@@ -29,11 +29,13 @@ import java.util.List;
 public class OrderFragment extends Fragment {
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    private ImageView mImageViewTitleRight;
-    private TextView mTextViewTitle;
     private ImageView mImageViewSearch;
     private EditText mEditTextSearch;
     private ListView mListView;
+
+    //  标题栏
+    private ImageView mImageViewTitleLeft, mImageViewTitleRight;
+    private TextView mTextViewTitle;
 
     private List<AdapterOrderData> mAdapterOrderDataList;
     private OrderAdapter mOrderAdapter;
@@ -51,11 +53,15 @@ public class OrderFragment extends Fragment {
     }
 
     private void init(View view) {
+
+        mImageViewTitleLeft = view.findViewById(R.id.iv_layout_title_base_left);
+        mImageViewTitleRight = view.findViewById(R.id.iv_layout_title_base_right);
+        mTextViewTitle = view.findViewById(R.id.tv_layout_title_base_middle);
+        initTitle();
+
         mSwipeRefreshLayout = view.findViewById(R.id.srl_fragment_worker_order);
-        mImageViewTitleRight = view.findViewById(R.id.iv_layout_title_worker_right);
         mImageViewSearch = view.findViewById(R.id.iv_layout_search);
         mEditTextSearch = view.findViewById(R.id.et_layout_search);
-        mTextViewTitle = view.findViewById(R.id.tv_layout_title_worker_middle);
         mListView = view.findViewById(R.id.lv_fragment_worker_order);
 
         mEditTextSearch.clearFocus();
@@ -77,6 +83,12 @@ public class OrderFragment extends Fragment {
         mOrderAdapter = new OrderAdapter(getContext(), mAdapterOrderDataList);
 
         mListView.setAdapter(mOrderAdapter);
+    }
+
+    private void initTitle() {
+        mTextViewTitle.setText(R.string.order_task);
+        mImageViewTitleLeft.setImageResource(R.drawable.ic_switch_account);
+        mImageViewTitleRight.setImageResource(R.drawable.ic_locate);
     }
 
     private void setEventListener() {

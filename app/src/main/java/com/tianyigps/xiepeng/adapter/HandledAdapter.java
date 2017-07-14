@@ -1,6 +1,7 @@
 package com.tianyigps.xiepeng.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.tianyigps.xiepeng.R;
+import com.tianyigps.xiepeng.activity.OrderDetailsActivity;
 import com.tianyigps.xiepeng.data.AdapterHandledData;
 
 import java.util.List;
@@ -68,6 +70,15 @@ public class HandledAdapter extends BaseAdapter {
         viewHolder.textViewAddress.setText(data.getAddress());
         viewHolder.textViewId.setText(data.getId());
         viewHolder.textViewNumber.setText("安装：有线" + data.getOnline() + "个，无线" + data.getLineLess());
+
+        contentView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO: 2017/7/11 Item点击事件
+                Intent intent = new Intent(context, OrderDetailsActivity.class);
+                context.startActivity(intent);
+            }
+        });
 
         return contentView;
     }

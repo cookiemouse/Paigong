@@ -16,6 +16,7 @@
     <color name="colorTextSelect">#3cabfa</color>
     <color name="colorLine">#c9c9c9</color>
     <color name="colorBlue">#017CFC</color>
+    <color name="colorBlueTheme">#0091ea</color>
     <color name="colorRed">#E72020</color>
 
     <color name="colorNull">#00000000</color>

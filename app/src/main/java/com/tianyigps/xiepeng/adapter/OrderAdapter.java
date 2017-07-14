@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.tianyigps.xiepeng.R;
+import com.tianyigps.xiepeng.activity.OrderDetailsActivity;
 import com.tianyigps.xiepeng.data.AdapterOrderData;
 
 import java.util.List;
@@ -103,6 +104,15 @@ public class OrderAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 // TODO: 2017/7/13 签到
+            }
+        });
+
+        contentView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO: 2017/7/11 Item点击事件
+                Intent intent = new Intent(context, OrderDetailsActivity.class);
+                context.startActivity(intent);
             }
         });
 

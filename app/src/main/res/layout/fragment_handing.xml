@@ -5,7 +5,7 @@
     android:orientation="vertical">
 
     <include
-        layout="@layout/layout_title_worker_title"
+        layout="@layout/layout_title_base"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
@@ -65,7 +65,9 @@
                 android:layout_weight="1"
                 android:divider="@color/colorNull"
                 android:dividerHeight="@dimen/dp_8"
-                android:padding="@dimen/dp_8" />
+                android:paddingTop="@dimen/dp_8"
+                android:paddingLeft="@dimen/dp_8"
+                android:paddingRight="@dimen/dp_8" />
 
         </LinearLayout>
     </android.support.v4.widget.SwipeRefreshLayout>

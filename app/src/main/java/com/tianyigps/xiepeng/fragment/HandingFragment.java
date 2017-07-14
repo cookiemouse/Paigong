@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -32,6 +33,10 @@ public class HandingFragment extends Fragment implements View.OnClickListener {
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private TextView mTextViewHead, mTextViewManager;
     private ListView mListViewHanding;
+
+    //  标题栏
+    private ImageView mImageViewTitleLeft, mImageViewTitleRight;
+    private TextView mTextViewTitle;
 
     private List<AdapterHandingData> mAdapterHandingDataList;
     private HandingAdapter mHandingAdapter;
@@ -67,6 +72,11 @@ public class HandingFragment extends Fragment implements View.OnClickListener {
     }
 
     private void init(View view) {
+        mImageViewTitleLeft = view.findViewById(R.id.iv_layout_title_base_left);
+        mImageViewTitleRight = view.findViewById(R.id.iv_layout_title_base_right);
+        mTextViewTitle = view.findViewById(R.id.tv_layout_title_base_middle);
+        initTitle();
+
         mSwipeRefreshLayout = view.findViewById(R.id.srl_fragment_handing);
         mSwipeRefreshLayout.setColorSchemeColors(0xff3cabfa);
 
@@ -88,6 +98,12 @@ public class HandingFragment extends Fragment implements View.OnClickListener {
 
         mHandingAdapter = new HandingAdapter(getContext(), mAdapterHandingDataList);
         mListViewHanding.setAdapter(mHandingAdapter);
+    }
+
+    private void initTitle() {
+        mTextViewTitle.setText(R.string.handling);
+        mImageViewTitleLeft.setImageResource(R.drawable.ic_switch_account);
+        mImageViewTitleRight.setVisibility(View.GONE);
     }
 
     private void setEventListener() {
