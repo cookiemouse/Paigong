@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_item"
+    android:elevation="@dimen/dp_8"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/dp_40"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/rl_layout_order_details_content_order"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/iv_layout_order_details_content_order"
+                    android:layout_width="@dimen/dp_40"
+                    android:layout_height="@dimen/dp_40"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_margin="@dimen/dp_4"
+                    android:padding="@dimen/dp_4"
+                    android:src="@drawable/ic_order_details_order" />
+
+                <TextView
+                    android:id="@+id/tv_layout_order_details_content_order_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/iv_layout_order_details_content_order"
+                    android:layout_toEndOf="@+id/iv_layout_order_details_content_order"
+                    android:layout_toRightOf="@+id/iv_layout_order_details_content_order"
+                    android:text="TextView"
+                    android:textColor="@color/colorBlueTheme" />
+
+                <TextView
+                    android:id="@+id/tv_layout_order_details_content_order_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/iv_layout_order_details_content_order"
+                    android:layout_toEndOf="@+id/iv_layout_order_details_content_order"
+                    android:layout_toRightOf="@+id/iv_layout_order_details_content_order"
+                    android:text="TextView" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_layout_order_details_content_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/iv_layout_order_details_content_name"
+                    android:layout_width="@dimen/dp_40"
+                    android:layout_height="@dimen/dp_40"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_margin="@dimen/dp_4"
+                    android:padding="@dimen/dp_4"
+                    android:src="@drawable/ic_order_details_contacts" />
+
+                <TextView
+                    android:id="@+id/tv_layout_order_details_content_order_name_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/iv_layout_order_details_content_name"
+                    android:layout_toEndOf="@+id/iv_layout_order_details_content_name"
+                    android:layout_toRightOf="@+id/iv_layout_order_details_content_name"
+                    android:text="@string/contact"
+                    android:textColor="@color/colorBlueTheme" />
+
+                <TextView
+                    android:id="@+id/tv_layout_order_details_content_order_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/iv_layout_order_details_content_name"
+                    android:layout_toEndOf="@+id/iv_layout_order_details_content_name"
+                    android:layout_toRightOf="@+id/iv_layout_order_details_content_name"
+                    android:text="TextView" />
+
+                <ImageView
+                    android:id="@+id/iv_layout_order_details_content_call"
+                    android:layout_width="@dimen/dp_40"
+                    android:layout_height="@dimen/dp_40"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:padding="@dimen/dp_4"
+                    android:src="@drawable/ic_phone" />
+
+                <View
+                    android:layout_width="@dimen/dp_0_5"
+                    android:layout_height="@dimen/dp_24"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="@dimen/dp_16"
+                    android:layout_marginRight="@dimen/dp_16"
+                    android:layout_toLeftOf="@+id/iv_layout_order_details_content_call"
+                    android:layout_toStartOf="@+id/iv_layout_order_details_content_call"
+                    android:background="@color/colorBlack" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_layout_order_details_content_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/iv_layout_order_details_content_time"
+                    android:layout_width="@dimen/dp_40"
+                    android:layout_height="@dimen/dp_40"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_margin="@dimen/dp_4"
+                    android:padding="@dimen/dp_4"
+                    android:src="@drawable/ic_order_details_address" />
+
+                <TextView
+                    android:id="@+id/tv_layout_order_details_content_order_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/iv_layout_order_details_content_time"
+                    android:layout_toEndOf="@+id/iv_layout_order_details_content_time"
+                    android:layout_toRightOf="@+id/iv_layout_order_details_content_time"
+                    android:text="TextView"
+                    android:textColor="@color/colorBlueTheme" />
+
+                <TextView
+                    android:id="@+id/tv_layout_order_details_content_order_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/tv_layout_order_details_content_order_time"
+                    android:layout_alignStart="@+id/tv_layout_order_details_content_order_time"
+                    android:layout_below="@+id/tv_layout_order_details_content_order_time"
+                    android:text="TextView" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_layout_order_details_content_remarks"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/iv_layout_order_details_content_remarks"
+                    android:layout_width="@dimen/dp_40"
+                    android:layout_height="@dimen/dp_40"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_margin="@dimen/dp_4"
+                    android:padding="@dimen/dp_4"
+                    android:src="@drawable/ic_order_details_remarks" />
+
+                <TextView
+                    android:id="@+id/tv_layout_order_details_content_order_remarks_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/iv_layout_order_details_content_remarks"
+                    android:layout_toEndOf="@+id/iv_layout_order_details_content_remarks"
+                    android:layout_toRightOf="@+id/iv_layout_order_details_content_remarks"
+                    android:text="@string/remarks"
+                    android:textColor="@color/colorBlueTheme" />
+
+                <TextView
+                    android:id="@+id/tv_layout_order_details_content_order_remarks_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/iv_layout_order_details_content_remarks"
+                    android:layout_toEndOf="@+id/iv_layout_order_details_content_remarks"
+                    android:layout_toRightOf="@+id/iv_layout_order_details_content_remarks"
+                    android:text="TextView" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_layout_order_details_content_install"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/iv_layout_order_details_install"
+                    android:layout_width="@dimen/dp_40"
+                    android:layout_height="@dimen/dp_40"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_margin="@dimen/dp_8"
+                    android:padding="@dimen/dp_4"
+                    android:src="@drawable/ic_order_details_install" />
+
+                <TextView
+                    android:id="@+id/tv_layout_order_details_content_order_install_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/iv_layout_order_details_install"
+                    android:layout_toEndOf="@+id/iv_layout_order_details_install"
+                    android:layout_toRightOf="@+id/iv_layout_order_details_install"
+                    android:text="TextView"
+                    android:textColor="@color/colorBlueTheme" />
+
+                <TextView
+                    android:id="@+id/tv_layout_order_details_content_order_install_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/iv_layout_order_details_install"
+                    android:layout_toEndOf="@+id/iv_layout_order_details_install"
+                    android:layout_toRightOf="@+id/iv_layout_order_details_install"
+                    android:text="TextView" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_layout_order_details_content_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/iv_layout_order_details_info"
+                    android:layout_width="@dimen/dp_40"
+                    android:layout_height="@dimen/dp_40"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_margin="@dimen/dp_8"
+                    android:padding="@dimen/dp_4"
+                    android:src="@drawable/ic_order_details_info_add" />
+
+                <TextView
+                    android:id="@+id/tv_layout_order_details_content_order_info_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/iv_layout_order_details_info"
+                    android:layout_toEndOf="@+id/iv_layout_order_details_info"
+                    android:layout_toRightOf="@+id/iv_layout_order_details_info"
+                    android:text="TextView"
+                    android:textColor="@color/colorBlueTheme" />
+
+                <TextView
+                    android:id="@+id/tv_layout_order_details_content_order_info_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/tv_layout_order_details_content_order_info_title"
+                    android:layout_alignStart="@+id/tv_layout_order_details_content_order_info_title"
+                    android:layout_below="@+id/tv_layout_order_details_content_order_info_title"
+                    android:layout_marginTop="@dimen/dp_8"
+                    android:text="TextView" />
+            </RelativeLayout>
+
+            <Button
+                android:id="@+id/btn_layout_order_details_sign"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/dp_16"
+                android:text="@string/sign" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="@dimen/dp_16"
+                android:layout_marginTop="@dimen/dp_32"
+                android:text="@string/is_return_order" />
+        </LinearLayout>
+    </ScrollView>
+</FrameLayout>

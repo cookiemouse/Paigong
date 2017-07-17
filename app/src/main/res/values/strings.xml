@@ -33,6 +33,9 @@
     <string name="enter_password">请输入密码</string>
     <string name="login">登录</string>
     <string name="login_message">汽车金融数据经济构筑者</string>
+    <string name="is_return_order">退单？</string>
+    <string name="contact">现场联系人</string>
+    <string name="remarks">备注</string>
 
     <array name="picker_month">
         <item>01 月</item>

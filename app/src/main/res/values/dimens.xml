@@ -21,7 +21,11 @@
 
     <dimen name="dp_120">120dp</dimen>
 
+    <dimen name="dp_160">160dp</dimen>
+
     <dimen name="dp_240">240dp</dimen>
+
+    <dimen name="dp_320">320dp</dimen>
 
 
     <!--字体-->
