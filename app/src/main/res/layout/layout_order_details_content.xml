@@ -45,7 +45,7 @@
                     android:textColor="@color/colorBlueTheme" />
 
                 <TextView
-                    android:id="@+id/tv_layout_order_details_content_order_id"
+                    android:id="@+id/tv_layout_order_details_content_order_number"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignBottom="@+id/iv_layout_order_details_content_order"
@@ -159,6 +159,7 @@
                     android:layout_centerVertical="true"
                     android:layout_margin="@dimen/dp_4"
                     android:padding="@dimen/dp_4"
+                    android:background="@color/colorAccent"
                     android:src="@drawable/ic_order_details_remarks" />
 
                 <TextView
@@ -193,7 +194,7 @@
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
-                    android:layout_margin="@dimen/dp_8"
+                    android:layout_margin="@dimen/dp_4"
                     android:padding="@dimen/dp_4"
                     android:src="@drawable/ic_order_details_install" />
 
@@ -228,7 +229,7 @@
                     android:layout_height="@dimen/dp_40"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
-                    android:layout_margin="@dimen/dp_8"
+                    android:layout_margin="@dimen/dp_4"
                     android:padding="@dimen/dp_4"
                     android:src="@drawable/ic_order_details_info_add" />
 
