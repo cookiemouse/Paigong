@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.tianyigps.xiepeng.R;
 import com.tianyigps.xiepeng.activity.OrderDetailsActivity;
 import com.tianyigps.xiepeng.data.AdapterOrderData;
+import com.tianyigps.xiepeng.data.Data;
 
 import java.util.List;
 
@@ -114,6 +115,7 @@ public class OrderAdapter extends BaseAdapter {
             public void onClick(View view) {
                 // TODO: 2017/7/11 Item点击事件
                 Intent intent = new Intent(context, OrderDetailsActivity.class);
+                intent.putExtra(Data.DATA_INTENT_ORDER_NO, data.getId());
                 context.startActivity(intent);
             }
         });

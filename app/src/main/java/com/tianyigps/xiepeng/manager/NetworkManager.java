@@ -156,7 +156,7 @@ public class NetworkManager {
     }
 
     //  获取Worker订单任务    3
-    public void getWorkerOrder(String eid, String token, String condition) {
+    public void getWorkerOrder(int eid, String token, String condition) {
         Request.Builder builder = new Request.Builder();
         builder.url(Urls.URL_WORKER_ORDER + "eid=" + eid
                 + "&token=" + token
@@ -188,7 +188,7 @@ public class NetworkManager {
     }
 
     //  安装退回    4
-    public void installBack(String eid, String token, String orderNo
+    public void installBack(int eid, String token, String orderNo
             , String chooseReason, String filledReason) {
         Request.Builder builder = new Request.Builder();
         builder.url(Urls.URL_WORKER_INSTALL_BACK + "eid=" + eid
@@ -223,7 +223,7 @@ public class NetworkManager {
     }
 
     //  安装工程师联系现场   5
-    public void contactSite(String eid, String token, String orderNo, String eName) {
+    public void contactSite(int eid, String token, String orderNo, String eName) {
         Request.Builder builder = new Request.Builder();
         builder.url(Urls.URL_WORKER_CONTACT_SITE + "eid=" + eid
                 + "&token=" + token
@@ -256,7 +256,7 @@ public class NetworkManager {
     }
 
     //  安装工程师签到 6
-    public void signedWorker(String eid, String token, String eName
+    public void signedWorker(int eid, String token, String eName
             , String orderNo, String lat, String log
             , String type) {
 
@@ -295,7 +295,7 @@ public class NetworkManager {
     }
 
     //  获取设备定位信息    7
-    public void getTerminalInfo(String eid, String token, String imei) {
+    public void getTerminalInfo(int eid, String token, String imei) {
         Request.Builder builder = new Request.Builder();
         builder.url(Urls.URL_WORKER_GET_TERMINAL_INFO + "eid=" + eid
                 + "&token=" + token
@@ -327,7 +327,7 @@ public class NetworkManager {
     }
 
     //  获取安装工程师进行中的订单   8
-    public void getWorkerOrderHanding(String eid, String token) {
+    public void getWorkerOrderHanding(int eid, String token) {
         Request.Builder builder = new Request.Builder();
         builder.url(Urls.URL_WORKER_ORDER_HANDING + "eid=" + eid
                 + "&token=" + token);
@@ -358,10 +358,11 @@ public class NetworkManager {
     }
 
     //  获取安装工程师进行中的订单详情 9
-    public void getWorkerOrderInfoHanding(String eid, String token) {
+    public void getWorkerOrderInfoHanding(int eid, String token, String orderNo) {
         Request.Builder builder = new Request.Builder();
         builder.url(Urls.URL_WORKER_ORDER_INFO_HANDING + "eid=" + eid
-                + "&token=" + token);
+                + "&token=" + token
+                + "&orderNo=" + orderNo);
         mRequest = builder.build();
         Log.i(TAG, "getWorkerOrderInfoHanding: url-->" + mRequest.url());
         Call call = mOkHttpClient.newCall(mRequest);
@@ -389,7 +390,7 @@ public class NetworkManager {
     }
 
     //  安装工程师开始安装   10
-    public void startHanding(String eid, String token, String orderNo, String eName) {
+    public void startHanding(int eid, String token, String orderNo, String eName) {
         Request.Builder builder = new Request.Builder();
         builder.url(Urls.URL_WORKER_START_HANDING + "eid=" + eid
                 + "&token=" + token
@@ -422,7 +423,7 @@ public class NetworkManager {
     }
 
     //  获取安装工程师开始安装页面信息 11
-    public void getWorkerOrderInfoStart(String eid, String token, String orderNo) {
+    public void getWorkerOrderInfoStart(int eid, String token, String orderNo) {
         Request.Builder builder = new Request.Builder();
         builder.url(Urls.URL_WORKER_START_INFO_HANDING + "eid=" + eid
                 + "&token=" + token
@@ -454,7 +455,7 @@ public class NetworkManager {
     }
 
     //  安装工程师拆除 12
-    public void removeTerminal(String eid, String token, String orderNo) {
+    public void removeTerminal(int eid, String token, String orderNo) {
         Request.Builder builder = new Request.Builder();
         builder.url(Urls.URL_WORKER_REMOVE_TERMINAL + "eid=" + eid
                 + "&token=" + token
@@ -486,7 +487,7 @@ public class NetworkManager {
     }
 
     //  安装工程师设备信息校验 13
-    public void checkIMEI(String eid, String token, String imei
+    public void checkIMEI(int eid, String token, String imei
             , String model, String orderNo) {
         Request.Builder builder = new Request.Builder();
         builder.url(Urls.URL_WORKER_CHECK_IMEI + "eid=" + eid
@@ -521,7 +522,7 @@ public class NetworkManager {
     }
 
     //  获取安装工程师已完成订单    14
-    public void getWorkerOrderHanded(String eid, String token, String condition
+    public void getWorkerOrderHanded(int eid, String token, String condition
             , String lastOrderId) {
         Request.Builder builder = new Request.Builder();
         builder.url(Urls.URL_WORKER_ORDER_HANDED + "eid=" + eid
@@ -555,7 +556,7 @@ public class NetworkManager {
     }
 
     //  安装工程师质量统计   15
-    public void getQualityCount(String eid, String token, String month) {
+    public void getQualityCount(int eid, String token, String month) {
         Request.Builder builder = new Request.Builder();
         builder.url(Urls.URL_WORKER_QUALITY_COUNT + "eid=" + eid
                 + "&token=" + token
@@ -587,7 +588,7 @@ public class NetworkManager {
     }
 
     //  获取历史（最后一个）工程师   16
-    public void getLastInstaller(String eid, String token, String imei) {
+    public void getLastInstaller(int eid, String token, String imei) {
         Request.Builder builder = new Request.Builder();
         builder.url(Urls.URL_WORKER_LAST_INSTALLER + "eid=" + eid
                 + "&token=" + token
@@ -619,7 +620,7 @@ public class NetworkManager {
     }
 
     //  提交订单    17
-    public void saveOrderInfo(String eid, String token, String orderNo
+    public void saveOrderInfo(int eid, String token, String orderNo
             , String infoData, String partSubReason, String signature
             , String lat, String log, String type
     ) {
@@ -661,7 +662,7 @@ public class NetworkManager {
     }
 
     //  安装工程师删除设备信息 18
-    public void removeTerminalInfo(String eid, String token, String orderid
+    public void removeTerminalInfo(int eid, String token, String orderid
             , String tIds) {
         Request.Builder builder = new Request.Builder();
         builder.url(Urls.URL_WORKER_REMOVE_TERMINAL_INFO + "eid=" + eid
@@ -703,7 +704,7 @@ public class NetworkManager {
     }
 
     //  删除图片    20
-    public void deletePic(String eid, String token, String orderNo
+    public void deletePic(int eid, String token, String orderNo
             , String carId, String tId, String type
             , String imgUrl) {
         Request.Builder builder = new Request.Builder();
@@ -741,7 +742,7 @@ public class NetworkManager {
     }
 
     //  获取完整IMEI    21
-    public void getWholeImei(String eid, String token, String imei) {
+    public void getWholeImei(int eid, String token, String imei) {
         Request.Builder builder = new Request.Builder();
         builder.url(Urls.URL_WORKER_WHOLE_IMEI + "eid=" + eid
                 + "&token=" + token

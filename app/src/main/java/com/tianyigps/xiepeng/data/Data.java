@@ -18,6 +18,9 @@ public class Data {
     public final static int DATA_SCANNER_REQUEST = 0x001;
     public final static int DATA_SCANNER_RESULT = 0x002;
 
+    //  intent传值
+    public final static String DATA_INTENT_ORDER_NO = "paigong_intent_order_no";
+
     //  数据请求所需数据
     public final static String DATA_JSON = "paigong_json_";
     public final static String DATA_JSON_PHONE_NO = DATA_JSON + "phone_number";
@@ -41,6 +44,6 @@ public class Data {
     public final static int MSG_4 = 0x04;
 
     //  测试
-    public final static String EID = "204";
+    public final static int EID = 204;
     public final static String TOKEN = "25d55ad283aa400af464c76d713c07ad";
 }

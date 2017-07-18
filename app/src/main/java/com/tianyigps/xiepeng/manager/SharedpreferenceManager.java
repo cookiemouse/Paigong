@@ -49,7 +49,8 @@ public class SharedpreferenceManager {
 
     //  获取Eid
     public int getEid() {
-        return mSharedPreferences.getInt(DATA_JSON_EID, 0);
+//        return mSharedPreferences.getInt(DATA_JSON_EID, 0);
+        return Data.EID;
     }
 
     //  保存token

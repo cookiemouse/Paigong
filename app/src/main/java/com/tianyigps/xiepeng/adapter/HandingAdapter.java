@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.tianyigps.xiepeng.R;
 import com.tianyigps.xiepeng.activity.OrderDetailsActivity;
 import com.tianyigps.xiepeng.data.AdapterHandingData;
+import com.tianyigps.xiepeng.data.Data;
 
 import java.util.List;
 
@@ -48,7 +49,9 @@ public class HandingAdapter extends BaseAdapter {
     @Override
     public View getView(int i, View contentView, ViewGroup viewGroup) {
 
-        AdapterHandingData data = mHandingDataList.get(i);
+        final AdapterHandingData data = mHandingDataList.get(i);
+
+        final String orderNo = data.getId();
 
         ViewHolder viewHolder = null;
         if (null == contentView) {
@@ -110,6 +113,7 @@ public class HandingAdapter extends BaseAdapter {
             public void onClick(View view) {
                 // TODO: 2017/7/11 Item点击事件
                 Intent intent = new Intent(context, OrderDetailsActivity.class);
+                intent.putExtra(Data.DATA_INTENT_ORDER_NO, orderNo);
                 context.startActivity(intent);
             }
         });

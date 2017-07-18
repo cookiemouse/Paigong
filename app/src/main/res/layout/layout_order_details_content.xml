@@ -41,7 +41,7 @@
                     android:layout_alignTop="@+id/iv_layout_order_details_content_order"
                     android:layout_toEndOf="@+id/iv_layout_order_details_content_order"
                     android:layout_toRightOf="@+id/iv_layout_order_details_content_order"
-                    android:text="TextView"
+                    android:text=""
                     android:textColor="@color/colorBlueTheme" />
 
                 <TextView
@@ -51,7 +51,7 @@
                     android:layout_alignBottom="@+id/iv_layout_order_details_content_order"
                     android:layout_toEndOf="@+id/iv_layout_order_details_content_order"
                     android:layout_toRightOf="@+id/iv_layout_order_details_content_order"
-                    android:text="TextView" />
+                    android:text="" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -87,7 +87,7 @@
                     android:layout_alignBottom="@+id/iv_layout_order_details_content_name"
                     android:layout_toEndOf="@+id/iv_layout_order_details_content_name"
                     android:layout_toRightOf="@+id/iv_layout_order_details_content_name"
-                    android:text="TextView" />
+                    android:text="" />
 
                 <ImageView
                     android:id="@+id/iv_layout_order_details_content_call"
@@ -132,7 +132,7 @@
                     android:layout_alignTop="@+id/iv_layout_order_details_content_time"
                     android:layout_toEndOf="@+id/iv_layout_order_details_content_time"
                     android:layout_toRightOf="@+id/iv_layout_order_details_content_time"
-                    android:text="TextView"
+                    android:text=""
                     android:textColor="@color/colorBlueTheme" />
 
                 <TextView
@@ -142,7 +142,7 @@
                     android:layout_alignLeft="@+id/tv_layout_order_details_content_order_time"
                     android:layout_alignStart="@+id/tv_layout_order_details_content_order_time"
                     android:layout_below="@+id/tv_layout_order_details_content_order_time"
-                    android:text="TextView" />
+                    android:text="" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -156,7 +156,6 @@
                     android:layout_height="@dimen/dp_40"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
-                    android:layout_centerVertical="true"
                     android:layout_margin="@dimen/dp_4"
                     android:padding="@dimen/dp_4"
                     android:src="@drawable/ic_order_details_remarks" />
@@ -175,10 +174,10 @@
                     android:id="@+id/tv_layout_order_details_content_order_remarks_content"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignBottom="@+id/iv_layout_order_details_content_remarks"
-                    android:layout_toEndOf="@+id/iv_layout_order_details_content_remarks"
-                    android:layout_toRightOf="@+id/iv_layout_order_details_content_remarks"
-                    android:text="TextView" />
+                    android:layout_alignLeft="@+id/tv_layout_order_details_content_order_remarks_title"
+                    android:layout_alignStart="@+id/tv_layout_order_details_content_order_remarks_title"
+                    android:layout_below="@+id/tv_layout_order_details_content_order_remarks_title"
+                    android:text="" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -204,7 +203,7 @@
                     android:layout_alignTop="@+id/iv_layout_order_details_install"
                     android:layout_toEndOf="@+id/iv_layout_order_details_install"
                     android:layout_toRightOf="@+id/iv_layout_order_details_install"
-                    android:text="TextView"
+                    android:text=""
                     android:textColor="@color/colorBlueTheme" />
 
                 <TextView
@@ -214,7 +213,7 @@
                     android:layout_alignBottom="@+id/iv_layout_order_details_install"
                     android:layout_toEndOf="@+id/iv_layout_order_details_install"
                     android:layout_toRightOf="@+id/iv_layout_order_details_install"
-                    android:text="TextView" />
+                    android:text="" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -239,7 +238,7 @@
                     android:layout_alignTop="@+id/iv_layout_order_details_info"
                     android:layout_toEndOf="@+id/iv_layout_order_details_info"
                     android:layout_toRightOf="@+id/iv_layout_order_details_info"
-                    android:text="TextView"
+                    android:text=""
                     android:textColor="@color/colorBlueTheme" />
 
                 <TextView
@@ -249,7 +248,7 @@
                     android:layout_alignLeft="@+id/tv_layout_order_details_content_order_info_title"
                     android:layout_alignStart="@+id/tv_layout_order_details_content_order_info_title"
                     android:layout_below="@+id/tv_layout_order_details_content_order_info_title"
-                    android:text="TextView" />
+                    android:text="" />
             </RelativeLayout>
 
             <Button

@@ -1,6 +1,8 @@
 package com.tianyigps.xiepeng.activity;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -11,9 +13,15 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.tianyigps.xiepeng.R;
+import com.tianyigps.xiepeng.bean.OrderDetailsBean;
+import com.tianyigps.xiepeng.interfaces.OnGetWorkerOrderInfoHandingListener;
 import com.tianyigps.xiepeng.manager.NetworkManager;
+import com.tianyigps.xiepeng.manager.SharedpreferenceManager;
+import com.tianyigps.xiepeng.utils.TimeFormatU;
 
+import static com.tianyigps.xiepeng.data.Data.DATA_INTENT_ORDER_NO;
 import static com.tianyigps.xiepeng.data.Data.MSG_1;
 import static com.tianyigps.xiepeng.data.Data.MSG_ERO;
 
@@ -26,24 +34,21 @@ public class OrderDetailsActivity extends Activity {
     private ImageView mImageViewTitleLeft, mImageViewTitleRight;
 
     //  内容
-    private TextView mTextViewOrderName, mTextViewOrderNum, mTextViewCallName
-            , mTextViewTime, mTextViewAddress, mTextViewRemarks
-            , mTextViewInstallTitle, mTextViewInstallContent, mTextViewInfoTitle
-            , mTextViewInfoContent;
+    private TextView mTextViewOrderName, mTextViewOrderNum, mTextViewCallName, mTextViewTime, mTextViewAddress, mTextViewRemarks, mTextViewInstallTitle, mTextViewInstallContent, mTextViewInfoTitle, mTextViewInfoContent;
 
     private ImageView mImageViewCall;
     private Button mButtonSign;
 
     private NetworkManager mNetworkManager;
     private MyHandler myHandler;
+    private SharedpreferenceManager mSharedpreferenceManager;
+    private String orderNo;
 
-    private String mStringContactPhone, mStringDetail, mStringCity
-            , mStringOrderNum, mStringContactName, mStringProvince
-            , mStringCustName, mStringDistrict;
-    private int mIntOrderType, mIntWirelessNum, mIntRemoveWireNum
-            , mIntWireNum, mIntOrderStaus, mIntRemoveWirelessNum
-            , mIntReviseFlag, mIntOrderId;
-    private float mFloatDoorTime;
+    private String mStringContactPhone, mStringDetail, mStringCity, mStringOrderNum,
+            mStringContactName, mStringProvince, mStringCustName, mStringDistrict, mStringTypeTitle,
+            mStringTypeContent, mStringInfoTitle, mStringInstallInfo = "";
+    private int mIntOrderType, mIntWirelessNum, mIntRemoveWireNum, mIntWireNum, mIntOrderStaus, mIntRemoveWirelessNum, mIntReviseFlag, mIntOrderId;
+    private long mLongDoorTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,8 +88,15 @@ public class OrderDetailsActivity extends Activity {
         mImageViewCall = findViewById(R.id.iv_layout_order_details_content_call);
 
         mNetworkManager = NetworkManager.getInstance();
-
         myHandler = new MyHandler();
+        mSharedpreferenceManager = new SharedpreferenceManager(this);
+
+        int eid = mSharedpreferenceManager.getEid();
+        String token = mSharedpreferenceManager.getToken();
+        String orderNo = getIntent().getStringExtra(DATA_INTENT_ORDER_NO);
+        Log.i(TAG, "init: orderNo-->" + orderNo);
+
+        mNetworkManager.getWorkerOrderInfoHanding(eid, token, orderNo);
     }
 
     private void setEventListener() {
@@ -95,52 +107,91 @@ public class OrderDetailsActivity extends Activity {
             }
         });
 
-        // TODO: 2017/7/17 只做测试，并不是调用该接口
-        /*
-        mNetworkManager.getWorkerOrder("205", "25d55ad283aa400af464c76d713c07ad", "", new Callback() {
+        mImageViewCall.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onFailure(Call call, IOException e) {
-                Log.i(TAG, "onFailure: ");
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                Log.i(TAG, "onResponse: ");
-                Gson gson = new Gson();
-                WorkerOrderBean workerOrderBean = gson.fromJson(response.body().string(), WorkerOrderBean.class);
-                if (workerOrderBean.isSuccess()) {
-//                    for (WorkerOrderBean.ObjBean objBean : workerOrderBean.getObj()) {
-//
-//                    }
-                    WorkerOrderBean.ObjBean objBean = workerOrderBean.getObj().get(0);
-                    mStringContactPhone = objBean.getContactPhone();
-                    mStringContactName = objBean.getContactName();
-                    mStringCustName = objBean.getCustName();
-                    mStringDetail = objBean.getDetail();
-                    mStringCity = objBean.getCity();
-                    mStringProvince = objBean.getProvince();
-                    mStringDistrict = objBean.getDistrict();
-                    mStringOrderNum = objBean.getOrderNo();
-
-                    mIntWirelessNum = objBean.getWirelessNum();
-                    mIntRemoveWireNum = objBean.getRemoveWiredNum();
-                    mIntOrderType = objBean.getOrderType();
-                    mIntWireNum = objBean.getWiredNum();
-                    mIntOrderStaus = objBean.getOrderStatus();
-                    mIntRemoveWirelessNum = objBean.getRemoveWirelessNum();
-                    mIntReviseFlag = objBean.getReviseFlag();
-                    mIntOrderId = objBean.getOrderId();
-
-                    mFloatDoorTime = objBean.getDoorTime();
-
-//                    Message message = new Message();
-//                    message.arg1 = MSG_1;
-//                    myHandler.sendMessage();
-                    myHandler.sendEmptyMessage(MSG_1);
-                }
+            public void onClick(View view) {
+                toCalll(mStringContactPhone);
             }
         });
-        */
+
+        mNetworkManager.setGetWorkerOrderInfoListener(new OnGetWorkerOrderInfoHandingListener() {
+            @Override
+            public void onFailure() {
+                Log.i(TAG, "onFailure: ");
+                myHandler.sendEmptyMessage(MSG_ERO);
+            }
+
+            @Override
+            public void onSuccess(String result) {
+                Log.i(TAG, "onSuccess: -->" + result);
+                Gson gson = new Gson();
+                OrderDetailsBean orderDetailsBean = gson.fromJson(result, OrderDetailsBean.class);
+                if (!orderDetailsBean.isSuccess()) {
+                    onFailure();
+                    return;
+                }
+
+                OrderDetailsBean.ObjBean objBean = orderDetailsBean.getObj();
+                mStringCustName = objBean.getCustName();
+                mStringOrderNum = objBean.getOrderNo();
+                mStringContactName = objBean.getContactName();
+                mStringContactPhone = objBean.getContactPhone();
+                mLongDoorTime = objBean.getDoorTime();
+                mStringProvince = objBean.getProvince();
+                mStringCity = objBean.getCity();
+                mStringDistrict = objBean.getDistrict();
+                mStringDetail = objBean.getInstallDemand();
+                mIntOrderType = objBean.getOrderType();
+
+                switch (mIntOrderType) {
+                    case 1: {
+                        //  新安装
+                        mStringTypeTitle = "安装";
+                        mStringInfoTitle = mStringTypeTitle + "车辆信息";
+                        mStringTypeContent = "有线" + mIntWireNum + "个" +
+                                "，无线" + mIntWirelessNum + "个";
+                        break;
+                    }
+                    case 2: {
+                        //  维修
+                        mStringTypeTitle = "维修";
+                        mStringInfoTitle = mStringTypeTitle + "车辆信息";
+                        mStringTypeContent = "有线" + mIntWireNum + "个" +
+                                "，无线" + mIntWirelessNum + "个";
+                        break;
+                    }
+                    case 3: {
+                        //  拆改
+                        mStringTypeTitle = "拆改";
+                        mStringInfoTitle = mStringTypeTitle + "车辆信息";
+                        mStringTypeContent = "有线" + mIntRemoveWireNum + "个" +
+                                "，无线" + mIntRemoveWirelessNum + "个";
+                        break;
+                    }
+                    default: {
+                        Log.i(TAG, "handleMessage: OrderType.default");
+                    }
+                }
+
+                for (OrderDetailsBean.ObjBean.CarInfoBean carInfoBean : objBean.getCarInfo()) {
+                    mStringInstallInfo += carInfoBean.getCarVin();
+                    String carBrand = carInfoBean.getCarBrand();
+                    if (null != carBrand && !"".equals(carBrand)){
+                        mStringInstallInfo += ("，" + carInfoBean.getCarBrand());
+                    }
+                    mStringInstallInfo += "\n";
+                }
+
+                myHandler.sendEmptyMessage(MSG_1);
+            }
+        });
+    }
+
+    private void toCalll(String number){
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_DIAL);
+        intent.setData(Uri.parse("tel:" + number));
+        startActivity(intent);
     }
 
     //  Handler
@@ -158,37 +209,14 @@ public class OrderDetailsActivity extends Activity {
                     mTextViewOrderNum.setText(mStringOrderNum);
                     mTextViewCallName.setText(mStringContactName);
 
-                    mTextViewTime.setText("" + mFloatDoorTime);
+                    mTextViewTime.setText(new TimeFormatU().millisToDate(mLongDoorTime));
 
                     mTextViewAddress.setText(mStringProvince + mStringCity + mStringDistrict);
                     mTextViewRemarks.setText(mStringDetail);
-
-                    switch (mIntOrderType){
-                        case 1:{
-                            //  新安装
-                            mTextViewInstallTitle.setText("安装");
-                            mTextViewInstallContent.setText("有线" + mIntWireNum + "个" +
-                                    "，无线"  + mIntWirelessNum + "个");
-                            break;
-                        }
-                        case 2:{
-                            //  维修
-                            mTextViewInstallTitle.setText("维修");
-                            mTextViewInstallContent.setText("有线" + mIntWireNum + "个" +
-                                    "，无线"  + mIntWirelessNum + "个");
-                            break;
-                        }
-                        case 3:{
-                            //  拆改
-                            mTextViewInstallTitle.setText("拆改");
-                            mTextViewInstallContent.setText("有线" + mIntRemoveWireNum + "个" +
-                                    "，无线"  + mIntRemoveWirelessNum + "个");
-                            break;
-                        }
-                        default:{
-                            Log.i(TAG, "handleMessage: OrderType.default");
-                        }
-                    }
+                    mTextViewInstallTitle.setText(mStringTypeTitle);
+                    mTextViewInstallContent.setText(mStringTypeContent);
+                    mTextViewInfoTitle.setText(mStringInfoTitle);
+                    mTextViewInfoContent.setText(mStringInstallInfo);
 
                     break;
                 }
