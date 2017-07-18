@@ -1,12 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@drawable/bg_map_info_window">
+    android:background="@drawable/bg_map_info_window"
+    android:orientation="horizontal"
+    android:padding="@dimen/dp_8">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Title"/>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/tv_view_map_info_window_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:lines="1"
+            android:text="Title"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/sp_18" />
+
+        <TextView
+            android:id="@+id/tv_view_map_info_window_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_4"
+            android:text="TextView"
+            android:textColor="@color/colorWhite" />
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/iv_view_map_info_window_cancel"
+        android:layout_width="@dimen/dp_24"
+        android:layout_height="@dimen/dp_24"
+        android:src="@drawable/ic_back" />
+
+</LinearLayout>

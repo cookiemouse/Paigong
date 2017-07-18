@@ -21,7 +21,7 @@
 
     <color name="colorNull">#00000000</color>
 
-    <color name="colorAlphaBlue">#a80091ea</color>
+    <color name="colorAlphaBlue">#a8ffffff</color>
 
     <color name="material_green_300">#42bd41</color>
     <color name="material_light_blue_a700">#0091ea</color>

@@ -2,6 +2,8 @@ package com.tianyigps.xiepeng.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,14 +24,21 @@ import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.model.LatLng;
+import com.google.gson.Gson;
 import com.tianyigps.xiepeng.R;
 import com.tianyigps.xiepeng.base.BaseActivity;
+import com.tianyigps.xiepeng.bean.TerminalInfoBean;
+import com.tianyigps.xiepeng.interfaces.OnGetTerminalInfoListener;
 import com.tianyigps.xiepeng.manager.LocateManager;
+import com.tianyigps.xiepeng.manager.NetworkManager;
+import com.tianyigps.xiepeng.manager.SharedpreferenceManager;
 import com.tianyigps.xiepeng.utils.TimerU;
 
 import static com.tianyigps.xiepeng.data.Data.DATA_SCANNER;
 import static com.tianyigps.xiepeng.data.Data.DATA_SCANNER_REQUEST;
 import static com.tianyigps.xiepeng.data.Data.DATA_SCANNER_RESULT;
+import static com.tianyigps.xiepeng.data.Data.MSG_1;
+import static com.tianyigps.xiepeng.data.Data.MSG_ERO;
 
 public class LocateActivity extends BaseActivity implements View.OnClickListener {
 
@@ -45,6 +54,14 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
     private LocateManager mLocateManager;
 
     private TimerU mTimerU;
+
+    private SharedpreferenceManager mSharedpreferenceManager;
+    private NetworkManager mNetworkManager;
+    private MyHandler myHandler;
+    private int eid;
+    private String token;
+    private String mStringTitle, mStringContent;
+    private double lat, lng;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +80,7 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
     protected void onResume() {
         super.onResume();
         mMapView.onResume();
+        mLocateManager.startLocate();
     }
 
     @Override
@@ -79,8 +97,10 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == DATA_SCANNER_REQUEST && resultCode == DATA_SCANNER_RESULT){
+        if (requestCode == DATA_SCANNER_REQUEST && resultCode == DATA_SCANNER_RESULT) {
             Log.i(TAG, "onActivityResult: qrcode-->" + data.getStringExtra(DATA_SCANNER));
+            String imei = data.getStringExtra(DATA_SCANNER);
+            getImeiLocation(imei);
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -89,18 +109,20 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_activity_locate_imei: {
-                // TODO: 2017/7/12 跳转到二维码页面
+                // 2017/7/12 跳转到二维码页面
                 Intent intent = new Intent(LocateActivity.this, ScannerActivity.class);
                 startActivityForResult(intent, DATA_SCANNER_REQUEST);
                 break;
             }
             case R.id.iv_layout_map_control_locate: {
-                // TODO: 2017/7/12 定位
+                // 2017/7/12 定位
                 mLocateManager.startLocate();
                 break;
             }
             case R.id.tv_activity_locate_look: {
                 // TODO: 2017/7/12 查看设备定位
+                String imei = mEditTextImei.getText().toString();
+                getImeiLocation(imei);
                 break;
             }
             case R.id.tv_layout_map_control_normal: {
@@ -150,6 +172,13 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
         mTextViewFlush = findViewById(R.id.tv_layout_map_control_flush);
 
         mLocateManager = new LocateManager(getApplicationContext());
+
+        mSharedpreferenceManager = new SharedpreferenceManager(this);
+        eid = mSharedpreferenceManager.getEid();
+        token = mSharedpreferenceManager.getToken();
+
+        mNetworkManager = NetworkManager.getInstance();
+        myHandler = new MyHandler();
     }
 
     private void setEventListener() {
@@ -180,10 +209,42 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
                 mBaiduMap.setMyLocationConfiguration(config);
                 */
                 moveToCenter(latLng);
+            }
+        });
 
-//                markCar(latLng);
+        mNetworkManager.setGetTerminalInfoListener(new OnGetTerminalInfoListener() {
+            @Override
+            public void onFailure() {
+                Log.i(TAG, "onFailure: ");
+                myHandler.sendEmptyMessage(MSG_ERO);
+            }
 
-                showInfoWindow(latLng);
+            @Override
+            public void onSuccess(String result) {
+                Log.i(TAG, "onSuccess: result-->" + result);
+                Gson gson = new Gson();
+                TerminalInfoBean terminalInfoBean = gson.fromJson(result, TerminalInfoBean.class);
+                if (!terminalInfoBean.isSuccess()) {
+                    onFailure();
+                    return;
+                }
+
+                TerminalInfoBean.ObjBean objBean = terminalInfoBean.getObj();
+                mStringTitle = objBean.getName();
+
+                TerminalInfoBean.ObjBean.RedisObjBean redisObjBean = objBean.getRedisObj();
+                mStringContent = "设备编号：" + objBean.getImei()
+                        + "\n状态："
+                        + "\n定位类型："
+                        + "\n信号时间：" + redisObjBean.getCurrent_time()
+                        + "\n定位时间：" + redisObjBean.getLocate_time() + "\n\n";
+                redisObjBean.getAcc_status();   //00-未知，01-熄火，02-点火
+                redisObjBean.getLocate_type();  //0-基站定位，1-GPS定位，2-上线不定位
+
+                lat = redisObjBean.getLatitude();
+                lng = redisObjBean.getLongitude();
+
+                myHandler.sendEmptyMessage(MSG_1);
             }
         });
 
@@ -214,8 +275,22 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
         mBaiduMap.addOverlay(option);
     }
 
-    private void showInfoWindow(LatLng latLng) {
+    private void showInfoWindow(LatLng latLng, String title, String content) {
         View viewInfo = LayoutInflater.from(LocateActivity.this).inflate(R.layout.view_map_info_window, null);
+
+        ImageView imageViewCancel = viewInfo.findViewById(R.id.iv_view_map_info_window_cancel);
+        TextView textViewTitle = viewInfo.findViewById(R.id.tv_view_map_info_window_title);
+        TextView textViewContent = viewInfo.findViewById(R.id.tv_view_map_info_window_content);
+
+        textViewTitle.setText(title);
+        textViewContent.setText(content);
+
+        imageViewCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mBaiduMap.hideInfoWindow();
+            }
+        });
 
         InfoWindow mInfoWindow = new InfoWindow(viewInfo, latLng, 0);
         //显示InfoWindow
@@ -228,5 +303,31 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
         MapStatus status = builder.build();
         MapStatusUpdate update = MapStatusUpdateFactory.newMapStatus(status);
         mBaiduMap.animateMapStatus(update);
+    }
+
+    //  获取目标位置
+    private void getImeiLocation(String imei) {
+        mNetworkManager.getTerminalInfo(eid, token, imei);
+    }
+
+    private class MyHandler extends Handler {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case MSG_ERO: {
+                    break;
+                }
+                case MSG_1: {
+                    LatLng latLng = new LatLng(lat, lng);
+                    markCar(latLng);
+                    showInfoWindow(latLng, mStringTitle, mStringContent);
+                    break;
+                }
+                default: {
+                    Log.i(TAG, "handleMessage: default");
+                }
+            }
+        }
     }
 }
