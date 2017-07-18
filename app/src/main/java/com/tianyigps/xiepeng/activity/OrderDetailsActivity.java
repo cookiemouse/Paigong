@@ -11,16 +11,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
 import com.tianyigps.xiepeng.R;
-import com.tianyigps.xiepeng.bean.WorkerOrderBean;
 import com.tianyigps.xiepeng.manager.NetworkManager;
-
-import java.io.IOException;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Response;
 
 import static com.tianyigps.xiepeng.data.Data.MSG_1;
 import static com.tianyigps.xiepeng.data.Data.MSG_ERO;
@@ -104,6 +96,7 @@ public class OrderDetailsActivity extends Activity {
         });
 
         // TODO: 2017/7/17 只做测试，并不是调用该接口
+        /*
         mNetworkManager.getWorkerOrder("205", "25d55ad283aa400af464c76d713c07ad", "", new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -147,6 +140,7 @@ public class OrderDetailsActivity extends Activity {
                 }
             }
         });
+        */
     }
 
     //  Handler
@@ -178,17 +172,17 @@ public class OrderDetailsActivity extends Activity {
                             break;
                         }
                         case 2:{
-                            mTextViewInstallTitle.setText("维修");
                             //  维修
+                            mTextViewInstallTitle.setText("维修");
                             mTextViewInstallContent.setText("有线" + mIntWireNum + "个" +
                                     "，无线"  + mIntWirelessNum + "个");
                             break;
                         }
                         case 3:{
+                            //  拆改
                             mTextViewInstallTitle.setText("拆改");
                             mTextViewInstallContent.setText("有线" + mIntRemoveWireNum + "个" +
                                     "，无线"  + mIntRemoveWirelessNum + "个");
-                            //  拆改
                             break;
                         }
                         default:{

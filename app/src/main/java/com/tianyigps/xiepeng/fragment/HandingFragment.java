@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -15,12 +16,22 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.tianyigps.xiepeng.R;
 import com.tianyigps.xiepeng.adapter.HandingAdapter;
+import com.tianyigps.xiepeng.bean.WorkerHandingBean;
 import com.tianyigps.xiepeng.data.AdapterHandingData;
+import com.tianyigps.xiepeng.data.Data;
+import com.tianyigps.xiepeng.interfaces.OnGetWorkerOrderHandingListener;
+import com.tianyigps.xiepeng.manager.NetworkManager;
+import com.tianyigps.xiepeng.manager.SharedpreferenceManager;
+import com.tianyigps.xiepeng.utils.TimeFormatU;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.tianyigps.xiepeng.data.Data.MSG_1;
+import static com.tianyigps.xiepeng.data.Data.MSG_ERO;
 
 /**
  * Created by djc on 2017/7/13.
@@ -41,6 +52,11 @@ public class HandingFragment extends Fragment implements View.OnClickListener {
     private List<AdapterHandingData> mAdapterHandingDataList;
     private HandingAdapter mHandingAdapter;
 
+    private NetworkManager mNetworkManager;
+    private MyHandler myHandler;
+
+    private SharedpreferenceManager mSharedpreferenceManager;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -58,11 +74,13 @@ public class HandingFragment extends Fragment implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_fragment_handing_head: {
+                // TODO: 2017/7/18 总部号码
                 toCall("1234567890");
                 break;
             }
             case R.id.tv_fragment_handing_manager: {
-                toCall("1234567891");
+                String phone = mSharedpreferenceManager.getHeadPhone();
+                toCall(phone);
                 break;
             }
             default: {
@@ -86,18 +104,25 @@ public class HandingFragment extends Fragment implements View.OnClickListener {
         mListViewHanding = view.findViewById(R.id.lv_fragment_handling);
 
         mAdapterHandingDataList = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            mAdapterHandingDataList.add(new AdapterHandingData("万惠南宁"
-                    , "2017-01-02 17:30"
-                    , "上海市浦东区东方路985号一百杉杉大厦"
-                    , "TY2017010215542001"
-                    , "南柱赫"
-                    , "1234567890"
-                    , 5, 5));
-        }
+//        for (int i = 0; i < 10; i++) {
+//            mAdapterHandingDataList.add(new AdapterHandingData("万惠南宁"
+//                    , "2017-01-02 17:30"
+//                    , "上海市浦东区东方路985号一百杉杉大厦"
+//                    , "TY2017010215542001"
+//                    , "南柱赫"
+//                    , "1234567890"
+//                    , 5, 5));
+//        }
 
         mHandingAdapter = new HandingAdapter(getContext(), mAdapterHandingDataList);
         mListViewHanding.setAdapter(mHandingAdapter);
+
+        mNetworkManager = NetworkManager.getInstance();
+        myHandler = new MyHandler();
+
+        mSwipeRefreshLayout.setRefreshing(true);
+        mNetworkManager.getWorkerOrderHanding(Data.EID, Data.TOKEN);
+        mSharedpreferenceManager = new SharedpreferenceManager(getContext());
     }
 
     private void initTitle() {
@@ -114,12 +139,7 @@ public class HandingFragment extends Fragment implements View.OnClickListener {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        mSwipeRefreshLayout.setRefreshing(false);
-                    }
-                }, 2000);
+                mNetworkManager.getWorkerOrderHanding(Data.EID, Data.TOKEN);
             }
         });
 
@@ -133,6 +153,65 @@ public class HandingFragment extends Fragment implements View.OnClickListener {
                                 || mListViewHanding.getChildAt(0).getTop() < mListViewHanding.getPaddingTop());
             }
         });
+
+        mNetworkManager.setGetWorkerOrderHandingListener(new OnGetWorkerOrderHandingListener() {
+            @Override
+            public void onFailure() {
+                myHandler.sendEmptyMessage(MSG_ERO);
+            }
+
+            @Override
+            public void onSuccess(String result) {
+                mAdapterHandingDataList.clear();
+
+                Gson gson = new Gson();
+                WorkerHandingBean workerHandingBean = gson.fromJson(result, WorkerHandingBean.class);
+                if (!workerHandingBean.isSuccess()) {
+                    onFailure();
+                    return;
+                }
+                for (WorkerHandingBean.ObjBean objBean : workerHandingBean.getObj()) {
+
+                    String orderType;
+                    int wire, wireless;
+                    switch (objBean.getOrderType()) {
+                        case 1: {
+                            orderType = "安装：";
+                            wire = objBean.getWiredNum();
+                            wireless = objBean.getWirelessNum();
+                            break;
+                        }
+                        case 2: {
+                            orderType = "维修：";
+                            wire = objBean.getWiredNum();
+                            wireless = objBean.getWirelessNum();
+                            break;
+                        }
+                        case 3: {
+                            orderType = "拆改：";
+                            wire = objBean.getRemoveWiredNum();
+                            wireless = objBean.getRemoveWirelessNum();
+                            break;
+                        }
+                        default: {
+                            orderType = "安装：";
+                            wire = 0;
+                            wireless = 0;
+                            Log.i(TAG, "onResponse: default");
+                        }
+                    }
+
+                    mAdapterHandingDataList.add(new AdapterHandingData(objBean.getCustName()
+                            , new TimeFormatU().millisToDate(objBean.getDoorTime())
+                            , objBean.getProvince() + objBean.getCity() + objBean.getDistrict()
+                            , objBean.getOrderNo()
+                            , objBean.getContactName()
+                            , objBean.getContactPhone(), orderType, wire, wireless));
+                }
+
+                myHandler.sendEmptyMessage(MSG_1);
+            }
+        });
     }
 
     //  拨打电话
@@ -141,5 +220,25 @@ public class HandingFragment extends Fragment implements View.OnClickListener {
         intent.setAction(Intent.ACTION_DIAL);
         intent.setData(Uri.parse("tel:" + number));
         startActivity(intent);
+    }
+
+    private class MyHandler extends Handler {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            mSwipeRefreshLayout.setRefreshing(false);
+            switch (msg.what) {
+                case MSG_ERO: {
+                    Log.i(TAG, "handleMessage: ERO");
+                }
+                case MSG_1: {
+                    mHandingAdapter.notifyDataSetChanged();
+                    break;
+                }
+                default: {
+                    Log.i(TAG, "handleMessage: default");
+                }
+            }
+        }
     }
 }

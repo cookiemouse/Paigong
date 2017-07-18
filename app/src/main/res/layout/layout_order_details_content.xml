@@ -159,7 +159,6 @@
                     android:layout_centerVertical="true"
                     android:layout_margin="@dimen/dp_4"
                     android:padding="@dimen/dp_4"
-                    android:background="@color/colorAccent"
                     android:src="@drawable/ic_order_details_remarks" />
 
                 <TextView
@@ -250,7 +249,6 @@
                     android:layout_alignLeft="@+id/tv_layout_order_details_content_order_info_title"
                     android:layout_alignStart="@+id/tv_layout_order_details_content_order_info_title"
                     android:layout_below="@+id/tv_layout_order_details_content_order_info_title"
-                    android:layout_marginTop="@dimen/dp_8"
                     android:text="TextView" />
             </RelativeLayout>
 

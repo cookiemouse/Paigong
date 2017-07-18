@@ -5,7 +5,7 @@ package com.tianyigps.xiepeng.data;
  */
 
 public class AdapterHandingData {
-    private String name, time, address, id, callName, callNumber;
+    private String name, time, address, id, callName, callNumber, orderType;
     private int online, lineless;
     private boolean modify;
 
@@ -35,6 +35,19 @@ public class AdapterHandingData {
         this.online = online;
         this.lineless = lineless;
         this.modify = modify;
+    }
+
+    public AdapterHandingData(String name, String time, String address, String id, String callName, String callNumber, String orderType, int online, int lineless) {
+        this.name = name;
+        this.time = time;
+        this.address = address;
+        this.id = id;
+        this.callName = callName;
+        this.callNumber = callNumber;
+        this.orderType = orderType;
+        this.online = online;
+        this.lineless = lineless;
+        this.modify = false;
     }
 
     public String getName() {
@@ -99,6 +112,14 @@ public class AdapterHandingData {
 
     public void setLineless(int lineless) {
         this.lineless = lineless;
+    }
+
+    public String getOrderType() {
+        return orderType;
+    }
+
+    public void setOrderType(String orderType) {
+        this.orderType = orderType;
     }
 
     public boolean isModify() {

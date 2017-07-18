@@ -15,10 +15,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.tianyigps.xiepeng.R;
-import com.tianyigps.xiepeng.activity.LoginActivity;
+import com.tianyigps.xiepeng.activity.ModifyPasswordActivity;
 import com.tianyigps.xiepeng.activity.StatisticsActivity;
 import com.tianyigps.xiepeng.adapter.MineAdapter;
 import com.tianyigps.xiepeng.data.AdapterMineData;
+import com.tianyigps.xiepeng.manager.SharedpreferenceManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +42,8 @@ public class MineFragment extends Fragment {
     private TextView mTextViewTitle;
 
     private TextView mTextViewExit;
+
+    private SharedpreferenceManager mSharedpreferenceManager;
 
     @Nullable
     @Override
@@ -72,6 +75,8 @@ public class MineFragment extends Fragment {
         mMineAdapter = new MineAdapter(getContext(), mAdapterMineDataList);
 
         mListViewMine.setAdapter(mMineAdapter);
+
+        mSharedpreferenceManager = new SharedpreferenceManager(getContext());
     }
 
     private void initTitle() {
@@ -103,7 +108,7 @@ public class MineFragment extends Fragment {
                     case 1: {
                         // TODO: 2017/7/13 修改密码
 //                        Intent intent = new Intent(getContext(), ModifyPasswordActivity.class);
-                        Intent intent = new Intent(getContext(), LoginActivity.class);
+                        Intent intent = new Intent(getContext(), ModifyPasswordActivity.class);
                         startActivity(intent);
                         break;
                     }
@@ -117,8 +122,15 @@ public class MineFragment extends Fragment {
         mTextViewExit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: 2017/7/13 退出登陆
+                // 2017/7/13 退出登陆
+                exitLogin();
+                getActivity().finish();
             }
         });
+    }
+
+    //  退出登陆，数据清零
+    private void exitLogin() {
+        mSharedpreferenceManager.saveUserData(0, "", "", "", "", 1);
     }
 }

@@ -34,21 +34,23 @@ public class MD5U {
     }
 
     public static String getMd5(String str) {
-        MessageDigest messageDigest = null;
+        MessageDigest md5 = null;
         try {
-            messageDigest = MessageDigest.getInstance("MD5");
-            messageDigest.update(str.getBytes());
-            //  加密
-            byte[] result = messageDigest.digest();
-            StringBuilder stringBuffer = new StringBuilder();
-            for (byte b : result) {
-                stringBuffer.append(b);
+            md5 = MessageDigest.getInstance("MD5");
+            byte[] bytes = md5.digest(str.getBytes());
+            String result = "";
+            for (byte b : bytes) {
+                String temp = Integer.toHexString(b & 0xff);
+                if (temp.length() == 1) {
+                    temp = "0" + temp;
+                }
+                result += temp;
             }
-            return stringBuffer.toString();
+            return result;
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
-        return null;
+        return "";
     }
 
     /**

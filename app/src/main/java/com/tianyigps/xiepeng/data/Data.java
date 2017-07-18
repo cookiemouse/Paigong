@@ -8,9 +8,10 @@ public class Data {
     public final static String DATA_SHAREDPREFERENCES = "paigong_sharedpreferences";
 
     //  账号类型，worker或manager
-    public final static String DATA_S_STATE = "paigong_sharedpreferences_state";
-    public final static int DATA_S_STATE_1 = 0;
-    public final static int DATA_S_STATE_2 = 1;
+    public final static String DATA_LAUNCH_ACCOUNT = "paigong_sharedpreferences_launch_account";
+    public final static String DATA_LAUNCH_MODE = "paigong_sharedpreferences_launch_mode";
+    public final static int DATA_LAUNCH_MODE_WORKER = 1;
+    public final static int DATA_LAUNCH_MODE_MANAGER = 2;
 
     //  二维码扫描，Activity跳转
     public final static String DATA_SCANNER = "paigong_scanner";
@@ -38,4 +39,8 @@ public class Data {
     public final static int MSG_2 = 0x02;
     public final static int MSG_3 = 0x03;
     public final static int MSG_4 = 0x04;
+
+    //  测试
+    public final static String EID = "204";
+    public final static String TOKEN = "25d55ad283aa400af464c76d713c07ad";
 }

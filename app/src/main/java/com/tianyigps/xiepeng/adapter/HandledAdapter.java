@@ -58,7 +58,9 @@ public class HandledAdapter extends BaseAdapter {
             viewHolder.textViewTime = contentView.findViewById(R.id.tv_item_handled_time);
             viewHolder.textViewAddress = contentView.findViewById(R.id.tv_item_handled_address);
             viewHolder.textViewId = contentView.findViewById(R.id.tv_item_handled_id);
-            viewHolder.textViewNumber = contentView.findViewById(R.id.tv_item_handled_number);
+            viewHolder.textViewTitle = contentView.findViewById(R.id.tv_item_handled_content_title);
+            viewHolder.textViewWire = contentView.findViewById(R.id.tv_item_handled_content_wire);
+            viewHolder.textViewWireless = contentView.findViewById(R.id.tv_item_handled_content_wireless);
 
             contentView.setTag(viewHolder);
         } else {
@@ -69,7 +71,9 @@ public class HandledAdapter extends BaseAdapter {
         viewHolder.textViewTime.setText(data.getTime());
         viewHolder.textViewAddress.setText(data.getAddress());
         viewHolder.textViewId.setText(data.getId());
-        viewHolder.textViewNumber.setText("安装：有线" + data.getOnline() + "个，无线" + data.getLineLess());
+        viewHolder.textViewTitle.setText(data.getOrderType());
+        viewHolder.textViewWire.setText("" + data.getOnline());
+        viewHolder.textViewWireless.setText("" + data.getLineLess());
 
         contentView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,6 +88,7 @@ public class HandledAdapter extends BaseAdapter {
     }
 
     private class ViewHolder {
-        private TextView textViewName, textViewTime, textViewAddress, textViewId, textViewNumber;
+        private TextView textViewName, textViewTime, textViewAddress
+                , textViewId, textViewTitle, textViewWire, textViewWireless;
     }
 }

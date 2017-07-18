@@ -22,16 +22,13 @@ import com.tianyigps.xiepeng.activity.LocateActivity;
 import com.tianyigps.xiepeng.adapter.OrderAdapter;
 import com.tianyigps.xiepeng.bean.WorkerOrderBean;
 import com.tianyigps.xiepeng.data.AdapterOrderData;
+import com.tianyigps.xiepeng.data.Data;
+import com.tianyigps.xiepeng.interfaces.OnGetWorkerOrderListener;
 import com.tianyigps.xiepeng.manager.NetworkManager;
 import com.tianyigps.xiepeng.utils.TimeFormatU;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Response;
 
 import static com.tianyigps.xiepeng.data.Data.MSG_1;
 import static com.tianyigps.xiepeng.data.Data.MSG_ERO;
@@ -59,12 +56,8 @@ public class OrderFragment extends Fragment {
     private NetworkManager mNetworkManager;
     private MyHandler myHandler;
 
-    private String mStringContactPhone, mStringDetail, mStringCity
-            , mStringOrderNum, mStringContactName, mStringProvince
-            , mStringCustName, mStringDistrict;
-    private int mIntOrderType, mIntWirelessNum, mIntRemoveWireNum
-            , mIntWireNum, mIntOrderStaus, mIntRemoveWirelessNum
-            , mIntReviseFlag, mIntOrderId;
+    private String mStringContactPhone, mStringDetail, mStringCity, mStringOrderNum, mStringContactName, mStringProvince, mStringCustName, mStringDistrict;
+    private int mIntOrderType, mIntWirelessNum, mIntRemoveWireNum, mIntWireNum, mIntOrderStaus, mIntRemoveWirelessNum, mIntReviseFlag, mIntOrderId;
     private long mLongDoorTime;
 
     @Nullable
@@ -75,6 +68,9 @@ public class OrderFragment extends Fragment {
         init(viewRoot);
 
         setEventListener();
+
+        mSwipeRefreshLayout.setRefreshing(true);
+        mNetworkManager.getWorkerOrder(Data.EID, Data.TOKEN, "");
 
         return viewRoot;
     }
@@ -126,13 +122,7 @@ public class OrderFragment extends Fragment {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mNetworkManager.reStart();
-//                new Handler().postDelayed(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        mSwipeRefreshLayout.setRefreshing(false);
-//                    }
-//                }, 2000);
+                mNetworkManager.getWorkerOrder(Data.EID, Data.TOKEN, "");
             }
         });
 
@@ -155,20 +145,19 @@ public class OrderFragment extends Fragment {
             }
         });
 
-        mSwipeRefreshLayout.setRefreshing(true);
-        mNetworkManager.getWorkerOrder("205", "25d55ad283aa400af464c76d713c07ad", "", new Callback() {
+        mNetworkManager.setGetWorkerOrderListener(new OnGetWorkerOrderListener() {
             @Override
-            public void onFailure(Call call, IOException e) {
+            public void onFailure() {
                 Log.i(TAG, "onFailure: ");
                 myHandler.sendEmptyMessage(MSG_ERO);
             }
 
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
+            public void onSuccess(String result) {
                 Log.i(TAG, "onResponse: ");
                 mAdapterOrderDataList.clear();
                 Gson gson = new Gson();
-                WorkerOrderBean workerOrderBean = gson.fromJson(response.body().string(), WorkerOrderBean.class);
+                WorkerOrderBean workerOrderBean = gson.fromJson(result, WorkerOrderBean.class);
                 if (workerOrderBean.isSuccess()) {
                     for (WorkerOrderBean.ObjBean objBean : workerOrderBean.getObj()) {
                         mStringContactPhone = objBean.getContactPhone();
@@ -190,12 +179,40 @@ public class OrderFragment extends Fragment {
                         mIntOrderId = objBean.getOrderId();
 
                         mLongDoorTime = objBean.getDoorTime();
+                        String orderType;
+                        int wire, wireless;
+                        switch (objBean.getOrderType()) {
+                            case 1: {
+                                orderType = "安装：";
+                                wire = mIntWireNum;
+                                wireless = mIntWirelessNum;
+                                break;
+                            }
+                            case 2: {
+                                orderType = "维修：";
+                                wire = mIntWireNum;
+                                wireless = mIntWirelessNum;
+                                break;
+                            }
+                            case 3: {
+                                orderType = "拆改：";
+                                wire = mIntRemoveWireNum;
+                                wireless = mIntRemoveWirelessNum;
+                                break;
+                            }
+                            default: {
+                                orderType = "安装：";
+                                wire = 0;
+                                wireless = 0;
+                                Log.i(TAG, "onResponse: default");
+                            }
+                        }
                         mAdapterOrderDataList.add(new AdapterOrderData(mStringCustName
                                 , new TimeFormatU().millisToDate(mLongDoorTime)
                                 , mStringProvince + mStringCity + mStringDistrict
                                 , mStringOrderNum
                                 , mStringContactName
-                                , mStringContactPhone, "", mIntWirelessNum, mIntWireNum));
+                                , mStringContactPhone, orderType, wire, wireless));
                     }
 
                     myHandler.sendEmptyMessage(MSG_1);
@@ -204,20 +221,20 @@ public class OrderFragment extends Fragment {
         });
     }
 
-    private class MyHandler extends Handler{
+    private class MyHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             mSwipeRefreshLayout.setRefreshing(false);
-            switch (msg.what){
-                case MSG_ERO:{
+            switch (msg.what) {
+                case MSG_ERO: {
                     break;
                 }
-                case MSG_1:{
+                case MSG_1: {
                     mOrderAdapter.notifyDataSetChanged();
                     break;
                 }
-                default:{
+                default: {
                     Log.i(TAG, "handleMessage: default");
                 }
             }

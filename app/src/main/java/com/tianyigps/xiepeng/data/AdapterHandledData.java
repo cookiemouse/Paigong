@@ -5,14 +5,16 @@ package com.tianyigps.xiepeng.data;
  */
 
 public class AdapterHandledData {
-    private String name, time, address, id;
+    private String name, time, address, id, orderType;
     private int online, lineLess;
 
-    public AdapterHandledData(String name, String time, String address, String id, int online, int lineLess) {
+    public AdapterHandledData(String name, String time, String address, String id, String orderType
+            , int online, int lineLess) {
         this.name = name;
         this.time = time;
         this.address = address;
         this.id = id;
+        this.orderType = orderType;
         this.online = online;
         this.lineLess = lineLess;
     }
@@ -47,6 +49,14 @@ public class AdapterHandledData {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getOrderType() {
+        return orderType;
+    }
+
+    public void setOrderType(String orderType) {
+        this.orderType = orderType;
     }
 
     public int getOnline() {

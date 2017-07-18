@@ -22,6 +22,8 @@ import java.util.List;
 
 public class OrderAdapter extends BaseAdapter {
 
+    private static final String TAG = "OrderAdapter";
+
     private Context context;
     private List<AdapterOrderData> mAdapterOrderDataList;
 
@@ -61,8 +63,9 @@ public class OrderAdapter extends BaseAdapter {
             viewHolder.textViewAddress = contentView.findViewById(R.id.tv_item_order_address);
             viewHolder.textViewId = contentView.findViewById(R.id.tv_item_order_id);
             viewHolder.textViewPhoneName = contentView.findViewById(R.id.tv_item_order_phone_name);
-//            viewHolder.textViewLine = contentView.findViewById(R.id.tv_item_order_line);
-//            viewHolder.textViewLineless = contentView.findViewById(R.id.tv_item_order_lineless);
+            viewHolder.textViewLine = contentView.findViewById(R.id.tv_item_order_content_wire);
+            viewHolder.textViewLineless = contentView.findViewById(R.id.tv_item_order_content_wireless);
+            viewHolder.textViewContentTitle = contentView.findViewById(R.id.tv_item_order_content_title);
 
             viewHolder.imageViewMap = contentView.findViewById(R.id.iv_item_order_map);
             viewHolder.imageViewCall = contentView.findViewById(R.id.iv_item_order_phone);
@@ -78,10 +81,9 @@ public class OrderAdapter extends BaseAdapter {
         viewHolder.textViewAddress.setText(data.getAddress());
         viewHolder.textViewId.setText(data.getId());
         viewHolder.textViewPhoneName.setText(data.getPhoneName());
-//        data.getLineNumber()
-//        viewHolder.textViewLine.setText("");
-//        data.getLinelessNumber();
-//        viewHolder.textViewLineless.setText("");
+        viewHolder.textViewLine.setText(data.getOrderType());
+        viewHolder.textViewLine.setText("" + data.getLineNumber());
+        viewHolder.textViewLineless.setText("" + data.getLinelessNumber());
 
         viewHolder.imageViewMap.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -120,8 +122,7 @@ public class OrderAdapter extends BaseAdapter {
     }
 
     private class ViewHolder {
-        private TextView textViewName, textViewTime, textViewAddress
-                , textViewId, textViewPhoneName, textViewLine, textViewLineless;
+        private TextView textViewName, textViewTime, textViewAddress, textViewId, textViewPhoneName, textViewLine, textViewLineless, textViewContentTitle;
 
         private ImageView imageViewMap, imageViewCall, imageViewSign;
     }

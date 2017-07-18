@@ -48,7 +48,7 @@ public class HandingAdapter extends BaseAdapter {
     @Override
     public View getView(int i, View contentView, ViewGroup viewGroup) {
 
-        final AdapterHandingData data = mHandingDataList.get(i);
+        AdapterHandingData data = mHandingDataList.get(i);
 
         ViewHolder viewHolder = null;
         if (null == contentView) {
@@ -58,9 +58,11 @@ public class HandingAdapter extends BaseAdapter {
             viewHolder.textViewTime = contentView.findViewById(R.id.tv_item_handing_time);
             viewHolder.textViewAddress = contentView.findViewById(R.id.tv_item_handing_address);
             viewHolder.textViewId = contentView.findViewById(R.id.tv_item_handing_id);
-            viewHolder.textViewNumber = contentView.findViewById(R.id.tv_item_handing_number);
             viewHolder.textViewPhoneName = contentView.findViewById(R.id.tv_item_handing_phone_name);
             viewHolder.textViewModify = contentView.findViewById(R.id.tv_item_handing_modify);
+            viewHolder.textViewTitle = contentView.findViewById(R.id.tv_item_handing_content_title);
+            viewHolder.textViewWire = contentView.findViewById(R.id.tv_item_handing_content_wire);
+            viewHolder.textViewWireless = contentView.findViewById(R.id.tv_item_handing_content_wireless);
 
             viewHolder.imageViewCall = contentView.findViewById(R.id.iv_item_handing_phone);
             viewHolder.imageViewStart = contentView.findViewById(R.id.iv_item_handing_start);
@@ -74,8 +76,10 @@ public class HandingAdapter extends BaseAdapter {
         viewHolder.textViewTime.setText(data.getTime());
         viewHolder.textViewAddress.setText(data.getAddress());
         viewHolder.textViewId.setText(data.getId());
-        viewHolder.textViewNumber.setText("安装：有线" + data.getOnline() + "个，无线" + data.getLineless() + "个");
         viewHolder.textViewPhoneName.setText(data.getCallName());
+        viewHolder.textViewTitle.setText(data.getOrderType());
+        viewHolder.textViewWire.setText("" + data.getOnline());
+        viewHolder.textViewWireless.setText("" + data.getLineless());
 
         if (data.isModify()) {
             viewHolder.textViewModify.setVisibility(View.VISIBLE);
@@ -114,7 +118,9 @@ public class HandingAdapter extends BaseAdapter {
     }
 
     private class ViewHolder {
-        private TextView textViewName, textViewTime, textViewAddress, textViewId, textViewNumber, textViewPhoneName, textViewModify;
+        private TextView textViewName, textViewTime, textViewAddress
+                , textViewId, textViewTitle, textViewPhoneName
+                , textViewModify, textViewWire, textViewWireless;
         private ImageView imageViewCall, imageViewStart;
     }
 }
