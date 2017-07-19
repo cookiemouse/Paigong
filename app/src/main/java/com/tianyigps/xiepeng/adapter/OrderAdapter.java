@@ -28,6 +28,8 @@ public class OrderAdapter extends BaseAdapter {
     private Context context;
     private List<AdapterOrderData> mAdapterOrderDataList;
 
+    private OnMapClickListener mOnMapClickListener;
+
     public OrderAdapter(Context context, List<AdapterOrderData> mAdapterOrderDataList) {
         this.context = context;
         this.mAdapterOrderDataList = mAdapterOrderDataList;
@@ -49,7 +51,7 @@ public class OrderAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View contentView, ViewGroup viewGroup) {
+    public View getView(final int position, View contentView, ViewGroup viewGroup) {
 
         ViewHolder viewHolder = null;
 
@@ -90,6 +92,10 @@ public class OrderAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 // TODO: 2017/7/13 地图页
+                if (null == mOnMapClickListener) {
+                    throw new NullPointerException("OnMapClickListener is null");
+                }
+                mOnMapClickListener.onClick(position);
             }
         });
 
@@ -127,5 +133,13 @@ public class OrderAdapter extends BaseAdapter {
         private TextView textViewName, textViewTime, textViewAddress, textViewId, textViewPhoneName, textViewLine, textViewLineless, textViewContentTitle;
 
         private ImageView imageViewMap, imageViewCall, imageViewSign;
+    }
+
+    public interface OnMapClickListener {
+        void onClick(int position);
+    }
+
+    public void setOnMapClickListener(OnMapClickListener listener) {
+        this.mOnMapClickListener = listener;
     }
 }

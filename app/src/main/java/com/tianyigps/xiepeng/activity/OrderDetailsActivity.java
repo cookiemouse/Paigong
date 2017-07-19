@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.tianyigps.xiepeng.R;
 import com.tianyigps.xiepeng.bean.OrderDetailsBean;
+import com.tianyigps.xiepeng.dialog.ReturnOrderDialogFragment;
 import com.tianyigps.xiepeng.interfaces.OnGetWorkerOrderInfoHandingListener;
 import com.tianyigps.xiepeng.manager.NetworkManager;
 import com.tianyigps.xiepeng.manager.SharedpreferenceManager;
@@ -34,7 +35,7 @@ public class OrderDetailsActivity extends Activity {
     private ImageView mImageViewTitleLeft, mImageViewTitleRight;
 
     //  内容
-    private TextView mTextViewOrderName, mTextViewOrderNum, mTextViewCallName, mTextViewTime, mTextViewAddress, mTextViewRemarks, mTextViewInstallTitle, mTextViewInstallContent, mTextViewInfoTitle, mTextViewInfoContent;
+    private TextView mTextViewOrderName, mTextViewOrderNum, mTextViewCallName, mTextViewTime, mTextViewAddress, mTextViewRemarks, mTextViewInstallTitle, mTextViewInstallContent, mTextViewInfoTitle, mTextViewInfoContent, mTextViewReturnOrder;
 
     private ImageView mImageViewCall;
     private Button mButtonSign;
@@ -49,6 +50,9 @@ public class OrderDetailsActivity extends Activity {
             mStringTypeContent, mStringInfoTitle, mStringInstallInfo = "";
     private int mIntOrderType, mIntWirelessNum, mIntRemoveWireNum, mIntWireNum, mIntOrderStaus, mIntRemoveWirelessNum, mIntReviseFlag, mIntOrderId;
     private long mLongDoorTime;
+
+    //  退单对话框
+    private ReturnOrderDialogFragment mReturnOrderDialogFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +75,8 @@ public class OrderDetailsActivity extends Activity {
         mImageViewTitleRight.setVisibility(View.GONE);
         mImageViewTitleLeft.setImageResource(R.drawable.ic_back);
 
+        mReturnOrderDialogFragment = new ReturnOrderDialogFragment();
+
         //  内容
         mTextViewOrderName = findViewById(R.id.tv_layout_order_details_content_order_title);
         mTextViewOrderNum = findViewById(R.id.tv_layout_order_details_content_order_number);
@@ -82,6 +88,7 @@ public class OrderDetailsActivity extends Activity {
         mTextViewInstallContent = findViewById(R.id.tv_layout_order_details_content_order_install_content);
         mTextViewInfoTitle = findViewById(R.id.tv_layout_order_details_content_order_info_title);
         mTextViewInfoContent = findViewById(R.id.tv_layout_order_details_content_order_info_content);
+        mTextViewReturnOrder = findViewById(R.id.tv_layout_order_details_return_order);
 
         mButtonSign = findViewById(R.id.btn_layout_order_details_sign);
 
@@ -93,7 +100,7 @@ public class OrderDetailsActivity extends Activity {
 
         int eid = mSharedpreferenceManager.getEid();
         String token = mSharedpreferenceManager.getToken();
-        String orderNo = getIntent().getStringExtra(DATA_INTENT_ORDER_NO);
+        orderNo = getIntent().getStringExtra(DATA_INTENT_ORDER_NO);
         Log.i(TAG, "init: orderNo-->" + orderNo);
 
         mNetworkManager.getWorkerOrderInfoHanding(eid, token, orderNo);
@@ -111,6 +118,21 @@ public class OrderDetailsActivity extends Activity {
             @Override
             public void onClick(View view) {
                 toCalll(mStringContactPhone);
+            }
+        });
+
+        mTextViewReturnOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //  2017/7/19 退单
+                showReturnOrderDialog();
+            }
+        });
+
+        mReturnOrderDialogFragment.setOnFinishListener(new ReturnOrderDialogFragment.OnFinishListener() {
+            @Override
+            public void onFinish() {
+                onBackPressed();
             }
         });
 
@@ -176,7 +198,7 @@ public class OrderDetailsActivity extends Activity {
                 for (OrderDetailsBean.ObjBean.CarInfoBean carInfoBean : objBean.getCarInfo()) {
                     mStringInstallInfo += carInfoBean.getCarVin();
                     String carBrand = carInfoBean.getCarBrand();
-                    if (null != carBrand && !"".equals(carBrand)){
+                    if (null != carBrand && !"".equals(carBrand)) {
                         mStringInstallInfo += ("，" + carInfoBean.getCarBrand());
                     }
                     mStringInstallInfo += "\n";
@@ -187,11 +209,19 @@ public class OrderDetailsActivity extends Activity {
         });
     }
 
-    private void toCalll(String number){
+    private void toCalll(String number) {
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_DIAL);
         intent.setData(Uri.parse("tel:" + number));
         startActivity(intent);
+    }
+
+    //  显示退单对话框
+    private void showReturnOrderDialog() {
+        Bundle bundle = new Bundle();
+        bundle.putString(DATA_INTENT_ORDER_NO, orderNo);
+        mReturnOrderDialogFragment.setArguments(bundle);
+        mReturnOrderDialogFragment.show(getFragmentManager(), "ReturnOrder");
     }
 
     //  Handler

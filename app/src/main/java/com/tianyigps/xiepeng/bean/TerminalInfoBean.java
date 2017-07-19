@@ -5,13 +5,14 @@ package com.tianyigps.xiepeng.bean;
  */
 
 public class TerminalInfoBean {
+
     /**
      * errCode :
-     * jsonStr : {"time":1500370033937,"errCode":"","obj":{"install_location":"不知道","max_speed":10,"model":"1","offline_time":1491806822000,"remark":"","model_type_detail":"1","car_vin":"LNBSCBAF5DR306551","car_brand":"拆装","install_time":1500279921000,"sync_status":0,"sale_time":1493913600000,"car_type":"","online_time":1491806818000,"id":"4028818b531d032101531db38c1e0233","redisObj":{"locate_time":"2017/05/05 18:00:01","distance":334,"gps_time":"2017/05/05 18:00:01","speed":50,"direction":90,"imei":"123456789012340","locate_type":1,"current_time":"2017/05/05 18:00:01","longitude":118.775337,"latitude":31.971091,"terminal_type":"TY01","expire_time":"2018/04/10 14:47:01","acc_status":"01","longitudeF":118.78700240188502,"latitudeF":31.97525188429618},"end_date":1518710400000,"name":"苏A306551拆装有线","contact_name":"拆装","car_no":"苏A306551","icon":2,"idCard":"","imei":"123456789012340","group_id":678,"repayment_date":1462464000000,"contact_phone":"","alarm_speed":0,"update_time":1500279921000,"create_time":1460102784000,"install_person":"10004 胡梅","sim":"1964822809612","start_date":1464105600000,"cus_remark":"","customer_id":667},"msg":"操作成功","success":true}
+     * jsonStr : {"time":1500428074513,"errCode":"","obj":{"install_location":"不知道","max_speed":10,"model":"1","offline_time":1491806822000,"remark":"","model_type_detail":"1","car_vin":"LNBSCBAF5DR306551","car_brand":"拆装","install_time":1500279921000,"sync_status":0,"sale_time":1493913600000,"car_type":"","online_time":1491806818000,"id":"4028818b531d032101531db38c1e0233","redisObj":{"locate_time":"2017/05/05 18:00:01","distance":334,"gps_time":"2017/05/05 18:00:01","speed":50,"direction":90,"imei":"123456789012340","locate_type":1,"current_time":"2017/05/05 18:00:01","longitude":118.775337,"latitude":31.971091,"terminal_type":"TY01","expire_time":"2018/04/10 14:47:01","acc_status":"01","longitudeF":118.78700240188502,"latitudeF":31.97525188429618},"end_date":1518710400000,"name":"苏A306551拆装有线","contact_name":"拆装","car_no":"苏A306551","icon":2,"idCard":"","imei":"123456789012340","group_id":678,"repayment_date":1462464000000,"contact_phone":"","alarm_speed":0,"update_time":1500279921000,"create_time":1460102784000,"infoWindowStatus":"离线(74天15小时34分钟33秒)","install_person":"10004 胡梅","sim":"1964822809612","start_date":1464105600000,"cus_remark":"","customer_id":667},"msg":"操作成功","success":true}
      * msg : 操作成功
-     * obj : {"install_location":"不知道","max_speed":10,"model":"1","offline_time":1491806822000,"remark":"","model_type_detail":"1","car_vin":"LNBSCBAF5DR306551","car_brand":"拆装","install_time":1500279921000,"sync_status":0,"sale_time":1493913600000,"car_type":"","online_time":1491806818000,"id":"4028818b531d032101531db38c1e0233","redisObj":{"locate_time":"2017/05/05 18:00:01","distance":334,"gps_time":"2017/05/05 18:00:01","speed":50,"direction":90,"imei":"123456789012340","locate_type":1,"current_time":"2017/05/05 18:00:01","longitude":118.775337,"latitude":31.971091,"terminal_type":"TY01","expire_time":"2018/04/10 14:47:01","acc_status":"01","longitudeF":118.78700240188502,"latitudeF":31.97525188429618},"end_date":1518710400000,"name":"苏A306551拆装有线","contact_name":"拆装","car_no":"苏A306551","icon":2,"idCard":"","imei":"123456789012340","group_id":678,"repayment_date":1462464000000,"contact_phone":"","alarm_speed":0,"update_time":1500279921000,"create_time":1460102784000,"install_person":"10004 胡梅","sim":"1964822809612","start_date":1464105600000,"cus_remark":"","customer_id":667}
+     * obj : {"install_location":"不知道","max_speed":10,"model":"1","offline_time":1491806822000,"remark":"","model_type_detail":"1","car_vin":"LNBSCBAF5DR306551","car_brand":"拆装","install_time":1500279921000,"sync_status":0,"sale_time":1493913600000,"car_type":"","online_time":1491806818000,"id":"4028818b531d032101531db38c1e0233","redisObj":{"locate_time":"2017/05/05 18:00:01","distance":334,"gps_time":"2017/05/05 18:00:01","speed":50,"direction":90,"imei":"123456789012340","locate_type":1,"current_time":"2017/05/05 18:00:01","longitude":118.775337,"latitude":31.971091,"terminal_type":"TY01","expire_time":"2018/04/10 14:47:01","acc_status":"01","longitudeF":118.78700240188502,"latitudeF":31.97525188429618},"end_date":1518710400000,"name":"苏A306551拆装有线","contact_name":"拆装","car_no":"苏A306551","icon":2,"idCard":"","imei":"123456789012340","group_id":678,"repayment_date":1462464000000,"contact_phone":"","alarm_speed":0,"update_time":1500279921000,"create_time":1460102784000,"infoWindowStatus":"离线(74天15小时34分钟33秒)","install_person":"10004 胡梅","sim":"1964822809612","start_date":1464105600000,"cus_remark":"","customer_id":667}
      * success : true
-     * time : 1500370033937
+     * time : 1500428074513
      */
 
     private String errCode;
@@ -99,6 +100,7 @@ public class TerminalInfoBean {
          * alarm_speed : 0
          * update_time : 1500279921000
          * create_time : 1460102784000
+         * infoWindowStatus : 离线(74天15小时34分钟33秒)
          * install_person : 10004 胡梅
          * sim : 1964822809612
          * start_date : 1464105600000
@@ -134,6 +136,7 @@ public class TerminalInfoBean {
         private int alarm_speed;
         private long update_time;
         private long create_time;
+        private String infoWindowStatus;
         private String install_person;
         private String sim;
         private long start_date;
@@ -362,6 +365,14 @@ public class TerminalInfoBean {
 
         public void setCreate_time(long create_time) {
             this.create_time = create_time;
+        }
+
+        public String getInfoWindowStatus() {
+            return infoWindowStatus;
+        }
+
+        public void setInfoWindowStatus(String infoWindowStatus) {
+            this.infoWindowStatus = infoWindowStatus;
         }
 
         public String getInstall_person() {

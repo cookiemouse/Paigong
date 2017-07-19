@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:lines="1"
-            android:text="Title"
+            android:text=""
             android:textColor="@color/colorWhite"
             android:textSize="@dimen/sp_18" />
 
@@ -27,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_4"
-            android:text="TextView"
+            android:text=""
             android:textColor="@color/colorWhite" />
 
     </LinearLayout>
@@ -36,6 +36,6 @@
         android:id="@+id/iv_view_map_info_window_cancel"
         android:layout_width="@dimen/dp_24"
         android:layout_height="@dimen/dp_24"
-        android:src="@drawable/ic_back" />
+        android:src="@drawable/ic_delete" />
 
 </LinearLayout>

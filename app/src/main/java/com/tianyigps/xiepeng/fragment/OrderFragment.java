@@ -23,6 +23,7 @@ import com.tianyigps.xiepeng.adapter.OrderAdapter;
 import com.tianyigps.xiepeng.bean.WorkerOrderBean;
 import com.tianyigps.xiepeng.data.AdapterOrderData;
 import com.tianyigps.xiepeng.data.Data;
+import com.tianyigps.xiepeng.dialog.ChoiceMapDialogFragment;
 import com.tianyigps.xiepeng.interfaces.OnGetWorkerOrderListener;
 import com.tianyigps.xiepeng.manager.NetworkManager;
 import com.tianyigps.xiepeng.utils.TimeFormatU;
@@ -30,6 +31,7 @@ import com.tianyigps.xiepeng.utils.TimeFormatU;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.tianyigps.xiepeng.data.Data.DATA_INTENT_ADDRESS;
 import static com.tianyigps.xiepeng.data.Data.MSG_1;
 import static com.tianyigps.xiepeng.data.Data.MSG_ERO;
 
@@ -60,6 +62,8 @@ public class OrderFragment extends Fragment {
     private int mIntOrderType, mIntWirelessNum, mIntRemoveWireNum, mIntWireNum, mIntOrderStaus, mIntRemoveWirelessNum, mIntReviseFlag, mIntOrderId;
     private long mLongDoorTime;
 
+    private ChoiceMapDialogFragment mChoiceMapDialogFragment;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -69,8 +73,8 @@ public class OrderFragment extends Fragment {
 
         setEventListener();
 
-        mSwipeRefreshLayout.setRefreshing(true);
-        mNetworkManager.getWorkerOrder(Data.EID, Data.TOKEN, "");
+//        mSwipeRefreshLayout.setRefreshing(true);
+//        mNetworkManager.getWorkerOrder(Data.EID, Data.TOKEN, "");
 
         return viewRoot;
     }
@@ -82,6 +86,8 @@ public class OrderFragment extends Fragment {
         mTextViewTitle = view.findViewById(R.id.tv_layout_title_base_middle);
         initTitle();
 
+        mChoiceMapDialogFragment = new ChoiceMapDialogFragment();
+
         mSwipeRefreshLayout = view.findViewById(R.id.srl_fragment_worker_order);
         mImageViewSearch = view.findViewById(R.id.iv_layout_search);
         mEditTextSearch = view.findViewById(R.id.et_layout_search);
@@ -92,16 +98,16 @@ public class OrderFragment extends Fragment {
         mSwipeRefreshLayout.setColorSchemeColors(0xff3cabfa);
 
         mAdapterOrderDataList = new ArrayList<>();
-//        for (int i = 0; i < 6; i++) {
-//            mAdapterOrderDataList.add(new AdapterOrderData("万惠南宁"
-//                    , "2017-01-02 17:30"
-//                    , "上海市浦东区东方路985号一百杉杉大厦"
-//                    , "TY2017010215542001"
-//                    , "南柱赫"
-//                    , "1234567890"
-//                    , "orderType"
-//                    , i, 2));
-//        }
+        for (int i = 0; i < 6; i++) {
+            mAdapterOrderDataList.add(new AdapterOrderData("万惠南宁"
+                    , "2017-01-02 17:30"
+                    , "上海市浦东区东方路985号一百杉杉大厦"
+                    , "TY2017010215542001"
+                    , "南柱赫"
+                    , "1234567890"
+                    , "orderType"
+                    , i, 2));
+        }
 
         mOrderAdapter = new OrderAdapter(getContext(), mAdapterOrderDataList);
 
@@ -142,6 +148,16 @@ public class OrderFragment extends Fragment {
             public void onClick(View view) {
                 Intent intent = new Intent(getContext(), LocateActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        mOrderAdapter.setOnMapClickListener(new OrderAdapter.OnMapClickListener() {
+            @Override
+            public void onClick(int position) {
+                Bundle bundle = new Bundle();
+                bundle.putString(DATA_INTENT_ADDRESS, mAdapterOrderDataList.get(position).getAddress());
+                mChoiceMapDialogFragment.setArguments(bundle);
+                mChoiceMapDialogFragment.show(getChildFragmentManager(), "ChoiceMapDialog");
             }
         });
 

@@ -1,15 +1,19 @@
 package com.tianyigps.xiepeng.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.baidu.mapapi.SDKInitializer;
 import com.baidu.mapapi.map.BaiduMap;
@@ -24,6 +28,12 @@ import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.search.core.SearchResult;
+import com.baidu.mapapi.search.geocode.GeoCodeResult;
+import com.baidu.mapapi.search.geocode.GeoCoder;
+import com.baidu.mapapi.search.geocode.OnGetGeoCoderResultListener;
+import com.baidu.mapapi.search.geocode.ReverseGeoCodeOption;
+import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 import com.google.gson.Gson;
 import com.tianyigps.xiepeng.R;
 import com.tianyigps.xiepeng.base.BaseActivity;
@@ -38,6 +48,7 @@ import static com.tianyigps.xiepeng.data.Data.DATA_SCANNER;
 import static com.tianyigps.xiepeng.data.Data.DATA_SCANNER_REQUEST;
 import static com.tianyigps.xiepeng.data.Data.DATA_SCANNER_RESULT;
 import static com.tianyigps.xiepeng.data.Data.MSG_1;
+import static com.tianyigps.xiepeng.data.Data.MSG_2;
 import static com.tianyigps.xiepeng.data.Data.MSG_ERO;
 
 public class LocateActivity extends BaseActivity implements View.OnClickListener {
@@ -62,6 +73,12 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
     private String token;
     private String mStringTitle, mStringContent;
     private double lat, lng;
+
+    //  地理编码
+    private GeoCoder mGeoCoderSearch;
+    private String mStringAddress;
+
+    private Toast mToast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,6 +138,8 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
             }
             case R.id.tv_activity_locate_look: {
                 // TODO: 2017/7/12 查看设备定位
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(mEditTextImei.getWindowToken(), 0);
                 String imei = mEditTextImei.getText().toString();
                 getImeiLocation(imei);
                 break;
@@ -154,6 +173,10 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
     }
 
     private void init() {
+        this.setTitleText(R.string.look_location);
+
+        mToast = Toast.makeText(LocateActivity.this, "", Toast.LENGTH_SHORT);
+
         mMapView = findViewById(R.id.mv_layout_map);
         mBaiduMap = mMapView.getMap();
 
@@ -179,6 +202,8 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
 
         mNetworkManager = NetworkManager.getInstance();
         myHandler = new MyHandler();
+
+        mGeoCoderSearch = GeoCoder.newInstance();
     }
 
     private void setEventListener() {
@@ -212,6 +237,24 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
             }
         });
 
+        //  由经纬度查询地址
+        mGeoCoderSearch.setOnGetGeoCodeResultListener(new OnGetGeoCoderResultListener() {
+            @Override
+            public void onGetGeoCodeResult(GeoCodeResult geoCodeResult) {
+            }
+
+            @Override
+            public void onGetReverseGeoCodeResult(ReverseGeoCodeResult reverseGeoCodeResult) {
+                if (null == reverseGeoCodeResult || reverseGeoCodeResult.error != SearchResult.ERRORNO.NO_ERROR) {
+                    //无结果
+                } else {
+                    //获取反向地理编码结果
+                    mStringAddress = reverseGeoCodeResult.getAddress();
+                    myHandler.sendEmptyMessage(MSG_2);
+                }
+            }
+        });
+
         mNetworkManager.setGetTerminalInfoListener(new OnGetTerminalInfoListener() {
             @Override
             public void onFailure() {
@@ -233,13 +276,29 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
                 mStringTitle = objBean.getName();
 
                 TerminalInfoBean.ObjBean.RedisObjBean redisObjBean = objBean.getRedisObj();
+                String type;
+                switch (redisObjBean.getLocate_type()) {
+                    case 0: {
+                        type = "基站定位";
+                        break;
+                    }
+                    case 1: {
+                        type = "GPS定位";
+                        break;
+                    }
+                    case 2: {
+                        type = "上线不定们";
+                        break;
+                    }
+                    default: {
+                        type = "";
+                    }
+                }
                 mStringContent = "设备编号：" + objBean.getImei()
-                        + "\n状态："
-                        + "\n定位类型："
+                        + "\n状态：" + objBean.getInfoWindowStatus()
+                        + "\n定位类型：" + type
                         + "\n信号时间：" + redisObjBean.getCurrent_time()
                         + "\n定位时间：" + redisObjBean.getLocate_time() + "\n\n";
-                redisObjBean.getAcc_status();   //00-未知，01-熄火，02-点火
-                redisObjBean.getLocate_type();  //0-基站定位，1-GPS定位，2-上线不定位
 
                 lat = redisObjBean.getLatitude();
                 lng = redisObjBean.getLongitude();
@@ -310,6 +369,15 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
         mNetworkManager.getTerminalInfo(eid, token, imei);
     }
 
+    private void showToast(String message) {
+        View viewToast = LayoutInflater.from(LocateActivity.this).inflate(R.layout.layout_top_toast, null);
+        TextView textViewInfo = viewToast.findViewById(R.id.tv_layout_top_toast);
+        textViewInfo.setText(message);
+        mToast.setView(viewToast);
+        mToast.setGravity(Gravity.TOP, 0, 0);
+        mToast.show();
+    }
+
     private class MyHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
@@ -320,8 +388,17 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
                 }
                 case MSG_1: {
                     LatLng latLng = new LatLng(lat, lng);
+
+                    //  查询地址
+                    mGeoCoderSearch.reverseGeoCode(new ReverseGeoCodeOption().location(latLng));
+
+                    moveToCenter(latLng);
                     markCar(latLng);
                     showInfoWindow(latLng, mStringTitle, mStringContent);
+                    break;
+                }
+                case MSG_2: {
+                    mTextViewAddress.setText(mStringAddress);
                     break;
                 }
                 default: {

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_locate"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.tianyigps.xiepeng.activity.LocateActivity">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:id="@+id/activity_locate"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              tools:context="com.tianyigps.xiepeng.activity.LocateActivity">
 
     <LinearLayout
         android:id="@+id/ll_activity_locate"
@@ -24,15 +24,13 @@
             android:layout_marginStart="@dimen/dp_16"
             android:gravity="center"
             android:text="@string/imei_number"
-            android:textColor="@color/colorBlack"
-            android:textSize="@dimen/sp_20" />
+            android:textSize="@dimen/sp_18"/>
 
         <EditText
             android:id="@+id/et_activity_locate_imei"
             android:layout_width="0dp"
             android:layout_height="@dimen/dp_48"
-            android:layout_weight="1"
-            android:hint="@string/app_name" />
+            android:layout_weight="1"/>
 
         <ImageView
             android:id="@+id/iv_activity_locate_imei"
@@ -42,7 +40,7 @@
             android:layout_marginLeft="@dimen/dp_4"
             android:layout_marginRight="@dimen/dp_16"
             android:layout_marginStart="@dimen/dp_4"
-            android:src="@drawable/ic_scanner" />
+            android:src="@drawable/ic_scanner"/>
 
     </LinearLayout>
 
@@ -51,8 +49,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="@dimen/dp_8"
         android:layout_marginBottom="@dimen/dp_8"
+        android:layout_marginTop="@dimen/dp_8"
         android:background="@color/material_light_blue_a700"
         android:paddingBottom="@dimen/dp_8"
         android:paddingLeft="@dimen/dp_96"
@@ -60,10 +58,11 @@
         android:paddingTop="@dimen/dp_8"
         android:text="TextView"
         android:textColor="@color/colorWhite"
-        android:textSize="@dimen/sp_18" />
+        android:textSize="@dimen/sp_18"/>
 
-    <include layout="@layout/layout_map"
-        android:layout_height="match_parent"
+    <include
+        layout="@layout/layout_map"
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
         />
 </LinearLayout>

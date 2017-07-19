@@ -13,6 +13,7 @@
     <string name="start">开始</string>
     <string name="modify">(改)</string>
     <string name="look_map">查看地图</string>
+    <string name="look_location">查看定位</string>
     <string name="password_old">原密码：</string>
     <string name="password_new_ensure">确认新密码：</string>
     <string name="password_new">新密码：</string>
@@ -39,6 +40,15 @@
     <string name="ge">个</string>
     <string name="ge_middle">个，无线</string>
     <string name="wire">有线</string>
+    <string name="return_order">退单</string>
+    <string name="unable_arrive_on_time">无法按时到达</string>
+    <string name="no_device">缺少设备</string>
+    <string name="manager_ask">主任要求</string>
+    <string name="other_reason">其他原因</string>
+    <string name="submit">提交</string>
+    <string name="known">知道了</string>
+    <string name="tip">提示</string>
+    <string name="choice_map">请选择地图</string>
 
     <array name="picker_month">
         <item>01 月</item>
