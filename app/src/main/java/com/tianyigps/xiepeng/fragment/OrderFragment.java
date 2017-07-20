@@ -1,5 +1,7 @@
 package com.tianyigps.xiepeng.fragment;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -16,16 +18,21 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.baidu.mapapi.model.LatLng;
 import com.google.gson.Gson;
 import com.tianyigps.xiepeng.R;
 import com.tianyigps.xiepeng.activity.LocateActivity;
+import com.tianyigps.xiepeng.activity.WorkerFragmentContentActivity;
 import com.tianyigps.xiepeng.adapter.OrderAdapter;
 import com.tianyigps.xiepeng.bean.WorkerOrderBean;
 import com.tianyigps.xiepeng.data.AdapterOrderData;
 import com.tianyigps.xiepeng.data.Data;
 import com.tianyigps.xiepeng.dialog.ChoiceMapDialogFragment;
 import com.tianyigps.xiepeng.interfaces.OnGetWorkerOrderListener;
+import com.tianyigps.xiepeng.interfaces.OnSignedWorkerListener;
+import com.tianyigps.xiepeng.manager.LocateManager;
 import com.tianyigps.xiepeng.manager.NetworkManager;
+import com.tianyigps.xiepeng.manager.SharedpreferenceManager;
 import com.tianyigps.xiepeng.utils.TimeFormatU;
 
 import java.util.ArrayList;
@@ -33,6 +40,8 @@ import java.util.List;
 
 import static com.tianyigps.xiepeng.data.Data.DATA_INTENT_ADDRESS;
 import static com.tianyigps.xiepeng.data.Data.MSG_1;
+import static com.tianyigps.xiepeng.data.Data.MSG_2;
+import static com.tianyigps.xiepeng.data.Data.MSG_3;
 import static com.tianyigps.xiepeng.data.Data.MSG_ERO;
 
 /**
@@ -63,6 +72,17 @@ public class OrderFragment extends Fragment {
     private long mLongDoorTime;
 
     private ChoiceMapDialogFragment mChoiceMapDialogFragment;
+
+    //  获取定位
+    private LocateManager mLocateManager;
+    private static final String MAP_TYPE = "bd";
+    private LatLng mLatLngLocate;
+    private String orderNoPosition;
+
+    private SharedpreferenceManager mSharedpreferenceManager;
+    private int eid;
+    private String token;
+    private String name;
 
     @Nullable
     @Override
@@ -116,6 +136,14 @@ public class OrderFragment extends Fragment {
         mNetworkManager = NetworkManager.getInstance();
 
         myHandler = new MyHandler();
+
+        mLocateManager = new LocateManager(getActivity());
+
+        mSharedpreferenceManager = new SharedpreferenceManager(getActivity());
+
+        eid = mSharedpreferenceManager.getEid();
+        token = mSharedpreferenceManager.getToken();
+        name = mSharedpreferenceManager.getName();
     }
 
     private void initTitle() {
@@ -158,6 +186,23 @@ public class OrderFragment extends Fragment {
                 bundle.putString(DATA_INTENT_ADDRESS, mAdapterOrderDataList.get(position).getAddress());
                 mChoiceMapDialogFragment.setArguments(bundle);
                 mChoiceMapDialogFragment.show(getChildFragmentManager(), "ChoiceMapDialog");
+            }
+        });
+
+        mOrderAdapter.setOnSignClickListener(new OrderAdapter.OnSignClickListener() {
+            @Override
+            public void onClick(int position) {
+                orderNoPosition = mAdapterOrderDataList.get(position).getId();
+
+                showAskSignDialog();
+            }
+        });
+
+        mLocateManager.setOnReceiveLocationListener(new LocateManager.OnReceiveLocationListener() {
+            @Override
+            public void onReceive(LatLng latLng) {
+                mLatLngLocate = latLng;
+                myHandler.sendEmptyMessage(MSG_2);
             }
         });
 
@@ -235,9 +280,55 @@ public class OrderFragment extends Fragment {
                 }
             }
         });
+
+        mNetworkManager.setSignedWorkerListener(new OnSignedWorkerListener() {
+            @Override
+            public void onFailure() {
+            }
+
+            @Override
+            public void onSuccess(String result) {
+                myHandler.sendEmptyMessage(MSG_3);
+            }
+        });
+    }
+
+    //  确认签到对话框
+    private void showAskSignDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setCancelable(false);
+        View viewDialog = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_ask_sign, null);
+        builder.setView(viewDialog);
+
+        final Dialog dialog = builder.create();
+        TextView textViewCancel = viewDialog.findViewById(R.id.tv_dialog_ask_sign_cancel);
+        TextView textViewEnsure = viewDialog.findViewById(R.id.tv_dialog_ask_sign_ensure);
+
+        textViewCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO: 2017/7/20 dismiss
+                dialog.dismiss();
+            }
+        });
+
+        textViewEnsure.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // 2017/7/20 签到
+                mLocateManager.startLocate();
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
     }
 
     private class MyHandler extends Handler {
+
+        //  MSG_1   获取Order数据
+        //  MSG_2   获取定位数据
+        //  MSG_3   签到回调
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
@@ -248,6 +339,15 @@ public class OrderFragment extends Fragment {
                 }
                 case MSG_1: {
                     mOrderAdapter.notifyDataSetChanged();
+                    break;
+                }
+                case MSG_2: {
+                    mNetworkManager.signedWorker(eid, token, name, orderNoPosition, mLatLngLocate.latitude, mLatLngLocate.longitude, MAP_TYPE);
+                    break;
+                }
+                case MSG_3: {
+                    WorkerFragmentContentActivity activity = (WorkerFragmentContentActivity) getActivity();
+                    activity.showHandingFragment();
                     break;
                 }
                 default: {

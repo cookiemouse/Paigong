@@ -155,4 +155,13 @@ public class WorkerFragmentContentActivity extends AppCompatActivity implements 
         }
         fragmentTransaction.commit();
     }
+
+    //  显示进行中Fragment
+    public void showHandingFragment(){
+        resetBottomView();
+        mImageViewHandling.setImageResource(R.drawable.ic_tab_doing_selected);
+        mTextViewHandling.setTextColor(getResources().getColor(R.color.colorTextSelect));
+
+        showFragment(mHandingFragment);
+    }
 }

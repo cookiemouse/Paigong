@@ -257,7 +257,7 @@ public class NetworkManager {
 
     //  安装工程师签到 6
     public void signedWorker(int eid, String token, String eName
-            , String orderNo, String lat, String log
+            , String orderNo, double lat, double log
             , String type) {
 
         Request.Builder builder = new Request.Builder();

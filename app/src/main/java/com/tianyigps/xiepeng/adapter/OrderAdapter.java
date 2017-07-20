@@ -29,6 +29,7 @@ public class OrderAdapter extends BaseAdapter {
     private List<AdapterOrderData> mAdapterOrderDataList;
 
     private OnMapClickListener mOnMapClickListener;
+    private OnSignClickListener mOnSignClickListener;
 
     public OrderAdapter(Context context, List<AdapterOrderData> mAdapterOrderDataList) {
         this.context = context;
@@ -91,7 +92,7 @@ public class OrderAdapter extends BaseAdapter {
         viewHolder.imageViewMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: 2017/7/13 地图页
+                // 2017/7/13 地图页
                 if (null == mOnMapClickListener) {
                     throw new NullPointerException("OnMapClickListener is null");
                 }
@@ -112,7 +113,11 @@ public class OrderAdapter extends BaseAdapter {
         viewHolder.imageViewSign.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: 2017/7/13 签到
+                //  2017/7/13 签到
+                if (null == mOnSignClickListener) {
+                    throw new NullPointerException("OnSignClickListener is null");
+                }
+                mOnSignClickListener.onClick(position);
             }
         });
 
@@ -141,5 +146,13 @@ public class OrderAdapter extends BaseAdapter {
 
     public void setOnMapClickListener(OnMapClickListener listener) {
         this.mOnMapClickListener = listener;
+    }
+
+    public interface OnSignClickListener {
+        void onClick(int position);
+    }
+
+    public void setOnSignClickListener(OnSignClickListener listener) {
+        this.mOnSignClickListener = listener;
     }
 }
