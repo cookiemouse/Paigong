@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TableRow;
+import android.widget.TextView;
 
 import com.tianyigps.xiepeng.R;
 import com.tianyigps.xiepeng.utils.GeoCoderU;
@@ -87,6 +88,25 @@ public class ChoiceMapDialogFragment extends DialogFragment {
             tableRowGaode.setVisibility(View.GONE);
         }
 
+        if (tableRowBaidu.getVisibility() == View.GONE && tableRowGaode.getVisibility() == View.GONE) {
+            Log.i(TAG, "onCreateDialog: nomap");
+            View viewDialogNoMap = LayoutInflater.from(getActivity())
+                    .inflate(R.layout.dialog_message_no_map, null);
+
+            TextView textViewKnown = viewDialogNoMap.findViewById(R.id.tv_dialog_message_no_map_cancel);
+
+            textViewKnown.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dismiss();
+                }
+            });
+            builder.setView(viewDialogNoMap);
+        } else {
+            Log.i(TAG, "onCreateDialog: have map");
+            builder.setView(viewDialog);
+        }
+
         tableRowBaidu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -105,8 +125,6 @@ public class ChoiceMapDialogFragment extends DialogFragment {
                 dismiss();
             }
         });
-
-        builder.setView(viewDialog);
 
         return builder.create();
     }
