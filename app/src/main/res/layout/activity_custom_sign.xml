@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.tianyigps.xiepeng.activity.CustomSignActivity">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="@dimen/dp_16"
+        android:layout_weight="1"
+        android:background="@drawable/bg_edit"
+        android:padding="0dp">
+
+        <com.tianyigps.signviewlibrary.SignView
+            android:id="@+id/sv_activity_custom_sign"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <LinearLayout
+            android:id="@+id/ll_activity_custom_sign"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_marginBottom="@dimen/dp_8"
+            android:layout_marginRight="@dimen/dp_8"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="@dimen/dp_32"
+                android:layout_height="@dimen/dp_32"
+                android:src="@drawable/ic_eraser"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/dp_4"
+                android:layout_marginStart="@dimen/dp_4"
+                android:gravity="bottom"
+                android:text="清除"/>
+        </LinearLayout>
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/tv_activity_custom_sign"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="@dimen/dp_32"
+        android:layout_marginTop="@dimen/dp_16"
+        android:background="@color/colorBlueTheme"
+        android:padding="@dimen/dp_16"
+        android:text="@string/submit"/>
+
+</LinearLayout>

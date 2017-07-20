@@ -15,6 +15,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.tianyigps.xiepeng.R;
+import com.tianyigps.xiepeng.activity.CustomSignActivity;
+import com.tianyigps.xiepeng.activity.EditRemarksActivity;
 import com.tianyigps.xiepeng.activity.ModifyPasswordActivity;
 import com.tianyigps.xiepeng.activity.StatisticsActivity;
 import com.tianyigps.xiepeng.adapter.MineAdapter;
@@ -72,6 +74,10 @@ public class MineFragment extends Fragment {
         mAdapterMineDataList.add(new AdapterMineData(R.drawable.ic_statistics, "质量统计"));
         mAdapterMineDataList.add(new AdapterMineData(R.drawable.ic_modify_password, "修改密码"));
 
+        // TODO: 2017/7/20 测试
+        mAdapterMineDataList.add(new AdapterMineData(R.drawable.ic_modify_password, "测试客户签字"));
+        mAdapterMineDataList.add(new AdapterMineData(R.drawable.ic_modify_password, "测试填写备注"));
+
         mMineAdapter = new MineAdapter(getContext(), mAdapterMineDataList);
 
         mListViewMine.setAdapter(mMineAdapter);
@@ -109,6 +115,20 @@ public class MineFragment extends Fragment {
                         // TODO: 2017/7/13 修改密码
 //                        Intent intent = new Intent(getContext(), ModifyPasswordActivity.class);
                         Intent intent = new Intent(getContext(), ModifyPasswordActivity.class);
+                        startActivity(intent);
+                        break;
+                    }
+                    case 2: {
+                        //  2017/7/13 测试
+//                        Intent intent = new Intent(getContext(), ModifyPasswordActivity.class);
+                        Intent intent = new Intent(getContext(), CustomSignActivity.class);
+                        startActivity(intent);
+                        break;
+                    }
+                    case 3: {
+                        //  2017/7/13 测试
+//                        Intent intent = new Intent(getContext(), ModifyPasswordActivity.class);
+                        Intent intent = new Intent(getContext(), EditRemarksActivity.class);
                         startActivity(intent);
                         break;
                     }

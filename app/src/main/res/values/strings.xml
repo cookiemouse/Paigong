@@ -49,6 +49,7 @@
     <string name="known">知道了</string>
     <string name="tip">提示</string>
     <string name="choice_map">请选择地图</string>
+    <string name="next_step">下一步</string>
 
     <array name="picker_month">
         <item>01 月</item>

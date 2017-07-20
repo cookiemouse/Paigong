@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/dp_16"
+    android:orientation="vertical"
+    tools:context="com.tianyigps.xiepeng.activity.EditRemarksActivity">
+
+    <EditText
+        android:id="@+id/et_layout_return_order"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@drawable/bg_edit"
+        android:gravity="start"
+        android:hint="填写备注信息"
+        android:maxLength="200"/>
+
+    <TextView
+        android:id="@+id/tv_layout_return_order_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_marginTop="@dimen/dp_4"
+        android:text="0/200"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="@dimen/dp_32"
+        android:layout_marginTop="@dimen/dp_16"
+        android:background="@color/colorBlueTheme"
+        android:padding="@dimen/dp_16"
+        android:text="@string/next_step"/>
+
+</LinearLayout>
