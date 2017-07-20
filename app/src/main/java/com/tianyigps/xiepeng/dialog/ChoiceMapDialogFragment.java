@@ -9,12 +9,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TableRow;
 
 import com.tianyigps.xiepeng.R;
+import com.tianyigps.xiepeng.utils.GeoCoderU;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,12 +35,30 @@ public class ChoiceMapDialogFragment extends DialogFragment {
     private static final String PN_GAODE = "com.autonavi.minimap";
 
     private String address;
+    private double mLat, mLng;
+    private GeoCoderU mGeoCoderU;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle bundle = getArguments();
         address = bundle.getString(DATA_INTENT_ADDRESS);
+        Log.i(TAG, "onCreate: address-->" + address);
+
+        mGeoCoderU = new GeoCoderU();
+        mGeoCoderU.setOnGetGeoGodeListener(new GeoCoderU.OnGetGeoCodeListener() {
+            @Override
+            public void onGetLatlng(double lat, double lng) {
+                mLat = lat;
+                mLng = lng;
+            }
+
+            @Override
+            public void onGetAddress(String address) {
+            }
+        });
+
+        mGeoCoderU.searchLatlng(address);
     }
 
     @Nullable
@@ -80,7 +100,8 @@ public class ChoiceMapDialogFragment extends DialogFragment {
             @Override
             public void onClick(View view) {
                 // TODO: 2017/7/19 高德地图
-                toGaodeMap();
+//                toGaodeMap("36.547901", "104.258354", address);
+                toGaodeMap(mLat, mLng, address);
                 dismiss();
             }
         });
@@ -90,10 +111,16 @@ public class ChoiceMapDialogFragment extends DialogFragment {
         return builder.create();
     }
 
-    private void toGaodeMap() {
-        Intent intent = new Intent("android.intent.action.VIEW",
-                android.net.Uri.parse("androidamap://showTraffic?sourceApplication=softname&poiid=BGVIS1&lat=36.2&lon=116.1&level=10&dev=0"));
-        intent.setPackage("com.autonavi.minimap");
+    private void toGaodeMap(double lat, double lng, String address) {
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_VIEW);
+        intent.addCategory(Intent.CATEGORY_DEFAULT);
+        String uri = "androidamap://navi?sourceApplication=amap" +
+                "&poiname=" + address +
+                "&lat=" + lat +
+                "&lon=" + lng +
+                "&dev=1&style=0";
+        intent.setData(Uri.parse(uri));
         startActivity(intent);
     }
 
