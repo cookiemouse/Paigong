@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorBlueTheme"
-    tools:context="com.tianyigps.xiepeng.activity.OrderDetailsActivity">
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:background="@color/colorBlueTheme"
+             tools:context="com.tianyigps.xiepeng.activity.OrderDetailsActivity">
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_160"
         android:scaleType="fitXY"
-        android:src="@drawable/bg_order_details_top" />
+        android:src="@drawable/bg_order_details_top"/>
 
-    <include layout="@layout/layout_title_base" />
+    <include layout="@layout/layout_title_base"/>
 
     <include
         layout="@layout/layout_order_details_content"
@@ -21,14 +21,45 @@
         android:layout_marginBottom="@dimen/dp_16"
         android:layout_marginLeft="@dimen/dp_16"
         android:layout_marginRight="@dimen/dp_16"
-        android:layout_marginTop="120dp" />
+        android:layout_marginTop="120dp"/>
 
-    <ImageView
-        android:layout_width="@dimen/dp_64"
-        android:layout_height="@dimen/dp_64"
-        android:layout_marginTop="96dp"
+
+    <FrameLayout
+        android:layout_width="@dimen/dp_96"
+        android:layout_height="@dimen/dp_96"
         android:layout_gravity="center_horizontal"
-        android:background="@color/colorAccent"
-        android:elevation="@dimen/dp_16"/>
+        android:layout_marginTop="@dimen/dp_72"
+        android:elevation="@dimen/dp_16"
+        >
+
+        <com.tianyigps.cycleprogressview.CycleProgressView
+            android:id="@+id/cpv_activity_order_details"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_cycle"
+            android:padding="@dimen/dp_8"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="09:35"
+                android:textColor="@color/colorOrange"
+                android:textSize="@dimen/sp_16"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="剩余时间"
+                android:textSize="@dimen/sp_12"/>
+        </LinearLayout>
+
+
+    </FrameLayout>
 
 </FrameLayout>

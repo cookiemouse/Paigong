@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:padding="@dimen/dp_8"
+              android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dp_8"
+        android:text="@string/tip"/>
+
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dp_0_5"
+        android:layout_marginTop="@dimen/dp_4"
+        android:background="@color/colorBlueTheme"/>
+
+    <TextView
+        android:id="@+id/tv_dialog_message_message"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_72"
+        android:gravity="center"
+        android:text="@string/app_name"/>
+
+    <TextView
+        android:id="@+id/tv_dialog_message_cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/dp_16"
+        android:background="@color/colorBlueTheme"
+        android:paddingBottom="@dimen/dp_16"
+        android:paddingLeft="@dimen/dp_64"
+        android:paddingRight="@dimen/dp_64"
+        android:paddingTop="@dimen/dp_16"
+        android:layout_marginBottom="@dimen/dp_16"
+        android:text="@string/known"/>
+
+</LinearLayout>

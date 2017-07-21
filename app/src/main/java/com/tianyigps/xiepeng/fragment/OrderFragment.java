@@ -24,6 +24,7 @@ import com.tianyigps.xiepeng.R;
 import com.tianyigps.xiepeng.activity.LocateActivity;
 import com.tianyigps.xiepeng.activity.WorkerFragmentContentActivity;
 import com.tianyigps.xiepeng.adapter.OrderAdapter;
+import com.tianyigps.xiepeng.bean.SignWorkerBean;
 import com.tianyigps.xiepeng.bean.WorkerOrderBean;
 import com.tianyigps.xiepeng.data.AdapterOrderData;
 import com.tianyigps.xiepeng.data.Data;
@@ -42,6 +43,7 @@ import static com.tianyigps.xiepeng.data.Data.DATA_INTENT_ADDRESS;
 import static com.tianyigps.xiepeng.data.Data.MSG_1;
 import static com.tianyigps.xiepeng.data.Data.MSG_2;
 import static com.tianyigps.xiepeng.data.Data.MSG_3;
+import static com.tianyigps.xiepeng.data.Data.MSG_4;
 import static com.tianyigps.xiepeng.data.Data.MSG_ERO;
 
 /**
@@ -78,6 +80,8 @@ public class OrderFragment extends Fragment {
     private static final String MAP_TYPE = "bd";
     private LatLng mLatLngLocate;
     private String orderNoPosition;
+
+    private String strMessage;
 
     private SharedpreferenceManager mSharedpreferenceManager;
     private int eid;
@@ -288,7 +292,14 @@ public class OrderFragment extends Fragment {
 
             @Override
             public void onSuccess(String result) {
-                myHandler.sendEmptyMessage(MSG_3);
+                Gson gson = new Gson();
+                SignWorkerBean signWorkerBean = gson.fromJson(result, SignWorkerBean.class);
+                strMessage = signWorkerBean.getMsg();
+                if (signWorkerBean.isSuccess()) {
+                    myHandler.sendEmptyMessage(MSG_3);
+                } else {
+                    myHandler.sendEmptyMessage(MSG_4);
+                }
             }
         });
     }
@@ -324,11 +335,32 @@ public class OrderFragment extends Fragment {
         dialog.show();
     }
 
+    private void showMessageDialog(String message) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        View viewDialog = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_message_editable, null);
+        TextView textViewMessage = viewDialog.findViewById(R.id.tv_dialog_message_message);
+        TextView textViewKnow = viewDialog.findViewById(R.id.tv_dialog_message_cancel);
+        textViewMessage.setText(message);
+        builder.setView(viewDialog);
+        builder.setCancelable(false);
+        final AlertDialog dialog = builder.create();
+
+        textViewKnow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+    }
+
     private class MyHandler extends Handler {
 
         //  MSG_1   获取Order数据
         //  MSG_2   获取定位数据
-        //  MSG_3   签到回调
+        //  MSG_3   签到回调    成功
+        //  MSG_4   签到回调    失败
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
@@ -349,6 +381,9 @@ public class OrderFragment extends Fragment {
                     WorkerFragmentContentActivity activity = (WorkerFragmentContentActivity) getActivity();
                     activity.showHandingFragment();
                     break;
+                }
+                case MSG_4: {
+                    showMessageDialog(strMessage);
                 }
                 default: {
                     Log.i(TAG, "handleMessage: default");

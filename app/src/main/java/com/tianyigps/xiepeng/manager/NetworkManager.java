@@ -257,7 +257,7 @@ public class NetworkManager {
 
     //  安装工程师签到 6
     public void signedWorker(int eid, String token, String eName
-            , String orderNo, double lat, double log
+            , String orderNo, double lat, double lng
             , String type) {
 
         Request.Builder builder = new Request.Builder();
@@ -266,7 +266,7 @@ public class NetworkManager {
                 + "&eName=" + eName
                 + "&orderNo=" + orderNo
                 + "&lat=" + lat
-                + "&log=" + log
+                + "&lon=" + lng
                 + "&type=" + type);
         mRequest = builder.build();
         Log.i(TAG, "signedWorker: url-->" + mRequest.url());

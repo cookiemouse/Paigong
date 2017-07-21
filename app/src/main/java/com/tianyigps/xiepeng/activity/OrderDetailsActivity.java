@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.tianyigps.cycleprogressview.CycleProgressView;
 import com.tianyigps.xiepeng.R;
 import com.tianyigps.xiepeng.bean.OrderDetailsBean;
 import com.tianyigps.xiepeng.dialog.ReturnOrderDialogFragment;
@@ -39,6 +40,8 @@ public class OrderDetailsActivity extends Activity {
 
     private ImageView mImageViewCall;
     private Button mButtonSign;
+
+    private CycleProgressView mCycleProgressView;
 
     private NetworkManager mNetworkManager;
     private MyHandler myHandler;
@@ -93,6 +96,12 @@ public class OrderDetailsActivity extends Activity {
         mButtonSign = findViewById(R.id.btn_layout_order_details_sign);
 
         mImageViewCall = findViewById(R.id.iv_layout_order_details_content_call);
+
+        mCycleProgressView = findViewById(R.id.cpv_activity_order_details);
+
+        mCycleProgressView.setProgress(25);
+        mCycleProgressView.setStrokWidth(10);
+        mCycleProgressView.setDefaultColor(getResources().getColor(R.color.colorCycleGray));
 
         mNetworkManager = NetworkManager.getInstance();
         myHandler = new MyHandler();

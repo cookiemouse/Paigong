@@ -35,6 +35,7 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     compile(name: 'signviewlibrary', ext: 'aar')
+    compile(name: 'cycleprogressview', ext: 'aar')
     compile 'com.android.support:appcompat-v7:26.0.0-alpha1'
     compile 'com.dlazaro66.qrcodereaderview:qrcodereaderview:2.0.2'
     compile 'com.squareup.okhttp3:okhttp:3.8.1'
