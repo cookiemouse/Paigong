@@ -53,6 +53,8 @@
     <string name="frame_no">车架号</string>
     <string name="pending_no">派单数量</string>
     <string name="complete_no">完成数量</string>
+    <string name="car_no">车牌号</string>
+    <string name="car_type">车型</string>
 
     <array name="picker_month">
         <item>01 月</item>
