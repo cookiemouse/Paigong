@@ -25,18 +25,21 @@ import com.tianyigps.xiepeng.utils.TimeFormatU;
 
 import static com.tianyigps.xiepeng.data.Data.DATA_INTENT_ORDER_NO;
 import static com.tianyigps.xiepeng.data.Data.MSG_1;
+import static com.tianyigps.xiepeng.data.Data.MSG_2;
 import static com.tianyigps.xiepeng.data.Data.MSG_ERO;
 
 public class OrderDetailsActivity extends Activity {
 
     private static final String TAG = "OrderDetailsActivity";
 
+    private static final long TIME_2_HOUR = 7200000;
+
     //Title栏
     private TextView mTextViewTitle;
     private ImageView mImageViewTitleLeft, mImageViewTitleRight;
 
     //  内容
-    private TextView mTextViewOrderName, mTextViewOrderNum, mTextViewCallName, mTextViewTime, mTextViewAddress, mTextViewRemarks, mTextViewInstallTitle, mTextViewInstallContent, mTextViewInfoTitle, mTextViewInfoContent, mTextViewReturnOrder;
+    private TextView mTextViewOrderName, mTextViewOrderNum, mTextViewCallName, mTextViewTime, mTextViewAddress, mTextViewRemarks, mTextViewInstallTitle, mTextViewInstallContent, mTextViewInfoTitle, mTextViewInfoContent, mTextViewReturnOrder, mTextViewTimeRemain;
 
     private ImageView mImageViewCall;
     private Button mButtonSign;
@@ -92,6 +95,7 @@ public class OrderDetailsActivity extends Activity {
         mTextViewInfoTitle = findViewById(R.id.tv_layout_order_details_content_order_info_title);
         mTextViewInfoContent = findViewById(R.id.tv_layout_order_details_content_order_info_content);
         mTextViewReturnOrder = findViewById(R.id.tv_layout_order_details_return_order);
+        mTextViewTimeRemain = findViewById(R.id.tv_activity_order_details_time);
 
         mButtonSign = findViewById(R.id.btn_layout_order_details_sign);
 
@@ -99,7 +103,6 @@ public class OrderDetailsActivity extends Activity {
 
         mCycleProgressView = findViewById(R.id.cpv_activity_order_details);
 
-        mCycleProgressView.setProgress(25);
         mCycleProgressView.setStrokWidth(10);
         mCycleProgressView.setDefaultColor(getResources().getColor(R.color.colorCycleGray));
 
@@ -225,6 +228,28 @@ public class OrderDetailsActivity extends Activity {
         startActivity(intent);
     }
 
+    private void updateTime() {
+        long timeNow = System.currentTimeMillis();
+        long timeRemain = mLongDoorTime - timeNow;
+
+        Log.i(TAG, "updateTime: -->" + new TimeFormatU().millisToColock(timeRemain));
+
+        if (timeRemain > TIME_2_HOUR) {
+            mCycleProgressView.setProgress(100);
+            mTextViewTimeRemain.setText(new TimeFormatU().millisToColock(timeRemain));
+        } else if (timeRemain < 0) {
+            mCycleProgressView.setProgress(0);
+            mCycleProgressView.setDefaultColor(getResources().getColor(R.color.colorOrange));
+            mTextViewTimeRemain.setText("00:00");
+            mTextViewTimeRemain.setTextColor(getResources().getColor(R.color.colorRed));
+        } else {
+            mTextViewTimeRemain.setText(new TimeFormatU().millisToColock(timeRemain));
+            mCycleProgressView.setProgress((int) (timeRemain * 100 / TIME_2_HOUR));
+        }
+
+        myHandler.sendEmptyMessageDelayed(MSG_2, 60000);
+    }
+
     //  显示退单对话框
     private void showReturnOrderDialog() {
         Bundle bundle = new Bundle();
@@ -257,6 +282,11 @@ public class OrderDetailsActivity extends Activity {
                     mTextViewInfoTitle.setText(mStringInfoTitle);
                     mTextViewInfoContent.setText(mStringInstallInfo);
 
+                    updateTime();
+                    break;
+                }
+                case MSG_2: {
+                    updateTime();
                     break;
                 }
                 default: {

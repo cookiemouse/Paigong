@@ -16,6 +16,23 @@ public class TimeFormatU {
         return simpleDateFormat.format(date);
     }
 
+    public String millisToColock(long mills) {
+        int hour = (int) (mills / 1000 / 3600);
+        int min = (int) (mills / 1000 % 3600 / 60);
+        String time;
+        if (hour < 10) {
+            time = "0" + hour;
+        } else {
+            time = "" + hour;
+        }
+        if (min < 10) {
+            time += ":0" + min;
+        } else {
+            time += ":" + min;
+        }
+        return time;
+    }
+
     //字符串转时间戳
     public String dateToMillis(String date) {
         String timeStamp = null;
