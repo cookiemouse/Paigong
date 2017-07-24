@@ -25,6 +25,7 @@ import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.MyLocationData;
+import com.baidu.mapapi.map.Overlay;
 import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.search.core.SearchResult;
@@ -37,7 +38,10 @@ import com.google.gson.Gson;
 import com.tianyigps.xiepeng.R;
 import com.tianyigps.xiepeng.base.BaseActivity;
 import com.tianyigps.xiepeng.bean.TerminalInfoBean;
+import com.tianyigps.xiepeng.bean.WholeImeiBean;
+import com.tianyigps.xiepeng.data.Data;
 import com.tianyigps.xiepeng.interfaces.OnGetTerminalInfoListener;
+import com.tianyigps.xiepeng.interfaces.OnGetWholeIMEIListener;
 import com.tianyigps.xiepeng.manager.LocateManager;
 import com.tianyigps.xiepeng.manager.NetworkManager;
 import com.tianyigps.xiepeng.manager.SharedpreferenceManager;
@@ -48,6 +52,8 @@ import static com.tianyigps.xiepeng.data.Data.DATA_SCANNER_REQUEST;
 import static com.tianyigps.xiepeng.data.Data.DATA_SCANNER_RESULT;
 import static com.tianyigps.xiepeng.data.Data.MSG_1;
 import static com.tianyigps.xiepeng.data.Data.MSG_2;
+import static com.tianyigps.xiepeng.data.Data.MSG_3;
+import static com.tianyigps.xiepeng.data.Data.MSG_4;
 import static com.tianyigps.xiepeng.data.Data.MSG_ERO;
 
 public class LocateActivity extends BaseActivity implements View.OnClickListener {
@@ -55,7 +61,8 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
     private static final String TAG = "LocateActivity";
 
     private MapView mMapView;
-    BaiduMap mBaiduMap;
+    private BaiduMap mBaiduMap;
+    private Overlay mOverlayMarker;
 
     private EditText mEditTextImei;
     private ImageView mImageViewScanner, mImageViewLocate;
@@ -72,6 +79,9 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
     private String token;
     private String mStringTitle, mStringContent;
     private double lat, lng;
+
+    private String wholeImei;
+    private String errMsg;
 
     //  地理编码
     private GeoCoder mGeoCoderSearch;
@@ -137,7 +147,7 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(mEditTextImei.getWindowToken(), 0);
                 String imei = mEditTextImei.getText().toString();
-                getImeiLocation(imei);
+                getWholeImei(imei);
                 break;
             }
             case R.id.tv_layout_map_control_normal: {
@@ -157,8 +167,10 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
                 break;
             }
             case R.id.tv_layout_map_control_flush: {
-                // TODO: 2017/7/12 刷新位置
-                mTextViewFlush.setEnabled(true);
+                // 2017/7/12 刷新位置
+                String imei = mEditTextImei.getText().toString();
+                getWholeImei(imei);
+                mTextViewFlush.setEnabled(false);
                 mTimerU.start();
                 break;
             }
@@ -251,6 +263,27 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
             }
         });
 
+        mNetworkManager.setOnGetWholeIMEIListener(new OnGetWholeIMEIListener() {
+            @Override
+            public void onFailure() {
+                // TODO: 2017/7/24 请求数据失败
+            }
+
+            @Override
+            public void onSuccess(String result) {
+                Log.i(TAG, "onSuccess: result-->" + result);
+                Gson gson = new Gson();
+                WholeImeiBean wholeImeiBean = gson.fromJson(result, WholeImeiBean.class);
+                if (!wholeImeiBean.isSuccess()) {
+                    errMsg = wholeImeiBean.getMsg();
+                    myHandler.sendEmptyMessage(Data.MSG_4);
+                    return;
+                }
+                wholeImei = wholeImeiBean.getObj().getImei();
+                myHandler.sendEmptyMessage(MSG_3);
+            }
+        });
+
         mNetworkManager.setGetTerminalInfoListener(new OnGetTerminalInfoListener() {
             @Override
             public void onFailure() {
@@ -306,12 +339,13 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
         mTimerU.setOnTickListener(new TimerU.OnTickListener() {
             @Override
             public void onTick(int time) {
-                mTextViewFlush.setText("" + time);
+                mTextViewFlush.setText("刷新（" + time + "秒）");
             }
 
             @Override
             public void onEnd() {
                 mTextViewFlush.setEnabled(true);
+                mTextViewFlush.setText(R.string.flush);
             }
         });
     }
@@ -327,7 +361,7 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
         //构建MarkerOption，用于在地图上添加Marker
         OverlayOptions option = new MarkerOptions().position(latLng).icon(bitmap).anchor(0.5f, 0.5f);
         //在地图上添加Marker，并显示
-        mBaiduMap.addOverlay(option);
+        mOverlayMarker = mBaiduMap.addOverlay(option);
     }
 
     private void showInfoWindow(LatLng latLng, String title, String content) {
@@ -358,6 +392,11 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
         MapStatus status = builder.build();
         MapStatusUpdate update = MapStatusUpdateFactory.newMapStatus(status);
         mBaiduMap.animateMapStatus(update);
+    }
+
+    //  获取完整imei
+    private void getWholeImei(String imei) {
+        mNetworkManager.getWholeImei(eid, token, imei);
     }
 
     //  获取目标位置
@@ -396,6 +435,18 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
                 case MSG_2: {
                     mTextViewAddress.setText(mStringAddress);
                     break;
+                }
+                case MSG_3: {
+                    if (null != mOverlayMarker) {
+                        mOverlayMarker.remove();
+                    }
+                    //  获取到WholeImei
+                    getImeiLocation(wholeImei);
+                    break;
+                }
+                case MSG_4: {
+                    //  获取WholeImei失败
+                    showToast(errMsg);
                 }
                 default: {
                     Log.i(TAG, "handleMessage: default");

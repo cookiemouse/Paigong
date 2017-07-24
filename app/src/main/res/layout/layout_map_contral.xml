@@ -34,12 +34,12 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal"
-        android:background="@color/material_light_blue_a700"
+        android:background="@drawable/bg_button_flush"
         android:paddingBottom="@dimen/dp_8"
         android:paddingLeft="@dimen/dp_64"
         android:paddingRight="@dimen/dp_64"
         android:paddingTop="@dimen/dp_8"
-        android:text="TextView"
+        android:text="@string/flush"
         android:textColor="@color/colorWhite"
         android:textSize="@dimen/sp_18" />
 
