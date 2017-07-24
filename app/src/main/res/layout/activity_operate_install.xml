@@ -8,7 +8,7 @@
     android:orientation="vertical"
     tools:context="com.tianyigps.xiepeng.activity.OperateInstallActivity">
 
-    <ScrollView
+    <com.tianyigps.xiepeng.customview.MyScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -37,5 +37,5 @@
                 android:scrollbars="none"/>
 
         </LinearLayout>
-    </ScrollView>
+    </com.tianyigps.xiepeng.customview.MyScrollView>
 </FrameLayout>
