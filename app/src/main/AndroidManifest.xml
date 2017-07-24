@@ -73,7 +73,9 @@
         </activity>
         <activity android:name=".activity.EditRemarksActivity">
         </activity>
-        <activity android:name=".activity.InstallingAcvitity">
+        <activity android:name=".activity.InstallingActivity">
+        </activity>
+        <activity android:name=".activity.OperateInstallActivity">
         </activity>
     </application>
 

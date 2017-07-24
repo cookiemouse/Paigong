@@ -26,6 +26,8 @@ public class HandingAdapter extends BaseAdapter {
     private Context context;
     private List<AdapterHandingData> mHandingDataList;
 
+    private OnStartClickListener mOnStartClickListener;
+
     public HandingAdapter(Context context, List<AdapterHandingData> mHandingDataList) {
         this.context = context;
         this.mHandingDataList = mHandingDataList;
@@ -52,6 +54,7 @@ public class HandingAdapter extends BaseAdapter {
         final AdapterHandingData data = mHandingDataList.get(i);
 
         final String orderNo = data.getId();
+        final int position = i;
 
         ViewHolder viewHolder = null;
         if (null == contentView) {
@@ -105,13 +108,17 @@ public class HandingAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 // TODO: 2017/7/13 开始
+                if (null == mOnStartClickListener){
+                    throw new NullPointerException("OnStartClickListener is null");
+                }
+                mOnStartClickListener.onClick(position);
             }
         });
 
         contentView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: 2017/7/11 Item点击事件
+                // 2017/7/11 Item点击事件
                 Intent intent = new Intent(context, OrderDetailsActivity.class);
                 intent.putExtra(Data.DATA_INTENT_ORDER_NO, orderNo);
                 context.startActivity(intent);
@@ -122,9 +129,15 @@ public class HandingAdapter extends BaseAdapter {
     }
 
     private class ViewHolder {
-        private TextView textViewName, textViewTime, textViewAddress
-                , textViewId, textViewTitle, textViewPhoneName
-                , textViewModify, textViewWire, textViewWireless;
+        private TextView textViewName, textViewTime, textViewAddress, textViewId, textViewTitle, textViewPhoneName, textViewModify, textViewWire, textViewWireless;
         private ImageView imageViewCall, imageViewStart;
+    }
+
+    public interface OnStartClickListener {
+        void onClick(int position);
+    }
+
+    public void setStartClickListener(OnStartClickListener listener) {
+        this.mOnStartClickListener = listener;
     }
 }

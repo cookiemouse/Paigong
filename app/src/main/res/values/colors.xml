@@ -21,6 +21,13 @@
     <color name="colorRed">#E72020</color>
     <color name="colorOrange">#ffa800</color>
 
+    <color name="colorBlueGradientStart">#33d6ff</color>
+    <color name="colorBlueGradientEnd">#3386ff</color>
+    <color name="colorGreenGradientStart">#44f1bf</color>
+    <color name="colorGreenGradientEnd">#00baab</color>
+    <color name="colorOrangeGradientStart">#ffb643</color>
+    <color name="colorOrangeGradientEnd">#ff9a4a</color>
+
     <color name="colorNull">#00000000</color>
 
     <color name="colorAlphaBlue">#a8ffffff</color>

@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             android:id="@+id/fl_item_installing"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:background="@drawable/bg_item_installing_blue">
+
+    <ImageView
+        android:layout_width="@dimen/dp_120"
+        android:layout_height="@dimen/dp_64"
+        android:layout_gravity="bottom|end"
+        android:src="@drawable/ic_item_car"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dp_16">
+
+        <ImageView
+            android:layout_width="@dimen/dp_48"
+            android:layout_height="@dimen/dp_32"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:src="@drawable/ic_item_go"/>
+
+        <TextView
+            android:id="@+id/tv_item_installing_frame_no_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:text="@string/frame_no"
+            android:textColor="@color/colorWhite"/>
+
+        <TextView
+            android:id="@+id/tv_item_installing_frame_no"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/tv_item_installing_frame_no_title"
+            android:layout_marginTop="@dimen/dp_4"
+            android:text="@string/frame_no"
+            android:textColor="@color/colorWhite"/>
+
+        <TextView
+            android:id="@+id/tv_item_installing_pending_no_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/tv_item_installing_frame_no"
+            android:layout_marginTop="@dimen/dp_16"
+            android:text="@string/pending_no"
+            android:textColor="@color/colorWhite"/>
+
+        <TextView
+            android:id="@+id/tv_item_installing_pending_online_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/tv_item_installing_pending_no_title"
+            android:layout_marginLeft="@dimen/dp_8"
+            android:layout_marginStart="@dimen/dp_8"
+            android:layout_toEndOf="@+id/tv_item_installing_pending_no_title"
+            android:layout_toRightOf="@+id/tv_item_installing_pending_no_title"
+            android:text="@string/online"
+            android:textColor="@color/colorCycleGray"/>
+
+        <TextView
+            android:id="@+id/tv_item_installing_pending_online"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/tv_item_installing_pending_online_title"
+            android:layout_marginLeft="@dimen/dp_4"
+            android:layout_marginStart="@dimen/dp_4"
+            android:layout_toEndOf="@+id/tv_item_installing_pending_online_title"
+            android:layout_toRightOf="@+id/tv_item_installing_pending_online_title"
+            android:text="0"
+            android:textColor="@color/colorWhite"/>
+
+        <TextView
+            android:id="@+id/tv_item_installing_pending_offline_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/tv_item_installing_pending_online"
+            android:layout_marginLeft="@dimen/dp_4"
+            android:layout_marginStart="@dimen/dp_4"
+            android:layout_toEndOf="@+id/tv_item_installing_pending_online"
+            android:layout_toRightOf="@+id/tv_item_installing_pending_online"
+            android:text="@string/ge_middle"
+            android:textColor="@color/colorCycleGray"/>
+
+        <TextView
+            android:id="@+id/tv_item_installing_pending_offline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/tv_item_installing_pending_offline_title"
+            android:layout_marginLeft="@dimen/dp_4"
+            android:layout_marginStart="@dimen/dp_4"
+            android:layout_toEndOf="@+id/tv_item_installing_pending_offline_title"
+            android:layout_toRightOf="@+id/tv_item_installing_pending_offline_title"
+            android:text="0"
+            android:textColor="@color/colorWhite"/>
+
+        <TextView
+            android:id="@+id/tv_item_installing_pending_offline_end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/tv_item_installing_pending_offline"
+            android:layout_marginLeft="@dimen/dp_4"
+            android:layout_marginStart="@dimen/dp_4"
+            android:layout_toEndOf="@+id/tv_item_installing_pending_offline"
+            android:layout_toRightOf="@+id/tv_item_installing_pending_offline"
+            android:text="@string/ge"
+            android:textColor="@color/colorCycleGray"/>
+
+
+        <!--========================================-->
+
+        <TextView
+            android:id="@+id/tv_item_installing_complete_no_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/tv_item_installing_pending_no_title"
+            android:layout_marginTop="@dimen/dp_16"
+            android:text="@string/complete_no"
+
+            android:textColor="@color/colorWhite"/>
+
+        <TextView
+            android:id="@+id/tv_item_installing_complete_online_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/tv_item_installing_complete_no_title"
+            android:layout_marginLeft="@dimen/dp_8"
+            android:layout_marginStart="@dimen/dp_8"
+            android:layout_toEndOf="@+id/tv_item_installing_complete_no_title"
+            android:layout_toRightOf="@+id/tv_item_installing_complete_no_title"
+            android:text="@string/online"
+            android:textColor="@color/colorCycleGray"/>
+
+        <TextView
+            android:id="@+id/tv_item_installing_complete_online"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/tv_item_installing_complete_online_title"
+            android:layout_marginLeft="@dimen/dp_4"
+            android:layout_marginStart="@dimen/dp_4"
+            android:layout_toEndOf="@+id/tv_item_installing_complete_online_title"
+            android:layout_toRightOf="@+id/tv_item_installing_complete_online_title"
+            android:text="0"
+            android:textColor="@color/colorWhite"/>
+
+        <TextView
+            android:id="@+id/tv_item_installing_complete_offline_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/tv_item_installing_complete_online"
+            android:layout_marginLeft="@dimen/dp_4"
+            android:layout_marginStart="@dimen/dp_4"
+            android:layout_toEndOf="@+id/tv_item_installing_complete_online"
+            android:layout_toRightOf="@+id/tv_item_installing_complete_online"
+            android:text="@string/ge_middle"
+            android:textColor="@color/colorCycleGray"/>
+
+        <TextView
+            android:id="@+id/tv_item_installing_complete_offline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/tv_item_installing_complete_offline_title"
+            android:layout_marginLeft="@dimen/dp_4"
+            android:layout_marginStart="@dimen/dp_4"
+            android:layout_toEndOf="@+id/tv_item_installing_complete_offline_title"
+            android:layout_toRightOf="@+id/tv_item_installing_complete_offline_title"
+            android:text="0"
+            android:textColor="@color/colorWhite"/>
+
+        <TextView
+            android:id="@+id/tv_item_installing_complete_offline_end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/tv_item_installing_complete_offline"
+            android:layout_marginLeft="@dimen/dp_4"
+            android:layout_marginStart="@dimen/dp_4"
+            android:layout_toEndOf="@+id/tv_item_installing_complete_offline"
+            android:layout_toRightOf="@+id/tv_item_installing_complete_offline"
+            android:text="@string/ge"
+            android:textColor="@color/colorCycleGray"/>
+
+    </RelativeLayout>
+
+</FrameLayout>

@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.tianyigps.xiepeng.R;
+import com.tianyigps.xiepeng.activity.InstallingActivity;
 import com.tianyigps.xiepeng.adapter.HandingAdapter;
 import com.tianyigps.xiepeng.bean.WorkerHandingBean;
 import com.tianyigps.xiepeng.data.AdapterHandingData;
@@ -75,7 +76,7 @@ public class HandingFragment extends Fragment implements View.OnClickListener {
         switch (view.getId()) {
             case R.id.tv_fragment_handing_head: {
                 // TODO: 2017/7/18 总部号码
-                toCall("1234567890");
+                toCall("18017325972");
                 break;
             }
             case R.id.tv_fragment_handing_manager: {
@@ -151,6 +152,14 @@ public class HandingFragment extends Fragment implements View.OnClickListener {
                 return mListViewHanding.getChildCount() > 0 &&
                         (mListViewHanding.getFirstVisiblePosition() > 0
                                 || mListViewHanding.getChildAt(0).getTop() < mListViewHanding.getPaddingTop());
+            }
+        });
+
+        mHandingAdapter.setStartClickListener(new HandingAdapter.OnStartClickListener() {
+            @Override
+            public void onClick(int position) {
+                Intent intent = new Intent(getActivity(), InstallingActivity.class);
+                startActivity(intent);
             }
         });
 
