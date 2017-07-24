@@ -33,6 +33,7 @@ public class OrderDetailsActivity extends Activity {
     private static final String TAG = "OrderDetailsActivity";
 
     private static final long TIME_2_HOUR = 7200000;
+    private static final long TIME_1_MIN = 60000;
 
     //Title栏
     private TextView mTextViewTitle;
@@ -247,7 +248,7 @@ public class OrderDetailsActivity extends Activity {
             mCycleProgressView.setProgress((int) (timeRemain * 100 / TIME_2_HOUR));
         }
 
-        myHandler.sendEmptyMessageDelayed(MSG_2, 60000);
+        myHandler.sendEmptyMessageDelayed(MSG_2, TIME_1_MIN);
     }
 
     //  显示退单对话框

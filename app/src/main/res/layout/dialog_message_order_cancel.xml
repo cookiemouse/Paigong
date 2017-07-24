@@ -23,17 +23,15 @@
         android:gravity="center"
         android:text="订单已被取消！"/>
 
-    <TextView
+    <Button
         android:id="@+id/tv_dialog_message_order_cancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="@dimen/dp_16"
-        android:background="@color/colorBlueTheme"
-        android:paddingBottom="@dimen/dp_16"
+        android:background="@drawable/bg_button"
         android:paddingLeft="@dimen/dp_64"
         android:paddingRight="@dimen/dp_64"
-        android:paddingTop="@dimen/dp_16"
         android:layout_marginBottom="@dimen/dp_16"
         android:text="@string/known"/>
 

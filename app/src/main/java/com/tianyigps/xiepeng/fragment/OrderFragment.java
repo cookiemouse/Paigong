@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -312,10 +313,10 @@ public class OrderFragment extends Fragment {
         builder.setView(viewDialog);
 
         final Dialog dialog = builder.create();
-        TextView textViewCancel = viewDialog.findViewById(R.id.tv_dialog_ask_sign_cancel);
-        TextView textViewEnsure = viewDialog.findViewById(R.id.tv_dialog_ask_sign_ensure);
+        Button buttonCancel = viewDialog.findViewById(R.id.btn_dialog_ask_sign_cancel);
+        Button buttonEnsure = viewDialog.findViewById(R.id.btn_dialog_ask_sign_ensure);
 
-        textViewCancel.setOnClickListener(new View.OnClickListener() {
+        buttonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // TODO: 2017/7/20 dismiss
@@ -323,7 +324,7 @@ public class OrderFragment extends Fragment {
             }
         });
 
-        textViewEnsure.setOnClickListener(new View.OnClickListener() {
+        buttonEnsure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // 2017/7/20 签到
@@ -339,13 +340,13 @@ public class OrderFragment extends Fragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         View viewDialog = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_message_editable, null);
         TextView textViewMessage = viewDialog.findViewById(R.id.tv_dialog_message_message);
-        TextView textViewKnow = viewDialog.findViewById(R.id.tv_dialog_message_cancel);
+        Button buttonKnow = viewDialog.findViewById(R.id.btn_dialog_message_cancel);
         textViewMessage.setText(message);
         builder.setView(viewDialog);
         builder.setCancelable(false);
         final AlertDialog dialog = builder.create();
 
-        textViewKnow.setOnClickListener(new View.OnClickListener() {
+        buttonKnow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 dialog.dismiss();
