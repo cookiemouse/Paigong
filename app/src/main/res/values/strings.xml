@@ -55,6 +55,8 @@
     <string name="complete_no">完成数量</string>
     <string name="car_no">车牌号</string>
     <string name="car_type">车型</string>
+    <string name="place">安装位置</string>
+    <string name="connection_pic">接线图</string>
 
     <array name="picker_month">
         <item>01 月</item>

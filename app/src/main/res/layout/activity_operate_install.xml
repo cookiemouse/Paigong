@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -8,19 +8,34 @@
     android:orientation="vertical"
     tools:context="com.tianyigps.xiepeng.activity.OperateInstallActivity">
 
-    <include
-        layout="@layout/layout_activity_operate_install_head"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="match_parent">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_16"
-        android:background="@color/color_cut_line"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-    <ListView
-        android:id="@+id/lv_activity_operate_install"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+            <include
+                layout="@layout/layout_activity_operate_install_head"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
 
-</LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_16"
+                android:background="@color/color_cut_line"/>
+
+            <com.tianyigps.xiepeng.customview.MyListView
+                android:id="@+id/lv_activity_operate_install"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/dp_8"
+                android:divider="@color/colorNull"
+                android:dividerHeight="@dimen/dp_16"
+                android:scrollbars="none"/>
+
+        </LinearLayout>
+    </ScrollView>
+</FrameLayout>

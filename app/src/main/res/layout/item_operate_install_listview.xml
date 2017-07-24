@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@drawable/bg_item"
+              android:orientation="vertical"
+              android:padding="@dimen/dp_8">
+
+    <TextView
+        android:id="@+id/et_item_operate_install_list_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:background="@color/colorBlueTheme"
+        android:text="更换维修"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dp_4"
+        >
+
+        <ImageView
+            android:id="@+id/iv_item_operate_install_list"
+            android:layout_width="@dimen/dp_40"
+            android:layout_height="@dimen/dp_40"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:padding="@dimen/dp_8"
+            android:src="@drawable/ic_device_no"/>
+
+        <TextView
+            android:id="@+id/tv_item_operate_install_list_number_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/iv_item_operate_install_list"
+            android:layout_toEndOf="@+id/iv_item_operate_install_list"
+            android:layout_toRightOf="@+id/iv_item_operate_install_list"
+            android:text="设备号"/>
+
+        <EditText
+            android:id="@+id/et_item_operate_install_list_number_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/iv_item_operate_install_list"
+            android:layout_toEndOf="@+id/iv_item_operate_install_list"
+            android:layout_toRightOf="@+id/iv_item_operate_install_list"
+            android:background="@null"
+            android:hint="请输入设备号（至少6位）"
+            android:inputType="number"
+            android:textSize="@dimen/sp_14"/>
+
+        <ImageView
+            android:id="@+id/iv_item_operate_install_list_locate"
+            android:layout_width="@dimen/dp_24"
+            android:layout_height="@dimen/dp_24"
+            android:layout_alignBottom="@+id/et_item_operate_install_list_number_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/ic_address"/>
+
+        <ImageView
+            android:id="@+id/iv_item_operate_install_list_scan"
+            android:layout_width="@dimen/dp_24"
+            android:layout_height="@dimen/dp_24"
+            android:layout_alignTop="@+id/iv_item_operate_install_list_locate"
+            android:layout_marginEnd="@dimen/dp_8"
+            android:layout_marginRight="@dimen/dp_8"
+            android:layout_toLeftOf="@+id/iv_item_operate_install_list_locate"
+            android:layout_toStartOf="@+id/iv_item_operate_install_list_locate"
+            android:src="@drawable/ic_scanner"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_0_5"
+            android:layout_below="@id/iv_item_operate_install_list_locate"
+            android:layout_marginLeft="@dimen/dp_40"
+            android:layout_marginStart="@dimen/dp_40"
+            android:layout_marginTop="@dimen/dp_4"
+            android:background="@color/colorBlueTheme"/>
+
+    </RelativeLayout>
+
+    <!--======================================-->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dp_4">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true">
+
+            <ImageView
+                android:id="@+id/iv_item_operate_install_list_place"
+                android:layout_width="@dimen/dp_40"
+                android:layout_height="@dimen/dp_40"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:padding="@dimen/dp_8"
+                android:src="@drawable/ic_place"/>
+
+            <TextView
+                android:id="@+id/tv_item_operate_install_list_place_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/iv_item_operate_install_list_place"
+                android:layout_toEndOf="@+id/iv_item_operate_install_list_place"
+                android:layout_toRightOf="@+id/iv_item_operate_install_list_place"
+                android:text="@string/place"/>
+
+            <EditText
+                android:id="@+id/et_item_operate_install_list_place"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/iv_item_operate_install_list_place"
+                android:layout_toEndOf="@+id/iv_item_operate_install_list_place"
+                android:layout_toRightOf="@+id/iv_item_operate_install_list_place"
+                android:background="@null"
+                android:hint="请输入安装位置"
+                android:inputType="number"
+                android:textSize="@dimen/sp_14"/>
+
+        </RelativeLayout>
+
+
+        <ImageView
+            android:id="@+id/iv_item_operate_install_place_pic"
+            android:layout_width="@dimen/dp_96"
+            android:layout_height="@dimen/dp_64"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@color/colorAccent"/>
+
+        <ImageView
+            android:id="@+id/iv_item_operate_install_place_camera"
+            android:layout_width="@dimen/dp_32"
+            android:layout_height="@dimen/dp_32"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:padding="@dimen/dp_4"
+            android:src="@drawable/ic_camera"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_0_5"
+            android:layout_below="@id/iv_item_operate_install_place_pic"
+            android:layout_marginLeft="@dimen/dp_40"
+            android:layout_marginTop="@dimen/dp_4"
+            android:background="@color/colorBlueTheme"/>
+
+    </RelativeLayout>
+
+    <!--====================-->
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dp_4">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true">
+
+            <ImageView
+                android:id="@+id/iv_item_operate_install_list_connection"
+                android:layout_width="@dimen/dp_40"
+                android:layout_height="@dimen/dp_40"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:padding="@dimen/dp_8"
+                android:src="@drawable/ic_connection"/>
+
+            <TextView
+                android:id="@+id/tv_item_operate_install_list_connection_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/connection_pic"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/iv_item_operate_install_list_connection"
+                android:layout_toEndOf="@+id/iv_item_operate_install_list_connection"/>
+
+        </RelativeLayout>
+
+
+        <ImageView
+            android:id="@+id/iv_layout_operate_install_frame_pic"
+            android:layout_width="@dimen/dp_96"
+            android:layout_height="@dimen/dp_64"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@color/colorAccent"/>
+
+        <ImageView
+            android:id="@+id/iv_layout_operate_install_frame_camera"
+            android:layout_width="@dimen/dp_32"
+            android:layout_height="@dimen/dp_32"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:padding="@dimen/dp_4"
+            android:src="@drawable/ic_camera"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_0_5"
+            android:layout_below="@id/iv_layout_operate_install_frame_pic"
+            android:layout_marginLeft="@dimen/dp_40"
+            android:layout_marginTop="@dimen/dp_4"
+            android:background="@color/colorBlueTheme"/>
+
+    </RelativeLayout>
+
+</LinearLayout>

@@ -195,10 +195,10 @@
             android:background="@color/colorBlueTheme"/>
     </RelativeLayout>
 
-    <android.support.v7.widget.RecyclerView
+    <com.tianyigps.xiepeng.customview.MyRecyclerView
         android:id="@+id/rv_layout_activity_operate_install"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_48">
-    </android.support.v7.widget.RecyclerView>
+        android:layout_height="wrap_content">
+    </com.tianyigps.xiepeng.customview.MyRecyclerView>
 
 </LinearLayout>

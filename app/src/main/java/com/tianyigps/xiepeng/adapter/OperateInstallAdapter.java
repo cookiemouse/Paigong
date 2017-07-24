@@ -27,7 +27,7 @@ public class OperateInstallAdapter extends RecyclerView.Adapter<OperateInstallAd
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_operate_install, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_operate_install_recycler, parent, false);
         MyViewHolder myViewHolder = new MyViewHolder(view);
         return myViewHolder;
     }
