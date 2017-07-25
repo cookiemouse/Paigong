@@ -9,6 +9,14 @@ public class AdapterInstallingData {
     private int orderLine, orderOffline;
     private int completeLine, completeOffline;
 
+    public AdapterInstallingData(String frameNo, int orderLine, int orderOffline) {
+        this.frameNo = frameNo;
+        this.orderLine = orderLine;
+        this.orderOffline = orderOffline;
+        this.completeLine = 0;
+        this.completeOffline = 0;
+    }
+
     public AdapterInstallingData(String frameNo, int orderLine, int orderOffline, int completeLine, int completeOffline) {
         this.frameNo = frameNo;
         this.orderLine = orderLine;

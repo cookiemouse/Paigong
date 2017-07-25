@@ -70,7 +70,7 @@ public class InstallingActivity extends BaseActivity {
     private String orderNo;
     private SharedpreferenceManager mSharedpreferenceManager;
 
-    private String mRemarks;
+    private String mStringRemarks;
     private String mStringMsg = "数据请求失败，请检查网络";
 
     private MyHandler myHandler;
@@ -113,30 +113,14 @@ public class InstallingActivity extends BaseActivity {
 
         switch (mAdapterType) {
             case TYPE_INSTALL: {
-                for (int i = 0; i < 10; i++) {
-                    mAdapterInstallingDataList.add(new AdapterInstallingData("32132131", 1, 2, 0, 0));
-                }
                 mListView.setAdapter(mInstallingAdapter);
                 break;
             }
             case TYPE_REMOVE: {
-                mAdapterRemoveDataList.add(new AdapterRemoveData("拆除"));
-                mAdapterRemoveDataList.add(new AdapterRemoveData(2, 3, 1, 0));
-                mAdapterRemoveDataList.add(new AdapterRemoveData("安装"));
-                mAdapterRemoveDataList.add(new AdapterRemoveData("321313", 1, 3, 1, 0));
-                mAdapterRemoveDataList.add(new AdapterRemoveData("56456", 2, 2, 1, 0));
-                mAdapterRemoveDataList.add(new AdapterRemoveData("321798789321", 3, 1, 1, 0));
                 mListView.setAdapter(mRemoveAdapter);
                 break;
             }
             case TYPE_REPAIR: {
-                for (int i = 0; i < 5; i++) {
-                    mAdapterRepairDataList.add(new AdapterRepairData("有线设备"
-                            , "654654698736546"
-                            , "微贷网564564987"
-                            , "沪A2345",
-                            "LVC564HTE"));
-                }
                 mListView.setAdapter(mRepairAdapter);
                 break;
             }
@@ -174,6 +158,10 @@ public class InstallingActivity extends BaseActivity {
             @Override
             public void onSuccess(String result) {
                 Log.i(TAG, "onSuccess: result-->" + result);
+                mAdapterInstallingDataList.clear();
+                mAdapterRepairDataList.clear();
+                mAdapterRemoveDataList.clear();
+
                 Gson gson = new Gson();
                 StartOrderInfoBean startOrderInfoBean = gson.fromJson(result, StartOrderInfoBean.class);
 
@@ -182,9 +170,85 @@ public class InstallingActivity extends BaseActivity {
                     onFailure();
                     return;
                 }
-                mRemarks = startOrderInfoBean.getObj().getRemark();
+                StartOrderInfoBean.ObjBean objBean = startOrderInfoBean.getObj();
+                mStringRemarks = objBean.getRemark();
 
-                myHandler.sendEmptyMessage(Data.MSG_1);
+                switch (mAdapterType) {
+                    case TYPE_INSTALL: {
+                        for (StartOrderInfoBean.ObjBean.CarListBean carListBean : objBean.getCarList()) {
+                            carListBean.getCarVin();
+                            mAdapterInstallingDataList.add(
+                                    new AdapterInstallingData(carListBean.getNewCarVin()
+                                            , carListBean.getWiredNum()
+                                            , carListBean.getWirelessNum()));
+                        }
+
+                        myHandler.sendEmptyMessage(Data.MSG_1);
+                        break;
+                    }
+                    case TYPE_REMOVE: {
+                        mAdapterRemoveDataList.add(new AdapterRemoveData("拆除"));
+
+                        for (StartOrderInfoBean.ObjBean.CarListBean carListBean : objBean.getCarList()) {
+                            mAdapterRemoveDataList.add(new AdapterRemoveData(carListBean.getWiredNum(), carListBean.getWirelessNum()));
+                        }
+
+                        mAdapterRemoveDataList.add(new AdapterRemoveData("安装"));
+
+                        for (StartOrderInfoBean.ObjBean.CarListBean carListBean : objBean.getCarList()) {
+                            String frameNo = carListBean.getCarVin();
+                            mAdapterRemoveDataList.add(new AdapterRemoveData(frameNo
+                                    , carListBean.getWiredNum()
+                                    , carListBean.getWirelessNum()));
+                        }
+
+                        myHandler.sendEmptyMessage(Data.MSG_2);
+                        break;
+                    }
+                    case TYPE_REPAIR: {
+
+                        for (StartOrderInfoBean.ObjBean.CarListBean carListBean : objBean.getCarList()) {
+                            String frameNo = carListBean.getCarVin();
+                            String carNo = carListBean.getCarNo();
+                            for (StartOrderInfoBean.ObjBean.CarListBean.CarTerminalListBean carTerminalListBean
+                                    : carListBean.getCarTerminalList()) {
+
+                                int type = carTerminalListBean.getTerminalType();
+                                String terminalType;
+                                String terminalName = carTerminalListBean.getTerminalName();
+                                if (null == terminalName) {
+                                    terminalName = "";
+                                }
+                                switch (type) {
+                                    case 1: {
+                                        terminalType = "有线设备";
+                                        break;
+                                    }
+                                    case 2: {
+                                        terminalType = "无线设备";
+                                        break;
+                                    }
+                                    default: {
+                                        terminalType = "";
+                                        Log.i(TAG, "onSuccess: default");
+                                    }
+                                }
+
+                                mAdapterRepairDataList.add(new AdapterRepairData(terminalType
+                                        , carTerminalListBean.getTNo()
+                                        , terminalName
+                                        , carNo
+                                        , frameNo));
+                            }
+                        }
+
+                        myHandler.sendEmptyMessage(Data.MSG_3);
+                        break;
+                    }
+                    default: {
+                        Log.i(TAG, "onSuccess: default");
+                    }
+                }
             }
         });
     }
@@ -213,13 +277,24 @@ public class InstallingActivity extends BaseActivity {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
+            mTextViewRemarks.setText(mStringRemarks);
             switch (msg.what) {
                 case Data.MSG_ERO: {
                     showFailureDialog(mStringMsg);
                     break;
                 }
                 case Data.MSG_1: {
-                    mTextViewRemarks.setText(mRemarks);
+                    //  install
+                    mInstallingAdapter.notifyDataSetChanged();
+                    break;
+                }
+                case Data.MSG_2: {
+                    //  remove
+                    mRemoveAdapter.notifyDataSetChanged();
+                    break;
+                }
+                case Data.MSG_3: {
+                    mRepairAdapter.notifyDataSetChanged();
                     break;
                 }
                 default: {

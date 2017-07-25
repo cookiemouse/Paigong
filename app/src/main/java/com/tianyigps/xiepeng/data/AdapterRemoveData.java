@@ -18,12 +18,28 @@ public class AdapterRemoveData {
         this.typeName = typeName;
     }
 
+    public AdapterRemoveData(int online, int offline) {
+        this.type = 1;
+        this.online = online;
+        this.offline = offline;
+    }
+
     public AdapterRemoveData(int online, int offline, int onlineComplete, int offlineComplete) {
         this.type = 1;
+        this.typeName = "";
+        this.frameNo = "";
         this.online = online;
         this.offline = offline;
         this.onlineComplete = onlineComplete;
         this.offlineComplete = offlineComplete;
+    }
+
+    public AdapterRemoveData(String frameNo, int online, int offline) {
+        this.type = 2;
+        this.typeName = "";
+        this.frameNo = frameNo;
+        this.online = online;
+        this.offline = offline;
     }
 
     public AdapterRemoveData(String frameNo, int online, int offline, int onlineComplete, int
