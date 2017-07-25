@@ -7,6 +7,7 @@ import com.tianyigps.xiepeng.data.Data;
 
 import static com.tianyigps.xiepeng.data.Data.DATA_JSON_EID;
 import static com.tianyigps.xiepeng.data.Data.DATA_JSON_HEAD_PHONE;
+import static com.tianyigps.xiepeng.data.Data.DATA_JSON_IMG_BASE_URL;
 import static com.tianyigps.xiepeng.data.Data.DATA_JSON_JOB_NO;
 import static com.tianyigps.xiepeng.data.Data.DATA_JSON_NAME;
 import static com.tianyigps.xiepeng.data.Data.DATA_JSON_TOKEN;
@@ -113,8 +114,7 @@ public class SharedpreferenceManager {
         return mSharedPreferences.getString(DATA_JSON_JOB_NO, "");
     }
 
-    public void saveUserData(int eid, String token, String name, String headPhone, String jobNo
-            , int launchMode) {
+    public void saveUserData(int eid, String token, String name, String headPhone, String jobNo, String url, int launchMode) {
 
         SharedPreferences.Editor editor = mSharedPreferences.edit();
         editor.putInt(DATA_JSON_EID, eid);
@@ -122,7 +122,18 @@ public class SharedpreferenceManager {
         editor.putString(DATA_JSON_NAME, name);
         editor.putString(DATA_JSON_HEAD_PHONE, headPhone);
         editor.putString(DATA_JSON_JOB_NO, jobNo);
+        editor.putString(DATA_JSON_IMG_BASE_URL, url);
         editor.putInt(DATA_LAUNCH_MODE, launchMode);
         editor.apply();
+    }
+
+    public void saveImageBaseUrl(String url) {
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putString(DATA_JSON_IMG_BASE_URL, url);
+        editor.apply();
+    }
+
+    public String getImageBaseUrl() {
+        return mSharedPreferences.getString(DATA_JSON_IMG_BASE_URL, "http://121.43.178.183/file/pic/");
     }
 }

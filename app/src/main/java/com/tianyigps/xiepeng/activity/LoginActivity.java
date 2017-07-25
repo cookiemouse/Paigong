@@ -107,6 +107,7 @@ public class LoginActivity extends Activity {
                         , objBean.getName()
                         , objBean.getHeadPhone()
                         , objBean.getJobNo()
+                        , objBean.getImgBaseUrl()
                         , launchMode);
 
                 mSharedpreferenceManager.saveAccount(launchAccount);

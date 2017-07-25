@@ -27,6 +27,7 @@ import com.tianyigps.xiepeng.interfaces.OnUploadPicListener;
 import com.tianyigps.xiepeng.utils.MD5U;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -85,6 +86,11 @@ public class NetworkManager {
         }
 
         return mNetworkManager;
+    }
+
+    @Deprecated
+    public void setTimeOut() {
+        mOkHttpClient = new OkHttpClient.Builder().connectTimeout(5, TimeUnit.SECONDS).build();
     }
 
     //  登录  1

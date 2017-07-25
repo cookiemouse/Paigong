@@ -137,7 +137,12 @@ public class InstallingActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 // TODO: 2017/7/24 测试RecyclerView
-                toActivity(OperateInstallActivity.class);
+//                toActivity(OperateInstallActivity.class);
+                Intent intent = new Intent(InstallingActivity.this, OperateRemoveActivity.class);
+                intent.putExtra(Data.DATA_INTENT_EID, eid);
+                intent.putExtra(Data.DATA_INTENT_TOKEN, token);
+                intent.putExtra(Data.DATA_INTENT_ORDER_NO, orderNo);
+                startActivity(intent);
             }
         });
 
