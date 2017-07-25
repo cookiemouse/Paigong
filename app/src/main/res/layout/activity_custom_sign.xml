@@ -45,15 +45,17 @@
         </LinearLayout>
     </FrameLayout>
 
-    <TextView
-        android:id="@+id/tv_activity_custom_sign"
+    <Button
+        android:id="@+id/btn_activity_custom_sign_submit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="@dimen/dp_32"
         android:layout_marginTop="@dimen/dp_16"
-        android:background="@color/colorBlueTheme"
-        android:padding="@dimen/dp_16"
+        android:background="@drawable/bg_button_flush"
+        android:paddingLeft="@dimen/dp_72"
+        android:paddingRight="@dimen/dp_72"
+        android:textColor="@color/colorWhite"
         android:text="@string/submit"/>
 
 </LinearLayout>

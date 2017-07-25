@@ -3,6 +3,7 @@ package com.tianyigps.xiepeng.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,8 @@ import com.tianyigps.xiepeng.data.AdapterHandingData;
 import com.tianyigps.xiepeng.data.Data;
 
 import java.util.List;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * Created by djc on 2017/7/13.
@@ -83,7 +86,27 @@ public class HandingAdapter extends BaseAdapter {
         viewHolder.textViewAddress.setText(data.getAddress());
         viewHolder.textViewId.setText(data.getId());
         viewHolder.textViewPhoneName.setText(data.getCallName());
-        viewHolder.textViewTitle.setText(data.getOrderType());
+
+        String orderType;
+        switch (data.getOrderType()) {
+            case 1: {
+                orderType = "安装：";
+                break;
+            }
+            case 2: {
+                orderType = "维修：";
+                break;
+            }
+            case 3: {
+                orderType = "拆改：";
+                break;
+            }
+            default: {
+                orderType = "安装：";
+                Log.i(TAG, "onResponse: default");
+            }
+        }
+        viewHolder.textViewTitle.setText(orderType);
         viewHolder.textViewWire.setText("" + data.getOnline());
         viewHolder.textViewWireless.setText("" + data.getLineless());
 
@@ -108,7 +131,7 @@ public class HandingAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 // TODO: 2017/7/13 开始
-                if (null == mOnStartClickListener){
+                if (null == mOnStartClickListener) {
                     throw new NullPointerException("OnStartClickListener is null");
                 }
                 mOnStartClickListener.onClick(position);

@@ -22,21 +22,22 @@
         android:id="@+id/lv_activity_installing"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
         android:layout_marginLeft="@dimen/dp_8"
         android:layout_marginRight="@dimen/dp_8"
+        android:layout_weight="1"
         android:divider="@color/colorNull"
         android:dividerHeight="@dimen/dp_16"
         android:scrollbars="none"/>
 
-    <TextView
-        android:id="@+id/tv_activity_installing_next"
+    <Button
+        android:id="@+id/btn_activity_installing_next"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/colorBlueTheme"
-        android:layout_margin="@dimen/dp_8"
         android:layout_gravity="center"
-        android:gravity="center"
-        android:padding="@dimen/dp_16"
-        android:text="@string/next_step"/>
+        android:layout_margin="@dimen/dp_8"
+        android:background="@drawable/bg_flush"
+        android:paddingLeft="@dimen/dp_72"
+        android:paddingRight="@dimen/dp_72"
+        android:text="@string/next_step"
+        android:textColor="@color/colorWhite"/>
 </LinearLayout>

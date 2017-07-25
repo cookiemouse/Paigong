@@ -2,8 +2,8 @@ package com.tianyigps.xiepeng.activity;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.tianyigps.signviewlibrary.SignView;
 import com.tianyigps.xiepeng.R;
@@ -13,7 +13,7 @@ public class CustomSignActivity extends BaseActivity {
 
     private SignView mSignView;
     private LinearLayout mLinearLayoutClear;
-    private TextView mTextViewSubmit;
+    private Button mButtonSubmit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +30,7 @@ public class CustomSignActivity extends BaseActivity {
 
         mSignView = findViewById(R.id.sv_activity_custom_sign);
         mLinearLayoutClear = findViewById(R.id.ll_activity_custom_sign);
-        mTextViewSubmit = findViewById(R.id.tv_activity_custom_sign);
+        mButtonSubmit = findViewById(R.id.btn_activity_custom_sign_submit);
     }
 
     private void setEventListener() {
@@ -41,7 +41,7 @@ public class CustomSignActivity extends BaseActivity {
             }
         });
 
-        mTextViewSubmit.setOnClickListener(new View.OnClickListener() {
+        mButtonSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // TODO: 2017/7/20 提交

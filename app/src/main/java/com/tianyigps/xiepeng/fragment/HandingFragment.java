@@ -158,7 +158,10 @@ public class HandingFragment extends Fragment implements View.OnClickListener {
         mHandingAdapter.setStartClickListener(new HandingAdapter.OnStartClickListener() {
             @Override
             public void onClick(int position) {
+                AdapterHandingData data = mAdapterHandingDataList.get(position);
                 Intent intent = new Intent(getActivity(), InstallingActivity.class);
+                intent.putExtra(Data.DATA_INTENT_ORDER_NO, data.getId());
+                intent.putExtra(Data.DATA_INTENT_INSTALL_TYPE, (data.getOrderType() - 1));
                 startActivity(intent);
             }
         });
@@ -181,29 +184,24 @@ public class HandingFragment extends Fragment implements View.OnClickListener {
                 }
                 for (WorkerHandingBean.ObjBean objBean : workerHandingBean.getObj()) {
 
-                    String orderType;
                     int wire, wireless;
                     switch (objBean.getOrderType()) {
                         case 1: {
-                            orderType = "安装：";
                             wire = objBean.getWiredNum();
                             wireless = objBean.getWirelessNum();
                             break;
                         }
                         case 2: {
-                            orderType = "维修：";
                             wire = objBean.getWiredNum();
                             wireless = objBean.getWirelessNum();
                             break;
                         }
                         case 3: {
-                            orderType = "拆改：";
                             wire = objBean.getRemoveWiredNum();
                             wireless = objBean.getRemoveWirelessNum();
                             break;
                         }
                         default: {
-                            orderType = "安装：";
                             wire = 0;
                             wireless = 0;
                             Log.i(TAG, "onResponse: default");
@@ -215,7 +213,7 @@ public class HandingFragment extends Fragment implements View.OnClickListener {
                             , objBean.getProvince() + objBean.getCity() + objBean.getDistrict()
                             , objBean.getOrderNo()
                             , objBean.getContactName()
-                            , objBean.getContactPhone(), orderType, wire, wireless));
+                            , objBean.getContactPhone(), objBean.getOrderType(), wire, wireless));
                 }
 
                 myHandler.sendEmptyMessage(MSG_1);

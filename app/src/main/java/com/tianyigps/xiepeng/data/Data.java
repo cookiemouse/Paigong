@@ -21,6 +21,7 @@ public class Data {
     //  intent传值
     public final static String DATA_INTENT_ORDER_NO = "paigong_intent_order_no";
     public final static String DATA_INTENT_ADDRESS = "paigong_intent_address";
+    public final static String DATA_INTENT_INSTALL_TYPE = "paigong_intent_install_type";
 
     //  数据请求所需数据
     public final static String DATA_JSON = "paigong_json_";

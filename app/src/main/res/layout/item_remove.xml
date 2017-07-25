@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             android:id="@+id/fl_item_remove"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:background="@drawable/bg_item_installing_blue">
+
+    <ImageView
+        android:layout_width="@dimen/dp_120"
+        android:layout_height="@dimen/dp_64"
+        android:layout_gravity="bottom|end"
+        android:src="@drawable/ic_item_car"/>
+
+    <ImageView
+        android:layout_width="@dimen/dp_48"
+        android:layout_height="@dimen/dp_32"
+        android:layout_gravity="top|end"
+        android:layout_marginEnd="@dimen/dp_16"
+        android:layout_marginRight="@dimen/dp_16"
+        android:layout_marginTop="@dimen/dp_16"
+        android:src="@drawable/ic_item_go"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dp_16">
+
+        <TextView
+            android:id="@+id/tv_item_remove_no_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:text="@string/remove_no"
+            android:textColor="@color/colorWhite"/>
+
+        <TextView
+            android:id="@+id/tv_item_remove_online_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/tv_item_remove_no_title"
+            android:layout_marginTop="@dimen/dp_4"
+            android:text="@string/online"
+            android:textColor="@color/colorCycleGray"/>
+
+        <TextView
+            android:id="@+id/tv_item_remove_remove_online"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/tv_item_remove_online_title"
+            android:layout_marginLeft="@dimen/dp_4"
+            android:layout_marginStart="@dimen/dp_4"
+            android:layout_toEndOf="@+id/tv_item_remove_online_title"
+            android:layout_toRightOf="@+id/tv_item_remove_online_title"
+            android:text="0"
+            android:textColor="@color/colorWhite"/>
+
+        <TextView
+            android:id="@+id/tv_item_remove_remote_offline_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/tv_item_remove_remove_online"
+            android:layout_marginLeft="@dimen/dp_4"
+            android:layout_marginStart="@dimen/dp_4"
+            android:layout_toEndOf="@+id/tv_item_remove_remove_online"
+            android:layout_toRightOf="@+id/tv_item_remove_remove_online"
+            android:text="@string/ge_middle"
+            android:textColor="@color/colorCycleGray"/>
+
+        <TextView
+            android:id="@+id/tv_item_remove_remove_offline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/tv_item_remove_remote_offline_title"
+            android:layout_marginLeft="@dimen/dp_4"
+            android:layout_marginStart="@dimen/dp_4"
+            android:layout_toEndOf="@+id/tv_item_remove_remote_offline_title"
+            android:layout_toRightOf="@+id/tv_item_remove_remote_offline_title"
+            android:text="0"
+            android:textColor="@color/colorWhite"/>
+
+        <TextView
+            android:id="@+id/tv_item_remove_pending_offline_end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/tv_item_remove_remove_offline"
+            android:layout_marginLeft="@dimen/dp_4"
+            android:layout_marginStart="@dimen/dp_4"
+            android:layout_toEndOf="@+id/tv_item_remove_remove_offline"
+            android:layout_toRightOf="@+id/tv_item_remove_remove_offline"
+            android:text="@string/ge"
+            android:textColor="@color/colorCycleGray"/>
+
+
+        <!--========================================-->
+
+        <TextView
+            android:id="@+id/tv_item_remove_complete_no_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/tv_item_remove_online_title"
+            android:layout_marginTop="@dimen/dp_16"
+            android:text="@string/complete_no"
+            android:textColor="@color/colorWhite"/>
+
+        <TextView
+            android:id="@+id/tv_item_remove_complete_online_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/tv_item_remove_complete_no_title"
+            android:layout_marginTop="@dimen/dp_4"
+            android:text="@string/online"
+            android:textColor="@color/colorCycleGray"/>
+
+        <TextView
+            android:id="@+id/tv_item_remove_complete_online"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/tv_item_remove_complete_online_title"
+            android:layout_marginLeft="@dimen/dp_4"
+            android:layout_marginStart="@dimen/dp_4"
+            android:layout_toEndOf="@+id/tv_item_remove_complete_online_title"
+            android:layout_toRightOf="@+id/tv_item_remove_complete_online_title"
+            android:text="0"
+            android:textColor="@color/colorWhite"/>
+
+        <TextView
+            android:id="@+id/tv_item_remove_complete_offline_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/tv_item_remove_complete_online"
+            android:layout_marginLeft="@dimen/dp_4"
+            android:layout_marginStart="@dimen/dp_4"
+            android:layout_toEndOf="@+id/tv_item_remove_complete_online"
+            android:layout_toRightOf="@+id/tv_item_remove_complete_online"
+            android:text="@string/ge_middle"
+            android:textColor="@color/colorCycleGray"/>
+
+        <TextView
+            android:id="@+id/tv_item_remove_complete_offline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/tv_item_remove_complete_offline_title"
+            android:layout_marginLeft="@dimen/dp_4"
+            android:layout_marginStart="@dimen/dp_4"
+            android:layout_toEndOf="@+id/tv_item_remove_complete_offline_title"
+            android:layout_toRightOf="@+id/tv_item_remove_complete_offline_title"
+            android:text="0"
+            android:textColor="@color/colorWhite"/>
+
+        <TextView
+            android:id="@+id/tv_item_remove_complete_offline_end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/tv_item_remove_complete_offline"
+            android:layout_marginLeft="@dimen/dp_4"
+            android:layout_marginStart="@dimen/dp_4"
+            android:layout_toEndOf="@+id/tv_item_remove_complete_offline"
+            android:layout_toRightOf="@+id/tv_item_remove_complete_offline"
+            android:text="@string/ge"
+            android:textColor="@color/colorCycleGray"/>
+
+    </RelativeLayout>
+
+</FrameLayout>
