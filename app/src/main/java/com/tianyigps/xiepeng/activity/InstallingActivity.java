@@ -111,6 +111,8 @@ public class InstallingActivity extends BaseActivity {
         mRemoveAdapter = new RemoveAdapter(InstallingActivity.this, mAdapterRemoveDataList);
         mRepairAdapter = new RepairAdapter(InstallingActivity.this, mAdapterRepairDataList);
 
+        mAdapterType = TYPE_REPAIR;
+
         switch (mAdapterType) {
             case TYPE_INSTALL: {
                 mListView.setAdapter(mInstallingAdapter);
@@ -138,11 +140,8 @@ public class InstallingActivity extends BaseActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 // TODO: 2017/7/24 测试RecyclerView
 //                toActivity(OperateInstallActivity.class);
-                Intent intent = new Intent(InstallingActivity.this, OperateRemoveActivity.class);
-                intent.putExtra(Data.DATA_INTENT_EID, eid);
-                intent.putExtra(Data.DATA_INTENT_TOKEN, token);
-                intent.putExtra(Data.DATA_INTENT_ORDER_NO, orderNo);
-                startActivity(intent);
+//                toRemoveActivity();
+                toRepairActivity();
             }
         });
 
@@ -260,6 +259,22 @@ public class InstallingActivity extends BaseActivity {
 
     private void toActivity(Class cls) {
         Intent intent = new Intent(InstallingActivity.this, cls);
+        startActivity(intent);
+    }
+
+    private void toRemoveActivity() {
+        Intent intent = new Intent(InstallingActivity.this, OperateRemoveActivity.class);
+        intent.putExtra(Data.DATA_INTENT_EID, eid);
+        intent.putExtra(Data.DATA_INTENT_TOKEN, token);
+        intent.putExtra(Data.DATA_INTENT_ORDER_NO, orderNo);
+        startActivity(intent);
+    }
+
+    private void toRepairActivity() {
+        Intent intent = new Intent(InstallingActivity.this, OperateRepairActivity.class);
+        intent.putExtra(Data.DATA_INTENT_EID, eid);
+        intent.putExtra(Data.DATA_INTENT_TOKEN, token);
+        intent.putExtra(Data.DATA_INTENT_ORDER_NO, orderNo);
         startActivity(intent);
     }
 

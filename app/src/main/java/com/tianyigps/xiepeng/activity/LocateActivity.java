@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -67,6 +68,7 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
     private EditText mEditTextImei;
     private ImageView mImageViewScanner, mImageViewLocate;
     private TextView mTextViewLook, mTextViewAddress, mTextViewNormal, mTextViewSatellate, mTextViewFlush;
+    private LinearLayout mLinearLayout;
 
     private LocateManager mLocateManager;
 
@@ -168,10 +170,14 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
             }
             case R.id.tv_layout_map_control_flush: {
                 // 2017/7/12 刷新位置
-                String imei = mEditTextImei.getText().toString();
-                getWholeImei(imei);
                 mTextViewFlush.setEnabled(false);
                 mTimerU.start();
+                if (null != wholeImei){
+                    getImeiLocation(wholeImei);
+                    return;
+                }
+                String imei = mEditTextImei.getText().toString();
+                getWholeImei(imei);
                 break;
             }
             default: {
@@ -201,6 +207,7 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
         mTextViewNormal = findViewById(R.id.tv_layout_map_control_normal);
         mTextViewSatellate = findViewById(R.id.tv_layout_map_control_satellite);
         mTextViewFlush = findViewById(R.id.tv_layout_map_control_flush);
+        mLinearLayout = findViewById(R.id.ll_activity_locate);
 
         mLocateManager = new LocateManager(getApplicationContext());
 
@@ -212,6 +219,18 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
         myHandler = new MyHandler();
 
         mGeoCoderSearch = GeoCoder.newInstance();
+
+        Intent intent = getIntent();
+        boolean isShow = intent.getBooleanExtra(Data.DATA_INTENT_LOCATE_TYPE, true);
+        wholeImei = intent.getStringExtra(Data.DATA_INTENT_LOCATE_IMEI);
+        if (isShow) {
+            mTextViewLook.setVisibility(View.VISIBLE);
+            mLinearLayout.setVisibility(View.VISIBLE);
+        } else {
+            mTextViewLook.setVisibility(View.GONE);
+            mLinearLayout.setVisibility(View.GONE);
+            getImeiLocation(wholeImei);
+        }
     }
 
     private void setEventListener() {

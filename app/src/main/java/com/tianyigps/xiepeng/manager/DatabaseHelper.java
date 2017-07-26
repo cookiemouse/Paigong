@@ -16,7 +16,66 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TAG = "DatabaseHelper";
 
     private static final int VERSION = 1;
-    private static final String DATA_TABLE = "create table " + Data.DATA_TAB_NAME + "()";
+
+    private static final String TABLE_REPAIR = "create table " + Data.DATA_TAB_REPAIR
+            + "(tNo TEXT,position TEXT,positionPic TEXT,installPic TEXT,explain TEXT)";
+
+    //  拆除似乎不用存本地数据
+    private static final String TABLE_REMOVE = "create table " + Data.DATA_TAB_REMOVE
+            + "(frameNo TEXT,tNo TEXT,removeCountWire INTEGER,removeCountWireless INTEGER)";
+
+    private static final String TABLE_INSTALL_CAR = "create table " + Data.DATA_TAB_INSTALL_CAR
+            + "(frameNo TEXT,tNo TEXT" +
+            ",pic1 TEXT,pic2 TEXT,pic3 TEXT,pic4 TEXT,pic5 TEXT,pic6 TEXT)";
+
+    private static final String TABLE_INSTALL_TERMINAL = "create table " + Data.DATA_TAB_INSTALL_TERMINAL
+            + "(tNo TEXT,tType INTEGER,position TEXT,positionPic TEXT,installPic TEXT)";
+
+    /*
+    * 需要保存的信息
+    *
+    * =====总的======
+    * //    车辆id  carId int
+    * //    设备id  tId int
+    *
+    * 车架号   frameNo String  1级
+    * 设备号   tNo     String  2级
+    *
+    * ======维修======
+    * --2级数据--
+    * 安装位置  String
+    * 安装位置图  String(path)   图片
+    * 接线图   String(path)    图片
+    * 检修说明  String
+    *
+    * ======拆除======
+    * --1级数据--
+    * 拆除数量有线  removeCountWire       int
+    * 拆除数量无线  removeCountWireless   int
+    *
+    * ======安装======
+    * --1级数据--
+    * 安装数量有线    installCountWire        int
+    * 安装数量无线    installCountWireless    int
+    *
+    * 车牌号   String(path)    图片
+    * 车架号   String(path)    图片
+    * 车辆图1   String(path)    图片
+    * 车辆图2   String(path)    图片
+    * 车辆图3   String(path)    图片
+    * 车辆图4   String(path)    图片
+    * 车辆图5   String(path)    图片
+    * 车辆图6   String(path)    图片
+    *
+    * --2级数据--
+    * 设备号   tNo(imei)   String
+    * 设备类型  tType   int
+    * 安装位置  String  文字
+    * 安装位置  String(path)    图片
+    * 接线图   String(path)    图片
+    *
+    *
+    * **/
 
     public DatabaseHelper(Context context, String name) {
         this(context, name, null, VERSION);
@@ -29,12 +88,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         Log.i(TAG, "onCreate: -->" + 1);
-
+        sqLiteDatabase.execSQL(TABLE_REPAIR);
+        sqLiteDatabase.execSQL(TABLE_INSTALL_CAR);
+        sqLiteDatabase.execSQL(TABLE_INSTALL_TERMINAL);
         Log.i(TAG, "onCreate: -->" + 2);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-
     }
 }

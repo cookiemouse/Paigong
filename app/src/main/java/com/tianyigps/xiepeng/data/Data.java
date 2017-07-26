@@ -25,6 +25,9 @@ public class Data {
     public final static String DATA_INTENT_ADDRESS = "paigong_intent_address";
     public final static String DATA_INTENT_INSTALL_TYPE = "paigong_intent_install_type";
 
+    public final static String DATA_INTENT_LOCATE_TYPE = "paigong_intent_locate_type";
+    public final static String DATA_INTENT_LOCATE_IMEI = "paigong_intent_locate_imei";
+
     //  数据请求所需数据
     private final static String DATA_JSON = "paigong_json_";
     public final static String DATA_JSON_PHONE_NO = DATA_JSON + "phone_number";
@@ -48,7 +51,10 @@ public class Data {
     public final static int MSG_4 = 0x04;
 
     //  数据库
-    public final static String DATA_TAB_NAME = "paigong_database_tab";
+    public final static String DATA_TAB_REPAIR = "paigong_database_tab_repair";
+    public final static String DATA_TAB_REMOVE = "paigong_database_tab_remove";
+    public final static String DATA_TAB_INSTALL_CAR = "paigong_database_tab_install_car";
+    public final static String DATA_TAB_INSTALL_TERMINAL = "paigong_database_tab_install_terminal";
     public final static String DATA_DB_NAME = "paigong_database_db.db";
 
     //  测试
