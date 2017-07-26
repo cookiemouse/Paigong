@@ -729,6 +729,25 @@ public class NetworkManager {
                         , RequestBody.create(MediaType.parse("image/png"), f));
             }
         }
+
+        MultipartBody multipartBody = builder.build();
+        mRequest = new Request.Builder()
+                .url(Urls.URL_WORKER_UPLOAD_PIC)
+                .post(multipartBody)
+                .build();
+
+        Call call = mOkHttpClient.newCall(mRequest);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.i(TAG, "onFailure: 上传失败");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                Log.i(TAG, "onResponse: 上传成功");
+            }
+        });
     }
 
     public void setOnUploadPicListener(OnUploadPicListener listener) {
