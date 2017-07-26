@@ -461,10 +461,11 @@ public class NetworkManager {
     }
 
     //  安装工程师拆除 12
-    public void removeTerminal(int eid, String token, String orderNo) {
+    public void removeTerminal(int eid, String token, String orderNo, String imei) {
         Request.Builder builder = new Request.Builder();
         builder.url(Urls.URL_WORKER_REMOVE_TERMINAL + "eid=" + eid
                 + "&token=" + token
+                + "&imei=" + imei
                 + "&orderNo=" + orderNo);
         mRequest = builder.build();
         Log.i(TAG, "removeTerminal: url-->" + mRequest.url());

@@ -12,6 +12,7 @@
     <color name="colorBlack">#000000</color>
     <color name="colorGrayBlack">#222222</color>
     <color name="colorCycleGray">#c9c9c9</color>
+    <color name="colorGray">#c9c9c9</color>
     <color name="colorLoginGray">#656b81</color>
     <color name="colorText">#656b81</color>
     <color name="colorTextSelect">#3cabfa</color>

@@ -9,8 +9,12 @@ public class AdapterOperateRemoveData {
     private String picPosition, picInstall;
     private String date;
     private String installName, installPhone;
+    //  功能性属性
+    private int removeState;    //  0 = 未拆除，1 = 已拆除， 2 = 拆除后已改装
 
-    public AdapterOperateRemoveData(String carNo, String frameNo, String terminalType, String terminalName, String tNo, String installPosition, String picPosition, String picInstall, String date, String installName, String installPhone) {
+    public AdapterOperateRemoveData(String carNo, String frameNo, String terminalType, String terminalName, String tNo
+            , String installPosition, String picPosition, String picInstall, String date, String installName, String installPhone
+            , int removeState) {
         this.carNo = carNo;
         this.frameNo = frameNo;
         this.terminalType = terminalType;
@@ -22,6 +26,7 @@ public class AdapterOperateRemoveData {
         this.date = date;
         this.installName = installName;
         this.installPhone = installPhone;
+        this.removeState = removeState;
     }
 
     public String gettNo() {
@@ -110,5 +115,13 @@ public class AdapterOperateRemoveData {
 
     public void setInstallPhone(String installPhone) {
         this.installPhone = installPhone;
+    }
+
+    public int getRemoveState() {
+        return removeState;
+    }
+
+    public void setRemoveState(int removeState) {
+        this.removeState = removeState;
     }
 }

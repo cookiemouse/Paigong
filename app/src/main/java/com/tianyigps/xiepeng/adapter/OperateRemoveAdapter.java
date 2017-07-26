@@ -29,6 +29,8 @@ public class OperateRemoveAdapter extends BaseAdapter {
     private SharedpreferenceManager mSharedpreferenceManager;
     private String picPathUrl;
 
+    private OnRemoveListener mOnRemoveListener;
+
     public OperateRemoveAdapter(Context context, List<AdapterOperateRemoveData> mDataList) {
         this.context = context;
         this.mDataList = mDataList;
@@ -55,6 +57,7 @@ public class OperateRemoveAdapter extends BaseAdapter {
     public View getView(int position, View contentView, ViewGroup viewGroup) {
         AdapterOperateRemoveData data = mDataList.get(position);
         ViewHolder viewHolder = null;
+        final int positionFinal = position;
 
         if (null == contentView) {
             contentView = LayoutInflater.from(context).inflate(R.layout.item_operate_remove, null);
@@ -69,7 +72,8 @@ public class OperateRemoveAdapter extends BaseAdapter {
             viewHolder.installName = contentView.findViewById(R.id.tv_item_operate_remove_worker);
             viewHolder.installPhone = contentView.findViewById(R.id.tv_item_operate_remove_worker_phone);
             viewHolder.picPosition = contentView.findViewById(R.id.iv_item_operate_remove_position_pic);
-            viewHolder.picIntall = contentView.findViewById(R.id.iv_item_operate_remove_install_pic);
+            viewHolder.picInstall = contentView.findViewById(R.id.iv_item_operate_remove_install_pic);
+            viewHolder.state = contentView.findViewById(R.id.tv_item_operate_remove_state);
 
             contentView.setTag(viewHolder);
         } else {
@@ -86,15 +90,55 @@ public class OperateRemoveAdapter extends BaseAdapter {
         viewHolder.installName.setText(data.getInstallName());
         viewHolder.installPhone.setText(data.getInstallPhone());
 
+        String state;
+        switch (data.getRemoveState()) {
+            case 0: {
+                state = "拆除";
+                viewHolder.state.setEnabled(true);
+                break;
+            }
+            case 1: {
+                viewHolder.state.setEnabled(false);
+                state = "已拆除";
+                break;
+            }
+            case 2: {
+                viewHolder.state.setEnabled(false);
+                state = "拆除已安装";
+                break;
+            }
+            default: {
+                state = "拆除";
+                viewHolder.state.setEnabled(true);
+                Log.i(TAG, "getView: default");
+            }
+        }
+        viewHolder.state.setText(state);
+
         Log.i(TAG, "getView: url-->" + picPathUrl + data.getPicPosition());
         Picasso.with(context).load(picPathUrl + data.getPicPosition()).resize(320, 160).into(viewHolder.picPosition);
-        Picasso.with(context).load(picPathUrl + data.getPicInstall()).resize(320, 160).into(viewHolder.picIntall);
+        Picasso.with(context).load(picPathUrl + data.getPicInstall()).resize(320, 160).into(viewHolder.picInstall);
+
+        viewHolder.state.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mOnRemoveListener.onRemove(positionFinal);
+            }
+        });
 
         return contentView;
     }
 
+    public interface OnRemoveListener {
+        void onRemove(int position);
+    }
+
+    public void setRemoveListener(OnRemoveListener listener) {
+        this.mOnRemoveListener = listener;
+    }
+
     private class ViewHolder {
-        private TextView carNo, frameNo, typeAndName, tNo, position, date, installName, installPhone;
-        private ImageView picPosition, picIntall;
+        private TextView carNo, frameNo, typeAndName, tNo, position, date, installName, installPhone, state;
+        private ImageView picPosition, picInstall;
     }
 }

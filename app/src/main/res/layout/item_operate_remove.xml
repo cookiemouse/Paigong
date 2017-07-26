@@ -224,7 +224,7 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/textView10"
+            android:id="@+id/tv_item_operate_remove_state"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
@@ -234,12 +234,12 @@
             android:layout_marginEnd="@dimen/dp_16"
             android:layout_marginRight="@dimen/dp_16"
             android:layout_marginTop="@dimen/dp_16"
-            android:background="@drawable/bg_button"
+            android:background="@drawable/bg_button_clickable"
             android:paddingBottom="@dimen/dp_8"
             android:paddingLeft="@dimen/dp_16"
             android:paddingRight="@dimen/dp_16"
             android:paddingTop="@dimen/dp_8"
-            android:text="已拆除"
+            android:text="未拆除"
             android:textColor="@color/colorWhite"/>
 
     </RelativeLayout>

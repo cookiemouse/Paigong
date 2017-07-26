@@ -1,20 +1,27 @@
 package com.tianyigps.xiepeng.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.tianyigps.xiepeng.R;
 import com.tianyigps.xiepeng.adapter.OperateRemoveAdapter;
 import com.tianyigps.xiepeng.base.BaseActivity;
+import com.tianyigps.xiepeng.bean.RemoveTerminalBean;
 import com.tianyigps.xiepeng.bean.StartOrderInfoBean;
 import com.tianyigps.xiepeng.data.AdapterOperateRemoveData;
 import com.tianyigps.xiepeng.data.Data;
 import com.tianyigps.xiepeng.interfaces.OnGetWorkerOrderInfoStartListener;
+import com.tianyigps.xiepeng.interfaces.OnRemoveTerminalListener;
 import com.tianyigps.xiepeng.manager.NetworkManager;
 import com.tianyigps.xiepeng.utils.TimeFormatU;
 
@@ -24,6 +31,10 @@ import java.util.List;
 public class OperateRemoveActivity extends BaseActivity {
 
     private static final String TAG = "OperateRemoveActivity";
+
+    private static final int STATE_NO_REMOVE = 0;
+    private static final int STATE_REMOVED = 1;
+    private static final int STATE_REMOVED_INSTALL = 2;
 
     private ListView mListViewRemove;
     private List<AdapterOperateRemoveData> mAdapterOperateRemoveDataList = new ArrayList<>();
@@ -36,6 +47,8 @@ public class OperateRemoveActivity extends BaseActivity {
 
     private String mStringMsg = "数据请求失败，请检查网络！";
     private MyHandler myHandler;
+    private int positionNow;
+    private AlertDialog dialogRemove;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +84,8 @@ public class OperateRemoveActivity extends BaseActivity {
                     , "TY20170717143432075/dd5a838856314802be6a43d9139ecc51.png"
                     , "2018-08-08"
                     , "杨某某"
-                    , "17900000001"));
+                    , "17900000001"
+                    , 0));
         }
 
         mOperateRemoveAdapter = new OperateRemoveAdapter(OperateRemoveActivity.this, mAdapterOperateRemoveDataList);
@@ -139,7 +153,8 @@ public class OperateRemoveActivity extends BaseActivity {
                                 , carTerminalListBean.getNewWiringDiagramPic()
                                 , new TimeFormatU().millisToDate(carListBean.getWiredAnnual())
                                 , objBean.getDispatchContactName()
-                                , objBean.getDispatchContactPhone()));
+                                , objBean.getDispatchContactPhone()
+                                , carListBean.getRemoveFlag()));
                     }
                 }
 
@@ -147,6 +162,70 @@ public class OperateRemoveActivity extends BaseActivity {
 
             }
         });
+
+        mNetworkManager.setRemoveTerminalListener(new OnRemoveTerminalListener() {
+            @Override
+            public void onFailure() {
+                Log.i(TAG, "onFailure: ");
+            }
+
+            @Override
+            public void onSuccess(String result) {
+                Log.i(TAG, "onSuccess: result-->" + result);
+                Gson gson = new Gson();
+                RemoveTerminalBean removeTerminalBean = gson.fromJson(result, RemoveTerminalBean.class);
+                if (!removeTerminalBean.isSuccess()) {
+                    onFailure();
+                    return;
+                }
+
+                myHandler.sendEmptyMessage(Data.MSG_2);
+            }
+        });
+
+        mOperateRemoveAdapter.setRemoveListener(new OperateRemoveAdapter.OnRemoveListener() {
+            @Override
+            public void onRemove(int position) {
+                positionNow = position;
+                showRemoveDialog();
+            }
+        });
+    }
+
+    private void showRemoveDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(OperateRemoveActivity.this);
+        View viewDialog = LayoutInflater.from(OperateRemoveActivity.this).inflate(R.layout.dialog_remove, null);
+        builder.setView(viewDialog);
+        dialogRemove = builder.create();
+        TextView ensure = viewDialog.findViewById(R.id.btn_dialog_remove_ensure);
+        TextView cancel = viewDialog.findViewById(R.id.btn_dialog_remove_cancel);
+        ensure.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String imei = mAdapterOperateRemoveDataList.get(positionNow).gettNo();
+                mNetworkManager.removeTerminal(eid, token, orderNo, imei);
+            }
+        });
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialogRemove.dismiss();
+            }
+        });
+        dialogRemove.show();
+    }
+
+    private void showMessageDialog(String msg) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(OperateRemoveActivity.this);
+        builder.setMessage(msg);
+        builder.setPositiveButton(R.string.ensure, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                //  do nothing
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     private class MyHandler extends Handler {
@@ -154,7 +233,19 @@ public class OperateRemoveActivity extends BaseActivity {
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what) {
+                case Data.MSG_ERO: {
+                    showMessageDialog(mStringMsg);
+                    Log.i(TAG, "handleMessage: msg_ero");
+                }
                 case Data.MSG_1: {
+                    mOperateRemoveAdapter.notifyDataSetChanged();
+                    break;
+                }
+                case Data.MSG_2: {
+                    if (null != dialogRemove) {
+                        dialogRemove.dismiss();
+                    }
+                    mAdapterOperateRemoveDataList.get(positionNow).setRemoveState(STATE_REMOVED);
                     mOperateRemoveAdapter.notifyDataSetChanged();
                     break;
                 }
