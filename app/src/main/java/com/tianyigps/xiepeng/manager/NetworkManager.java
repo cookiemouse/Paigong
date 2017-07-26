@@ -1,5 +1,6 @@
 package com.tianyigps.xiepeng.manager;
 
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.tianyigps.xiepeng.data.Urls;
@@ -26,13 +27,17 @@ import com.tianyigps.xiepeng.interfaces.OnStartHandingListener;
 import com.tianyigps.xiepeng.interfaces.OnUploadPicListener;
 import com.tianyigps.xiepeng.utils.MD5U;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 /**
@@ -703,7 +708,27 @@ public class NetworkManager {
     }
 
     //  上转图片    19
-    public void uploadPic() {
+    public void uploadPic(int eid, String token, String orderNo
+            , @Nullable String carId, @Nullable String tId, int type, int model
+            , @Nullable String imgUrl, String... upfiles) {
+        MultipartBody.Builder builder = new MultipartBody.Builder();
+        builder.setType(MultipartBody.FORM);
+        builder.addFormDataPart("eid", "" + eid);
+        builder.addFormDataPart("token", token);
+        builder.addFormDataPart("orderNo", orderNo);
+        builder.addFormDataPart("carId", carId);
+        builder.addFormDataPart("tId", tId);
+        builder.addFormDataPart("type", "" + type);
+        builder.addFormDataPart("model", "" + model);
+        builder.addFormDataPart("imgUrl", "" + imgUrl);
+        for (String path : upfiles) {
+            File f = new File(path);
+            if (f != null) {
+                builder.addFormDataPart("upfile"
+                        , f.getName()
+                        , RequestBody.create(MediaType.parse("image/png"), f));
+            }
+        }
     }
 
     public void setOnUploadPicListener(OnUploadPicListener listener) {
