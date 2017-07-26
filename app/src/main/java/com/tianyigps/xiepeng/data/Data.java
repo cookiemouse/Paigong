@@ -26,7 +26,7 @@ public class Data {
     public final static String DATA_INTENT_INSTALL_TYPE = "paigong_intent_install_type";
 
     //  数据请求所需数据
-    public final static String DATA_JSON = "paigong_json_";
+    private final static String DATA_JSON = "paigong_json_";
     public final static String DATA_JSON_PHONE_NO = DATA_JSON + "phone_number";
     public final static String DATA_JSON_AREA = DATA_JSON + "area";
     public final static String DATA_JSON_TOKEN = DATA_JSON + "token";
@@ -46,6 +46,10 @@ public class Data {
     public final static int MSG_2 = 0x02;
     public final static int MSG_3 = 0x03;
     public final static int MSG_4 = 0x04;
+
+    //  数据库
+    public final static String DATA_TAB_NAME = "paigong_database_tab";
+    public final static String DATA_DB_NAME = "paigong_database_db.db";
 
     //  测试
     public final static int EID = 204;
