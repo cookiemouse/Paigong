@@ -28,7 +28,7 @@
             android:layout_alignParentTop="true"
             android:layout_toEndOf="@+id/iv_activity_operate_default_car"
             android:layout_toRightOf="@+id/iv_activity_operate_default_car"
-            android:text="沪X9527"/>
+            />
 
         <TextView
             android:id="@+id/tv_activity_operate_default_frame_no"
@@ -37,7 +37,7 @@
             android:layout_alignBottom="@+id/iv_activity_operate_default_car"
             android:layout_toEndOf="@+id/iv_activity_operate_default_car"
             android:layout_toRightOf="@+id/iv_activity_operate_default_car"
-            android:text="LSJW546461FCV89789"/>
+            />
 
         <ImageView
             android:id="@+id/iv_activity_operate_default_locate"
@@ -67,7 +67,7 @@
             android:layout_alignTop="@+id/iv_activity_operate_default_device_type"
             android:layout_toEndOf="@+id/iv_activity_operate_default_device_type"
             android:layout_toRightOf="@+id/iv_activity_operate_default_device_type"
-            android:text="有线（微贷网201703201351）"/>
+            />
 
         <TextView
             android:id="@+id/tv_activity_operate_default_device_t_no"
@@ -76,7 +76,7 @@
             android:layout_alignBottom="@+id/iv_activity_operate_default_device_type"
             android:layout_toEndOf="@+id/iv_activity_operate_default_device_type"
             android:layout_toRightOf="@+id/iv_activity_operate_default_device_type"
-            android:text="32154983215647832"/>
+            />
 
         <ImageView
             android:id="@+id/iv_activity_operate_default_position"
@@ -96,7 +96,7 @@
             android:layout_alignTop="@+id/iv_activity_operate_default_position"
             android:layout_toEndOf="@+id/iv_activity_operate_default_position"
             android:layout_toRightOf="@+id/iv_activity_operate_default_position"
-            android:text="旧安装位置"/>
+            android:text="@string/ole_install_position"/>
 
         <TextView
             android:id="@+id/tv_activity_operate_default_position"
@@ -107,7 +107,7 @@
             android:layout_toRightOf="@+id/iv_activity_operate_default_position"
             android:lines="1"
             android:maxWidth="@dimen/dp_240"
-            android:text="驾驶舱仪器内"/>
+            />
 
         <ImageView
             android:id="@+id/iv_activity_operate_default_position_pic"
@@ -144,7 +144,7 @@
                 android:layout_toEndOf="@+id/iv_activity_operate_default_install"
                 android:layout_toRightOf="@+id/iv_activity_operate_default_install"
                 android:gravity="center"
-                android:text="旧接线图"/>
+                android:text="@string/old_install_pic"/>
 
             <ImageView
                 android:id="@+id/iv_activity_operate_default_install_pic"
@@ -177,7 +177,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/dp_40"
                 android:gravity="center_vertical"
-                android:text="安装人："/>
+                android:text="@string/install_worker"/>
 
             <TextView
                 android:id="@+id/tv_activity_operate_default_worker"
@@ -185,7 +185,7 @@
                 android:layout_height="@dimen/dp_40"
                 android:layout_weight="1"
                 android:gravity="center_vertical|end"
-                android:text="杨某某"/>
+                />
 
             <TextView
                 android:id="@+id/tv_activity_operate_default_worker_phone"
@@ -193,7 +193,7 @@
                 android:layout_height="@dimen/dp_40"
                 android:layout_weight="1"
                 android:gravity="center_vertical|end"
-                android:text="17900000001"/>
+                />
         </LinearLayout>
 
         <View
@@ -211,7 +211,7 @@
             android:layout_alignParentStart="true"
             android:layout_below="@+id/view_activity_operate_default_line_2"
             android:layout_marginTop="@dimen/dp_16"
-            android:text="故障描述"
+            android:text="@string/fault_describe"
             android:textStyle="bold"
             />
 
@@ -223,7 +223,6 @@
             android:layout_alignParentStart="true"
             android:layout_below="@+id/tv_activity_operate_fault_describe_title"
             android:padding="@dimen/dp_8"
-            android:text="GPS卫星信号..."
             />
 
         <TextView
@@ -242,9 +241,77 @@
             android:paddingLeft="@dimen/dp_16"
             android:paddingRight="@dimen/dp_16"
             android:paddingTop="@dimen/dp_8"
-            android:text="维修更换"
+            android:text="@string/repair_replace"
             android:textColor="@color/colorWhite"
             />
+
+        <RelativeLayout
+            android:id="@+id/rl_activity_operate_replace"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_below="@id/tv_activity_operate_remove_state"
+            android:layout_marginTop="@dimen/dp_16">
+
+            <ImageView
+                android:id="@+id/iv_activity_operate_replace"
+                android:layout_width="@dimen/dp_40"
+                android:layout_height="@dimen/dp_40"
+                android:padding="@dimen/dp_8"
+                android:src="@drawable/ic_device_no"/>
+
+            <TextView
+                android:id="@+id/tv_activity_operate_replace_device_no_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_toEndOf="@+id/iv_activity_operate_replace"
+                android:layout_toRightOf="@+id/iv_activity_operate_replace"
+                android:text="新设备号"/>
+
+            <EditText
+                android:id="@+id/et_activity_operate_replace_device_no"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/iv_activity_operate_replace"
+                android:layout_marginEnd="@dimen/dp_80"
+                android:layout_marginRight="@dimen/dp_80"
+                android:layout_toEndOf="@+id/iv_activity_operate_replace"
+                android:layout_toRightOf="@+id/iv_activity_operate_replace"
+                android:background="@null"
+                android:hint="请输入设备号（至少6位）"
+                android:inputType="number"
+                android:lines="1"
+                android:maxWidth="@dimen/dp_240"
+                android:textSize="@dimen/sp_14"/>
+
+            <ImageView
+                android:id="@+id/iv_activity_operate_replace_locate"
+                android:layout_width="@dimen/dp_40"
+                android:layout_height="@dimen/dp_40"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:padding="@dimen/dp_8"
+                android:src="@drawable/ic_address"/>
+
+            <ImageView
+                android:id="@+id/iv_activity_operate_replace_scanner"
+                android:layout_width="@dimen/dp_40"
+                android:layout_height="@dimen/dp_40"
+                android:layout_toLeftOf="@+id/iv_activity_operate_replace_locate"
+                android:layout_toStartOf="@+id/iv_activity_operate_replace_locate"
+                android:padding="@dimen/dp_8"
+                android:src="@drawable/ic_scanner"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_0_5"
+                android:layout_below="@+id/iv_activity_operate_replace"
+                android:layout_marginLeft="@dimen/dp_40"
+                android:layout_marginStart="@dimen/dp_40"
+                android:layout_marginTop="@dimen/dp_8"
+                android:background="@color/colorBlueTheme"/>
+        </RelativeLayout>
 
         <ImageView
             android:id="@+id/iv_activity_operate_default_position_new"
@@ -252,7 +319,7 @@
             android:layout_height="@dimen/dp_40"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/tv_activity_operate_remove_state"
+            android:layout_below="@+id/rl_activity_operate_replace"
             android:layout_marginTop="@dimen/dp_16"
             android:padding="@dimen/dp_8"
             android:src="@drawable/ic_place"/>
@@ -264,19 +331,19 @@
             android:layout_alignTop="@+id/iv_activity_operate_default_position_new"
             android:layout_toEndOf="@+id/iv_activity_operate_default_position_new"
             android:layout_toRightOf="@+id/iv_activity_operate_default_position_new"
-            android:text="安装位置"/>
+            android:text="@string/install_place"/>
 
         <EditText
             android:id="@+id/et_activity_operate_default_position_new"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/dp_80"
-            android:layout_marginEnd="@dimen/dp_80"
             android:layout_alignBottom="@+id/iv_activity_operate_default_position_new"
+            android:layout_marginEnd="@dimen/dp_80"
+            android:layout_marginRight="@dimen/dp_80"
             android:layout_toEndOf="@+id/iv_activity_operate_default_position_new"
             android:layout_toRightOf="@+id/iv_activity_operate_default_position_new"
             android:background="@null"
-            android:hint="请输入安装位置"
+            android:hint="@string/enter_install_place"
             android:lines="1"
             android:maxWidth="@dimen/dp_240"
             android:textSize="@dimen/sp_14"/>
@@ -327,7 +394,7 @@
                 android:layout_toEndOf="@+id/iv_activity_operate_default_install_new"
                 android:layout_toRightOf="@+id/iv_activity_operate_default_install_new"
                 android:gravity="center"
-                android:text="接线图"/>
+                android:text="@string/install_pic"/>
 
             <ImageView
                 android:id="@+id/iv_activity_operate_default_install_pic_new"
@@ -351,11 +418,11 @@
             android:id="@+id/tv_activity_operate_default_install_explain_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_below="@+id/view_activity_operate_default_line_4"
             android:layout_marginTop="@dimen/dp_16"
-            android:layout_toEndOf="@+id/tv_activity_operate_fault_describe_title"
-            android:layout_toRightOf="@+id/tv_activity_operate_fault_describe_title"
-            android:text="检修说明"/>
+            android:text="@string/explain"/>
 
         <EditText
             android:id="@+id/et_activity_operate_default_install_explain"
@@ -365,7 +432,7 @@
             android:layout_marginTop="@dimen/dp_8"
             android:background="@drawable/bg_edit"
             android:gravity="start|top"
-            android:hint="请输入故障说明..."
+            android:hint="@string/enter_explain"
             android:maxLength="200"
             android:minHeight="@dimen/dp_96"
             android:textSize="@dimen/sp_14"/>
@@ -395,6 +462,5 @@
             android:paddingTop="@dimen/dp_8"
             android:text="@string/save"
             android:textColor="@color/colorWhite"/>
-
     </RelativeLayout>
 </ScrollView>

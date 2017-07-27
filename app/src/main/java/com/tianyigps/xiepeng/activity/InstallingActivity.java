@@ -141,7 +141,7 @@ public class InstallingActivity extends BaseActivity {
                 // TODO: 2017/7/24 测试RecyclerView
 //                toActivity(OperateInstallActivity.class);
 //                toRemoveActivity();
-                toRepairActivity();
+                toRepairActivity(mAdapterRepairDataList.get(i).getId());
             }
         });
 
@@ -270,11 +270,12 @@ public class InstallingActivity extends BaseActivity {
         startActivity(intent);
     }
 
-    private void toRepairActivity() {
+    private void toRepairActivity(String tNo) {
         Intent intent = new Intent(InstallingActivity.this, OperateRepairActivity.class);
         intent.putExtra(Data.DATA_INTENT_EID, eid);
         intent.putExtra(Data.DATA_INTENT_TOKEN, token);
         intent.putExtra(Data.DATA_INTENT_ORDER_NO, orderNo);
+        intent.putExtra(Data.DATA_INTENT_T_NO, tNo);
         startActivity(intent);
     }
 

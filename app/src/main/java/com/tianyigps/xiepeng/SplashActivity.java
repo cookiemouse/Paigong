@@ -1,10 +1,14 @@
 package com.tianyigps.xiepeng;
 
+import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
@@ -19,6 +23,12 @@ import com.tianyigps.xiepeng.bean.CheckUserBean;
 import com.tianyigps.xiepeng.interfaces.OnCheckUserListener;
 import com.tianyigps.xiepeng.manager.NetworkManager;
 import com.tianyigps.xiepeng.manager.SharedpreferenceManager;
+import com.yanzhenjie.permission.AndPermission;
+import com.yanzhenjie.permission.PermissionListener;
+import com.yanzhenjie.permission.Rationale;
+import com.yanzhenjie.permission.RationaleListener;
+
+import java.util.List;
 
 import static com.tianyigps.xiepeng.data.Data.DATA_LAUNCH_MODE_WORKER;
 import static com.tianyigps.xiepeng.data.Data.MSG_1;
@@ -53,12 +63,13 @@ public class SplashActivity extends Activity {
         init();
 
         setEventListener();
+
+        applyPermiss();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        myHandler.postDelayed(mRunnable, DELAY);
     }
 
     @Override
@@ -136,6 +147,50 @@ public class SplashActivity extends Activity {
         Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
         startActivity(intent);
         this.finish();
+    }
+
+    //  运行时权限
+
+    private void applyPermiss() {
+        AndPermission
+                .with(SplashActivity.this)
+                .requestCode(100)
+                .permission(Manifest.permission.WRITE_EXTERNAL_STORAGE
+                        , Manifest.permission.ACCESS_FINE_LOCATION
+                        , Manifest.permission.CAMERA)
+                .rationale(new RationaleListener() {
+                    @Override
+                    public void showRequestPermissionRationale(int requestCode, Rationale rationale) {
+                        AndPermission.rationaleDialog(SplashActivity.this, rationale).show();
+                    }
+                })
+                .callback(new PermissionListener() {
+                    @Override
+                    public void onSucceed(int requestCode, @NonNull List<String> grantPermissions) {
+                        myHandler.postDelayed(mRunnable, DELAY);
+                    }
+
+                    @Override
+                    public void onFailed(int requestCode, @NonNull List<String> deniedPermissions) {
+                        if (AndPermission.hasAlwaysDeniedPermission(SplashActivity.this, deniedPermissions)) {
+                            showMessageDialog();
+                        }
+                    }
+                }).start();
+    }
+
+    private void showMessageDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(SplashActivity.this);
+        builder.setMessage("应用权限被禁止，请打开相关权限");
+        builder.setCancelable(false);
+        builder.setPositiveButton(R.string.ensure, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                SplashActivity.this.finish();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     private class MyHandler extends Handler {

@@ -723,7 +723,7 @@ public class NetworkManager {
         builder.addFormDataPart("imgUrl", "" + imgUrl);
         for (String path : upfiles) {
             File f = new File(path);
-            if (f != null) {
+            if (f.exists()) {
                 builder.addFormDataPart("upfile"
                         , f.getName()
                         , RequestBody.create(MediaType.parse("image/png"), f));
@@ -746,6 +746,7 @@ public class NetworkManager {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 Log.i(TAG, "onResponse: 上传成功");
+                Log.i(TAG, "onResponse: result-->" + response.body().string());
             }
         });
     }

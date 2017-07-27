@@ -49,8 +49,8 @@ import com.tianyigps.xiepeng.manager.SharedpreferenceManager;
 import com.tianyigps.xiepeng.utils.TimerU;
 
 import static com.tianyigps.xiepeng.data.Data.DATA_SCANNER;
-import static com.tianyigps.xiepeng.data.Data.DATA_SCANNER_REQUEST;
-import static com.tianyigps.xiepeng.data.Data.DATA_SCANNER_RESULT;
+import static com.tianyigps.xiepeng.data.Data.DATA_INTENT_SCANNER_REQUEST;
+import static com.tianyigps.xiepeng.data.Data.DATA_INTENT_SCANNER_RESULT;
 import static com.tianyigps.xiepeng.data.Data.MSG_1;
 import static com.tianyigps.xiepeng.data.Data.MSG_2;
 import static com.tianyigps.xiepeng.data.Data.MSG_3;
@@ -122,7 +122,7 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == DATA_SCANNER_REQUEST && resultCode == DATA_SCANNER_RESULT) {
+        if (requestCode == DATA_INTENT_SCANNER_REQUEST && resultCode == DATA_INTENT_SCANNER_RESULT) {
             Log.i(TAG, "onActivityResult: qrcode-->" + data.getStringExtra(DATA_SCANNER));
             String imei = data.getStringExtra(DATA_SCANNER);
             getImeiLocation(imei);
@@ -136,7 +136,7 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
             case R.id.iv_activity_locate_imei: {
                 // 2017/7/12 跳转到二维码页面
                 Intent intent = new Intent(LocateActivity.this, ScannerActivity.class);
-                startActivityForResult(intent, DATA_SCANNER_REQUEST);
+                startActivityForResult(intent, DATA_INTENT_SCANNER_REQUEST);
                 break;
             }
             case R.id.iv_layout_map_control_locate: {
