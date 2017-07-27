@@ -18,7 +18,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final int VERSION = 1;
 
     private static final String TABLE_REPAIR = "create table " + Data.DATA_TAB_REPAIR
-            + "(tNo TEXT,position TEXT,positionPic TEXT,installPic TEXT,explain TEXT)";
+            + "(tNo TEXT,position TEXT,positionPic TEXT,installPic TEXT,explain TEXT,newtNo TEXT)";
 
     //  拆除似乎不用存本地数据
     private static final String TABLE_REMOVE = "create table " + Data.DATA_TAB_REMOVE
@@ -47,6 +47,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     * 安装位置图  String(path)   图片
     * 接线图   String(path)    图片
     * 检修说明  String
+    * 是否替换  boolean
+    * 新IMEI     String
     *
     * ======拆除======
     * --1级数据--

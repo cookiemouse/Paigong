@@ -95,4 +95,8 @@ public class FileManager {
     public String getPath() {
         return mFile.getPath();
     }
+
+    public File file() {
+        return mFile;
+    }
 }

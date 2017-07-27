@@ -65,6 +65,17 @@
     <string name="device_name">设备名称</string>
     <string name="device_name_">设备名称：</string>
     <string name="save">保存</string>
+    <string name="ole_install_position">旧安装位置</string>
+    <string name="old_install_pic">旧接线图</string>
+    <string name="install_worker">安装人：</string>
+    <string name="fault_describe">故障描述</string>
+    <string name="install_place">安装位置</string>
+    <string name="enter_install_place">请输入安装位置</string>
+    <string name="install_pic">接线图</string>
+    <string name="explain">检修说明</string>
+    <string name="enter_explain">请输入故障说明...</string>
+    <string name="repair_replace">维修更换</string>
+    <string name="not_replace">不更换</string>
 
     <array name="picker_month">
         <item>01 月</item>

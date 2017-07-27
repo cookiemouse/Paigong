@@ -15,13 +15,14 @@ public class Data {
 
     //  二维码扫描，Activity跳转
     public final static String DATA_SCANNER = "paigong_scanner";
-    public final static int DATA_SCANNER_REQUEST = 0x001;
-    public final static int DATA_SCANNER_RESULT = 0x002;
+    public final static int DATA_INTENT_SCANNER_REQUEST = 0x001;
+    public final static int DATA_INTENT_SCANNER_RESULT = 0x002;
 
     //  intent传值
     public final static String DATA_INTENT_EID = "paigong_intent_eid";
     public final static String DATA_INTENT_TOKEN = "paigong_intent_token";
     public final static String DATA_INTENT_ORDER_NO = "paigong_intent_order_no";
+    public final static String DATA_INTENT_T_NO = "paigong_intent_t_no";
     public final static String DATA_INTENT_ADDRESS = "paigong_intent_address";
     public final static String DATA_INTENT_INSTALL_TYPE = "paigong_intent_install_type";
 

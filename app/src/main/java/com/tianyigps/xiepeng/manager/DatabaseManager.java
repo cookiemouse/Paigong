@@ -24,9 +24,9 @@ public class DatabaseManager {
     }
 
     //  增，维修
-    public void addRepair(String tNo, String position, String positionPic, String installPic, String explain) {
+    public void addRepair(String tNo, String position, String positionPic, String installPic, String explain, String newtNo) {
         if (repairExist(tNo)) {
-            modifyRepair(tNo, position, positionPic, installPic, explain);
+            modifyRepair(tNo, position, positionPic, installPic, explain, newtNo);
             return;
         }
         ContentValues contentValues = new ContentValues();
@@ -35,6 +35,7 @@ public class DatabaseManager {
         contentValues.put("positionPic", positionPic);
         contentValues.put("installPic", installPic);
         contentValues.put("explain", explain);
+        contentValues.put("newtNo", newtNo);
 
         mSqLiteDatabase.beginTransaction();
         try {
@@ -47,13 +48,26 @@ public class DatabaseManager {
         }
     }
 
+    //  增，维修
+    public void addRepair(String tNo, String position, String explain) {
+        addRepairPosition(tNo, position);
+        addRepairExplain(tNo, explain);
+    }
+
+    //  增，维修
+    public void addRepair(String tNo, String position, String explain, String newtNo) {
+        addRepairPosition(tNo, position);
+        addRepairExplain(tNo, explain);
+        addRepairNewtNo(tNo, newtNo);
+    }
+
     //  增，维修，重载
     public void addRepairPosition(String tNo, String position) {
         if (repairExist(tNo)) {
             modifyRepairPosition(tNo, position);
             return;
         }
-        addRepair(tNo, position, null, null, null);
+        addRepair(tNo, position, null, null, null, null);
     }
 
     //  增，维修，重载
@@ -62,7 +76,7 @@ public class DatabaseManager {
             modifyRepairPositionPic(tNo, positionPic);
             return;
         }
-        addRepair(tNo, null, positionPic, null, null);
+        addRepair(tNo, null, positionPic, null, null, null);
     }
 
     //  增，维修，重载
@@ -71,7 +85,7 @@ public class DatabaseManager {
             modifyRepairInstallPic(tNo, installPic);
             return;
         }
-        addRepair(tNo, null, null, installPic, null);
+        addRepair(tNo, null, null, installPic, null, null);
     }
 
     //  增，维修，重载
@@ -80,7 +94,16 @@ public class DatabaseManager {
             modifyRepairExplain(tNo, explain);
             return;
         }
-        addRepair(tNo, null, null, null, explain);
+        addRepair(tNo, null, null, null, explain, null);
+    }
+
+    //  增，维修，重载
+    public void addRepairNewtNo(String tNo, String newtNo) {
+        if (repairExist(tNo)) {
+            modifyRepairExplain(newtNo, newtNo);
+            return;
+        }
+        addRepair(tNo, null, null, null, null, newtNo);
     }
 
     //  删，维修
@@ -102,7 +125,7 @@ public class DatabaseManager {
     }
 
     //  改，维修
-    public void modifyRepair(String tNo, String position, String positionPic, String installPic, String explain) {
+    public void modifyRepair(String tNo, String position, String positionPic, String installPic, String explain, String newtNo) {
         if (!repairExist(tNo)) {
             return;
         }
@@ -111,6 +134,7 @@ public class DatabaseManager {
         contentValues.put("positionPic", positionPic);
         contentValues.put("installPic", installPic);
         contentValues.put("explain", explain);
+        contentValues.put("newtNo", newtNo);
 
         mSqLiteDatabase.beginTransaction();
         try {
@@ -199,6 +223,27 @@ public class DatabaseManager {
         }
         ContentValues contentValues = new ContentValues();
         contentValues.put("explain", explain);
+
+        mSqLiteDatabase.beginTransaction();
+        try {
+            mSqLiteDatabase.update(Data.DATA_TAB_REPAIR
+                    , contentValues
+                    , "tNo=?"
+                    , new String[]{tNo});
+            mSqLiteDatabase.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.e(TAG, e + "SqLiteDatabase update error");
+        } finally {
+            mSqLiteDatabase.endTransaction();
+        }
+    }
+    //  改，维修，重载
+    public void modifyRepairnewtNo(String tNo, String newtNo) {
+        if (!repairExist(tNo)) {
+            return;
+        }
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("newtNo", newtNo);
 
         mSqLiteDatabase.beginTransaction();
         try {

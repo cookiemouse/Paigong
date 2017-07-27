@@ -10,7 +10,7 @@ import com.tianyigps.xiepeng.R;
 import com.tianyigps.xiepeng.base.BaseActivity;
 
 import static com.tianyigps.xiepeng.data.Data.DATA_SCANNER;
-import static com.tianyigps.xiepeng.data.Data.DATA_SCANNER_RESULT;
+import static com.tianyigps.xiepeng.data.Data.DATA_INTENT_SCANNER_RESULT;
 
 public class ScannerActivity extends BaseActivity {
 
@@ -53,7 +53,7 @@ public class ScannerActivity extends BaseActivity {
             public void onQRCodeRead(String text, PointF[] points) {
                 Log.i(TAG, "onQRCodeRead: -->" + text);
                 mIntent.putExtra(DATA_SCANNER, text);
-                setResult(DATA_SCANNER_RESULT, mIntent);
+                setResult(DATA_INTENT_SCANNER_RESULT, mIntent);
                 finish();
             }
         });
