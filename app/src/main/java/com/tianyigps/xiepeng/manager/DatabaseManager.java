@@ -25,6 +25,10 @@ public class DatabaseManager {
 
     //  增，维修
     public void addRepair(String tNo, String position, String positionPic, String installPic, String explain) {
+        if (repairExist(tNo)) {
+            modifyRepair(tNo, position, positionPic, installPic, explain);
+            return;
+        }
         ContentValues contentValues = new ContentValues();
         contentValues.put("tNo", tNo);
         contentValues.put("position", position);
@@ -43,8 +47,47 @@ public class DatabaseManager {
         }
     }
 
+    //  增，维修，重载
+    public void addRepairPosition(String tNo, String position) {
+        if (repairExist(tNo)) {
+            modifyRepairPosition(tNo, position);
+            return;
+        }
+        addRepair(tNo, position, null, null, null);
+    }
+
+    //  增，维修，重载
+    public void addRepairPositionPic(String tNo, String positionPic) {
+        if (repairExist(tNo)) {
+            modifyRepairPositionPic(tNo, positionPic);
+            return;
+        }
+        addRepair(tNo, null, positionPic, null, null);
+    }
+
+    //  增，维修，重载
+    public void addRepairInstallPic(String tNo, String installPic) {
+        if (repairExist(tNo)) {
+            modifyRepairInstallPic(tNo, installPic);
+            return;
+        }
+        addRepair(tNo, null, null, installPic, null);
+    }
+
+    //  增，维修，重载
+    public void addRepairExplain(String tNo, String explain) {
+        if (repairExist(tNo)) {
+            modifyRepairExplain(tNo, explain);
+            return;
+        }
+        addRepair(tNo, null, null, null, explain);
+    }
+
     //  删，维修
     public void deleteRepair(String tNo) {
+        if (!repairExist(tNo)) {
+            return;
+        }
         mSqLiteDatabase.beginTransaction();
         try {
             mSqLiteDatabase.delete(Data.DATA_TAB_REPAIR
@@ -60,8 +103,10 @@ public class DatabaseManager {
 
     //  改，维修
     public void modifyRepair(String tNo, String position, String positionPic, String installPic, String explain) {
+        if (!repairExist(tNo)) {
+            return;
+        }
         ContentValues contentValues = new ContentValues();
-        contentValues.put("tNo", tNo);
         contentValues.put("position", position);
         contentValues.put("positionPic", positionPic);
         contentValues.put("installPic", installPic);
@@ -81,8 +126,96 @@ public class DatabaseManager {
         }
     }
 
+    //  改，维修，重载
+    public void modifyRepairPosition(String tNo, String position) {
+        if (!repairExist(tNo)) {
+            return;
+        }
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("position", position);
+
+        mSqLiteDatabase.beginTransaction();
+        try {
+            mSqLiteDatabase.update(Data.DATA_TAB_REPAIR
+                    , contentValues
+                    , "tNo=?"
+                    , new String[]{tNo});
+            mSqLiteDatabase.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.e(TAG, e + "SqLiteDatabase update error");
+        } finally {
+            mSqLiteDatabase.endTransaction();
+        }
+    }
+
+    //  改，维修，重载
+    public void modifyRepairPositionPic(String tNo, String positionPic) {
+        if (!repairExist(tNo)) {
+            return;
+        }
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("positionPic", positionPic);
+
+        mSqLiteDatabase.beginTransaction();
+        try {
+            mSqLiteDatabase.update(Data.DATA_TAB_REPAIR
+                    , contentValues
+                    , "tNo=?"
+                    , new String[]{tNo});
+            mSqLiteDatabase.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.e(TAG, e + "SqLiteDatabase update error");
+        } finally {
+            mSqLiteDatabase.endTransaction();
+        }
+    }
+
+    //  改，维修，重载
+    public void modifyRepairInstallPic(String tNo, String installPic) {
+        if (!repairExist(tNo)) {
+            return;
+        }
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("installPic", installPic);
+
+        mSqLiteDatabase.beginTransaction();
+        try {
+            mSqLiteDatabase.update(Data.DATA_TAB_REPAIR
+                    , contentValues
+                    , "tNo=?"
+                    , new String[]{tNo});
+            mSqLiteDatabase.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.e(TAG, e + "SqLiteDatabase update error");
+        } finally {
+            mSqLiteDatabase.endTransaction();
+        }
+    }
+
+    //  改，维修，重载
+    public void modifyRepairExplain(String tNo, String explain) {
+        if (!repairExist(tNo)) {
+            return;
+        }
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("explain", explain);
+
+        mSqLiteDatabase.beginTransaction();
+        try {
+            mSqLiteDatabase.update(Data.DATA_TAB_REPAIR
+                    , contentValues
+                    , "tNo=?"
+                    , new String[]{tNo});
+            mSqLiteDatabase.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.e(TAG, e + "SqLiteDatabase update error");
+        } finally {
+            mSqLiteDatabase.endTransaction();
+        }
+    }
+
     //  查，维修
-    public Cursor getRepair() {
+    public Cursor getRepairs() {
         mSqLiteDatabase.beginTransaction();
         try {
             Cursor cursor = mSqLiteDatabase.query(Data.DATA_TAB_REPAIR
@@ -119,6 +252,12 @@ public class DatabaseManager {
             mSqLiteDatabase.endTransaction();
         }
         return null;
+    }
+
+    //  查，是否存在该order
+    public boolean repairExist(String tNo) {
+        Cursor cursor = getRepair(tNo);
+        return cursor.moveToFirst();
     }
 
     //=============================================华丽的分割线===================================================

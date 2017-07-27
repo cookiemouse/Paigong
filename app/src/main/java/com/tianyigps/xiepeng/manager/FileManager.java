@@ -1,7 +1,7 @@
 package com.tianyigps.xiepeng.manager;
 
 import android.graphics.Bitmap;
-import android.util.Log;
+import android.os.Environment;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -16,25 +16,52 @@ public class FileManager {
 
     private static final String TAG = "FileManager";
 
+    public static final int TYPE_PNG = 1;
+    public static final int TYPE_JPEG = 2;
+
+    private static final String DIRECT = Environment.getExternalStorageDirectory().getPath() + "/paigong/";
+
     private File mFile;
 
-    public FileManager(String path) {
+    public FileManager(String name) {
+        String path = DIRECT + name;
         mFile = new File(path);
-        if (!mFile.exists()) {
-            if (mFile.mkdirs()) {
-                Log.i(TAG, "FileManager: make dirs");
+//        if (!mFile.exists()) {
+//            if (mFile.mkdirs()) {
+//                Log.i(TAG, "FileManager: make dirs");
+//            }
+//            delete();
+//        }
+    }
+
+    public FileManager(int type) {
+        String path;
+        switch (type) {
+            case TYPE_PNG: {
+                path = DIRECT + System.currentTimeMillis() + ".png";
+                break;
+            }
+            case TYPE_JPEG: {
+                path = DIRECT + System.currentTimeMillis() + ".jpg";
+                break;
+            }
+            default: {
+                path = DIRECT + System.currentTimeMillis() + ".png";
             }
         }
+        mFile = new File(path);
     }
+
 
     public boolean isExists() {
         return mFile.exists();
     }
 
-    public void delete() {
+    public boolean delete() {
         if (isExists()) {
-            mFile.delete();
+            return mFile.delete();
         }
+        return false;
     }
 
     public void saveBitmapPng(Bitmap bitmap) {

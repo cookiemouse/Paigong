@@ -1,11 +1,11 @@
 package com.tianyigps.xiepeng.activity;
 
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,13 +22,15 @@ import com.tianyigps.xiepeng.manager.DatabaseManager;
 import com.tianyigps.xiepeng.manager.FileManager;
 import com.yundian.bottomdialog.BottomDialog;
 
+import java.io.File;
+
 public class OperateRepairActivity extends BaseActivity {
 
     private static final String TAG = "OperateRepairActivity";
 
     private static final int INTENT_CHOICE_P = 1;
-    private static final int INTENT_CHOICE_I = 2;
-    private static final int INTENT_PHOTO_P = 3;
+    private static final int INTENT_PHOTO_P = 2;
+    private static final int INTENT_CHOICE_I = 3;
     private static final int INTENT_PHOTO_I = 4;
     private int picType = 1;   //  1 = 安装位置，3 = 接线图
 
@@ -54,16 +56,6 @@ public class OperateRepairActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Cursor cursor = mDatabaseManager.getRepair();
-        if (null != cursor && cursor.moveToFirst()) {
-            String positionPath = cursor.getString(2);
-            String installPath = cursor.getString(3);
-            Log.i(TAG, "onResume: path-->" + positionPath);
-            Log.i(TAG, "onResume: path-->" + installPath);
-            Picasso.with(this).load(positionPath).into(mImageViewPositionOld);
-            Picasso.with(this).load(installPath).into(mImageViewInstallOld);
-
-        }
     }
 
     @Override
@@ -71,53 +63,81 @@ public class OperateRepairActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         Log.i(TAG, "onActivityResult: requestCode-->" + requestCode);
+        if (RESULT_OK == resultCode) {
+            switch (requestCode) {
+                case INTENT_CHOICE_P: {
+                    Uri selectedImage = data.getData();
+                    mImageViewPositionNew.setImageURI(selectedImage);
 
-        if (requestCode == INTENT_PHOTO_P && RESULT_OK == resultCode) {
-            FileManager fileManager = new FileManager(Environment.getExternalStorageDirectory().getPath() + "/paigong/test.jpg");
-            Bundle bundle = data.getExtras();
-            Bitmap bitmap = (Bitmap) bundle.get("data");
-            mImageViewPositionNew.setImageBitmap(bitmap);
-            fileManager.saveBitmapJpg(bitmap);
-            mStringPositionPath = fileManager.getPath();
-            return;
-        }
-        if (requestCode == INTENT_PHOTO_I && RESULT_OK == resultCode) {
-            FileManager fileManager = new FileManager(Environment.getExternalStorageDirectory().getPath() + "/paigong/test.jpg");
-            Bundle bundle = data.getExtras();
-            Bitmap bitmap = (Bitmap) bundle.get("data");
-            mImageViewInstallNew.setImageBitmap(bitmap);
-            fileManager.saveBitmapJpg(bitmap);
-            mStringInstallPath = fileManager.getPath();
-            return;
-        }
-        if (requestCode == INTENT_CHOICE_P && RESULT_OK == resultCode) {
-            Uri selectedImage = data.getData();
-            mImageViewPositionNew.setImageURI(selectedImage);
+                    final String scheme = selectedImage.getScheme();
+                    String str = null;
+                    if (scheme == null)
+                        str = selectedImage.getPath();
+                    else if (ContentResolver.SCHEME_FILE.equals(scheme)) {
+                        str = selectedImage.getPath();
+                    } else if (ContentResolver.SCHEME_CONTENT.equals(scheme)) {
+                        Cursor cursor = this.getContentResolver().query(selectedImage, new String[]{MediaStore.Images.ImageColumns.DATA}, null, null,
+                                null);
+                        if (null != cursor) {
+                            if (cursor.moveToFirst()) {
+                                int index = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+                                if (index > -1) {
+                                    str = cursor.getString(index);
+                                }
+                            }
+                            cursor.close();
+                        }
+                    }
+                    Log.i(TAG, "onActivityResult: str-->" + str);
+                    break;
+                }
+                case INTENT_PHOTO_P: {
+                    FileManager fileManager = new FileManager(FileManager.TYPE_PNG);
+                    Bundle bundle = data.getExtras();
+                    Bitmap bitmap = (Bitmap) bundle.get("data");
+                    mImageViewPositionNew.setImageBitmap(bitmap);
+                    fileManager.saveBitmapJpg(bitmap);
+                    mStringPositionPath = fileManager.getPath();
+                    break;
+                }
+                case INTENT_CHOICE_I: {
+                    Uri selectedImage = data.getData();
+                    mImageViewInstallNew.setImageURI(selectedImage);
 
-            String[] filePathColumn = {MediaStore.Images.Media.DATA};
+                    String[] filePathColumn = {MediaStore.Images.Media.DATA};
 
-            Cursor cursor = getContentResolver().query(selectedImage,
-                    filePathColumn, null, null, null);
-            if (null != cursor && cursor.moveToFirst()) {
-                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                mStringPositionPath = cursor.getString(columnIndex);
-                cursor.close();
+                    Cursor cursor = getContentResolver().query(selectedImage,
+                            filePathColumn, null, null, null);
+                    if (null != cursor && cursor.moveToFirst()) {
+                        int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                        mStringInstallPath = cursor.getString(columnIndex);
+                        cursor.close();
+                    }
+                    break;
+                }
+                case INTENT_PHOTO_I: {
+                    FileManager fileManager = new FileManager(FileManager.TYPE_PNG);
+                    Bundle bundle = data.getExtras();
+                    Bitmap bitmap = (Bitmap) bundle.get("data");
+                    mImageViewInstallNew.setImageBitmap(bitmap);
+                    fileManager.saveBitmapJpg(bitmap);
+                    mStringInstallPath = fileManager.getPath();
+                    break;
+                }
+                default: {
+                    Log.i(TAG, "onActivityResult: default");
+                }
             }
-            return;
-        }
-        if (requestCode == INTENT_CHOICE_I && RESULT_OK == resultCode) {
-            Uri selectedImage = data.getData();
-            mImageViewInstallNew.setImageURI(selectedImage);
-
-            String[] filePathColumn = {MediaStore.Images.Media.DATA};
-
-            Cursor cursor = getContentResolver().query(selectedImage,
-                    filePathColumn, null, null, null);
-            if (null != cursor && cursor.moveToFirst()) {
-                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                mStringInstallPath = cursor.getString(columnIndex);
-                cursor.close();
-            }
+            Log.i(TAG, "onActivityResult: path-1->" + mStringPositionPath);
+            Log.i(TAG, "onActivityResult: path-2->" + mStringInstallPath);
+//            if (null != mStringPositionPath) {
+//                Log.i(TAG, "onActivityResult: path-3->保存");
+//                mDatabaseManager.addRepairPositionPic("测试tNo", mStringPositionPath);
+//            }
+//            if (null != mStringInstallPath) {
+//                Log.i(TAG, "onActivityResult: path-4->保存");
+//                mDatabaseManager.addRepairInstallPic("测试tNo", mStringInstallPath);
+//            }
         }
         /*
         Bundle bundle = data.getExtras();
@@ -195,6 +215,41 @@ public class OperateRepairActivity extends BaseActivity {
         mTextViewSave = findViewById(R.id.tv_activity_operate_default_install_save);
 
         mDatabaseManager = new DatabaseManager(OperateRepairActivity.this);
+
+
+
+        Cursor cursor = mDatabaseManager.getRepairs();
+        Log.i(TAG, "onResume:");
+        if (null != cursor && cursor.moveToFirst()) {
+            do {
+                Log.i(TAG, "onResume:-->" + cursor.getString(0));
+                if ("测试tNo".equals(cursor.getString(0))) {
+                    mStringPosition = cursor.getString(1);
+                    mStringPositionPath = cursor.getString(2);
+                    mStringInstallPath = cursor.getString(3);
+                    mStringExplain = cursor.getString(4);
+
+                    mEditTextPosition.setText(mStringPosition);
+                    mEditTextExplain.setText(mStringExplain);
+                    Log.i(TAG, "onResume: position-->" + mStringPosition);
+                    Log.i(TAG, "onResume: positionPath-->" + mStringPositionPath);
+                    Log.i(TAG, "onResume: installPath-->" + mStringInstallPath);
+                    Log.i(TAG, "onResume: explain-->" + mStringExplain);
+                    if (null != mStringPositionPath) {
+                        File file = new File(mStringPositionPath);
+                        if (file.exists()) {
+                            Picasso.with(this).load(file).into(mImageViewPositionNew);
+                        }
+                    }
+                    if (null != mStringInstallPath) {
+                        File file = new File(mStringInstallPath);
+                        if (file.exists()) {
+                            Picasso.with(this).load(file).into(mImageViewInstallNew);
+                        }
+                    }
+                }
+            } while (cursor.moveToNext());
+        }
     }
 
     private void setEventListener() {
@@ -220,7 +275,7 @@ public class OperateRepairActivity extends BaseActivity {
                 Log.i(TAG, "onClick: save.positionPath-->" + mStringPositionPath);
                 Log.i(TAG, "onClick: save.installPath-->" + mStringInstallPath);
 
-                mDatabaseManager.addRepair("测试", mStringPosition, mStringPositionPath, mStringInstallPath, mStringExplain);
+                mDatabaseManager.addRepair("测试tNo", mStringPosition, mStringPositionPath, mStringInstallPath, mStringExplain);
             }
         });
 
@@ -236,7 +291,7 @@ public class OperateRepairActivity extends BaseActivity {
         mImageViewInstallNew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                picType = 2;
+                picType = 3;
                 showChoiceDialog();
                 // 2017/7/26 拍照
             }

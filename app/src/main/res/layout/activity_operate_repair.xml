@@ -353,8 +353,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/view_activity_operate_default_line_4"
             android:layout_marginTop="@dimen/dp_16"
-            android:layout_toEndOf="@+id/tv_activity_operate_fault_describe_title"
-            android:layout_toRightOf="@+id/tv_activity_operate_fault_describe_title"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:text="检修说明"/>
 
         <EditText
