@@ -743,14 +743,18 @@ public class NetworkManager {
         call.enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Log.i(TAG, "onFailure: exception-->" + e);
-                Log.i(TAG, "onFailure: 上传失败");
+                if (null == mOnUploadPicListener) {
+                    throw new NullPointerException("OnUploadPicListener is null");
+                }
+                mOnUploadPicListener.onFailure();
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                Log.i(TAG, "onResponse: 上传成功");
-                Log.i(TAG, "onResponse: result-->" + response.body().string());
+                if (null == mOnUploadPicListener) {
+                    throw new NullPointerException("OnUploadPicListener is null");
+                }
+                mOnUploadPicListener.onSuccess(response.body().string());
             }
         });
     }
@@ -788,13 +792,18 @@ public class NetworkManager {
         call.enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Log.i(TAG, "onFailure: 上传失败");
+                if (null == mOnUploadPicListener) {
+                    throw new NullPointerException("OnUploadPicListener is null");
+                }
+                mOnUploadPicListener.onFailure();
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                Log.i(TAG, "onResponse: 上传成功");
-                Log.i(TAG, "onResponse: result-->" + response.body().string());
+                if (null == mOnUploadPicListener) {
+                    throw new NullPointerException("OnUploadPicListener is null");
+                }
+                mOnUploadPicListener.onSuccess(response.body().string());
             }
         });
     }

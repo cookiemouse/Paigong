@@ -2,7 +2,6 @@ package com.tianyigps.xiepeng.utils;
 
 import android.support.annotation.Nullable;
 
-import com.tianyigps.xiepeng.interfaces.OnUploadPicListener;
 import com.tianyigps.xiepeng.manager.NetworkManager;
 
 /**
@@ -10,10 +9,10 @@ import com.tianyigps.xiepeng.manager.NetworkManager;
  */
 
 public class UploadPicU {
-    private static NetworkManager mNetworkManager;
+    private NetworkManager mNetworkManager;
 
-    public UploadPicU() {
-        mNetworkManager = new NetworkManager();
+    public UploadPicU(NetworkManager networkManager) {
+        mNetworkManager = networkManager;
     }
 
     //  上传单张图片
@@ -28,10 +27,5 @@ public class UploadPicU {
             , @Nullable int carId, @Nullable int tId, int type, int model
             , String... upfiles) {
         mNetworkManager.uploadPic(eid, token, orderNo, carId, tId, type, model, upfiles);
-    }
-
-
-    public void setOnUploadPicListener(OnUploadPicListener listener) {
-        mNetworkManager.setOnUploadPicListener(listener);
     }
 }
