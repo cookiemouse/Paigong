@@ -3,6 +3,7 @@ package com.tianyigps.xiepeng.activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -25,6 +26,7 @@ import com.tianyigps.xiepeng.data.AdapterRemoveData;
 import com.tianyigps.xiepeng.data.AdapterRepairData;
 import com.tianyigps.xiepeng.data.Data;
 import com.tianyigps.xiepeng.interfaces.OnGetWorkerOrderInfoStartListener;
+import com.tianyigps.xiepeng.manager.DatabaseManager;
 import com.tianyigps.xiepeng.manager.NetworkManager;
 import com.tianyigps.xiepeng.manager.SharedpreferenceManager;
 
@@ -78,6 +80,9 @@ public class InstallingActivity extends BaseActivity {
     //  AdapterType
     private int mAdapterType;
 
+    //  数据库
+    private DatabaseManager mDatabaseManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,6 +91,13 @@ public class InstallingActivity extends BaseActivity {
         init();
 
         setEventListener();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //将背景色复原
+        resetRepairList();
     }
 
     private void init() {
@@ -104,6 +116,8 @@ public class InstallingActivity extends BaseActivity {
         mAdapterType = intent.getIntExtra(Data.DATA_INTENT_INSTALL_TYPE, TYPE_INSTALL);
 
         mNetworkManager = NetworkManager.getInstance();
+
+        mDatabaseManager = new DatabaseManager(this);
 
         myHandler = new MyHandler();
 
@@ -148,7 +162,11 @@ public class InstallingActivity extends BaseActivity {
         mButtonNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                toActivity(CustomSignActivity.class);
+                if (checkRepairList()) {
+                    toActivity(CustomSignActivity.class);
+                    return;
+                }
+//                toActivity(EditRemarksActivity.class);
             }
         });
 
@@ -218,27 +236,13 @@ public class InstallingActivity extends BaseActivity {
                                     : carListBean.getCarTerminalList()) {
 
                                 int type = carTerminalListBean.getTerminalType();
-                                String terminalType;
+
                                 String terminalName = carTerminalListBean.getTerminalName();
                                 if (null == terminalName) {
                                     terminalName = "";
                                 }
-                                switch (type) {
-                                    case 1: {
-                                        terminalType = "有线设备";
-                                        break;
-                                    }
-                                    case 2: {
-                                        terminalType = "无线设备";
-                                        break;
-                                    }
-                                    default: {
-                                        terminalType = "";
-                                        Log.i(TAG, "onSuccess: default");
-                                    }
-                                }
 
-                                mAdapterRepairDataList.add(new AdapterRepairData(terminalType
+                                mAdapterRepairDataList.add(new AdapterRepairData(type
                                         , carTerminalListBean.getTNo()
                                         , terminalName
                                         , carNo
@@ -292,6 +296,52 @@ public class InstallingActivity extends BaseActivity {
         });
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    //  将维修背景色初始化
+    private void resetRepairList() {
+        if (mAdapterRepairDataList.size() > 0) {
+            for (AdapterRepairData data : mAdapterRepairDataList) {
+                data.setComplete(true);
+            }
+        }
+        myHandler.sendEmptyMessage(Data.MSG_3);
+    }
+
+    //  检验维修列表是否已完成
+    private boolean checkRepairList() {
+        boolean nextAble = true;
+        if (mAdapterRepairDataList.size() > 0) {
+            for (AdapterRepairData data : mAdapterRepairDataList) {
+                boolean isComplete = false;
+                Cursor cursor = mDatabaseManager.getRepair(data.getId());
+                if (cursor.moveToFirst()){
+                    String position = cursor.getString(1);
+                    String explain = cursor.getString(4);
+                    String positionUrl = cursor.getString(6);
+                    String installUrl = cursor.getString(7);
+
+                    Log.i(TAG, "onResume: 1-->" + position);
+                    Log.i(TAG, "onResume: 2-->" + explain);
+                    Log.i(TAG, "onResume: 3-->" + positionUrl);
+                    Log.i(TAG, "onResume: 4-->" + installUrl);
+
+                    isComplete = ((null != position)
+                            && (null != explain)
+                            && (null != positionUrl)
+                            && (null != installUrl));
+                }
+
+                data.setComplete(isComplete);
+
+                if (nextAble){
+                    nextAble = isComplete;
+                }
+            }
+        }
+        myHandler.sendEmptyMessage(Data.MSG_3);
+
+        return nextAble;
     }
 
     private class MyHandler extends Handler {

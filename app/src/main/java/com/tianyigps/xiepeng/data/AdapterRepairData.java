@@ -5,21 +5,25 @@ package com.tianyigps.xiepeng.data;
  */
 
 public class AdapterRepairData {
-    private String type, id, name, carNo, frameNo;
+    private int type;
+    private String id, name, carNo, frameNo;
+    //  是否完成，即item背景
+    private boolean complete;
 
-    public AdapterRepairData(String type, String id, String name, String carNo, String frameNo) {
+    public AdapterRepairData(int type, String id, String name, String carNo, String frameNo) {
         this.type = type;
         this.id = id;
         this.name = name;
         this.carNo = carNo;
         this.frameNo = frameNo;
+        this.complete = true;
     }
 
-    public String getType() {
+    public int getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(int type) {
         this.type = type;
     }
 
@@ -53,5 +57,13 @@ public class AdapterRepairData {
 
     public void setFrameNo(String frameNo) {
         this.frameNo = frameNo;
+    }
+
+    public boolean isComplete() {
+        return complete;
+    }
+
+    public void setComplete(boolean complete) {
+        this.complete = complete;
     }
 }

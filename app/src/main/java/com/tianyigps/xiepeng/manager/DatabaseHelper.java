@@ -18,7 +18,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final int VERSION = 1;
 
     private static final String TABLE_REPAIR = "create table " + Data.DATA_TAB_REPAIR
-            + "(tNo TEXT,position TEXT,positionPic TEXT,installPic TEXT,explain TEXT,newtNo TEXT)";
+            + "(tNo TEXT,position TEXT,positionPic TEXT,installPic TEXT,explain TEXT" +
+            ",newtNo TEXT,positionUrl TEXT,installUrl TEXT)";
 
     //  拆除似乎不用存本地数据
     private static final String TABLE_REMOVE = "create table " + Data.DATA_TAB_REMOVE

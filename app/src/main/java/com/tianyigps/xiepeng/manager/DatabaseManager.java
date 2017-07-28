@@ -24,9 +24,10 @@ public class DatabaseManager {
     }
 
     //  增，维修
-    public void addRepair(String tNo, String position, String positionPic, String installPic, String explain, String newtNo) {
+    public void addRepair(String tNo, String position, String positionPic, String installPic, String explain, String newtNo,
+                          String positionUrl, String installUrl) {
         if (repairExist(tNo)) {
-            modifyRepair(tNo, position, positionPic, installPic, explain, newtNo);
+            modifyRepair(tNo, position, positionPic, installPic, explain, newtNo, positionUrl, installUrl);
             return;
         }
         ContentValues contentValues = new ContentValues();
@@ -36,6 +37,8 @@ public class DatabaseManager {
         contentValues.put("installPic", installPic);
         contentValues.put("explain", explain);
         contentValues.put("newtNo", newtNo);
+        contentValues.put("positionUrl", positionUrl);
+        contentValues.put("installUrl", installUrl);
 
         mSqLiteDatabase.beginTransaction();
         try {
@@ -67,7 +70,7 @@ public class DatabaseManager {
             modifyRepairPosition(tNo, position);
             return;
         }
-        addRepair(tNo, position, null, null, null, null);
+        addRepair(tNo, position, null, null, null, null, null, null);
     }
 
     //  增，维修，重载
@@ -76,7 +79,7 @@ public class DatabaseManager {
             modifyRepairPositionPic(tNo, positionPic);
             return;
         }
-        addRepair(tNo, null, positionPic, null, null, null);
+        addRepair(tNo, null, positionPic, null, null, null, null, null);
     }
 
     //  增，维修，重载
@@ -85,7 +88,7 @@ public class DatabaseManager {
             modifyRepairInstallPic(tNo, installPic);
             return;
         }
-        addRepair(tNo, null, null, installPic, null, null);
+        addRepair(tNo, null, null, installPic, null, null, null, null);
     }
 
     //  增，维修，重载
@@ -94,16 +97,34 @@ public class DatabaseManager {
             modifyRepairExplain(tNo, explain);
             return;
         }
-        addRepair(tNo, null, null, null, explain, null);
+        addRepair(tNo, null, null, null, explain, null, null, null);
     }
 
     //  增，维修，重载
     public void addRepairNewtNo(String tNo, String newtNo) {
         if (repairExist(tNo)) {
-            modifyRepairnewtNo(tNo, newtNo);
+            modifyRepairNewtNo(tNo, newtNo);
             return;
         }
-        addRepair(tNo, null, null, null, null, newtNo);
+        addRepair(tNo, null, null, null, null, newtNo, null, null);
+    }
+
+    //  增，维修，重载
+    public void addRepairPositionUrl(String tNo, String positionUrl) {
+        if (repairExist(tNo)) {
+            modifyRepairPositionUrl(tNo, positionUrl);
+            return;
+        }
+        addRepair(tNo, null, null, null, null, null, positionUrl, null);
+    }
+
+    //  增，维修，重载
+    public void addRepairInstallUrl(String tNo, String installUrl) {
+        if (repairExist(tNo)) {
+            modifyRepairInstallUrl(tNo, installUrl);
+            return;
+        }
+        addRepair(tNo, null, null, null, null, null, null, installUrl);
     }
 
     //  删，维修
@@ -125,7 +146,8 @@ public class DatabaseManager {
     }
 
     //  改，维修
-    public void modifyRepair(String tNo, String position, String positionPic, String installPic, String explain, String newtNo) {
+    public void modifyRepair(String tNo, String position, String positionPic, String installPic, String explain, String newtNo,
+                             String positionUrl, String installUrl) {
         if (!repairExist(tNo)) {
             return;
         }
@@ -135,6 +157,8 @@ public class DatabaseManager {
         contentValues.put("installPic", installPic);
         contentValues.put("explain", explain);
         contentValues.put("newtNo", newtNo);
+        contentValues.put("positionUrl", positionUrl);
+        contentValues.put("installUrl", installUrl);
 
         mSqLiteDatabase.beginTransaction();
         try {
@@ -239,7 +263,7 @@ public class DatabaseManager {
     }
 
     //  改，维修，重载
-    public void modifyRepairnewtNo(String tNo, String newtNo) {
+    public void modifyRepairNewtNo(String tNo, String newtNo) {
         if (!repairExist(tNo)) {
             return;
         }
@@ -260,12 +284,56 @@ public class DatabaseManager {
         }
     }
 
+    //  改，维修，重载
+    public void modifyRepairPositionUrl(String tNo, String positionUrl) {
+        if (!repairExist(tNo)) {
+            return;
+        }
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("positionUrl", positionUrl);
+
+        mSqLiteDatabase.beginTransaction();
+        try {
+            mSqLiteDatabase.update(Data.DATA_TAB_REPAIR
+                    , contentValues
+                    , "tNo=?"
+                    , new String[]{tNo});
+            mSqLiteDatabase.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.e(TAG, e + "SqLiteDatabase update error");
+        } finally {
+            mSqLiteDatabase.endTransaction();
+        }
+    }
+
+    //  改，维修，重载
+    public void modifyRepairInstallUrl(String tNo, String installUrl) {
+        if (!repairExist(tNo)) {
+            return;
+        }
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("installUrl", installUrl);
+
+        mSqLiteDatabase.beginTransaction();
+        try {
+            mSqLiteDatabase.update(Data.DATA_TAB_REPAIR
+                    , contentValues
+                    , "tNo=?"
+                    , new String[]{tNo});
+            mSqLiteDatabase.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.e(TAG, e + "SqLiteDatabase update error");
+        } finally {
+            mSqLiteDatabase.endTransaction();
+        }
+    }
+
     //  查，维修
     public Cursor getRepairs() {
         mSqLiteDatabase.beginTransaction();
         try {
             Cursor cursor = mSqLiteDatabase.query(Data.DATA_TAB_REPAIR
-                    , new String[]{"tNo, position, positionPic, installPic, explain, newtNo"}
+                    , new String[]{"tNo, position, positionPic, installPic, explain, newtNo, positionUrl, installUrl"}
                     , null
                     , null
                     , null, null, null);
@@ -285,7 +353,7 @@ public class DatabaseManager {
         mSqLiteDatabase.beginTransaction();
         try {
             Cursor cursor = mSqLiteDatabase.query(Data.DATA_TAB_REPAIR
-                    , new String[]{"tNo, position, positionPic, installPic, explain, newtNo"}
+                    , new String[]{"tNo, position, positionPic, installPic, explain, newtNo, positionUrl, installUrl"}
                     , "tNo=?"
                     , new String[]{tNo}
                     , null, null, null);
@@ -331,6 +399,56 @@ public class DatabaseManager {
         try {
             Cursor cursor = mSqLiteDatabase.query(Data.DATA_TAB_REPAIR
                     , new String[]{"installPic"}
+                    , "tNo=?"
+                    , new String[]{tNo}
+                    , null, null, null);
+            mSqLiteDatabase.setTransactionSuccessful();
+
+            if (cursor.moveToFirst()) {
+                String path = cursor.getString(0);
+                cursor.close();
+                return path;
+            }
+            return null;
+        } catch (Exception e) {
+            Log.e(TAG, e + "SqliteDatabase query error");
+        } finally {
+            mSqLiteDatabase.endTransaction();
+        }
+        return null;
+    }
+
+    //  查，维修，重载
+    public String getRepairPositionUrl(String tNo) {
+        mSqLiteDatabase.beginTransaction();
+        try {
+            Cursor cursor = mSqLiteDatabase.query(Data.DATA_TAB_REPAIR
+                    , new String[]{"positionUrl"}
+                    , "tNo=?"
+                    , new String[]{tNo}
+                    , null, null, null);
+            mSqLiteDatabase.setTransactionSuccessful();
+
+            if (cursor.moveToFirst()) {
+                String path = cursor.getString(0);
+                cursor.close();
+                return path;
+            }
+            return null;
+        } catch (Exception e) {
+            Log.e(TAG, e + "SqliteDatabase query error");
+        } finally {
+            mSqLiteDatabase.endTransaction();
+        }
+        return null;
+    }
+
+    //  查，维修，重载
+    public String getRepairInstallUrl(String tNo) {
+        mSqLiteDatabase.beginTransaction();
+        try {
+            Cursor cursor = mSqLiteDatabase.query(Data.DATA_TAB_REPAIR
+                    , new String[]{"installUrl"}
                     , "tNo=?"
                     , new String[]{tNo}
                     , null, null, null);
