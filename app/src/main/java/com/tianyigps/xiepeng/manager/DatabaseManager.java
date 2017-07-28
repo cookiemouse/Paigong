@@ -100,7 +100,7 @@ public class DatabaseManager {
     //  增，维修，重载
     public void addRepairNewtNo(String tNo, String newtNo) {
         if (repairExist(tNo)) {
-            modifyRepairExplain(newtNo, newtNo);
+            modifyRepairnewtNo(tNo, newtNo);
             return;
         }
         addRepair(tNo, null, null, null, null, newtNo);
@@ -264,7 +264,7 @@ public class DatabaseManager {
         mSqLiteDatabase.beginTransaction();
         try {
             Cursor cursor = mSqLiteDatabase.query(Data.DATA_TAB_REPAIR
-                    , new String[]{"tNo, position, positionPic, installPic, explain"}
+                    , new String[]{"tNo, position, positionPic, installPic, explain, newtNo"}
                     , null
                     , null
                     , null, null, null);
@@ -284,7 +284,7 @@ public class DatabaseManager {
         mSqLiteDatabase.beginTransaction();
         try {
             Cursor cursor = mSqLiteDatabase.query(Data.DATA_TAB_REPAIR
-                    , new String[]{"tNo, position, positionPic, installPic, explain"}
+                    , new String[]{"tNo, position, positionPic, installPic, explain, newtNo"}
                     , "tNo=?"
                     , new String[]{tNo}
                     , null, null, null);

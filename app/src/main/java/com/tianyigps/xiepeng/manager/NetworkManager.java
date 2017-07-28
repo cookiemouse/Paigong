@@ -77,7 +77,7 @@ public class NetworkManager {
     //  20
     private OnGetWholeIMEIListener mOnGetWholeIMEIListener;
 
-    private NetworkManager() {
+    public NetworkManager() {
         mOkHttpClient = new OkHttpClient();
     }
 

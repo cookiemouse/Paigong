@@ -48,9 +48,9 @@ import com.tianyigps.xiepeng.manager.NetworkManager;
 import com.tianyigps.xiepeng.manager.SharedpreferenceManager;
 import com.tianyigps.xiepeng.utils.TimerU;
 
-import static com.tianyigps.xiepeng.data.Data.DATA_SCANNER;
 import static com.tianyigps.xiepeng.data.Data.DATA_INTENT_SCANNER_REQUEST;
 import static com.tianyigps.xiepeng.data.Data.DATA_INTENT_SCANNER_RESULT;
+import static com.tianyigps.xiepeng.data.Data.DATA_SCANNER;
 import static com.tianyigps.xiepeng.data.Data.MSG_1;
 import static com.tianyigps.xiepeng.data.Data.MSG_2;
 import static com.tianyigps.xiepeng.data.Data.MSG_3;
@@ -117,6 +117,8 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        mLocateManager.stopLocate();
+        mGeoCoderSearch.destroy();
         mMapView.onDestroy();
     }
 
@@ -172,7 +174,7 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
                 // 2017/7/12 刷新位置
                 mTextViewFlush.setEnabled(false);
                 mTimerU.start();
-                if (null != wholeImei){
+                if (null != wholeImei) {
                     getImeiLocation(wholeImei);
                     return;
                 }
@@ -215,7 +217,7 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
         eid = mSharedpreferenceManager.getEid();
         token = mSharedpreferenceManager.getToken();
 
-        mNetworkManager = NetworkManager.getInstance();
+        mNetworkManager = new NetworkManager();
         myHandler = new MyHandler();
 
         mGeoCoderSearch = GeoCoder.newInstance();
@@ -335,7 +337,7 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
                         break;
                     }
                     case 2: {
-                        type = "上线不定们";
+                        type = "上线不定位";
                         break;
                     }
                     default: {
@@ -446,9 +448,9 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
                     //  查询地址
                     mGeoCoderSearch.reverseGeoCode(new ReverseGeoCodeOption().location(latLng));
 
-                    moveToCenter(latLng);
                     markCar(latLng);
                     showInfoWindow(latLng, mStringTitle, mStringContent);
+                    moveToCenter(latLng);
                     break;
                 }
                 case MSG_2: {

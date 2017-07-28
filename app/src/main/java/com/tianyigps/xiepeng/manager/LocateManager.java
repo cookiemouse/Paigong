@@ -216,6 +216,11 @@ public class LocateManager {
         mLocationClient.start();
     }
 
+    //  关闭定位
+    public void stopLocate() {
+        mLocationClient.stop();
+    }
+
     /***
      * 接口
      */

@@ -37,9 +37,6 @@ import com.yundian.bottomdialog.BottomDialog;
 
 import java.io.File;
 
-import static com.tianyigps.xiepeng.data.Data.DATA_INTENT_SCANNER_REQUEST;
-import static com.tianyigps.xiepeng.data.Data.MSG_2;
-
 public class OperateRepairActivity extends BaseActivity {
 
     private static final String TAG = "OperateRepairActivity";
@@ -229,7 +226,7 @@ public class OperateRepairActivity extends BaseActivity {
         Log.i(TAG, "init: tNo-->" + tNo);
         mTextViewFrameNo.setText(tNo);
 
-        mNetworkManager = NetworkManager.getInstance();
+        mNetworkManager = new NetworkManager();
         myHandler = new MyHandler();
         mSharedpreferenceManager = new SharedpreferenceManager(this);
         baseUrl = mSharedpreferenceManager.getImageBaseUrl();
@@ -243,10 +240,7 @@ public class OperateRepairActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 // 2017/7/26 定位
-                Intent intent = new Intent(OperateRepairActivity.this, LocateActivity.class);
-                intent.putExtra(Data.DATA_INTENT_LOCATE_TYPE, false);
-                intent.putExtra(Data.DATA_INTENT_LOCATE_IMEI, tNo);
-                startActivity(intent);
+                toLocate(tNo);
             }
         });
 
@@ -257,11 +251,12 @@ public class OperateRepairActivity extends BaseActivity {
                 mStringPosition = mEditTextPosition.getText().toString();
                 mStringExplain = mEditTextExplain.getText().toString();
                 mStringNewtNo = mEditTextNewImei.getText().toString();
+                Log.i(TAG, "onClick: mStringNewtNo-->" + mStringNewtNo);
                 if ("".equals(mStringNewtNo)) {
-                    mDatabaseManager.addRepair(tNo, mStringPosition, mStringExplain, mStringNewtNo);
+                    mDatabaseManager.addRepair(tNo, mStringPosition, mStringExplain);
                     return;
                 }
-                mDatabaseManager.addRepair(tNo, mStringPosition, mStringExplain);
+                mDatabaseManager.addRepair(tNo, mStringPosition, mStringExplain, mStringNewtNo);
             }
         });
 
@@ -300,7 +295,7 @@ public class OperateRepairActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(OperateRepairActivity.this, ScannerActivity.class);
-                startActivityForResult(intent, DATA_INTENT_SCANNER_REQUEST);
+                startActivityForResult(intent, Data.DATA_INTENT_SCANNER_REQUEST);
             }
         });
 
@@ -409,7 +404,7 @@ public class OperateRepairActivity extends BaseActivity {
                     return;
                 }
                 wholeImei = wholeImeiBean.getObj().getImei();
-                myHandler.sendEmptyMessage(MSG_2);
+                myHandler.sendEmptyMessage(Data.MSG_2);
             }
         });
     }
@@ -473,7 +468,8 @@ public class OperateRepairActivity extends BaseActivity {
                     mStringPositionPath = cursor.getString(2);
                     mStringInstallPath = cursor.getString(3);
                     mStringExplain = cursor.getString(4);
-//                    mStringNewtNo = cursor.getString(5);
+                    mStringNewtNo = cursor.getString(5);
+                    Log.i(TAG, "loadSavedData: newtNo-->" + mStringNewtNo);
 
                     mEditTextPosition.setText(mStringPosition);
                     mEditTextExplain.setText(mStringExplain);
@@ -503,6 +499,13 @@ public class OperateRepairActivity extends BaseActivity {
     //  获取完整imei
     private void getWholeImei(String imei) {
         mNetworkManager.getWholeImei(eid, token, imei);
+    }
+
+    private void toLocate(String imei) {
+        Intent intent = new Intent(OperateRepairActivity.this, LocateActivity.class);
+        intent.putExtra(Data.DATA_INTENT_LOCATE_TYPE, false);
+        intent.putExtra(Data.DATA_INTENT_LOCATE_IMEI, imei);
+        startActivity(intent);
     }
 
     private class MyHandler extends Handler {
@@ -535,9 +538,7 @@ public class OperateRepairActivity extends BaseActivity {
                 }
                 case Data.MSG_2: {
                     mEditTextNewImei.setText(wholeImei);
-                    Intent intent = new Intent(OperateRepairActivity.this, LocateActivity.class);
-                    intent.putExtra(Data.DATA_INTENT_LOCATE_IMEI, wholeImei);
-                    startActivity(intent);
+                    toLocate(wholeImei);
                     break;
                 }
                 case Data.MSG_3: {
