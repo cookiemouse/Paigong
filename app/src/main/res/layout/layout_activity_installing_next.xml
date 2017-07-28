@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical">
+
+
+    <Button
+        android:id="@+id/btn_layout_activity_installing_next"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="@dimen/dp_8"
+        android:background="@drawable/bg_flush"
+        android:paddingLeft="@dimen/dp_72"
+        android:paddingRight="@dimen/dp_72"
+        android:text="@string/next_step"
+        android:textColor="@color/colorWhite"/>
+
+</LinearLayout>

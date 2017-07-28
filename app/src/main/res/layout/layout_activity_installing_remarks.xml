@@ -3,7 +3,9 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:background="@drawable/bg_item"
+              android:layout_marginTop="@dimen/dp_16"
               android:elevation="@dimen/dp_2"
+              android:id="@+id/ll_layout_activity_installing_remarkds"
               android:orientation="vertical">
 
     <TextView

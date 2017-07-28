@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -65,6 +66,8 @@ public class InstallingActivity extends BaseActivity {
     private List<AdapterRepairData> mAdapterRepairDataList = new ArrayList<>();
     private RepairAdapter mRepairAdapter;
 
+    private View mViewRemarks, mViewNext;
+
     //  网络请求
     private NetworkManager mNetworkManager;
     private int eid;
@@ -103,9 +106,13 @@ public class InstallingActivity extends BaseActivity {
     private void init() {
         this.setTitleText("");
 
-        mTextViewRemarks = findViewById(R.id.tv_layout_activity_installing_remarks);
         mListView = findViewById(R.id.lv_activity_installing);
-        mButtonNext = findViewById(R.id.btn_activity_installing_next);
+
+        mViewRemarks = LayoutInflater.from(this).inflate(R.layout.layout_activity_installing_remarks, null);
+        mViewNext = LayoutInflater.from(this).inflate(R.layout.layout_activity_installing_next, null);
+
+        mTextViewRemarks = mViewRemarks.findViewById(R.id.tv_layout_activity_installing_remarks);
+        mButtonNext = mViewNext.findViewById(R.id.btn_layout_activity_installing_next);
 
         mSharedpreferenceManager = new SharedpreferenceManager(InstallingActivity.this);
         eid = mSharedpreferenceManager.getEid();
@@ -144,6 +151,9 @@ public class InstallingActivity extends BaseActivity {
                 Log.i(TAG, "init: default");
             }
         }
+
+        mListView.addHeaderView(mViewRemarks);
+        mListView.addFooterView(mViewNext);
 
         mNetworkManager.getWorkerOrderInfoStart(eid, token, orderNo);
     }
@@ -315,7 +325,7 @@ public class InstallingActivity extends BaseActivity {
             for (AdapterRepairData data : mAdapterRepairDataList) {
                 boolean isComplete = false;
                 Cursor cursor = mDatabaseManager.getRepair(data.getId());
-                if (cursor.moveToFirst()){
+                if (cursor.moveToFirst()) {
                     String position = cursor.getString(1);
                     String explain = cursor.getString(4);
                     String positionUrl = cursor.getString(6);
@@ -334,7 +344,7 @@ public class InstallingActivity extends BaseActivity {
 
                 data.setComplete(isComplete);
 
-                if (nextAble){
+                if (nextAble) {
                     nextAble = isComplete;
                 }
             }
