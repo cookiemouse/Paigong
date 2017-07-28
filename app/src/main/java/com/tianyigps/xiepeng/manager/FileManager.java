@@ -2,6 +2,7 @@ package com.tianyigps.xiepeng.manager;
 
 import android.graphics.Bitmap;
 import android.os.Environment;
+import android.util.Log;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -24,14 +25,19 @@ public class FileManager {
     private File mFile;
 
     public FileManager(String name) {
-        String path = DIRECT + name;
-        mFile = new File(path);
+        File file = new File(DIRECT);
+        if (file.mkdirs()) {
+            Log.i(TAG, "FileManager: make dirs");
+        }
 //        if (!mFile.exists()) {
-//            if (mFile.mkdirs()) {
-//                Log.i(TAG, "FileManager: make dirs");
-//            }
 //            delete();
 //        }
+        String path = DIRECT + name;
+        mFile = new File(path);
+    }
+
+    public FileManager() {
+        this("temp.png");
     }
 
     public FileManager(int type) {

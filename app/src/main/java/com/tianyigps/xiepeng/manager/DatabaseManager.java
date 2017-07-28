@@ -237,6 +237,7 @@ public class DatabaseManager {
             mSqLiteDatabase.endTransaction();
         }
     }
+
     //  改，维修，重载
     public void modifyRepairnewtNo(String tNo, String newtNo) {
         if (!repairExist(tNo)) {
@@ -291,6 +292,56 @@ public class DatabaseManager {
             mSqLiteDatabase.setTransactionSuccessful();
 
             return cursor;
+        } catch (Exception e) {
+            Log.e(TAG, e + "SqliteDatabase query error");
+        } finally {
+            mSqLiteDatabase.endTransaction();
+        }
+        return null;
+    }
+
+    //  查，维修，重载
+    public String getRepairPositionPic(String tNo) {
+        mSqLiteDatabase.beginTransaction();
+        try {
+            Cursor cursor = mSqLiteDatabase.query(Data.DATA_TAB_REPAIR
+                    , new String[]{"positionPic"}
+                    , "tNo=?"
+                    , new String[]{tNo}
+                    , null, null, null);
+            mSqLiteDatabase.setTransactionSuccessful();
+
+            if (cursor.moveToFirst()) {
+                String path = cursor.getString(0);
+                cursor.close();
+                return path;
+            }
+            return null;
+        } catch (Exception e) {
+            Log.e(TAG, e + "SqliteDatabase query error");
+        } finally {
+            mSqLiteDatabase.endTransaction();
+        }
+        return null;
+    }
+
+    //  查，维修，重载
+    public String getRepairInstallPic(String tNo) {
+        mSqLiteDatabase.beginTransaction();
+        try {
+            Cursor cursor = mSqLiteDatabase.query(Data.DATA_TAB_REPAIR
+                    , new String[]{"installPic"}
+                    , "tNo=?"
+                    , new String[]{tNo}
+                    , null, null, null);
+            mSqLiteDatabase.setTransactionSuccessful();
+
+            if (cursor.moveToFirst()) {
+                String path = cursor.getString(0);
+                cursor.close();
+                return path;
+            }
+            return null;
         } catch (Exception e) {
             Log.e(TAG, e + "SqliteDatabase query error");
         } finally {

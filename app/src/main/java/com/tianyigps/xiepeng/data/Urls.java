@@ -26,7 +26,7 @@ public class Urls {
     public static final String URL_WORKER_LAST_INSTALLER = IP + "/dispatch4AppController/getLastInstaller4Engineer?";
     public static final String URL_WORKER_SAVE_ORDER_INFO = IP + "/dispatch4AppController/saveOrderInfo4Engineer?";
     public static final String URL_WORKER_REMOVE_TERMINAL_INFO = IP + "/dispatch4AppController/removeOrderCarTerminal?";
-    public static final String URL_WORKER_UPLOAD_PIC = IP + "/dispatch4AppController/uploadPic4Engineer?";
+    public static final String URL_WORKER_UPLOAD_PIC = IP + "/dispatch4AppController/uploadPic4Engineer";
     public static final String URL_WORKER_DELETE_PIC = IP + "/dispatch4AppController/deletePic4Engineer?";
     public static final String URL_WORKER_WHOLE_IMEI = IP + "/dispatch4AppController/getWholeImei4Engineer?";
 }

@@ -27,11 +27,14 @@ import com.tianyigps.xiepeng.bean.WholeImeiBean;
 import com.tianyigps.xiepeng.data.Data;
 import com.tianyigps.xiepeng.interfaces.OnGetWholeIMEIListener;
 import com.tianyigps.xiepeng.interfaces.OnGetWorkerOrderInfoStartListener;
+import com.tianyigps.xiepeng.interfaces.OnUploadPicListener;
 import com.tianyigps.xiepeng.manager.DatabaseManager;
 import com.tianyigps.xiepeng.manager.FileManager;
 import com.tianyigps.xiepeng.manager.NetworkManager;
 import com.tianyigps.xiepeng.manager.SharedpreferenceManager;
 import com.tianyigps.xiepeng.utils.MessageDialogU;
+import com.tianyigps.xiepeng.utils.TinyU;
+import com.tianyigps.xiepeng.utils.UploadPicU;
 import com.tianyigps.xiepeng.utils.Uri2FileU;
 import com.yundian.bottomdialog.BottomDialog;
 
@@ -78,6 +81,8 @@ public class OperateRepairActivity extends BaseActivity {
     private String baseUrl;
     private String mStringMessage = "数据请求失败，请检查网络！";
     private String wholeImei;
+    private int tid;
+    private int tType;
 
     //  网络数据返回
     private String carNoG, frameNoG, typeAndNameG, positionG, positionPicG, installPicG, installNameG, installPhoneG;
@@ -119,7 +124,9 @@ public class OperateRepairActivity extends BaseActivity {
 
                 String path = new Uri2FileU(OperateRepairActivity.this).getRealPathFromUri(selectedImage);
                 Log.i(TAG, "onActivityResult: path-->" + path);
+
                 mDatabaseManager.addRepairPositionPic(tNo, path);
+                uploadPic(Data.DATA_UPLOAD_TYPE_3, null, path);
 
                 Picasso.with(this).load(selectedImage).resize(PIC_WIDTH, PIC_HEIGHT).error(R.drawable.ic_camera).into
                         (mImageViewPositionNew);
@@ -138,7 +145,9 @@ public class OperateRepairActivity extends BaseActivity {
 
                 String path = new Uri2FileU(OperateRepairActivity.this).getRealPathFromUri(uri);
                 Log.i(TAG, "onActivityResult: path-->" + path);
+
                 mDatabaseManager.addRepairPositionPic(tNo, path);
+                uploadPic(Data.DATA_UPLOAD_TYPE_3, null, path);
 
                 Picasso.with(this).load(uri).resize(PIC_WIDTH, PIC_HEIGHT).error(R.drawable.ic_camera).into(mImageViewPositionNew);
                 break;
@@ -148,7 +157,9 @@ public class OperateRepairActivity extends BaseActivity {
 
                 String path = new Uri2FileU(OperateRepairActivity.this).getRealPathFromUri(selectedImage);
                 Log.i(TAG, "onActivityResult: path-->" + path);
+
                 mDatabaseManager.addRepairInstallPic(tNo, path);
+                uploadPic(Data.DATA_UPLOAD_TYPE_4, null, path);
 
                 Picasso.with(this).load(selectedImage).resize(PIC_WIDTH, PIC_HEIGHT).error(R.drawable.ic_camera).into(mImageViewInstallNew);
                 break;
@@ -167,6 +178,7 @@ public class OperateRepairActivity extends BaseActivity {
                 String path = new Uri2FileU(OperateRepairActivity.this).getRealPathFromUri(uri);
                 Log.i(TAG, "onActivityResult: path-->" + path);
                 mDatabaseManager.addRepairInstallPic(tNo, path);
+                uploadPic(Data.DATA_UPLOAD_TYPE_4, null, path);
 
                 Picasso.with(this).load(uri).resize(PIC_WIDTH, PIC_HEIGHT).error(R.drawable.ic_camera).into(mImageViewInstallNew);
                 break;
@@ -252,7 +264,7 @@ public class OperateRepairActivity extends BaseActivity {
                 mStringExplain = mEditTextExplain.getText().toString();
                 mStringNewtNo = mEditTextNewImei.getText().toString();
                 Log.i(TAG, "onClick: mStringNewtNo-->" + mStringNewtNo);
-                if ("".equals(mStringNewtNo)) {
+                if ("".equals(mStringNewtNo) || mRelativeLayoutReplace.getVisibility() == View.GONE) {
                     mDatabaseManager.addRepair(tNo, mStringPosition, mStringExplain);
                     return;
                 }
@@ -377,6 +389,8 @@ public class OperateRepairActivity extends BaseActivity {
                             installPicG = baseUrl + carTerminalListBean.getNewWiringDiagramPic();
                             installNameG = objBean.getDispatchContactName();
                             installPhoneG = objBean.getDispatchContactPhone();
+                            tid = carTerminalListBean.getId();
+                            tType = carTerminalListBean.getNewTerminalType();
 
                             myHandler.sendEmptyMessage(Data.MSG_1);
                             return;
@@ -405,6 +419,18 @@ public class OperateRepairActivity extends BaseActivity {
                 }
                 wholeImei = wholeImeiBean.getObj().getImei();
                 myHandler.sendEmptyMessage(Data.MSG_2);
+            }
+        });
+
+        mNetworkManager.setOnUploadPicListener(new OnUploadPicListener() {
+            @Override
+            public void onFailure() {
+                Log.i(TAG, "onFailure: uploadpic");
+            }
+
+            @Override
+            public void onSuccess(String result) {
+                Log.i(TAG, "onSuccess: result-->" + result);
             }
         });
     }
@@ -488,12 +514,21 @@ public class OperateRepairActivity extends BaseActivity {
                     if (null != mStringNewtNo) {
                         mRelativeLayoutReplace.setVisibility(View.VISIBLE);
                         mEditTextNewImei.setText(mStringNewtNo);
+                        mTextViewCount.setText(R.string.not_replace);
                     } else {
                         mRelativeLayoutReplace.setVisibility(View.GONE);
+                        mTextViewCount.setText(R.string.repair_replace);
                     }
                 }
             } while (cursor.moveToNext());
+            cursor.close();
         }
+    }
+
+    //  上传图片
+    public void uploadPic(int type, String imgUrl, String path) {
+        String pathT = TinyU.tinyPic(path);
+        new UploadPicU().uploadPic(eid, token, orderNo, tid, type, tType, imgUrl, pathT);
     }
 
     //  获取完整imei

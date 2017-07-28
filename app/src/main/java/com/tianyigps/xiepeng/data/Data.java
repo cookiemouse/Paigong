@@ -58,6 +58,17 @@ public class Data {
     public final static String DATA_TAB_INSTALL_TERMINAL = "paigong_database_tab_install_terminal";
     public final static String DATA_DB_NAME = "paigong_database_db.db";
 
+    //  上传图片type
+    public final static int DATA_UPLOAD_TYPE_1 = 1;     //车牌号照片
+    public final static int DATA_UPLOAD_TYPE_2 = 2;     //安装位置照片
+    public final static int DATA_UPLOAD_TYPE_3 = 3;     //安装位置照片
+    public final static int DATA_UPLOAD_TYPE_4 = 4;     //接线图照片
+    public final static int DATA_UPLOAD_TYPE_5 = 5;     //附加照片
+
+    //  上传图片model
+    public final static int DATA_UPLOAD_MODEL_1 = 1;    //有线
+    public final static int DATA_UPLOAD_MODEL_2 = 2;    //无线
+
     //  测试
     public final static int EID = 204;
     public final static String TOKEN = "25d55ad283aa400af464c76d713c07ad";
