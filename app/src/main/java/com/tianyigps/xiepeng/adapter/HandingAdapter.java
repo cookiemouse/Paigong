@@ -18,13 +18,13 @@ import com.tianyigps.xiepeng.data.Data;
 
 import java.util.List;
 
-import static android.content.ContentValues.TAG;
-
 /**
  * Created by djc on 2017/7/13.
  */
 
 public class HandingAdapter extends BaseAdapter {
+
+    private static final String TAG = "HandingAdapter";
 
     private Context context;
     private List<AdapterHandingData> mHandingDataList;
@@ -72,6 +72,7 @@ public class HandingAdapter extends BaseAdapter {
             viewHolder.textViewTitle = contentView.findViewById(R.id.tv_item_handing_content_title);
             viewHolder.textViewWire = contentView.findViewById(R.id.tv_item_handing_content_wire);
             viewHolder.textViewWireless = contentView.findViewById(R.id.tv_item_handing_content_wireless);
+            viewHolder.textViewStatue = contentView.findViewById(R.id.tv_item_handing_status);
 
             viewHolder.imageViewCall = contentView.findViewById(R.id.iv_item_handing_phone);
             viewHolder.imageViewStart = contentView.findViewById(R.id.iv_item_handing_start);
@@ -104,6 +105,36 @@ public class HandingAdapter extends BaseAdapter {
             default: {
                 orderType = "安装：";
                 Log.i(TAG, "onResponse: default");
+            }
+        }
+        switch (data.getCheckStatus()) {
+            case 1: {
+                viewHolder.textViewStatue.setVisibility(View.VISIBLE);
+                viewHolder.textViewStatue.setText(R.string.pending_audit);
+                viewHolder.imageViewCall.setEnabled(false);
+                viewHolder.imageViewStart.setEnabled(false);
+                break;
+            }
+            case 2: {
+                viewHolder.textViewStatue.setVisibility(View.VISIBLE);
+                viewHolder.textViewStatue.setText(R.string.audit_fault);
+                viewHolder.imageViewCall.setEnabled(true);
+                viewHolder.imageViewStart.setEnabled(true);
+                break;
+            }
+            case 3: {
+                viewHolder.textViewStatue.setVisibility(View.GONE);
+                viewHolder.textViewStatue.setText("");
+                viewHolder.imageViewCall.setEnabled(true);
+                viewHolder.imageViewStart.setEnabled(true);
+                break;
+            }
+            default: {
+                viewHolder.textViewStatue.setVisibility(View.GONE);
+                viewHolder.textViewStatue.setText("");
+                viewHolder.imageViewCall.setEnabled(true);
+                viewHolder.imageViewStart.setEnabled(true);
+                Log.i(TAG, "getView: default");
             }
         }
         viewHolder.textViewTitle.setText(orderType);
@@ -152,7 +183,7 @@ public class HandingAdapter extends BaseAdapter {
     }
 
     private class ViewHolder {
-        private TextView textViewName, textViewTime, textViewAddress, textViewId, textViewTitle, textViewPhoneName, textViewModify, textViewWire, textViewWireless;
+        private TextView textViewName, textViewTime, textViewAddress, textViewId, textViewTitle, textViewPhoneName, textViewModify, textViewWire, textViewWireless, textViewStatue;
         private ImageView imageViewCall, imageViewStart;
     }
 

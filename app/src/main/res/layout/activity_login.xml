@@ -91,6 +91,10 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="@dimen/dp_96"
+        android:paddingLeft="@dimen/dp_80"
+        android:paddingRight="@dimen/dp_80"
+        android:textColor="@color/colorWhite"
+        android:background="@drawable/bg_button_flush"
         android:text="@string/login" />
 
     <TextView

@@ -33,6 +33,7 @@
         android:paddingLeft="@dimen/dp_64"
         android:paddingRight="@dimen/dp_64"
         android:layout_marginBottom="@dimen/dp_16"
+        android:textColor="@color/colorWhite"
         android:text="@string/known"/>
 
 </LinearLayout>

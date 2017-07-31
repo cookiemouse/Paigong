@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/bg_item">
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_item">
 
     <TextView
         android:id="@+id/tv_item_handing_name"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp_8"
         android:layout_marginRight="@dimen/dp_8"
         android:lines="1"
         android:text="@string/app_name"
         android:textColor="@color/colorGrayBlack"
-        android:textSize="@dimen/sp_20" />
+        android:textSize="@dimen/sp_20"/>
 
     <View
         android:id="@+id/line_item_handing_1"
@@ -22,7 +22,7 @@
         android:layout_height="@dimen/dp_1"
         android:layout_below="@+id/tv_item_handing_content_title"
         android:layout_marginTop="@dimen/dp_8"
-        android:background="@color/color_cut_line" />
+        android:background="@color/color_cut_line"/>
 
     <TextView
         android:id="@+id/tv_item_handing_time"
@@ -32,7 +32,7 @@
         android:layout_alignStart="@+id/tv_item_handing_name"
         android:layout_below="@+id/tv_item_handing_name"
         android:layout_marginTop="@dimen/dp_8"
-        android:text="time" />
+        android:text="time"/>
 
     <TextView
         android:id="@+id/tv_item_handing_address"
@@ -41,7 +41,7 @@
         android:layout_alignLeft="@+id/tv_item_handing_time"
         android:layout_alignStart="@+id/tv_item_handing_time"
         android:layout_below="@+id/tv_item_handing_time"
-        android:text="address" />
+        android:text="address"/>
 
     <TextView
         android:id="@+id/tv_item_handing_id"
@@ -51,7 +51,7 @@
         android:layout_alignStart="@+id/tv_item_handing_address"
         android:layout_below="@+id/tv_item_handing_address"
         android:layout_marginTop="@dimen/dp_8"
-        android:text="TextView" />
+        android:text="TextView"/>
 
     <!--<TextView-->
     <!--android:id="@+id/tv_item_handing_number"-->
@@ -70,7 +70,7 @@
         android:layout_alignLeft="@+id/tv_item_handing_id"
         android:layout_alignStart="@+id/tv_item_handing_id"
         android:layout_below="@+id/tv_item_handing_id"
-        android:text="安装：" />
+        android:text="安装："/>
 
     <TextView
         android:id="@+id/tv_item_handing_content_1"
@@ -80,7 +80,7 @@
         android:layout_below="@+id/tv_item_handing_id"
         android:layout_toEndOf="@+id/tv_item_handing_content_title"
         android:layout_toRightOf="@+id/tv_item_handing_content_title"
-        android:text="@string/wire" />
+        android:text="@string/wire"/>
 
     <TextView
         android:id="@+id/tv_item_handing_content_wire"
@@ -92,7 +92,7 @@
         android:layout_toEndOf="@+id/tv_item_handing_content_1"
         android:layout_toRightOf="@+id/tv_item_handing_content_1"
         android:text="0"
-        android:textColor="@color/colorBlueTheme" />
+        android:textColor="@color/colorBlueTheme"/>
 
     <TextView
         android:id="@+id/tv_item_handing_content_2"
@@ -101,7 +101,7 @@
         android:layout_alignTop="@+id/tv_item_handing_content_wire"
         android:layout_toEndOf="@+id/tv_item_handing_content_wire"
         android:layout_toRightOf="@+id/tv_item_handing_content_wire"
-        android:text="@string/ge_middle" />
+        android:text="@string/ge_middle"/>
 
     <TextView
         android:id="@+id/tv_item_handing_content_wireless"
@@ -113,7 +113,7 @@
         android:layout_toEndOf="@+id/tv_item_handing_content_2"
         android:layout_toRightOf="@+id/tv_item_handing_content_2"
         android:text="0"
-        android:textColor="@color/colorBlueTheme" />
+        android:textColor="@color/colorBlueTheme"/>
 
     <TextView
         android:id="@+id/tv_item_handing_content_3"
@@ -122,7 +122,7 @@
         android:layout_alignTop="@+id/tv_item_handing_content_wireless"
         android:layout_toEndOf="@+id/tv_item_handing_content_wireless"
         android:layout_toRightOf="@+id/tv_item_handing_content_wireless"
-        android:text="@string/ge" />
+        android:text="@string/ge"/>
 
     <LinearLayout
         android:id="@+id/ll_item_handing_"
@@ -145,14 +145,14 @@
                 android:id="@+id/iv_item_handing_phone"
                 android:layout_width="@dimen/dp_32"
                 android:layout_height="@dimen/dp_32"
-                android:src="@drawable/ic_phone_blue" />
+                android:src="@drawable/ic_phone_status"/>
 
             <TextView
                 android:id="@+id/tv_item_handing_phone_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_4"
-                android:text="@string/app_name" />
+                android:text="@string/app_name"/>
 
         </LinearLayout>
 
@@ -167,13 +167,13 @@
                 android:id="@+id/iv_item_handing_start"
                 android:layout_width="@dimen/dp_32"
                 android:layout_height="@dimen/dp_32"
-                android:src="@drawable/ic_start_blue" />
+                android:src="@drawable/ic_start_status"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_4"
-                android:text="@string/start" />
+                android:text="@string/start"/>
 
         </LinearLayout>
 
@@ -189,6 +189,15 @@
         android:layout_toRightOf="@+id/tv_item_handing_time"
         android:text="@string/modify"
         android:textColor="@color/colorRed"
-        android:visibility="gone" />
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/tv_item_handing_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:textColor="@color/colorOrange"/>
 
 </RelativeLayout>

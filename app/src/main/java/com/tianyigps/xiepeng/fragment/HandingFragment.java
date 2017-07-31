@@ -208,12 +208,29 @@ public class HandingFragment extends Fragment implements View.OnClickListener {
                         }
                     }
 
+                    boolean modify;
+                    switch (objBean.getReviseFlag()) {
+                        case 0: {
+                            modify = false;
+                            break;
+                        }
+                        case 1: {
+                            modify = true;
+                            break;
+                        }
+                        default: {
+                            modify = false;
+                            Log.i(TAG, "onSuccess: default");
+                        }
+                    }
+
                     mAdapterHandingDataList.add(new AdapterHandingData(objBean.getCustName()
                             , new TimeFormatU().millisToDate(objBean.getDoorTime())
                             , objBean.getProvince() + objBean.getCity() + objBean.getDistrict()
                             , objBean.getOrderNo()
                             , objBean.getContactName()
-                            , objBean.getContactPhone(), objBean.getOrderType(), wire, wireless));
+                            , objBean.getContactPhone()
+                            , objBean.getCheckStatus(), objBean.getOrderType(), wire, wireless, modify));
                 }
 
                 myHandler.sendEmptyMessage(MSG_1);

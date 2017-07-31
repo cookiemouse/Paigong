@@ -73,20 +73,20 @@ public class OperateRemoveActivity extends BaseActivity {
 
         mNetworkManager.getWorkerOrderInfoStart(eid, token, orderNo);
 
-        for (int i = 0; i < 10; i++) {
-            mAdapterOperateRemoveDataList.add(new AdapterOperateRemoveData("carNo"
-                    , "frameNo"
-                    , "有线"
-                    , "（微贷网2165467987）"
-                    , "tNo"
-                    , "驾驶舱仪表内"
-                    , "TY20170717143432075/2de3a21e0bda4f06acf8bffe62065a48.png"
-                    , "TY20170717143432075/dd5a838856314802be6a43d9139ecc51.png"
-                    , "2018-08-08"
-                    , "杨某某"
-                    , "17900000001"
-                    , 0));
-        }
+//        for (int i = 0; i < 10; i++) {
+//            mAdapterOperateRemoveDataList.add(new AdapterOperateRemoveData("carNo"
+//                    , "frameNo"
+//                    , "有线"
+//                    , "（微贷网2165467987）"
+//                    , "tNo"
+//                    , "驾驶舱仪表内"
+//                    , "TY20170717143432075/2de3a21e0bda4f06acf8bffe62065a48.png"
+//                    , "TY20170717143432075/dd5a838856314802be6a43d9139ecc51.png"
+//                    , "2018-08-08"
+//                    , "杨某某"
+//                    , "17900000001"
+//                    , 0));
+//        }
 
         mOperateRemoveAdapter = new OperateRemoveAdapter(OperateRemoveActivity.this, mAdapterOperateRemoveDataList);
 

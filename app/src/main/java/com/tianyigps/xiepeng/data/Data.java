@@ -69,6 +69,10 @@ public class Data {
     public final static int DATA_UPLOAD_MODEL_1 = 1;    //有线
     public final static int DATA_UPLOAD_MODEL_2 = 2;    //无线
 
+    //  图片大小
+    public final static int DATA_PIC_SIZE_WIDTH = 300;  //宽度
+    public final static int DATA_PIC_SIZE_HEIGHT = 150; //高度
+
     //  测试
     public final static int EID = 204;
     public final static String TOKEN = "25d55ad283aa400af464c76d713c07ad";

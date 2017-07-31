@@ -51,12 +51,15 @@
     <string name="choice_map">请选择地图</string>
     <string name="next_step">下一步</string>
     <string name="frame_no">车架号</string>
+    <string name="enter_frame_no">请输入车架号</string>
     <string name="frame_no_">车架号：</string>
     <string name="pending_no">派单数量</string>
     <string name="complete_no">完成数量</string>
     <string name="car_no">车牌号</string>
+    <string name="enter_car_no">请输入车牌号</string>
     <string name="car_no_">车牌号：</string>
     <string name="car_type">车型</string>
+    <string name="enter_car_type">请输入车型</string>
     <string name="place">安装位置</string>
     <string name="connection_pic">接线图</string>
     <string name="flush">刷新</string>
@@ -76,6 +79,8 @@
     <string name="enter_explain">请输入故障说明...</string>
     <string name="repair_replace">维修更换</string>
     <string name="not_replace">不更换</string>
+    <string name="pending_audit">待审核</string>
+    <string name="audit_fault">审核未通过</string>
 
     <array name="picker_month">
         <item>01 月</item>

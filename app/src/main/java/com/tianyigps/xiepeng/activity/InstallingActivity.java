@@ -132,8 +132,6 @@ public class InstallingActivity extends BaseActivity {
         mRemoveAdapter = new RemoveAdapter(InstallingActivity.this, mAdapterRemoveDataList);
         mRepairAdapter = new RepairAdapter(InstallingActivity.this, mAdapterRepairDataList);
 
-        mAdapterType = TYPE_REPAIR;
-
         switch (mAdapterType) {
             case TYPE_INSTALL: {
                 mListView.setAdapter(mInstallingAdapter);
@@ -163,9 +161,32 @@ public class InstallingActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 // TODO: 2017/7/24 测试RecyclerView
-//                toActivity(OperateInstallActivity.class);
-//                toRemoveActivity();
-                toRepairActivity(mAdapterRepairDataList.get(i).getId());
+                if (0 == i) {
+                    return;
+                }
+                int position = i - 1;
+
+                switch (mAdapterType) {
+                    case TYPE_INSTALL: {
+                        toActivity(OperateInstallActivity.class);
+                        break;
+                    }
+                    case TYPE_REMOVE: {
+                        if (null == mAdapterRemoveDataList.get(position).getFrameNo()) {
+                            toRemoveActivity();
+                            return;
+                        }
+                        toActivity(OperateInstallActivity.class);
+                        break;
+                    }
+                    case TYPE_REPAIR: {
+                        toRepairActivity(mAdapterRepairDataList.get(position).getId());
+                        break;
+                    }
+                    default: {
+                        Log.i(TAG, "init: default");
+                    }
+                }
             }
         });
 
@@ -228,10 +249,13 @@ public class InstallingActivity extends BaseActivity {
                         mAdapterRemoveDataList.add(new AdapterRemoveData("安装"));
 
                         for (StartOrderInfoBean.ObjBean.CarListBean carListBean : objBean.getCarList()) {
-                            String frameNo = carListBean.getCarVin();
-                            mAdapterRemoveDataList.add(new AdapterRemoveData(frameNo
-                                    , carListBean.getWiredNum()
-                                    , carListBean.getWirelessNum()));
+                            for (StartOrderInfoBean.ObjBean.CarListBean.CarTerminalListBean carTerminalListBean : carListBean.getCarTerminalList()) {
+
+                                String frameNo = carListBean.getCarVin();
+                                mAdapterRemoveDataList.add(new AdapterRemoveData(frameNo
+                                        , carListBean.getWiredNum()
+                                        , carListBean.getWirelessNum()));
+                            }
                         }
 
                         myHandler.sendEmptyMessage(Data.MSG_2);
@@ -375,6 +399,7 @@ public class InstallingActivity extends BaseActivity {
                     break;
                 }
                 case Data.MSG_3: {
+                    //  repair
                     mRepairAdapter.notifyDataSetChanged();
                     break;
                 }

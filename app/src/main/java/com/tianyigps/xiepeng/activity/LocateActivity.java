@@ -147,7 +147,7 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
                 break;
             }
             case R.id.tv_activity_locate_look: {
-                // TODO: 2017/7/12 查看设备定位
+                // 2017/7/12 查看设备定位
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(mEditTextImei.getWindowToken(), 0);
                 String imei = mEditTextImei.getText().toString();
@@ -376,6 +376,9 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
         if (null == latLng) {
             return;
         }
+        if (null != mOverlayMarker) {
+            mOverlayMarker.remove();
+        }
         //构建Marker图标
         View viewMarker = LayoutInflater.from(LocateActivity.this).inflate(R.layout.view_map_marker_car, null);
         BitmapDescriptor bitmap = BitmapDescriptorFactory.fromView(viewMarker);
@@ -458,9 +461,6 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
                     break;
                 }
                 case MSG_3: {
-                    if (null != mOverlayMarker) {
-                        mOverlayMarker.remove();
-                    }
                     //  获取到WholeImei
                     getImeiLocation(wholeImei);
                     break;

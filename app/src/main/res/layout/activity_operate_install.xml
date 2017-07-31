@@ -31,7 +31,6 @@
                 android:id="@+id/lv_activity_operate_install"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="@dimen/dp_8"
                 android:divider="@color/colorNull"
                 android:dividerHeight="@dimen/dp_16"
                 android:scrollbars="none"/>
