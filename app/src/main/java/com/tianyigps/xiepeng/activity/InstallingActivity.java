@@ -78,9 +78,9 @@ public class InstallingActivity extends BaseActivity {
     private String mStringRemarks;
     private String mStringMsg = "数据请求失败，请检查网络";
 
-    private int[] carIds = new int[100];
-    private int[][] tIds = new int[100][100];
-    private int[][] tModels = new int[100][100];
+    private int[] carIds;   //  在返回数据时初始化，因为需要知道大小，下面同理
+    private int[][] tIds;
+    private int[][] tModels;
 
     private MyHandler myHandler;
 
@@ -230,6 +230,19 @@ public class InstallingActivity extends BaseActivity {
                 StartOrderInfoBean.ObjBean objBean = startOrderInfoBean.getObj();
                 mStringRemarks = objBean.getRemark();
 
+                int sizeCar = objBean.getCarList().size();
+                int sizeT = 0;
+                for (StartOrderInfoBean.ObjBean.CarListBean carListBean : objBean.getCarList()) {
+                    int temp = carListBean.getCarTerminalList().size();
+                    if (temp > sizeT) {
+                        sizeT = temp;
+                    }
+                }
+
+                carIds = new int[sizeCar];
+                tIds = new int[sizeCar][sizeT];
+                tModels = new int[sizeCar][sizeT];
+
                 for (int i = 0; i < objBean.getCarList().size(); i++) {
                     StartOrderInfoBean.ObjBean.CarListBean carListBean = objBean.getCarList().get(i);
                     carIds[i] = carListBean.getId();
@@ -333,6 +346,10 @@ public class InstallingActivity extends BaseActivity {
     }
 
     private void toInstallActivity(int carId) {
+        if (null == carIds || null == tIds || null == tModels){
+            showFailureDialog("数据异常，请重新刷新！");
+            return;
+        }
         Intent intent = new Intent(InstallingActivity.this, OperateInstallActivity.class);
         intent.putExtra(Data.DATA_INTENT_ORDER_NO, orderNo);
         intent.putExtra(Data.DATA_INTENT_INSTALL_CAR_ID, carId);

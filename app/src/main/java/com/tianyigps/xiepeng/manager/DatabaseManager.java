@@ -471,7 +471,7 @@ public class DatabaseManager {
     //  查，是否存在该order
     public boolean repairExist(String tNo) {
         Cursor cursor = getRepair(tNo);
-        return cursor.moveToFirst();
+        return null != cursor && cursor.moveToFirst();
     }
 
     //=====================维修========================华丽的分割线=======================车辆============================
@@ -777,7 +777,7 @@ public class DatabaseManager {
     //  查，是否存在该Car
     public boolean carExist(int idMain) {
         Cursor cursor = getCar(idMain);
-        return cursor.moveToFirst();
+        return null != cursor && cursor.moveToFirst();
     }
 
     //=====================车辆========================华丽的分割线=======================设备============================

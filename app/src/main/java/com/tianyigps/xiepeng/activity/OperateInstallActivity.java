@@ -365,13 +365,16 @@ public class OperateInstallActivity extends BaseActivity {
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
-        for (int i = 0; i < 10; i++) {
-            mAdapterOperateInstallListDataList.add(new AdapterOperateInstallListData("11", "仪表盘下", null, null, null, null));
+//        for (int i = 0; i < 10; i++) {
+//            mAdapterOperateInstallListDataList.add(new AdapterOperateInstallListData("11", "仪表盘下", null, null, null, null));
+//        }
+//        mAdapterOperateInstallListDataList.get(0).settNoNew("352544072172191");
+//        mAdapterOperateInstallListDataList.get(1).settNoNew(null);
+//        mAdapterOperateInstallListDataList.get(2).settNoOld("123546789");
+//        mAdapterOperateInstallListDataList.get(2).settNoNew(null);
+        for (int tid : tIds){
+            mAdapterOperateInstallListDataList.add(new AdapterOperateInstallListData(null, null, null, null, null, null));
         }
-        mAdapterOperateInstallListDataList.get(0).settNoNew("352544072172191");
-        mAdapterOperateInstallListDataList.get(1).settNoNew(null);
-        mAdapterOperateInstallListDataList.get(2).settNoOld("123546789");
-        mAdapterOperateInstallListDataList.get(2).settNoNew(null);
 
         mOperateInstallAdapter = new OperateInstallAdapter(this, mAdapterOperateInstallRecyclerDataList);
 
