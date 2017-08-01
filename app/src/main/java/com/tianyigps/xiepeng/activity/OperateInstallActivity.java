@@ -77,6 +77,10 @@ public class OperateInstallActivity extends BaseActivity {
     private String mStringMessage = "请求数据失败，请检查网络！";
     private int eid;
     private String token;
+    private String orderNo;
+    private int carId;
+    private int[] tIds = new int[]{};
+    private int[] tModels = new int[]{};
 
     // id，主键
     // TODO: 2017/8/1 测试车辆数据库
@@ -330,6 +334,19 @@ public class OperateInstallActivity extends BaseActivity {
 
     private void init() {
         this.setTitleText("");
+
+        Intent intent = getIntent();
+        orderNo = intent.getStringExtra(Data.DATA_INTENT_ORDER_NO);
+        tIds = intent.getIntArrayExtra(Data.DATA_INTENT_INSTALL_T_IDS);
+        tModels = intent.getIntArrayExtra(Data.DATA_INTENT_INSTALL_T_MODELS);
+
+        Log.i(TAG, "init: orderNo-->" + orderNo);
+        for (int tid : tIds) {
+            Log.i(TAG, "init: tids-->" + tid);
+        }
+        for (int tm : tModels) {
+            Log.i(TAG, "init: tm-->" + tm);
+        }
 
         mImageViewCarNo = findViewById(R.id.iv_layout_operate_install_car_pic);
         mImageViewFrameNo = findViewById(R.id.iv_layout_operate_install_frame_pic);

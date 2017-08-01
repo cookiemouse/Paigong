@@ -78,6 +78,10 @@ public class InstallingActivity extends BaseActivity {
     private String mStringRemarks;
     private String mStringMsg = "数据请求失败，请检查网络";
 
+    private int[] carIds = new int[100];
+    private int[][] tIds = new int[100][100];
+    private int[][] tModels = new int[100][100];
+
     private MyHandler myHandler;
 
     //  AdapterType
@@ -168,7 +172,7 @@ public class InstallingActivity extends BaseActivity {
 
                 switch (mAdapterType) {
                     case TYPE_INSTALL: {
-                        toInstallActivity(i);
+                        toInstallActivity(mAdapterInstallingDataList.get(position).getCarId());
                         break;
                     }
                     case TYPE_REMOVE: {
@@ -176,7 +180,7 @@ public class InstallingActivity extends BaseActivity {
                             toRemoveActivity();
                             return;
                         }
-                        toInstallActivity(i);
+                        toInstallActivity(mAdapterRemoveDataList.get(position).getCarId());
                         break;
                     }
                     case TYPE_REPAIR: {
@@ -226,16 +230,22 @@ public class InstallingActivity extends BaseActivity {
                 StartOrderInfoBean.ObjBean objBean = startOrderInfoBean.getObj();
                 mStringRemarks = objBean.getRemark();
 
+                for (int i = 0; i < objBean.getCarList().size(); i++) {
+                    StartOrderInfoBean.ObjBean.CarListBean carListBean = objBean.getCarList().get(i);
+                    carIds[i] = carListBean.getId();
+                    for (int j = 0; j < carListBean.getCarTerminalList().size(); j++) {
+                        StartOrderInfoBean.ObjBean.CarListBean.CarTerminalListBean carTerminalListBean =
+                                carListBean.getCarTerminalList().get(j);
+                        tIds[i][j] = carTerminalListBean.getId();
+                        tModels[i][j] = carTerminalListBean.getTerminalType();
+                    }
+                }
+
                 switch (mAdapterType) {
                     case TYPE_INSTALL: {
                         for (StartOrderInfoBean.ObjBean.CarListBean carListBean : objBean.getCarList()) {
-                            int[] ids = new int[]{};
-                            for (int i = 0; i < carListBean.getCarTerminalList().size(); i++) {
-                                ids[i] = carListBean.getCarTerminalList().get(i).getId();
-                            }
                             mAdapterInstallingDataList.add(
                                     new AdapterInstallingData(carListBean.getId()
-                                            , ids
                                             , carListBean.getNewCarVin()
                                             , carListBean.getWiredNum()
                                             , carListBean.getWirelessNum()));
@@ -255,13 +265,8 @@ public class InstallingActivity extends BaseActivity {
 
                         for (StartOrderInfoBean.ObjBean.CarListBean carListBean : objBean.getCarList()) {
                             for (StartOrderInfoBean.ObjBean.CarListBean.CarTerminalListBean carTerminalListBean : carListBean.getCarTerminalList()) {
-                                int[] ids = new int[]{};
-                                for (int i = 0; i < carListBean.getCarTerminalList().size(); i++) {
-                                    ids[i] = carListBean.getCarTerminalList().get(i).getId();
-                                }
-                                String frameNo = carListBean.getNewCarVin();
+                                String frameNo = carListBean.getCarVin();
                                 mAdapterRemoveDataList.add(new AdapterRemoveData(carListBean.getId()
-                                        , ids
                                         , frameNo
                                         , carListBean.getWiredNum()
                                         , carListBean.getWirelessNum()));
@@ -327,26 +332,20 @@ public class InstallingActivity extends BaseActivity {
         startActivity(intent);
     }
 
-    private void toInstallActivity(int position) {
+    private void toInstallActivity(int carId) {
         Intent intent = new Intent(InstallingActivity.this, OperateInstallActivity.class);
-        intent.putExtra(Data.DATA_INTENT_EID, eid);
-        intent.putExtra(Data.DATA_INTENT_TOKEN, token);
         intent.putExtra(Data.DATA_INTENT_ORDER_NO, orderNo);
-        switch (mAdapterType) {
-            case TYPE_INSTALL: {
-                intent.putExtra(Data.DATA_INTENT_INSTALL_CAR_ID, mAdapterInstallingDataList.get(position).getCarId());
-                intent.putExtra(Data.DATA_INTENT_INSTALL_T_IDS, mAdapterInstallingDataList.get(position).gettIds());
+        intent.putExtra(Data.DATA_INTENT_INSTALL_CAR_ID, carId);
+        int i = 0;
+        for (; i < carIds.length; i++) {
+            if (carId == carIds[i]) {
                 break;
-            }
-            case TYPE_REMOVE: {
-                intent.putExtra(Data.DATA_INTENT_INSTALL_CAR_ID, mAdapterRemoveDataList.get(position).getCarId());
-                intent.putExtra(Data.DATA_INTENT_INSTALL_T_IDS, mAdapterRemoveDataList.get(position).gettIds());
-                break;
-            }
-            default: {
-                Log.i(TAG, "toInstallActivity: default");
             }
         }
+        Log.i(TAG, "toInstallActivity: carid-->" + carId);
+        Log.i(TAG, "toInstallActivity: i-->" + i);
+        intent.putExtra(Data.DATA_INTENT_INSTALL_T_IDS, tIds[i]);
+        intent.putExtra(Data.DATA_INTENT_INSTALL_T_MODELS, tModels[i]);
         startActivity(intent);
     }
 

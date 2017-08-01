@@ -5,15 +5,13 @@ package com.tianyigps.xiepeng.data;
  */
 
 public class AdapterInstallingData {
-    private int carId;
-    private int[] tIds;
+    int carId;
     private String frameNo;
     private int orderLine, orderOffline;
     private int completeLine, completeOffline;
 
-    public AdapterInstallingData(int carId, int[] tIds, String frameNo, int orderLine, int orderOffline) {
+    public AdapterInstallingData(int carId, String frameNo, int orderLine, int orderOffline) {
         this.carId = carId;
-        this.tIds = tIds;
         this.frameNo = frameNo;
         this.orderLine = orderLine;
         this.orderOffline = orderOffline;
@@ -21,10 +19,9 @@ public class AdapterInstallingData {
         this.completeOffline = 0;
     }
 
-    public AdapterInstallingData(int carId, int[] tIds, String frameNo, int orderLine, int orderOffline, int completeLine, int
+    public AdapterInstallingData(int carId, String frameNo, int orderLine, int orderOffline, int completeLine, int
             completeOffline) {
         this.carId = carId;
-        this.tIds = tIds;
         this.frameNo = frameNo;
         this.orderLine = orderLine;
         this.orderOffline = orderOffline;
@@ -78,13 +75,5 @@ public class AdapterInstallingData {
 
     public void setCarId(int carId) {
         this.carId = carId;
-    }
-
-    public int[] gettIds() {
-        return tIds;
-    }
-
-    public void settIds(int[] tIds) {
-        this.tIds = tIds;
     }
 }

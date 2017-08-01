@@ -26,6 +26,7 @@ public class Data {
     public final static String DATA_INTENT_ADDRESS = "paigong_intent_address";
     public final static String DATA_INTENT_INSTALL_TYPE = "paigong_intent_install_type";
     public final static String DATA_INTENT_INSTALL_T_IDS = "paigong_intent_install_t_ids";
+    public final static String DATA_INTENT_INSTALL_T_MODELS = "paigong_intent_install_t_models";
     public final static String DATA_INTENT_INSTALL_CAR_ID = "paigong_intent_install_car_id";
 
     public final static String DATA_INTENT_LOCATE_TYPE = "paigong_intent_locate_type";
