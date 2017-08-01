@@ -1,12 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:orientation="vertical">
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:minHeight="@dimen/dp_80"
+             android:orientation="vertical"
+             android:padding="@dimen/dp_4">
 
     <ImageView
         android:id="@+id/iv_item_operate_install"
-        android:layout_width="@dimen/dp_72"
-        android:layout_height="@dimen/dp_48"/>
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_40"
+        android:layout_gravity="center"/>
 
-</LinearLayout>
+    <ImageView
+        android:id="@+id/iv_item_operate_install_delete"
+        android:layout_width="@dimen/dp_24"
+        android:layout_height="@dimen/dp_24"
+        android:layout_gravity="end"
+        android:background="@drawable/bg_cycle_delete"
+        android:padding="@dimen/dp_4"
+        android:src="@drawable/ic_delete"/>
+
+</FrameLayout>

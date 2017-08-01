@@ -27,6 +27,7 @@ import com.tianyigps.xiepeng.bean.WholeImeiBean;
 import com.tianyigps.xiepeng.customview.MyListView;
 import com.tianyigps.xiepeng.customview.MyRecyclerView;
 import com.tianyigps.xiepeng.data.AdapterOperateInstallListData;
+import com.tianyigps.xiepeng.data.AdapterOperateInstallRecyclerData;
 import com.tianyigps.xiepeng.data.Data;
 import com.tianyigps.xiepeng.interfaces.OnGetWholeIMEIListener;
 import com.tianyigps.xiepeng.manager.FileManager;
@@ -42,17 +43,21 @@ public class OperateInstallActivity extends BaseActivity {
 
     private static final String TAG = "OperateInstall";
     private static final int DELAY = 2000;
+    private static final int PIC_MAX = 5;
 
     private ImageView mImageViewCarNo, mImageViewFrameNo;
 
     private MyRecyclerView mRecyclerView;
     private MyListView mListView;
 
+    private OperateInstallAdapter mOperateInstallAdapter;
     private OperateInstallListAdapter mOperateInstallListAdapter;
 
+    private List<AdapterOperateInstallRecyclerData> mAdapterOperateInstallRecyclerDataList;
     private List<AdapterOperateInstallListData> mAdapterOperateInstallListDataList;
 
     //  正在操作中的item
+    private int itemRecycler;
     private int itemPosition;
 
     private NetworkManager mNetworkManager;
@@ -71,7 +76,9 @@ public class OperateInstallActivity extends BaseActivity {
     private static final int INTENT_PHOTO_C = 6;
     private static final int INTENT_CHOICE_F = 7;
     private static final int INTENT_PHOTO_F = 8;
-    private int picType = 1;   //  1 = 安装位置，3 = 接线图
+    private static final int INTENT_CHOICE_R = 9;
+    private static final int INTENT_PHOTO_R = 10;
+    private int picType = 1;   //  1 = 安装位置，3 = 接线图, 5 = 车牌号, 7 = 车架号, 9 = RecyclerView
 
     private Uri mUriPhoto;
     private String fileTempName;
@@ -105,10 +112,10 @@ public class OperateInstallActivity extends BaseActivity {
             return;
         }
 
-        AdapterOperateInstallListData adapterOperateInstallListData = mAdapterOperateInstallListDataList.get(itemPosition);
         switch (requestCode) {
             case INTENT_CHOICE_P: {
                 Uri selectedImage = data.getData();
+                Log.i(TAG, "onActivityResult: uri-->" + selectedImage);
 
                 String path = new Uri2FileU(OperateInstallActivity.this).getRealPathFromUri(selectedImage);
                 Log.i(TAG, "onActivityResult: path-->" + path);
@@ -123,7 +130,9 @@ public class OperateInstallActivity extends BaseActivity {
 //                        .error(R.drawable.ic_camera).into
 //                        (mImageViewPositionNew);
 
+                AdapterOperateInstallListData adapterOperateInstallListData = mAdapterOperateInstallListDataList.get(itemPosition);
                 adapterOperateInstallListData.setPositionPic(selectedImage);
+                mOperateInstallListAdapter.notifyDataSetChanged();
                 break;
             }
             case INTENT_PHOTO_P: {
@@ -146,7 +155,9 @@ public class OperateInstallActivity extends BaseActivity {
 //
 //                Picasso.with(this).load(uri).resize(PIC_WIDTH, PIC_HEIGHT).error(R.drawable.ic_camera).into(mImageViewPositionNew);
 
+                AdapterOperateInstallListData adapterOperateInstallListData = mAdapterOperateInstallListDataList.get(itemPosition);
                 adapterOperateInstallListData.setPositionPic(uri);
+                mOperateInstallListAdapter.notifyDataSetChanged();
                 break;
             }
             case INTENT_CHOICE_I: {
@@ -161,7 +172,9 @@ public class OperateInstallActivity extends BaseActivity {
 //
 //                Picasso.with(this).load(selectedImage).resize(PIC_WIDTH, PIC_HEIGHT).error(R.drawable.ic_camera).into(mImageViewInstallNew);
 
+                AdapterOperateInstallListData adapterOperateInstallListData = mAdapterOperateInstallListDataList.get(itemPosition);
                 adapterOperateInstallListData.setInstallPic(selectedImage);
+                mOperateInstallListAdapter.notifyDataSetChanged();
                 break;
             }
             case INTENT_PHOTO_I: {
@@ -183,7 +196,9 @@ public class OperateInstallActivity extends BaseActivity {
 //
 //                Picasso.with(this).load(uri).resize(PIC_WIDTH, PIC_HEIGHT).error(R.drawable.ic_camera).into(mImageViewInstallNew);
 
+                AdapterOperateInstallListData adapterOperateInstallListData = mAdapterOperateInstallListDataList.get(itemPosition);
                 adapterOperateInstallListData.setInstallPic(uri);
+                mOperateInstallListAdapter.notifyDataSetChanged();
                 break;
             }
             case INTENT_CHOICE_C: {
@@ -248,12 +263,33 @@ public class OperateInstallActivity extends BaseActivity {
                         .into(mImageViewFrameNo);
                 break;
             }
+            case INTENT_CHOICE_R: {
+                Uri selectedImage = data.getData();
+
+                String path = new Uri2FileU(OperateInstallActivity.this).getRealPathFromUri(selectedImage);
+                Log.i(TAG, "onActivityResult: path-->" + path);
+
+                addPicToRecycler(selectedImage);
+                break;
+            }
+            case INTENT_PHOTO_R: {
+                Uri uri = null;
+                if (data != null && data.getData() != null) {
+                    uri = data.getData();
+                }
+                if (uri == null) {
+                    if (mUriPhoto != null) {
+                        uri = mUriPhoto;
+                    }
+                }
+
+                addPicToRecycler(uri);
+                break;
+            }
             default: {
                 Log.i(TAG, "onActivityResult: default");
             }
         }
-
-        mOperateInstallListAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -271,23 +307,32 @@ public class OperateInstallActivity extends BaseActivity {
         mRecyclerView = findViewById(R.id.rv_layout_activity_operate_install);
         mListView = findViewById(R.id.lv_activity_operate_install);
 
+        mAdapterOperateInstallRecyclerDataList = new ArrayList<>();
         mAdapterOperateInstallListDataList = new ArrayList<>();
 
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
-        List<String> list = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
-            list.add("");
             mAdapterOperateInstallListDataList.add(new AdapterOperateInstallListData("1111111111", "仪表盘下", null, null));
-
         }
+        Log.i(TAG, "init: size-->" + mAdapterOperateInstallListDataList.size());
         mAdapterOperateInstallListDataList.get(0).settNoNew("352544072172191");
         mAdapterOperateInstallListDataList.get(1).settNoNew(null);
         mAdapterOperateInstallListDataList.get(2).settNoOld("123546789");
         mAdapterOperateInstallListDataList.get(2).settNoNew(null);
 
-        mRecyclerView.setAdapter(new OperateInstallAdapter(this, list));
+//        Uri.Builder builder = new Uri.Builder();
+//        builder.path("/storage/emulated/0/paigong/1501494051425.png");
+//        Uri uri = builder.build();
+//        for (int i = 0; i < 5; i++) {
+//            mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData(uri));
+//        }
+        mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData());
+
+        mOperateInstallAdapter = new OperateInstallAdapter(this, mAdapterOperateInstallRecyclerDataList);
+
+        mRecyclerView.setAdapter(mOperateInstallAdapter);
 
         mOperateInstallListAdapter = new OperateInstallListAdapter(OperateInstallActivity.this,
                 mAdapterOperateInstallListDataList);
@@ -316,6 +361,22 @@ public class OperateInstallActivity extends BaseActivity {
             public void onClick(View view) {
                 // TODO: 2017/7/31 选择图片
                 picType = 7;
+                showChoiceDialog();
+            }
+        });
+
+        mOperateInstallAdapter.setOnItemOperateListener(new OperateInstallAdapter.OnItemOperateListener() {
+            @Override
+            public void onDeleteClick(int position) {
+                //  2017/8/1 删除图片
+                removePicFromRecycler(position);
+            }
+
+            @Override
+            public void onPicClick(int position) {
+                // 2017/8/1 添加图片
+                itemRecycler = position;
+                picType = 9;
                 showChoiceDialog();
             }
         });
@@ -415,6 +476,26 @@ public class OperateInstallActivity extends BaseActivity {
                 myHandler.sendMessage(message);
             }
         });
+    }
+
+    //  RecyclerView添加图片
+    private void addPicToRecycler(Uri uri) {
+        AdapterOperateInstallRecyclerData adapterOperateInstallRecyclerData = mAdapterOperateInstallRecyclerDataList.get(itemRecycler);
+        adapterOperateInstallRecyclerData.setUri(uri);
+        if (itemRecycler == (mAdapterOperateInstallRecyclerDataList.size() - 1) && itemRecycler < PIC_MAX) {
+            mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData());
+        }
+        mOperateInstallAdapter.notifyDataSetChanged();
+    }
+
+    //  RecycleView删除图片
+    private void removePicFromRecycler(int position) {
+        mAdapterOperateInstallRecyclerDataList.remove(position);
+        int last = mAdapterOperateInstallRecyclerDataList.size() - 1;
+        if (null != mAdapterOperateInstallRecyclerDataList.get(last).getUri()) {
+            mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData());
+        }
+        mOperateInstallAdapter.notifyDataSetChanged();
     }
 
     //  跳转到快速定位页面

@@ -15,7 +15,6 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.tianyigps.xiepeng.R;
 import com.tianyigps.xiepeng.data.AdapterOperateInstallListData;
-import com.tianyigps.xiepeng.data.Data;
 
 import java.util.List;
 
@@ -134,7 +133,8 @@ public class OperateInstallListAdapter extends BaseAdapter {
         if (data.getPositionPic() != null) {
             Picasso.with(context)
                     .load(data.getPositionPic())
-                    .resize(Data.DATA_PIC_SIZE_WIDTH, Data.DATA_PIC_SIZE_HEIGHT)
+                    .fit()
+                    .centerInside()
                     .error(R.drawable.ic_camera)
                     .into(viewHolder.ivPositionPic);
         }
@@ -142,7 +142,8 @@ public class OperateInstallListAdapter extends BaseAdapter {
         if (data.getInstallPic() != null) {
             Picasso.with(context)
                     .load(data.getInstallPic())
-                    .resize(Data.DATA_PIC_SIZE_WIDTH, Data.DATA_PIC_SIZE_HEIGHT)
+                    .fit()
+                    .centerInside()
                     .error(R.drawable.ic_camera)
                     .into(viewHolder.ivInstallPic);
         }

@@ -1,13 +1,16 @@
 package com.tianyigps.xiepeng.adapter;
 
 import android.content.Context;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.squareup.picasso.Picasso;
 import com.tianyigps.xiepeng.R;
+import com.tianyigps.xiepeng.data.AdapterOperateInstallRecyclerData;
 
 import java.util.List;
 
@@ -18,11 +21,13 @@ import java.util.List;
 public class OperateInstallAdapter extends RecyclerView.Adapter<OperateInstallAdapter.MyViewHolder> {
 
     private Context context;
-    private List<String> mPathList;
+    private List<AdapterOperateInstallRecyclerData> mDataList;
 
-    public OperateInstallAdapter(Context context, List<String> pathList) {
+    private OnItemOperateListener mOnItemOperateListener;
+
+    public OperateInstallAdapter(Context context, List<AdapterOperateInstallRecyclerData> dataList) {
         this.context = context;
-        this.mPathList = pathList;
+        this.mDataList = dataList;
     }
 
     @Override
@@ -34,21 +39,70 @@ public class OperateInstallAdapter extends RecyclerView.Adapter<OperateInstallAd
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        holder.imageView.setBackgroundResource(R.color.colorAccent);
+        final int positionFinal = position;
+
+        Uri uri = mDataList.get(position).getUri();
+        if (null == uri) {
+            holder.imageViewDelete.setVisibility(View.GONE);
+            Picasso.with(context)
+                    .load(R.drawable.ic_add_pic)
+                    .fit()
+                    .centerInside()
+                    .into(holder.imageViewPic);
+        } else {
+            Picasso.with(context)
+                    .load(uri)
+                    .fit()
+                    .centerInside()
+                    .error(R.drawable.ic_camera)
+                    .into(holder.imageViewPic);
+            holder.imageViewDelete.setVisibility(View.VISIBLE);
+        }
+
+        holder.imageViewPic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (null == mOnItemOperateListener) {
+                    throw new NullPointerException("OnItemOperateListener is null");
+                }
+                mOnItemOperateListener.onPicClick(positionFinal);
+            }
+        });
+
+        holder.imageViewDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (null == mOnItemOperateListener) {
+                    throw new NullPointerException("OnItemOperateListener is null");
+                }
+                mOnItemOperateListener.onDeleteClick(positionFinal);
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
-        return mPathList.size();
+        return mDataList.size();
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
 
-        private ImageView imageView;
+        private ImageView imageViewPic, imageViewDelete;
 
         MyViewHolder(View itemView) {
             super(itemView);
-            imageView = itemView.findViewById(R.id.iv_item_operate_install);
+            imageViewPic = itemView.findViewById(R.id.iv_item_operate_install);
+            imageViewDelete = itemView.findViewById(R.id.iv_item_operate_install_delete);
         }
+    }
+
+    public interface OnItemOperateListener {
+        void onDeleteClick(int position);
+
+        void onPicClick(int position);
+    }
+
+    public void setOnItemOperateListener(OnItemOperateListener listener) {
+        this.mOnItemOperateListener = listener;
     }
 }
