@@ -1,30 +1,34 @@
 package com.tianyigps.xiepeng.data;
 
-import android.net.Uri;
-
 /**
  * Created by cookiemouse on 2017/7/24.
  */
 
 public class AdapterOperateInstallListData {
     private String tNoNew, position;
-    private Uri positionPic, installPic;
+    private String positionPic, installPic;
+    private String positionPicUrl, installPicUrl;
 
     private String tNoOld;
 
-    public AdapterOperateInstallListData(String tNoNew, String position, Uri positionPic, Uri installPic) {
+    public AdapterOperateInstallListData(String tNoNew, String position, String positionPic, String installPic, String positionPicUrl, String installPicUrl) {
         this.tNoNew = tNoNew;
         this.position = position;
         this.positionPic = positionPic;
         this.installPic = installPic;
+        this.positionPicUrl = positionPicUrl;
+        this.installPicUrl = installPicUrl;
     }
 
     @Deprecated
-    public AdapterOperateInstallListData(String tNoNew, String position, Uri positionPic, Uri installPic, String tNoOld) {
+    public AdapterOperateInstallListData(String tNoNew, String position, String positionPic, String installPic, String
+            positionPicUrl, String installPicUrl, String tNoOld) {
         this.tNoNew = tNoNew;
         this.position = position;
         this.positionPic = positionPic;
         this.installPic = installPic;
+        this.positionPicUrl = positionPicUrl;
+        this.installPicUrl = installPicUrl;
         this.tNoOld = tNoOld;
     }
 
@@ -44,20 +48,36 @@ public class AdapterOperateInstallListData {
         this.position = position;
     }
 
-    public Uri getPositionPic() {
+    public String getPositionPic() {
         return positionPic;
     }
 
-    public void setPositionPic(Uri positionPic) {
+    public void setPositionPic(String positionPic) {
         this.positionPic = positionPic;
     }
 
-    public Uri getInstallPic() {
+    public String getInstallPic() {
         return installPic;
     }
 
-    public void setInstallPic(Uri installPic) {
+    public void setInstallPic(String installPic) {
         this.installPic = installPic;
+    }
+
+    public String getPositionPicUrl() {
+        return positionPicUrl;
+    }
+
+    public void setPositionPicUrl(String positionPicUrl) {
+        this.positionPicUrl = positionPicUrl;
+    }
+
+    public String getInstallPicUrl() {
+        return installPicUrl;
+    }
+
+    public void setInstallPicUrl(String installPicUrl) {
+        this.installPicUrl = installPicUrl;
     }
 
     public String gettNoOld() {

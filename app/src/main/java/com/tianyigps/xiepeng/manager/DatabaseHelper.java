@@ -26,11 +26,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + "(frameNo TEXT,tNo TEXT,removeCountWire INTEGER,removeCountWireless INTEGER)";
 
     private static final String TABLE_INSTALL_CAR = "create table " + Data.DATA_TAB_INSTALL_CAR
-            + "(frameNo TEXT,tNo TEXT" +
-            ",pic1 TEXT,pic2 TEXT,pic3 TEXT,pic4 TEXT,pic5 TEXT,pic6 TEXT)";
+            + "(idMain INTEGER,carNo TEXT,frameNo TEXT,carType TEXT"
+            + ",carNoPic TEXT,frameNoPic TEXT"
+            + ",pic1 TEXT,pic2 TEXT,pic3 TEXT,pic4 TEXT,pic5 TEXT,pic6 TEXT"
+            + ",carNoPicUri TEXT,frameNoPicUri TEXT"
+            + ",pic1Uri TEXT,pic2Uri TEXT,pic3Uri TEXT,pic4Uri TEXT,pic5Uri TEXT,pic6Uri TEXT)";
 
     private static final String TABLE_INSTALL_TERMINAL = "create table " + Data.DATA_TAB_INSTALL_TERMINAL
-            + "(tNo TEXT,tType INTEGER,position TEXT,positionPic TEXT,installPic TEXT)";
+            + "(idMain INTEGER,tNoOle TEXT,tNoNew TEXT,position TEXT,positionPic TEXT,installPic TEXT" +
+            ",positionPicUri TEXT,installPicUri TEXT)";
 
     /*
     * 需要保存的信息

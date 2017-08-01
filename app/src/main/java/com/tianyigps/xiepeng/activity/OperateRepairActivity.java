@@ -552,7 +552,7 @@ public class OperateRepairActivity extends BaseActivity {
     }
 
     //  上传图片
-    public void uploadPic(int type, String imgUrl, String path) {
+    private void uploadPic(int type, String imgUrl, String path) {
         //  压缩图片
         String pathT = TinyU.tinyPic(path);
         new UploadPicU(mNetworkManager).uploadPic(eid, token, orderNo, tid, type, tType, imgUrl, pathT);

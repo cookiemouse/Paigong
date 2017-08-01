@@ -5,6 +5,8 @@ package com.tianyigps.xiepeng.data;
  */
 
 public class AdapterRemoveData {
+    private int carId;
+    private int[] tIds;
     //  type表示拆除和安装，0 = title, 1 = 拆除，2 = 安装
     private int type;
     private String typeName;
@@ -34,17 +36,21 @@ public class AdapterRemoveData {
         this.offlineComplete = offlineComplete;
     }
 
-    public AdapterRemoveData(String frameNo, int online, int offline) {
+    public AdapterRemoveData(int carId, int[] tIds, String frameNo, int online, int offline) {
         this.type = 2;
+        this.carId = carId;
+        this.tIds = tIds;
         this.typeName = "";
         this.frameNo = frameNo;
         this.online = online;
         this.offline = offline;
     }
 
-    public AdapterRemoveData(String frameNo, int online, int offline, int onlineComplete, int
+    public AdapterRemoveData(int carId, int[] tIds, String frameNo, int online, int offline, int onlineComplete, int
             offlineComplete) {
         this.type = 2;
+        this.carId = carId;
+        this.tIds = tIds;
         this.typeName = "";
         this.frameNo = frameNo;
         this.online = online;
@@ -107,5 +113,21 @@ public class AdapterRemoveData {
 
     public void setOfflineComplete(int offlineComplete) {
         this.offlineComplete = offlineComplete;
+    }
+
+    public int getCarId() {
+        return carId;
+    }
+
+    public void setCarId(int carId) {
+        this.carId = carId;
+    }
+
+    public int[] gettIds() {
+        return tIds;
+    }
+
+    public void settIds(int[] tIds) {
+        this.tIds = tIds;
     }
 }

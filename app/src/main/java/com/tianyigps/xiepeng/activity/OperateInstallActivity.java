@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -14,6 +15,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -23,6 +25,7 @@ import com.tianyigps.xiepeng.R;
 import com.tianyigps.xiepeng.adapter.OperateInstallAdapter;
 import com.tianyigps.xiepeng.adapter.OperateInstallListAdapter;
 import com.tianyigps.xiepeng.base.BaseActivity;
+import com.tianyigps.xiepeng.bean.UploadPicBean;
 import com.tianyigps.xiepeng.bean.WholeImeiBean;
 import com.tianyigps.xiepeng.customview.MyListView;
 import com.tianyigps.xiepeng.customview.MyRecyclerView;
@@ -30,12 +33,17 @@ import com.tianyigps.xiepeng.data.AdapterOperateInstallListData;
 import com.tianyigps.xiepeng.data.AdapterOperateInstallRecyclerData;
 import com.tianyigps.xiepeng.data.Data;
 import com.tianyigps.xiepeng.interfaces.OnGetWholeIMEIListener;
+import com.tianyigps.xiepeng.interfaces.OnUploadPicListener;
+import com.tianyigps.xiepeng.manager.DatabaseManager;
 import com.tianyigps.xiepeng.manager.FileManager;
 import com.tianyigps.xiepeng.manager.NetworkManager;
 import com.tianyigps.xiepeng.manager.SharedpreferenceManager;
+import com.tianyigps.xiepeng.utils.TinyU;
+import com.tianyigps.xiepeng.utils.UploadPicU;
 import com.tianyigps.xiepeng.utils.Uri2FileU;
 import com.yundian.bottomdialog.BottomDialog;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,6 +54,7 @@ public class OperateInstallActivity extends BaseActivity {
     private static final int PIC_MAX = 5;
 
     private ImageView mImageViewCarNo, mImageViewFrameNo;
+    private EditText mEditTextCarNo, mEditTextFrameNo, mEditTextCarType;
 
     private MyRecyclerView mRecyclerView;
     private MyListView mListView;
@@ -57,8 +66,10 @@ public class OperateInstallActivity extends BaseActivity {
     private List<AdapterOperateInstallListData> mAdapterOperateInstallListDataList;
 
     //  正在操作中的item
-    private int itemRecycler;
-    private int itemPosition;
+    private int itemRecycler;   //  Recycler操作位置
+    private int itemPosition;   //  listview操作位置
+    private String itemPath;    //  从相册或拍照得到的图片物理位置
+    private String urlCarNoPic, urlFrameNoPic;  //  车牌号图片Url、车架号图片url
 
     private NetworkManager mNetworkManager;
     private SharedpreferenceManager mSharedpreferenceManager;
@@ -66,6 +77,12 @@ public class OperateInstallActivity extends BaseActivity {
     private String mStringMessage = "请求数据失败，请检查网络！";
     private int eid;
     private String token;
+
+    // id，主键
+    // TODO: 2017/8/1 测试车辆数据库
+    private int idMainCar = 100, idMainTerminal;
+
+    private DatabaseManager mDatabaseManager;
 
     //  选择图片或拍照
     private static final int INTENT_CHOICE_P = 1;
@@ -119,20 +136,11 @@ public class OperateInstallActivity extends BaseActivity {
 
                 String path = new Uri2FileU(OperateInstallActivity.this).getRealPathFromUri(selectedImage);
                 Log.i(TAG, "onActivityResult: path-->" + path);
+                itemPath = path;
 
-//                mDatabaseManager.addRepairPositionPic(tNo, path);
-//                String imgUrl = mDatabaseManager.getRepairPositionUrl(tNo);
-//                uploadPic(Data.DATA_UPLOAD_TYPE_3, imgUrl, path);
-//
-//                Picasso.with(this)
-//                        .load(selectedImage)
-//                        .resize(Data.DATA_PIC_SIZE_WIDTH, Data.DATA_PIC_SIZE_HEIGHT)
-//                        .error(R.drawable.ic_camera).into
-//                        (mImageViewPositionNew);
+                String imgUrl = mAdapterOperateInstallListDataList.get(itemPosition).getPositionPicUrl();
 
-                AdapterOperateInstallListData adapterOperateInstallListData = mAdapterOperateInstallListDataList.get(itemPosition);
-                adapterOperateInstallListData.setPositionPic(selectedImage);
-                mOperateInstallListAdapter.notifyDataSetChanged();
+                uploadTerminalPic(Data.DATA_UPLOAD_TYPE_3, imgUrl, path);
                 break;
             }
             case INTENT_PHOTO_P: {
@@ -146,35 +154,27 @@ public class OperateInstallActivity extends BaseActivity {
                     }
                 }
 
-//                String path = new Uri2FileU(OperateInstallActivity.this).getRealPathFromUri(uri);
-//                Log.i(TAG, "onActivityResult: path-->" + path);
-//
-//                mDatabaseManager.addRepairPositionPic(tNo, path);
-//                String imgUrl = mDatabaseManager.getRepairPositionUrl(tNo);
-//                uploadPic(Data.DATA_UPLOAD_TYPE_3, imgUrl, path);
-//
-//                Picasso.with(this).load(uri).resize(PIC_WIDTH, PIC_HEIGHT).error(R.drawable.ic_camera).into(mImageViewPositionNew);
+                String path = new Uri2FileU(OperateInstallActivity.this).getRealPathFromUri(uri);
+                Log.i(TAG, "onActivityResult: path-->" + path);
 
-                AdapterOperateInstallListData adapterOperateInstallListData = mAdapterOperateInstallListDataList.get(itemPosition);
-                adapterOperateInstallListData.setPositionPic(uri);
-                mOperateInstallListAdapter.notifyDataSetChanged();
+                itemPath = path;
+
+                String imgUrl = mAdapterOperateInstallListDataList.get(itemPosition).getPositionPicUrl();
+
+                uploadTerminalPic(Data.DATA_UPLOAD_TYPE_3, imgUrl, path);
                 break;
             }
             case INTENT_CHOICE_I: {
                 Uri selectedImage = data.getData();
 
-//                String path = new Uri2FileU(OperateInstallActivity.this).getRealPathFromUri(selectedImage);
-//                Log.i(TAG, "onActivityResult: path-->" + path);
-//
-//                mDatabaseManager.addRepairInstallPic(tNo, path);
-//                String imgUrl = mDatabaseManager.getRepairInstallUrl(tNo);
-//                uploadPic(Data.DATA_UPLOAD_TYPE_4, imgUrl, path);
-//
-//                Picasso.with(this).load(selectedImage).resize(PIC_WIDTH, PIC_HEIGHT).error(R.drawable.ic_camera).into(mImageViewInstallNew);
+                String path = new Uri2FileU(OperateInstallActivity.this).getRealPathFromUri(selectedImage);
+                Log.i(TAG, "onActivityResult: path-->" + path);
 
-                AdapterOperateInstallListData adapterOperateInstallListData = mAdapterOperateInstallListDataList.get(itemPosition);
-                adapterOperateInstallListData.setInstallPic(selectedImage);
-                mOperateInstallListAdapter.notifyDataSetChanged();
+                itemPath = path;
+
+                String imgUrl = mAdapterOperateInstallListDataList.get(itemPosition).getInstallPicUrl();
+
+                uploadTerminalPic(Data.DATA_UPLOAD_TYPE_4, imgUrl, path);
                 break;
             }
             case INTENT_PHOTO_I: {
@@ -188,17 +188,14 @@ public class OperateInstallActivity extends BaseActivity {
                         uri = mUriPhoto;
                     }
                 }
-//                String path = new Uri2FileU(OperateInstallActivity.this).getRealPathFromUri(uri);
-//                Log.i(TAG, "onActivityResult: path-->" + path);
-//                mDatabaseManager.addRepairInstallPic(tNo, path);
-//                String imgUrl = mDatabaseManager.getRepairInstallUrl(tNo);
-//                uploadPic(Data.DATA_UPLOAD_TYPE_4, imgUrl, path);
-//
-//                Picasso.with(this).load(uri).resize(PIC_WIDTH, PIC_HEIGHT).error(R.drawable.ic_camera).into(mImageViewInstallNew);
+                String path = new Uri2FileU(OperateInstallActivity.this).getRealPathFromUri(uri);
+                Log.i(TAG, "onActivityResult: path-->" + path);
 
-                AdapterOperateInstallListData adapterOperateInstallListData = mAdapterOperateInstallListDataList.get(itemPosition);
-                adapterOperateInstallListData.setInstallPic(uri);
-                mOperateInstallListAdapter.notifyDataSetChanged();
+                itemPath = path;
+
+                String imgUrl = mAdapterOperateInstallListDataList.get(itemPosition).getInstallPicUrl();
+
+                uploadTerminalPic(Data.DATA_UPLOAD_TYPE_4, imgUrl, path);
                 break;
             }
             case INTENT_CHOICE_C: {
@@ -206,12 +203,16 @@ public class OperateInstallActivity extends BaseActivity {
 
                 String path = new Uri2FileU(OperateInstallActivity.this).getRealPathFromUri(selectedImage);
                 Log.i(TAG, "onActivityResult: path-->" + path);
+                itemPath = path;
 
                 Picasso.with(this)
                         .load(selectedImage)
-                        .resize(Data.DATA_PIC_SIZE_WIDTH, Data.DATA_PIC_SIZE_HEIGHT)
+                        .fit()
+                        .centerInside()
                         .error(R.drawable.ic_camera)
                         .into(mImageViewCarNo);
+
+                uploadCarPic(Data.DATA_UPLOAD_TYPE_1, urlCarNoPic, path);
                 break;
             }
             case INTENT_PHOTO_C: {
@@ -227,9 +228,14 @@ public class OperateInstallActivity extends BaseActivity {
 
                 Picasso.with(this)
                         .load(uri)
-                        .resize(Data.DATA_PIC_SIZE_WIDTH, Data.DATA_PIC_SIZE_HEIGHT)
+                        .fit()
+                        .centerInside()
                         .error(R.drawable.ic_camera)
                         .into(mImageViewCarNo);
+
+                String path = new Uri2FileU(OperateInstallActivity.this).getRealPathFromUri(uri);
+                itemPath = path;
+                uploadCarPic(Data.DATA_UPLOAD_TYPE_1, urlCarNoPic, path);
                 break;
             }
             case INTENT_CHOICE_F: {
@@ -238,11 +244,16 @@ public class OperateInstallActivity extends BaseActivity {
                 String path = new Uri2FileU(OperateInstallActivity.this).getRealPathFromUri(selectedImage);
                 Log.i(TAG, "onActivityResult: path-->" + path);
 
+                itemPath = path;
+
                 Picasso.with(this)
                         .load(selectedImage)
-                        .resize(Data.DATA_PIC_SIZE_WIDTH, Data.DATA_PIC_SIZE_HEIGHT)
+                        .fit()
+                        .centerInside()
                         .error(R.drawable.ic_camera)
                         .into(mImageViewFrameNo);
+
+                uploadCarPic(Data.DATA_UPLOAD_TYPE_2, urlFrameNoPic, path);
                 break;
             }
             case INTENT_PHOTO_F: {
@@ -258,18 +269,25 @@ public class OperateInstallActivity extends BaseActivity {
 
                 Picasso.with(this)
                         .load(uri)
-                        .resize(Data.DATA_PIC_SIZE_WIDTH, Data.DATA_PIC_SIZE_HEIGHT)
+                        .fit()
+                        .centerInside()
                         .error(R.drawable.ic_camera)
                         .into(mImageViewFrameNo);
+
+                String path = new Uri2FileU(OperateInstallActivity.this).getRealPathFromUri(uri);
+                itemPath = path;
+                uploadCarPic(Data.DATA_UPLOAD_TYPE_2, urlFrameNoPic, path);
                 break;
             }
             case INTENT_CHOICE_R: {
                 Uri selectedImage = data.getData();
 
                 String path = new Uri2FileU(OperateInstallActivity.this).getRealPathFromUri(selectedImage);
+                itemPath = path;
                 Log.i(TAG, "onActivityResult: path-->" + path);
+                String imgUrl = mAdapterOperateInstallRecyclerDataList.get(itemRecycler).getImgUrl();
 
-                addPicToRecycler(selectedImage);
+                uploadCarPic(Data.DATA_UPLOAD_TYPE_5, imgUrl, path);
                 break;
             }
             case INTENT_PHOTO_R: {
@@ -283,7 +301,12 @@ public class OperateInstallActivity extends BaseActivity {
                     }
                 }
 
-                addPicToRecycler(uri);
+                String path = new Uri2FileU(OperateInstallActivity.this).getRealPathFromUri(uri);
+                itemPath = path;
+
+                String imgUrl = mAdapterOperateInstallRecyclerDataList.get(itemRecycler).getImgUrl();
+
+                uploadCarPic(Data.DATA_UPLOAD_TYPE_5, imgUrl, path);
                 break;
             }
             default: {
@@ -295,7 +318,14 @@ public class OperateInstallActivity extends BaseActivity {
     @Override
     protected void onStop() {
         // TODO: 2017/7/31 保存数据
+        mDatabaseManager.addCarInfo(idMainCar, "测试车牌号", "测试车架号", "测试车型");
         super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        mDatabaseManager.close();
+        super.onDestroy();
     }
 
     private void init() {
@@ -303,6 +333,9 @@ public class OperateInstallActivity extends BaseActivity {
 
         mImageViewCarNo = findViewById(R.id.iv_layout_operate_install_car_pic);
         mImageViewFrameNo = findViewById(R.id.iv_layout_operate_install_frame_pic);
+        mEditTextCarNo = findViewById(R.id.et_layout_operate_install_car_no);
+        mEditTextFrameNo = findViewById(R.id.et_layout_operate_install_frame_no);
+        mEditTextCarType = findViewById(R.id.et_layout_operate_install_car_type);
 
         mRecyclerView = findViewById(R.id.rv_layout_activity_operate_install);
         mListView = findViewById(R.id.lv_activity_operate_install);
@@ -310,25 +343,18 @@ public class OperateInstallActivity extends BaseActivity {
         mAdapterOperateInstallRecyclerDataList = new ArrayList<>();
         mAdapterOperateInstallListDataList = new ArrayList<>();
 
+        mDatabaseManager = new DatabaseManager(this);
+
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
         for (int i = 0; i < 10; i++) {
-            mAdapterOperateInstallListDataList.add(new AdapterOperateInstallListData("1111111111", "仪表盘下", null, null));
+            mAdapterOperateInstallListDataList.add(new AdapterOperateInstallListData("11", "仪表盘下", null, null, null, null));
         }
-        Log.i(TAG, "init: size-->" + mAdapterOperateInstallListDataList.size());
         mAdapterOperateInstallListDataList.get(0).settNoNew("352544072172191");
         mAdapterOperateInstallListDataList.get(1).settNoNew(null);
         mAdapterOperateInstallListDataList.get(2).settNoOld("123546789");
         mAdapterOperateInstallListDataList.get(2).settNoNew(null);
-
-//        Uri.Builder builder = new Uri.Builder();
-//        builder.path("/storage/emulated/0/paigong/1501494051425.png");
-//        Uri uri = builder.build();
-//        for (int i = 0; i < 5; i++) {
-//            mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData(uri));
-//        }
-        mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData());
 
         mOperateInstallAdapter = new OperateInstallAdapter(this, mAdapterOperateInstallRecyclerDataList);
 
@@ -344,6 +370,8 @@ public class OperateInstallActivity extends BaseActivity {
 
         eid = mSharedpreferenceManager.getEid();
         token = mSharedpreferenceManager.getToken();
+
+        loadCarData();
     }
 
     private void setEventListener() {
@@ -457,6 +485,7 @@ public class OperateInstallActivity extends BaseActivity {
         mNetworkManager.setOnGetWholeIMEIListener(new OnGetWholeIMEIListener() {
             @Override
             public void onFailure() {
+                mStringMessage = "请求数据失败，请检查网络！";
                 myHandler.sendEmptyMessage(Data.MSG_ERO);
             }
 
@@ -476,13 +505,133 @@ public class OperateInstallActivity extends BaseActivity {
                 myHandler.sendMessage(message);
             }
         });
+
+        mNetworkManager.setOnUploadPicListener(new OnUploadPicListener() {
+            @Override
+            public void onFailure() {
+                mStringMessage = "请求数据失败，请检查网络！";
+                myHandler.sendEmptyMessage(Data.MSG_ERO);
+            }
+
+            @Override
+            public void onSuccess(String result) {
+                Log.i(TAG, "onSuccess: result-->" + result);
+                Gson gson = new Gson();
+                UploadPicBean uploadPicBean = gson.fromJson(result, UploadPicBean.class);
+                if (!uploadPicBean.isSuccess()) {
+                    onFailure();
+                    return;
+                }
+                UploadPicBean.ObjBean objBean = uploadPicBean.getObj();
+                String imgUrl = objBean.getImgUrl();
+
+                switch (picType) {
+                    //  Recycler
+                    case INTENT_CHOICE_R: {
+                    }
+                    case INTENT_PHOTO_R: {
+                        mDatabaseManager.addCarPics(idMainCar, itemRecycler, itemPath, imgUrl);
+                        myHandler.sendEmptyMessage(Data.MSG_3);
+                        break;
+                    }
+                    // carNo
+                    case INTENT_CHOICE_C: {
+                    }
+                    case INTENT_PHOTO_C: {
+                        mDatabaseManager.addCarNoPic(idMainCar, itemPath, imgUrl);
+                        break;
+                    }
+                    // frameNo
+                    case INTENT_CHOICE_F: {
+                    }
+                    case INTENT_PHOTO_F: {
+                        mDatabaseManager.addCarFrameNoPic(idMainCar, itemPath, imgUrl);
+                        break;
+                    }
+
+                    //  positionPic
+                    case INTENT_CHOICE_P: {
+                    }
+                    case INTENT_PHOTO_P: {
+                        break;
+                    }
+                }
+            }
+        });
+    }
+
+    //  获取并显示数据库里的车辆数据
+    private void loadCarData() {
+        Cursor cursor = mDatabaseManager.getCar(idMainCar);
+        if (null != cursor && cursor.moveToFirst()) {
+            Log.i(TAG, "loadCardata: idMain-->" + cursor.getInt(0));
+            String carNo = cursor.getString(1);
+            String frameNo = cursor.getString(2);
+            String carType = cursor.getString(3);
+            String carNoPic = cursor.getString(4);
+            String frameNoPic = cursor.getString(5);
+            urlCarNoPic = cursor.getString(6);
+            urlFrameNoPic = cursor.getString(7);
+
+            mEditTextCarNo.setText(carNo);
+            mEditTextFrameNo.setText(frameNo);
+            mEditTextCarType.setText(carType);
+
+            Log.i(TAG, "loadCarData: carNoPic-->" + carNoPic);
+            Log.i(TAG, "loadCarData: urlCarNoPic-->" + urlCarNoPic);
+            Log.i(TAG, "loadCarData: frameNoPic-->" + frameNoPic);
+            Log.i(TAG, "loadCarData: urlFrameNoPic-->" + urlFrameNoPic);
+
+            if (null != carNoPic) {
+                Picasso.with(this)
+                        .load(new File(carNoPic))
+                        .fit()
+                        .centerInside()
+                        .error(R.drawable.ic_camera)
+                        .into(mImageViewCarNo);
+            }
+
+            if (null != frameNoPic) {
+                Picasso.with(this)
+                        .load(new File(frameNoPic))
+                        .fit()
+                        .centerInside()
+                        .error(R.drawable.ic_camera)
+                        .into(mImageViewFrameNo);
+            }
+            cursor.close();
+        }
+        //  加载Recycler图片
+        myHandler.sendEmptyMessage(Data.MSG_3);
+    }
+
+    //  加载Recycler图片
+    private void loadCarPics() {
+        mAdapterOperateInstallRecyclerDataList.clear();
+        Cursor cursor = mDatabaseManager.getCarPics(idMainCar);
+        if (null != cursor && cursor.moveToFirst()) {
+            for (int i = 0; i < 6; i++) {
+                String pic = cursor.getString(i);
+                String url = cursor.getString(i + 6);
+                Log.i(TAG, "loadCarPics: pic-->" + pic);
+                Log.i(TAG, "loadCarPics: url-->" + url);
+                if (null != pic) {
+                    mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData(pic, url));
+                }
+            }
+            cursor.close();
+        }
+        if (mAdapterOperateInstallRecyclerDataList.size() <= PIC_MAX) {
+            mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData());
+        }
+        mOperateInstallAdapter.notifyDataSetChanged();
     }
 
     //  RecyclerView添加图片
-    private void addPicToRecycler(Uri uri) {
+    private void addPicToRecycler(String path) {
         AdapterOperateInstallRecyclerData adapterOperateInstallRecyclerData = mAdapterOperateInstallRecyclerDataList.get(itemRecycler);
-        adapterOperateInstallRecyclerData.setUri(uri);
-        if (itemRecycler == (mAdapterOperateInstallRecyclerDataList.size() - 1) && itemRecycler < PIC_MAX) {
+        adapterOperateInstallRecyclerData.setPath(path);
+        if (mAdapterOperateInstallRecyclerDataList.size() <= PIC_MAX) {
             mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData());
         }
         mOperateInstallAdapter.notifyDataSetChanged();
@@ -492,7 +641,7 @@ public class OperateInstallActivity extends BaseActivity {
     private void removePicFromRecycler(int position) {
         mAdapterOperateInstallRecyclerDataList.remove(position);
         int last = mAdapterOperateInstallRecyclerDataList.size() - 1;
-        if (null != mAdapterOperateInstallRecyclerDataList.get(last).getUri()) {
+        if (null != mAdapterOperateInstallRecyclerDataList.get(last).getPath()) {
             mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData());
         }
         mOperateInstallAdapter.notifyDataSetChanged();
@@ -574,6 +723,22 @@ public class OperateInstallActivity extends BaseActivity {
         dialog.show();
     }
 
+    //  上传图片
+    private void uploadCarPic(int type, String imgUrl, String path) {
+        //  压缩图片
+        String pathT = TinyU.tinyPic(path);
+        // TODO: 2017/8/1 上传图片，从intent传相关值
+        new UploadPicU(mNetworkManager).uploadCarPic(eid, token, "TY20170731093521248", 671, type, imgUrl, pathT);
+    }
+
+    //  上传图片
+    private void uploadTerminalPic(int type, String imgUrl, String path) {
+        //  压缩图片
+        String pathT = TinyU.tinyPic(path);
+        //  上传
+        new UploadPicU(mNetworkManager).uploadPic(eid, token, "TY20170731093521248", 379, type, 1, imgUrl, pathT);
+    }
+
     //  获取完整imei
     private void getWholeImei(String imei) {
         mNetworkManager.getWholeImei(eid, token, imei);
@@ -599,6 +764,11 @@ public class OperateInstallActivity extends BaseActivity {
                     AdapterOperateInstallListData data = mAdapterOperateInstallListDataList.get(itemPosition);
                     data.settNoNew(imei);
                     mOperateInstallListAdapter.notifyDataSetChanged();
+                    break;
+                }
+                case Data.MSG_3: {
+                    //  loadCarPics, 加载Recycler图片
+                    loadCarPics();
                     break;
                 }
                 default: {

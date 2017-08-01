@@ -22,6 +22,13 @@ public class UploadPicU {
         mNetworkManager.uploadPic(eid, token, orderNo, tId, type, model, imgUrl, upfile);
     }
 
+    //  上传单张图片
+    public void uploadCarPic(int eid, String token, String orderNo
+            , @Nullable int carId, int type
+            , @Nullable String imgUrl, String upfile) {
+        mNetworkManager.uploadCarPic(eid, token, orderNo, carId, type, imgUrl, upfile);
+    }
+
     //  上传多张图片
     public void uploadPics(int eid, String token, String orderNo
             , @Nullable int carId, @Nullable int tId, int type, int model

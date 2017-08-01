@@ -1,7 +1,6 @@
 package com.tianyigps.xiepeng.adapter;
 
 import android.content.Context;
-import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +11,7 @@ import com.squareup.picasso.Picasso;
 import com.tianyigps.xiepeng.R;
 import com.tianyigps.xiepeng.data.AdapterOperateInstallRecyclerData;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -41,8 +41,8 @@ public class OperateInstallAdapter extends RecyclerView.Adapter<OperateInstallAd
     public void onBindViewHolder(MyViewHolder holder, int position) {
         final int positionFinal = position;
 
-        Uri uri = mDataList.get(position).getUri();
-        if (null == uri) {
+        String path = mDataList.get(position).getPath();
+        if (null == path) {
             holder.imageViewDelete.setVisibility(View.GONE);
             Picasso.with(context)
                     .load(R.drawable.ic_add_pic)
@@ -51,7 +51,7 @@ public class OperateInstallAdapter extends RecyclerView.Adapter<OperateInstallAd
                     .into(holder.imageViewPic);
         } else {
             Picasso.with(context)
-                    .load(uri)
+                    .load(new File(path))
                     .fit()
                     .centerInside()
                     .error(R.drawable.ic_camera)

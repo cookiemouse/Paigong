@@ -1,26 +1,34 @@
 package com.tianyigps.xiepeng.data;
 
-import android.net.Uri;
-
 /**
  * Created by cookiemouse on 2017/8/1.
  */
 
 public class AdapterOperateInstallRecyclerData {
-    private Uri uri;
+    private String path;
+    private String imgUrl;
 
     public AdapterOperateInstallRecyclerData() {
     }
 
-    public AdapterOperateInstallRecyclerData(Uri uri) {
-        this.uri = uri;
+    public AdapterOperateInstallRecyclerData(String path, String imgUrl) {
+        this.path = path;
+        this.imgUrl = imgUrl;
     }
 
-    public Uri getUri() {
-        return uri;
+    public String getPath() {
+        return path;
     }
 
-    public void setUri(Uri uri) {
-        this.uri = uri;
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
     }
 }

@@ -759,6 +759,57 @@ public class NetworkManager {
         });
     }
 
+    //  上转图片    19-1
+    public void uploadCarPic(int eid, String token, String orderNo
+            , @Nullable int carId, int type
+            , @Nullable String imgUrl, String upfile) {
+        MultipartBody.Builder builder = new MultipartBody.Builder();
+        builder.setType(MultipartBody.FORM);
+        File file = new File(upfile);
+        if (file.exists()) {
+            builder.addFormDataPart("upfile"
+                    , file.getName()
+                    , RequestBody.create(MediaType.parse("image/png"), file));
+        }
+
+        builder.addFormDataPart("eid", "" + eid);
+        builder.addFormDataPart("token", token);
+        builder.addFormDataPart("orderNo", orderNo);
+        builder.addFormDataPart("carId", ("" + carId));
+        builder.addFormDataPart("type", ("" + type));
+        if (null != imgUrl) {
+            builder.addFormDataPart("imgUrl", ("" + imgUrl));
+        }
+
+        RequestBody requestBody = builder.build();
+
+        mRequest = new Request.Builder()
+                .url(Urls.URL_WORKER_UPLOAD_PIC)
+                .post(requestBody)
+                .build();
+
+        Log.i(TAG, "uploadPic: url-->" + mRequest.url());
+
+        Call call = mOkHttpClient.newCall(mRequest);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                if (null == mOnUploadPicListener) {
+                    throw new NullPointerException("OnUploadPicListener is null");
+                }
+                mOnUploadPicListener.onFailure();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (null == mOnUploadPicListener) {
+                    throw new NullPointerException("OnUploadPicListener is null");
+                }
+                mOnUploadPicListener.onSuccess(response.body().string());
+            }
+        });
+    }
+
     //  上转图片    19-2
     public void uploadPic(int eid, String token, String orderNo
             , int carId, int tId, int type, int model
