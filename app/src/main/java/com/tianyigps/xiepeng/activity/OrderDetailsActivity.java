@@ -100,6 +100,12 @@ public class OrderDetailsActivity extends Activity {
         setEventListener();
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        myHandler.removeMessages(Data.MSG_2);
+    }
+
     private void init() {
         mTextViewTitle = findViewById(R.id.tv_layout_title_base_middle);
         mImageViewTitleLeft = findViewById(R.id.iv_layout_title_base_left);

@@ -104,7 +104,7 @@ public class HandingAdapter extends BaseAdapter {
             }
             default: {
                 orderType = "安装：";
-                Log.i(TAG, "onResponse: default");
+                Log.i(TAG, "onResponse: default" + data.getOrderType());
             }
         }
         switch (data.getCheckStatus()) {
@@ -134,7 +134,7 @@ public class HandingAdapter extends BaseAdapter {
                 viewHolder.textViewStatue.setText("");
                 viewHolder.imageViewCall.setEnabled(true);
                 viewHolder.imageViewStart.setEnabled(true);
-                Log.i(TAG, "getView: default");
+                Log.i(TAG, "getView: default" + data.getCheckStatus());
             }
         }
         viewHolder.textViewTitle.setText(orderType);

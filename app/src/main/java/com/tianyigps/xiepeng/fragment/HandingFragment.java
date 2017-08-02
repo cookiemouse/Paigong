@@ -174,14 +174,15 @@ public class HandingFragment extends Fragment implements View.OnClickListener {
 
             @Override
             public void onSuccess(String result) {
-                mAdapterHandingDataList.clear();
-
                 Gson gson = new Gson();
                 WorkerHandingBean workerHandingBean = gson.fromJson(result, WorkerHandingBean.class);
                 if (!workerHandingBean.isSuccess()) {
                     onFailure();
                     return;
                 }
+
+                mAdapterHandingDataList.clear();
+
                 for (WorkerHandingBean.ObjBean objBean : workerHandingBean.getObj()) {
 
                     int wire, wireless;

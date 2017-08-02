@@ -19,7 +19,7 @@ public class TimeFormatU {
     public String millisToColock(long mills) {
 //        int hour = (int) (mills / 1000 / 3600);
 //        int min = (int) (mills / 1000 % 3600 / 60);
-        int min = (int) (mills / 1000 / 3600 / 60);
+        int min = (int) (mills / 1000 / 60);
         int second = (int) (mills / 1000 % 3600 / 60 / 60);
         String time = "";
 //        if (hour < 10) {
@@ -28,9 +28,9 @@ public class TimeFormatU {
 //            time = "" + hour;
 //        }
         if (min < 10) {
-            time += ":0" + min;
+            time += "0" + min;
         } else {
-            time += ":" + min;
+            time += "" + min;
         }
         if (second < 10) {
             time += ":0" + second;

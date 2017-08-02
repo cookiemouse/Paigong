@@ -136,16 +136,16 @@ public class OrderFragment extends Fragment {
         mSwipeRefreshLayout.setColorSchemeColors(0xff3cabfa);
 
         mAdapterOrderDataList = new ArrayList<>();
-        for (int i = 0; i < 6; i++) {
-            mAdapterOrderDataList.add(new AdapterOrderData("万惠南宁"
-                    , "2017-01-02 17:30"
-                    , "上海市浦东区东方路985号一百杉杉大厦"
-                    , "TY2017010215542001"
-                    , "南柱赫"
-                    , "1234567890"
-                    , "orderType"
-                    , i, 2));
-        }
+//        for (int i = 0; i < 6; i++) {
+//            mAdapterOrderDataList.add(new AdapterOrderData("万惠南宁"
+//                    , "2017-01-02 17:30"
+//                    , "上海市浦东区东方路985号一百杉杉大厦"
+//                    , "TY2017010215542001"
+//                    , "南柱赫"
+//                    , "1234567890"
+//                    , "orderType"
+//                    , i, 2));
+//        }
 
         mOrderAdapter = new OrderAdapter(getContext(), mAdapterOrderDataList);
 
@@ -162,6 +162,9 @@ public class OrderFragment extends Fragment {
         eid = mSharedpreferenceManager.getEid();
         token = mSharedpreferenceManager.getToken();
         name = mSharedpreferenceManager.getName();
+
+        mSwipeRefreshLayout.setRefreshing(true);
+        mNetworkManager.getWorkerOrder(Data.EID, Data.TOKEN, "");
     }
 
     private void initTitle() {
@@ -241,68 +244,73 @@ public class OrderFragment extends Fragment {
             @Override
             public void onSuccess(String result) {
                 Log.i(TAG, "onResponse: ");
-                mAdapterOrderDataList.clear();
+
                 Gson gson = new Gson();
                 WorkerOrderBean workerOrderBean = gson.fromJson(result, WorkerOrderBean.class);
-                if (workerOrderBean.isSuccess()) {
-                    for (WorkerOrderBean.ObjBean objBean : workerOrderBean.getObj()) {
-                        mStringContactPhone = objBean.getContactPhone();
-                        mStringContactName = objBean.getContactName();
-                        mStringCustName = objBean.getCustName();
-                        mStringDetail = objBean.getDetail();
-                        mStringCity = objBean.getCity();
-                        mStringProvince = objBean.getProvince();
-                        mStringDistrict = objBean.getDistrict();
-                        mStringOrderNum = objBean.getOrderNo();
-
-                        mIntWirelessNum = objBean.getWirelessNum();
-                        mIntRemoveWireNum = objBean.getRemoveWiredNum();
-                        mIntOrderType = objBean.getOrderType();
-                        mIntWireNum = objBean.getWiredNum();
-                        mIntOrderStaus = objBean.getOrderStatus();
-                        mIntRemoveWirelessNum = objBean.getRemoveWirelessNum();
-                        mIntReviseFlag = objBean.getReviseFlag();
-                        mIntOrderId = objBean.getOrderId();
-
-                        mLongDoorTime = objBean.getDoorTime();
-                        String orderType;
-                        int wire, wireless;
-                        switch (objBean.getOrderType()) {
-                            case 1: {
-                                orderType = "安装：";
-                                wire = mIntWireNum;
-                                wireless = mIntWirelessNum;
-                                break;
-                            }
-                            case 2: {
-                                orderType = "维修：";
-                                wire = mIntWireNum;
-                                wireless = mIntWirelessNum;
-                                break;
-                            }
-                            case 3: {
-                                orderType = "拆改：";
-                                wire = mIntRemoveWireNum;
-                                wireless = mIntRemoveWirelessNum;
-                                break;
-                            }
-                            default: {
-                                orderType = "安装：";
-                                wire = 0;
-                                wireless = 0;
-                                Log.i(TAG, "onResponse: default");
-                            }
-                        }
-                        mAdapterOrderDataList.add(new AdapterOrderData(mStringCustName
-                                , new TimeFormatU().millisToDate(mLongDoorTime)
-                                , mStringProvince + mStringCity + mStringDistrict
-                                , mStringOrderNum
-                                , mStringContactName
-                                , mStringContactPhone, orderType, wire, wireless));
-                    }
-
-                    myHandler.sendEmptyMessage(MSG_1);
+                if (!workerOrderBean.isSuccess()) {
+                    onFailure();
+                    return;
                 }
+
+                mAdapterOrderDataList.clear();
+
+                for (WorkerOrderBean.ObjBean objBean : workerOrderBean.getObj()) {
+                    mStringContactPhone = objBean.getContactPhone();
+                    mStringContactName = objBean.getContactName();
+                    mStringCustName = objBean.getCustName();
+                    mStringDetail = objBean.getDetail();
+                    mStringCity = objBean.getCity();
+                    mStringProvince = objBean.getProvince();
+                    mStringDistrict = objBean.getDistrict();
+                    mStringOrderNum = objBean.getOrderNo();
+
+                    mIntWirelessNum = objBean.getWirelessNum();
+                    mIntRemoveWireNum = objBean.getRemoveWiredNum();
+                    mIntOrderType = objBean.getOrderType();
+                    mIntWireNum = objBean.getWiredNum();
+                    mIntOrderStaus = objBean.getOrderStatus();
+                    mIntRemoveWirelessNum = objBean.getRemoveWirelessNum();
+                    mIntReviseFlag = objBean.getReviseFlag();
+                    mIntOrderId = objBean.getOrderId();
+
+                    mLongDoorTime = objBean.getDoorTime();
+                    String orderType;
+                    int wire, wireless;
+                    switch (objBean.getOrderType()) {
+                        case 1: {
+                            orderType = "安装：";
+                            wire = mIntWireNum;
+                            wireless = mIntWirelessNum;
+                            break;
+                        }
+                        case 2: {
+                            orderType = "维修：";
+                            wire = mIntWireNum;
+                            wireless = mIntWirelessNum;
+                            break;
+                        }
+                        case 3: {
+                            orderType = "拆改：";
+                            wire = mIntRemoveWireNum;
+                            wireless = mIntRemoveWirelessNum;
+                            break;
+                        }
+                        default: {
+                            orderType = "安装：";
+                            wire = 0;
+                            wireless = 0;
+                            Log.i(TAG, "onResponse: default");
+                        }
+                    }
+                    mAdapterOrderDataList.add(new AdapterOrderData(mStringCustName
+                            , new TimeFormatU().millisToDate(mLongDoorTime)
+                            , mStringProvince + mStringCity + mStringDistrict
+                            , mStringOrderNum
+                            , mStringContactName
+                            , mStringContactPhone, orderType, wire, wireless));
+                }
+
+                myHandler.sendEmptyMessage(MSG_1);
             }
         });
 

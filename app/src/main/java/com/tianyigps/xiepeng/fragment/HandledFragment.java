@@ -100,9 +100,6 @@ public class HandledFragment extends Fragment {
         mSwipeRefreshLayout.setColorSchemeColors(0xff3cabfa);
 
         mAdapterHandledDataList = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            mAdapterHandledDataList.add(new AdapterHandledData("", "", "", "", "", 0, i));
-        }
         mHandledAdapter = new HandledAdapter(getContext(), mAdapterHandledDataList);
 
         mListViewHandled.setAdapter(mHandledAdapter);
@@ -113,7 +110,7 @@ public class HandledFragment extends Fragment {
         myHandler = new MyHandler();
 
         mSwipeRefreshLayout.setRefreshing(true);
-//        mNetworkManager.getWorkerOrderHanded(EID, TOKEN, "", "");
+        mNetworkManager.getWorkerOrderHanded(EID, TOKEN, "", "");
     }
 
     private void initTitle() {
@@ -158,15 +155,15 @@ public class HandledFragment extends Fragment {
                         addAble = false;
                         if (isLast) {
                             mProgressBarMore.setVisibility(View.GONE);
-                            mTextViewMore.setText("我是有底线的!");
                             mTextViewMore.setVisibility(View.VISIBLE);
+                            mTextViewMore.setText("我是有底线的!");
                             myHandler.sendEmptyMessageDelayed(Data.MSG_2, DELAY_LAST);
                             return;
                         }
                         mProgressBarMore.setVisibility(View.VISIBLE);
-                        mTextViewMore.setText("正在加载...");
                         mTextViewMore.setVisibility(View.VISIBLE);
-                        myHandler.sendEmptyMessageDelayed(Data.MSG_2, 2000);
+                        mTextViewMore.setText("正在加载...");
+                        // TODO: 17-8-2 加载下面数据
                     }
                 }
             }
@@ -259,13 +256,13 @@ public class HandledFragment extends Fragment {
                 }
                 case MSG_1: {
                     mHandledAdapter.notifyDataSetChanged();
+                    myHandler.sendEmptyMessage(Data.MSG_2);
                     break;
                 }
                 case Data.MSG_2: {
                     //  加载更多完成
                     if (!isLast) {
                         mTextViewMore.setText("加载完成");
-                        isLast = true;
                     }
                     mProgressBarMore.setVisibility(View.GONE);
                     myHandler.sendEmptyMessageDelayed(Data.MSG_3, DELAY_GONE);
@@ -273,6 +270,7 @@ public class HandledFragment extends Fragment {
                 }
                 case Data.MSG_3: {
                     //  加载完成，隐藏footer，并归零
+                    mProgressBarMore.setVisibility(View.GONE);
                     mTextViewMore.setVisibility(View.GONE);
                     addAble = true;
                     break;
