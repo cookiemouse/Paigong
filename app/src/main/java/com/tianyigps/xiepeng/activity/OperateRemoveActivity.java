@@ -154,7 +154,7 @@ public class OperateRemoveActivity extends BaseActivity {
                                 , new TimeFormatU().millisToDate(carListBean.getWiredAnnual())
                                 , objBean.getDispatchContactName()
                                 , objBean.getDispatchContactPhone()
-                                , carListBean.getRemoveFlag()));
+                                , carTerminalListBean.getRemoveStatus()));
                     }
                 }
 

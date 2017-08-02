@@ -11,9 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.tianyigps.xiepeng.R;
-import com.tianyigps.xiepeng.activity.OrderDetailsActivity;
 import com.tianyigps.xiepeng.data.AdapterOrderData;
-import com.tianyigps.xiepeng.data.Data;
 
 import java.util.List;
 
@@ -117,17 +115,18 @@ public class OrderAdapter extends BaseAdapter {
                 if (null == mOnSignClickListener) {
                     throw new NullPointerException("OnSignClickListener is null");
                 }
-                mOnSignClickListener.onClick(position);
+                mOnSignClickListener.onSignClick(position);
             }
         });
 
         contentView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: 2017/7/11 Item点击事件
-                Intent intent = new Intent(context, OrderDetailsActivity.class);
-                intent.putExtra(Data.DATA_INTENT_ORDER_NO, data.getId());
-                context.startActivity(intent);
+                // 2017/7/11 Item点击事件
+                if (null == mOnSignClickListener) {
+                    throw new NullPointerException("OnSignClickListener is null");
+                }
+                mOnSignClickListener.onItemClick(position);
             }
         });
 
@@ -149,7 +148,9 @@ public class OrderAdapter extends BaseAdapter {
     }
 
     public interface OnSignClickListener {
-        void onClick(int position);
+        void onSignClick(int position);
+
+        void onItemClick(int position);
     }
 
     public void setOnSignClickListener(OnSignClickListener listener) {

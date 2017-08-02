@@ -29,7 +29,7 @@
             android:layout_alignParentTop="true"
             android:layout_toEndOf="@+id/iv_item_operate_remove_car"
             android:layout_toRightOf="@+id/iv_item_operate_remove_car"
-            android:text="沪X9527"/>
+            />
 
         <TextView
             android:id="@+id/tv_item_operate_remove_frame_no"
@@ -38,7 +38,7 @@
             android:layout_alignBottom="@+id/iv_item_operate_remove_car"
             android:layout_toEndOf="@+id/iv_item_operate_remove_car"
             android:layout_toRightOf="@+id/iv_item_operate_remove_car"
-            android:text="LSJW546461FCV89789"/>
+            />
 
         <ImageView
             android:id="@+id/iv_item_operate_remove_device_type"
@@ -58,7 +58,7 @@
             android:layout_alignTop="@+id/iv_item_operate_remove_device_type"
             android:layout_toEndOf="@+id/iv_item_operate_remove_device_type"
             android:layout_toRightOf="@+id/iv_item_operate_remove_device_type"
-            android:text="有线（微贷网201703201351）"/>
+            />
 
         <TextView
             android:id="@+id/tv_item_operate_remove_device_t_no"
@@ -67,7 +67,7 @@
             android:layout_alignBottom="@+id/iv_item_operate_remove_device_type"
             android:layout_toEndOf="@+id/iv_item_operate_remove_device_type"
             android:layout_toRightOf="@+id/iv_item_operate_remove_device_type"
-            android:text="32154983215647832"/>
+            />
 
         <ImageView
             android:id="@+id/iv_item_operate_remove_position"
@@ -98,7 +98,7 @@
             android:layout_toRightOf="@+id/iv_item_operate_remove_position"
             android:lines="1"
             android:maxWidth="@dimen/dp_240"
-            android:text="驾驶舱仪器内"/>
+            />
 
         <ImageView
             android:id="@+id/iv_item_operate_remove_position_pic"
@@ -107,7 +107,7 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_alignTop="@+id/tv_item_operate_remove_position_title"
-            android:src="@drawable/ic_camera"/>
+            />
 
         <RelativeLayout
             android:id="@+id/rl_item_operate_remove_install"
@@ -144,7 +144,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignTop="@+id/iv_item_operate_remove_install"
-                android:src="@drawable/ic_camera"/>
+                />
         </RelativeLayout>
 
         <LinearLayout
@@ -179,7 +179,7 @@
                     android:layout_height="@dimen/dp_40"
                     android:layout_weight="1"
                     android:gravity="center_vertical|end"
-                    android:text="2018-02-23"/>
+                    />
             </LinearLayout>
 
             <View
@@ -206,7 +206,7 @@
                     android:layout_height="@dimen/dp_40"
                     android:layout_weight="1"
                     android:gravity="center_vertical|end"
-                    android:text="杨某某"/>
+                    />
 
                 <TextView
                     android:id="@+id/tv_item_operate_remove_worker_phone"
@@ -214,7 +214,7 @@
                     android:layout_height="@dimen/dp_40"
                     android:layout_weight="1"
                     android:gravity="center_vertical|end"
-                    android:text="17900000001"/>
+                    />
             </LinearLayout>
 
             <View

@@ -5,13 +5,20 @@ package com.tianyigps.xiepeng.data;
  */
 
 public class AdapterOperateInstallListData {
+    private boolean wire;   //  true = 有线，false = 无线
     private String tNoNew, position;
     private String positionPic, installPic;
     private String positionPicUrl, installPicUrl;
 
     private String tNoOld;
 
-    public AdapterOperateInstallListData(String tNoNew, String position, String positionPic, String installPic, String positionPicUrl, String installPicUrl) {
+    public AdapterOperateInstallListData(boolean wire) {
+        this.wire = wire;
+    }
+
+    public AdapterOperateInstallListData(boolean wire, String tNoNew, String position, String positionPic, String installPic,
+                                         String positionPicUrl, String installPicUrl) {
+        this.wire = wire;
         this.tNoNew = tNoNew;
         this.position = position;
         this.positionPic = positionPic;
@@ -21,8 +28,9 @@ public class AdapterOperateInstallListData {
     }
 
     @Deprecated
-    public AdapterOperateInstallListData(String tNoNew, String position, String positionPic, String installPic, String
-            positionPicUrl, String installPicUrl, String tNoOld) {
+    public AdapterOperateInstallListData(boolean wire, String tNoNew, String position, String positionPic, String installPic
+            , String positionPicUrl, String installPicUrl, String tNoOld) {
+        this.wire = wire;
         this.tNoNew = tNoNew;
         this.position = position;
         this.positionPic = positionPic;
@@ -30,6 +38,14 @@ public class AdapterOperateInstallListData {
         this.positionPicUrl = positionPicUrl;
         this.installPicUrl = installPicUrl;
         this.tNoOld = tNoOld;
+    }
+
+    public boolean isWire() {
+        return wire;
+    }
+
+    public void setWire(boolean wire) {
+        this.wire = wire;
     }
 
     public String gettNoNew() {

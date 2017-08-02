@@ -23,6 +23,7 @@ import com.baidu.mapapi.model.LatLng;
 import com.google.gson.Gson;
 import com.tianyigps.xiepeng.R;
 import com.tianyigps.xiepeng.activity.LocateActivity;
+import com.tianyigps.xiepeng.activity.OrderDetailsActivity;
 import com.tianyigps.xiepeng.activity.WorkerFragmentContentActivity;
 import com.tianyigps.xiepeng.adapter.OrderAdapter;
 import com.tianyigps.xiepeng.bean.SignWorkerBean;
@@ -102,6 +103,18 @@ public class OrderFragment extends Fragment {
 //        mNetworkManager.getWorkerOrder(Data.EID, Data.TOKEN, "");
 
         return viewRoot;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == Data.DATA_INTENT_ORDER_DETAILS_REQUEST &&
+                resultCode == Data.DATA_INTENT_ORDER_DETAILS_RESULT) {
+            if (data.getBooleanExtra(Data.DATA_INTENT_ORDER_DETAILS_RESULT_SIGNED, false)) {
+                WorkerFragmentContentActivity activity = (WorkerFragmentContentActivity) getActivity();
+                activity.showHandingFragment();
+            }
+        }
     }
 
     private void init(View view) {
@@ -196,10 +209,17 @@ public class OrderFragment extends Fragment {
 
         mOrderAdapter.setOnSignClickListener(new OrderAdapter.OnSignClickListener() {
             @Override
-            public void onClick(int position) {
+            public void onSignClick(int position) {
                 orderNoPosition = mAdapterOrderDataList.get(position).getId();
 
                 showAskSignDialog();
+            }
+
+            @Override
+            public void onItemClick(int position) {
+                Intent intent = new Intent(getActivity(), OrderDetailsActivity.class);
+                intent.putExtra(Data.DATA_INTENT_ORDER_NO, mAdapterOrderDataList.get(position).getId());
+                startActivityForResult(intent, Data.DATA_INTENT_ORDER_DETAILS_REQUEST);
             }
         });
 

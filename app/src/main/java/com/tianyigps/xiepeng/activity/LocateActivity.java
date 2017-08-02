@@ -183,7 +183,7 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
                 break;
             }
             default: {
-                Log.i(TAG, "onClick: default");
+                Log.i(TAG, "onSignClick: default");
             }
         }
     }

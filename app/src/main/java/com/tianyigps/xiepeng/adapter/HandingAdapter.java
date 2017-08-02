@@ -173,8 +173,12 @@ public class HandingAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 // 2017/7/11 Item点击事件
+                if (1 == data.getCheckStatus()){
+                    return;
+                }
                 Intent intent = new Intent(context, OrderDetailsActivity.class);
                 intent.putExtra(Data.DATA_INTENT_ORDER_NO, orderNo);
+                intent.putExtra(Data.DATA_INTENT_ORDER_DETAILS_IS_CHECKED, true);
                 context.startActivity(intent);
             }
         });

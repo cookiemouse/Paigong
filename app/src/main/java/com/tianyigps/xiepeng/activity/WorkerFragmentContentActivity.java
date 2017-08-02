@@ -1,5 +1,7 @@
 package com.tianyigps.xiepeng.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -86,9 +88,34 @@ public class WorkerFragmentContentActivity extends AppCompatActivity implements 
                 break;
             }
             default: {
-                Log.i(TAG, "onClick: default");
+                Log.i(TAG, "onSignClick: default");
             }
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+//        super.onBackPressed();
+        showFinishDialog();
+    }
+
+    private void showFinishDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("是否要退出程序！");
+        builder.setPositiveButton(R.string.ensure, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                WorkerFragmentContentActivity.this.finish();
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                //  do nothing
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     //  初始化
@@ -157,7 +184,7 @@ public class WorkerFragmentContentActivity extends AppCompatActivity implements 
     }
 
     //  显示进行中Fragment
-    public void showHandingFragment(){
+    public void showHandingFragment() {
         resetBottomView();
         mImageViewHandling.setImageResource(R.drawable.ic_tab_doing_selected);
         mTextViewHandling.setTextColor(getResources().getColor(R.color.colorTextSelect));

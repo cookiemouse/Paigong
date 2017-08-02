@@ -773,10 +773,19 @@ public class StartOrderInfoBean {
                 private int operateType;
                 private int orderCarId;
                 private int orderId;
+                private int removeStatus;
                 private int positionType;
                 private String solution;
                 private String tNo;
                 private int terminalType;
+
+                public int getRemoveStatus() {
+                    return removeStatus;
+                }
+
+                public void setRemoveStatus(int removeStatus) {
+                    this.removeStatus = removeStatus;
+                }
 
                 public String getTerminalName() {
                     return terminalName;

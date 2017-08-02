@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/bg_item"
-    android:elevation="@dimen/dp_8"
-    android:orientation="vertical">
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:background="@drawable/bg_item"
+             android:elevation="@dimen/dp_8"
+             android:orientation="vertical">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -32,7 +32,7 @@
                     android:layout_centerVertical="true"
                     android:layout_margin="@dimen/dp_4"
                     android:padding="@dimen/dp_4"
-                    android:src="@drawable/ic_order_details_order" />
+                    android:src="@drawable/ic_order_details_order"/>
 
                 <TextView
                     android:id="@+id/tv_layout_order_details_content_order_title"
@@ -42,7 +42,7 @@
                     android:layout_toEndOf="@+id/iv_layout_order_details_content_order"
                     android:layout_toRightOf="@+id/iv_layout_order_details_content_order"
                     android:text=""
-                    android:textColor="@color/colorBlueTheme" />
+                    android:textColor="@color/colorBlueTheme"/>
 
                 <TextView
                     android:id="@+id/tv_layout_order_details_content_order_number"
@@ -51,7 +51,7 @@
                     android:layout_alignBottom="@+id/iv_layout_order_details_content_order"
                     android:layout_toEndOf="@+id/iv_layout_order_details_content_order"
                     android:layout_toRightOf="@+id/iv_layout_order_details_content_order"
-                    android:text="" />
+                    android:text=""/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -68,7 +68,7 @@
                     android:layout_centerVertical="true"
                     android:layout_margin="@dimen/dp_4"
                     android:padding="@dimen/dp_4"
-                    android:src="@drawable/ic_order_details_contacts" />
+                    android:src="@drawable/ic_order_details_contacts"/>
 
                 <TextView
                     android:id="@+id/tv_layout_order_details_content_order_name_title"
@@ -78,7 +78,7 @@
                     android:layout_toEndOf="@+id/iv_layout_order_details_content_name"
                     android:layout_toRightOf="@+id/iv_layout_order_details_content_name"
                     android:text="@string/contact"
-                    android:textColor="@color/colorBlueTheme" />
+                    android:textColor="@color/colorBlueTheme"/>
 
                 <TextView
                     android:id="@+id/tv_layout_order_details_content_order_name"
@@ -87,7 +87,7 @@
                     android:layout_alignBottom="@+id/iv_layout_order_details_content_name"
                     android:layout_toEndOf="@+id/iv_layout_order_details_content_name"
                     android:layout_toRightOf="@+id/iv_layout_order_details_content_name"
-                    android:text="" />
+                    android:text=""/>
 
                 <ImageView
                     android:id="@+id/iv_layout_order_details_content_call"
@@ -97,7 +97,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:padding="@dimen/dp_4"
-                    android:src="@drawable/ic_phone" />
+                    android:src="@drawable/ic_phone"/>
 
                 <View
                     android:layout_width="@dimen/dp_0_5"
@@ -107,7 +107,7 @@
                     android:layout_marginRight="@dimen/dp_16"
                     android:layout_toLeftOf="@+id/iv_layout_order_details_content_call"
                     android:layout_toStartOf="@+id/iv_layout_order_details_content_call"
-                    android:background="@color/colorBlack" />
+                    android:background="@color/colorBlack"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -123,7 +123,7 @@
                     android:layout_alignParentStart="true"
                     android:layout_margin="@dimen/dp_4"
                     android:padding="@dimen/dp_4"
-                    android:src="@drawable/ic_order_details_address" />
+                    android:src="@drawable/ic_order_details_address"/>
 
                 <TextView
                     android:id="@+id/tv_layout_order_details_content_order_time"
@@ -133,7 +133,7 @@
                     android:layout_toEndOf="@+id/iv_layout_order_details_content_time"
                     android:layout_toRightOf="@+id/iv_layout_order_details_content_time"
                     android:text=""
-                    android:textColor="@color/colorBlueTheme" />
+                    android:textColor="@color/colorBlueTheme"/>
 
                 <TextView
                     android:id="@+id/tv_layout_order_details_content_order_address"
@@ -142,7 +142,7 @@
                     android:layout_alignLeft="@+id/tv_layout_order_details_content_order_time"
                     android:layout_alignStart="@+id/tv_layout_order_details_content_order_time"
                     android:layout_below="@+id/tv_layout_order_details_content_order_time"
-                    android:text="" />
+                    android:text=""/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -158,7 +158,7 @@
                     android:layout_alignParentStart="true"
                     android:layout_margin="@dimen/dp_4"
                     android:padding="@dimen/dp_4"
-                    android:src="@drawable/ic_order_details_remarks" />
+                    android:src="@drawable/ic_order_details_remarks"/>
 
                 <TextView
                     android:id="@+id/tv_layout_order_details_content_order_remarks_title"
@@ -168,7 +168,7 @@
                     android:layout_toEndOf="@+id/iv_layout_order_details_content_remarks"
                     android:layout_toRightOf="@+id/iv_layout_order_details_content_remarks"
                     android:text="@string/remarks"
-                    android:textColor="@color/colorBlueTheme" />
+                    android:textColor="@color/colorBlueTheme"/>
 
                 <TextView
                     android:id="@+id/tv_layout_order_details_content_order_remarks_content"
@@ -177,7 +177,7 @@
                     android:layout_alignLeft="@+id/tv_layout_order_details_content_order_remarks_title"
                     android:layout_alignStart="@+id/tv_layout_order_details_content_order_remarks_title"
                     android:layout_below="@+id/tv_layout_order_details_content_order_remarks_title"
-                    android:text="" />
+                    android:text=""/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -194,7 +194,7 @@
                     android:layout_centerVertical="true"
                     android:layout_margin="@dimen/dp_4"
                     android:padding="@dimen/dp_4"
-                    android:src="@drawable/ic_order_details_install" />
+                    android:src="@drawable/ic_order_details_install"/>
 
                 <TextView
                     android:id="@+id/tv_layout_order_details_content_order_install_title"
@@ -204,7 +204,7 @@
                     android:layout_toEndOf="@+id/iv_layout_order_details_install"
                     android:layout_toRightOf="@+id/iv_layout_order_details_install"
                     android:text=""
-                    android:textColor="@color/colorBlueTheme" />
+                    android:textColor="@color/colorBlueTheme"/>
 
                 <TextView
                     android:id="@+id/tv_layout_order_details_content_order_install_content"
@@ -213,7 +213,7 @@
                     android:layout_alignBottom="@+id/iv_layout_order_details_install"
                     android:layout_toEndOf="@+id/iv_layout_order_details_install"
                     android:layout_toRightOf="@+id/iv_layout_order_details_install"
-                    android:text="" />
+                    android:text=""/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -229,7 +229,7 @@
                     android:layout_alignParentStart="true"
                     android:layout_margin="@dimen/dp_4"
                     android:padding="@dimen/dp_4"
-                    android:src="@drawable/ic_order_details_info_add" />
+                    android:src="@drawable/ic_order_details_info_add"/>
 
                 <TextView
                     android:id="@+id/tv_layout_order_details_content_order_info_title"
@@ -239,7 +239,7 @@
                     android:layout_toEndOf="@+id/iv_layout_order_details_info"
                     android:layout_toRightOf="@+id/iv_layout_order_details_info"
                     android:text=""
-                    android:textColor="@color/colorBlueTheme" />
+                    android:textColor="@color/colorBlueTheme"/>
 
                 <TextView
                     android:id="@+id/tv_layout_order_details_content_order_info_content"
@@ -248,7 +248,7 @@
                     android:layout_alignLeft="@+id/tv_layout_order_details_content_order_info_title"
                     android:layout_alignStart="@+id/tv_layout_order_details_content_order_info_title"
                     android:layout_below="@+id/tv_layout_order_details_content_order_info_title"
-                    android:text="" />
+                    android:text=""/>
             </RelativeLayout>
 
             <Button
@@ -256,11 +256,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="@dimen/dp_16"
                 android:layout_marginTop="@dimen/dp_16"
                 android:background="@drawable/bg_button_flush"
                 android:paddingLeft="@dimen/dp_80"
                 android:paddingRight="@dimen/dp_80"
-                android:text="@string/sign" />
+                android:text="@string/sign"
+                android:textColor="@color/colorWhite"/>
 
             <TextView
                 android:id="@+id/tv_layout_order_details_return_order"
@@ -268,8 +270,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="@dimen/dp_16"
-                android:layout_marginTop="@dimen/dp_32"
-                android:text="@string/is_return_order" />
+                android:layout_marginTop="@dimen/dp_16"
+                android:text="@string/is_return_order"/>
         </LinearLayout>
     </ScrollView>
 </FrameLayout>

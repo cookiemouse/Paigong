@@ -65,6 +65,7 @@ public class OperateInstallListAdapter extends BaseAdapter {
             contentView = LayoutInflater.from(context).inflate(R.layout.item_operate_install_listview, null);
             viewHolder = new ViewHolder();
 
+            viewHolder.tvTitle = contentView.findViewById(R.id.tv_item_operate_install_new_device_no_title);
             viewHolder.tvStatus = contentView.findViewById(R.id.tv_item_operate_install_state);
             viewHolder.tvTNoOld = contentView.findViewById(R.id.tv_item_operate_install_old_device_no);
             viewHolder.etTNoNew = contentView.findViewById(R.id.et_item_operate_new_device_no);
@@ -124,6 +125,12 @@ public class OperateInstallListAdapter extends BaseAdapter {
             } else {
                 viewHolder.tvStatus.setEnabled(false);
             }
+        }
+
+        if (data.isWire()) {
+            viewHolder.tvTitle.setText("新有线设备");
+        } else {
+            viewHolder.tvTitle.setText("新无线设备");
         }
 
         viewHolder.etTNoNew.setText(data.gettNoNew());
@@ -206,7 +213,7 @@ public class OperateInstallListAdapter extends BaseAdapter {
     }
 
     private class ViewHolder {
-        private TextView tvStatus, tvTNoOld;
+        private TextView tvTitle, tvStatus, tvTNoOld;
         private EditText etTNoNew, etPosition;
         private ImageView ivScanner, ivLocate, ivPositionPic, ivInstallPic;
         private RelativeLayout rlOld;

@@ -78,10 +78,6 @@ public class InstallingActivity extends BaseActivity {
     private String mStringRemarks;
     private String mStringMsg = "数据请求失败，请检查网络";
 
-    private int[] carIds;   //  在返回数据时初始化，因为需要知道大小，下面同理
-    private int[][] tIds;
-    private int[][] tModels;
-
     private MyHandler myHandler;
 
     //  AdapterType
@@ -125,6 +121,8 @@ public class InstallingActivity extends BaseActivity {
         Intent intent = getIntent();
         orderNo = intent.getStringExtra(Data.DATA_INTENT_ORDER_NO);
         mAdapterType = intent.getIntExtra(Data.DATA_INTENT_INSTALL_TYPE, TYPE_INSTALL);
+
+        Log.i(TAG, "init: orderType-->" + mAdapterType);
 
         mNetworkManager = NetworkManager.getInstance();
 
@@ -172,7 +170,7 @@ public class InstallingActivity extends BaseActivity {
 
                 switch (mAdapterType) {
                     case TYPE_INSTALL: {
-                        toInstallActivity(mAdapterInstallingDataList.get(position).getCarId());
+                        toInstallActivity(position);
                         break;
                     }
                     case TYPE_REMOVE: {
@@ -180,7 +178,7 @@ public class InstallingActivity extends BaseActivity {
                             toRemoveActivity();
                             return;
                         }
-                        toInstallActivity(mAdapterRemoveDataList.get(position).getCarId());
+                        toInstallActivity(position);
                         break;
                     }
                     case TYPE_REPAIR: {
@@ -197,6 +195,7 @@ public class InstallingActivity extends BaseActivity {
         mButtonNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // TODO: 2017/8/2 check
                 if (checkRepairList()) {
                     toActivity(CustomSignActivity.class);
                     return;
@@ -239,29 +238,15 @@ public class InstallingActivity extends BaseActivity {
                     }
                 }
 
-                carIds = new int[sizeCar];
-                tIds = new int[sizeCar][sizeT];
-                tModels = new int[sizeCar][sizeT];
-
-                for (int i = 0; i < objBean.getCarList().size(); i++) {
-                    StartOrderInfoBean.ObjBean.CarListBean carListBean = objBean.getCarList().get(i);
-                    carIds[i] = carListBean.getId();
-                    for (int j = 0; j < carListBean.getCarTerminalList().size(); j++) {
-                        StartOrderInfoBean.ObjBean.CarListBean.CarTerminalListBean carTerminalListBean =
-                                carListBean.getCarTerminalList().get(j);
-                        tIds[i][j] = carTerminalListBean.getId();
-                        tModels[i][j] = carTerminalListBean.getTerminalType();
-                    }
-                }
-
                 switch (mAdapterType) {
                     case TYPE_INSTALL: {
                         for (StartOrderInfoBean.ObjBean.CarListBean carListBean : objBean.getCarList()) {
-                            mAdapterInstallingDataList.add(
-                                    new AdapterInstallingData(carListBean.getId()
-                                            , carListBean.getNewCarVin()
-                                            , carListBean.getWiredNum()
-                                            , carListBean.getWirelessNum()));
+                            if (carListBean.getRemoveFlag() == 0) {
+                                mAdapterInstallingDataList.add(new AdapterInstallingData(carListBean.getId()
+                                        , carListBean.getNewCarVin()
+                                        , carListBean.getWiredNum()
+                                        , carListBean.getWirelessNum()));
+                            }
                         }
 
                         myHandler.sendEmptyMessage(Data.MSG_1);
@@ -271,14 +256,16 @@ public class InstallingActivity extends BaseActivity {
                         mAdapterRemoveDataList.add(new AdapterRemoveData("拆除"));
 
                         for (StartOrderInfoBean.ObjBean.CarListBean carListBean : objBean.getCarList()) {
-                            mAdapterRemoveDataList.add(new AdapterRemoveData(carListBean.getWiredNum(), carListBean.getWirelessNum()));
+                            if (carListBean.getRemoveFlag() == 1) {
+                                mAdapterRemoveDataList.add(new AdapterRemoveData(carListBean.getWiredNum(), carListBean.getWirelessNum()));
+                            }
                         }
 
                         mAdapterRemoveDataList.add(new AdapterRemoveData("安装"));
 
                         for (StartOrderInfoBean.ObjBean.CarListBean carListBean : objBean.getCarList()) {
-                            for (StartOrderInfoBean.ObjBean.CarListBean.CarTerminalListBean carTerminalListBean : carListBean.getCarTerminalList()) {
-                                String frameNo = carListBean.getCarVin();
+                            String frameNo = carListBean.getCarVin();
+                            if (carListBean.getRemoveFlag() == 0) {
                                 mAdapterRemoveDataList.add(new AdapterRemoveData(carListBean.getId()
                                         , frameNo
                                         , carListBean.getWiredNum()
@@ -290,7 +277,6 @@ public class InstallingActivity extends BaseActivity {
                         break;
                     }
                     case TYPE_REPAIR: {
-
                         for (StartOrderInfoBean.ObjBean.CarListBean carListBean : objBean.getCarList()) {
                             String frameNo = carListBean.getCarVin();
                             String carNo = carListBean.getCarNo();
@@ -345,24 +331,42 @@ public class InstallingActivity extends BaseActivity {
         startActivity(intent);
     }
 
-    private void toInstallActivity(int carId) {
-        if (null == carIds || null == tIds || null == tModels){
-            showFailureDialog("数据异常，请重新刷新！");
-            return;
-        }
+    private void toInstallActivity(int position) {
         Intent intent = new Intent(InstallingActivity.this, OperateInstallActivity.class);
         intent.putExtra(Data.DATA_INTENT_ORDER_NO, orderNo);
-        intent.putExtra(Data.DATA_INTENT_INSTALL_CAR_ID, carId);
-        int i = 0;
-        for (; i < carIds.length; i++) {
-            if (carId == carIds[i]) {
+        String frameNo;
+        int carId;
+        int wiredNum;
+        int wirelessNum;
+        switch (mAdapterType) {
+            case TYPE_INSTALL: {
+                AdapterInstallingData data = mAdapterInstallingDataList.get(position);
+                frameNo = data.getFrameNo();
+                carId = data.getCarId();
+                wiredNum = data.getOrderLine();
+                wirelessNum = data.getOrderOffline();
                 break;
             }
+            case TYPE_REMOVE: {
+                AdapterRemoveData data = mAdapterRemoveDataList.get(position);
+                frameNo = data.getFrameNo();
+                carId = data.getCarId();
+                wiredNum = data.getOnline();
+                wirelessNum = data.getOffline();
+                break;
+            }
+            default: {
+                frameNo = "";
+                carId = 0;
+                wiredNum = 0;
+                wirelessNum = 0;
+                Log.i(TAG, "toInstallActivity: default");
+            }
         }
-        Log.i(TAG, "toInstallActivity: carid-->" + carId);
-        Log.i(TAG, "toInstallActivity: i-->" + i);
-        intent.putExtra(Data.DATA_INTENT_INSTALL_T_IDS, tIds[i]);
-        intent.putExtra(Data.DATA_INTENT_INSTALL_T_MODELS, tModels[i]);
+        intent.putExtra(Data.DATA_INTENT_FRAME_NO, frameNo);
+        intent.putExtra(Data.DATA_INTENT_INSTALL_CAR_ID, carId);
+        intent.putExtra(Data.DATA_INTENT_INSTALL_WIRED_NUM, wiredNum);
+        intent.putExtra(Data.DATA_INTENT_INSTALL_WIRELESS_NUM, wirelessNum);
         startActivity(intent);
     }
 

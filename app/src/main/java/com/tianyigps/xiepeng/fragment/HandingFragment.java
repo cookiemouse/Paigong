@@ -85,7 +85,7 @@ public class HandingFragment extends Fragment implements View.OnClickListener {
                 break;
             }
             default: {
-                Log.i(TAG, "onClick: default");
+                Log.i(TAG, "onSignClick: default");
             }
         }
     }

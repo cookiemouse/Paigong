@@ -15,6 +15,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -54,7 +55,11 @@ public class OperateInstallActivity extends BaseActivity {
     private static final int PIC_MAX = 5;
 
     private ImageView mImageViewCarNo, mImageViewFrameNo;
-    private EditText mEditTextCarNo, mEditTextFrameNo, mEditTextCarType;
+    private EditText mEditTextCarNo, mEditTextCarType;
+    private TextView mTextFViewrameNo;
+
+    private Button mButtonSave;
+    private View mViewSave;
 
     private MyRecyclerView mRecyclerView;
     private MyListView mListView;
@@ -78,9 +83,10 @@ public class OperateInstallActivity extends BaseActivity {
     private int eid;
     private String token;
     private String orderNo;
+    private String frameNo;
     private int carId;
-    private int[] tIds = new int[]{};
-    private int[] tModels = new int[]{};
+    private int wiredNum;
+    private int wirelessNum;
 
     // id，主键
     // TODO: 2017/8/1 测试车辆数据库
@@ -337,25 +343,32 @@ public class OperateInstallActivity extends BaseActivity {
 
         Intent intent = getIntent();
         orderNo = intent.getStringExtra(Data.DATA_INTENT_ORDER_NO);
-        tIds = intent.getIntArrayExtra(Data.DATA_INTENT_INSTALL_T_IDS);
-        tModels = intent.getIntArrayExtra(Data.DATA_INTENT_INSTALL_T_MODELS);
+        frameNo = intent.getStringExtra(Data.DATA_INTENT_FRAME_NO);
+        carId = intent.getIntExtra(Data.DATA_INTENT_INSTALL_CAR_ID, 0);
+        wiredNum = intent.getIntExtra(Data.DATA_INTENT_INSTALL_WIRED_NUM, 0);
+        wirelessNum = intent.getIntExtra(Data.DATA_INTENT_INSTALL_WIRELESS_NUM, 0);
 
         Log.i(TAG, "init: orderNo-->" + orderNo);
-        for (int tid : tIds) {
-            Log.i(TAG, "init: tids-->" + tid);
-        }
-        for (int tm : tModels) {
-            Log.i(TAG, "init: tm-->" + tm);
-        }
+        Log.i(TAG, "init: frameNo-->" + frameNo);
+        Log.i(TAG, "init: carId-->" + carId);
+        Log.i(TAG, "init: wiredNum-->" + wiredNum);
+        Log.i(TAG, "init: wirelessNum-->" + wirelessNum);
 
         mImageViewCarNo = findViewById(R.id.iv_layout_operate_install_car_pic);
         mImageViewFrameNo = findViewById(R.id.iv_layout_operate_install_frame_pic);
         mEditTextCarNo = findViewById(R.id.et_layout_operate_install_car_no);
-        mEditTextFrameNo = findViewById(R.id.et_layout_operate_install_frame_no);
+        mTextFViewrameNo = findViewById(R.id.tv_layout_operate_install_frame_no);
         mEditTextCarType = findViewById(R.id.et_layout_operate_install_car_type);
+
+        mViewSave = LayoutInflater.from(this).inflate(R.layout.layout_activity_installing_next, null);
+        mButtonSave = mViewSave.findViewById(R.id.btn_layout_activity_installing_next);
+        mButtonSave.setText(R.string.save);
+
+        mTextFViewrameNo.setText(frameNo);
 
         mRecyclerView = findViewById(R.id.rv_layout_activity_operate_install);
         mListView = findViewById(R.id.lv_activity_operate_install);
+
 
         mAdapterOperateInstallRecyclerDataList = new ArrayList<>();
         mAdapterOperateInstallListDataList = new ArrayList<>();
@@ -365,15 +378,11 @@ public class OperateInstallActivity extends BaseActivity {
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
-//        for (int i = 0; i < 10; i++) {
-//            mAdapterOperateInstallListDataList.add(new AdapterOperateInstallListData("11", "仪表盘下", null, null, null, null));
-//        }
-//        mAdapterOperateInstallListDataList.get(0).settNoNew("352544072172191");
-//        mAdapterOperateInstallListDataList.get(1).settNoNew(null);
-//        mAdapterOperateInstallListDataList.get(2).settNoOld("123546789");
-//        mAdapterOperateInstallListDataList.get(2).settNoNew(null);
-        for (int tid : tIds){
-            mAdapterOperateInstallListDataList.add(new AdapterOperateInstallListData(null, null, null, null, null, null));
+        for (int i = 0; i < wiredNum; i++) {
+            mAdapterOperateInstallListDataList.add(new AdapterOperateInstallListData(true));
+        }
+        for (int i = 0; i < wirelessNum; i++) {
+            mAdapterOperateInstallListDataList.add(new AdapterOperateInstallListData(false));
         }
 
         mOperateInstallAdapter = new OperateInstallAdapter(this, mAdapterOperateInstallRecyclerDataList);
@@ -383,6 +392,8 @@ public class OperateInstallActivity extends BaseActivity {
         mOperateInstallListAdapter = new OperateInstallListAdapter(OperateInstallActivity.this,
                 mAdapterOperateInstallListDataList);
         mListView.setAdapter(mOperateInstallListAdapter);
+
+        mListView.addFooterView(mViewSave);
 
         mNetworkManager = new NetworkManager();
         mSharedpreferenceManager = new SharedpreferenceManager(this);
@@ -594,7 +605,7 @@ public class OperateInstallActivity extends BaseActivity {
             urlFrameNoPic = cursor.getString(7);
 
             mEditTextCarNo.setText(carNo);
-            mEditTextFrameNo.setText(frameNo);
+//            mTextFViewrameNo.setText(frameNo);
             mEditTextCarType.setText(carType);
 
             Log.i(TAG, "loadCarData: carNoPic-->" + carNoPic);

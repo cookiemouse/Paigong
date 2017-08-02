@@ -127,7 +127,7 @@ public class PendingAdapter extends BaseAdapter {
     }
 
     //  确认签到对话框
-    private void showSignDialog(){
+    private void showSignDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         View viewDialog = LayoutInflater.from(context).inflate(R.layout.layout_dialog_sign, null);
         TextView textViewEnsure = viewDialog.findViewById(R.id.tv_layout_dialog_sign_ensure);

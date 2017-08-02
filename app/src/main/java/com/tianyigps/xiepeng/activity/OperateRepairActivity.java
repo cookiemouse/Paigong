@@ -268,7 +268,7 @@ public class OperateRepairActivity extends BaseActivity {
                 mStringPosition = mEditTextPosition.getText().toString();
                 mStringExplain = mEditTextExplain.getText().toString();
                 mStringNewtNo = mEditTextNewImei.getText().toString();
-                Log.i(TAG, "onClick: mStringNewtNo-->" + mStringNewtNo);
+                Log.i(TAG, "onSignClick: mStringNewtNo-->" + mStringNewtNo);
                 if ("".equals(mStringPosition)) {
                     mStringPosition = null;
                 }

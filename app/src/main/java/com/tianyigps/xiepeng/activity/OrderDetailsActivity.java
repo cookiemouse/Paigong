@@ -1,31 +1,42 @@
 package com.tianyigps.xiepeng.activity;
 
 import android.app.Activity;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.baidu.mapapi.model.LatLng;
 import com.google.gson.Gson;
 import com.tianyigps.cycleprogressview.CycleProgressView;
 import com.tianyigps.xiepeng.R;
 import com.tianyigps.xiepeng.bean.OrderDetailsBean;
+import com.tianyigps.xiepeng.bean.SignWorkerBean;
+import com.tianyigps.xiepeng.data.Data;
 import com.tianyigps.xiepeng.dialog.ReturnOrderDialogFragment;
 import com.tianyigps.xiepeng.interfaces.OnGetWorkerOrderInfoHandingListener;
+import com.tianyigps.xiepeng.interfaces.OnSignedWorkerListener;
+import com.tianyigps.xiepeng.manager.LocateManager;
 import com.tianyigps.xiepeng.manager.NetworkManager;
 import com.tianyigps.xiepeng.manager.SharedpreferenceManager;
 import com.tianyigps.xiepeng.utils.TimeFormatU;
 
+import static com.tianyigps.xiepeng.data.Data.DATA_INTENT_ORDER_DETAILS_RESULT_SIGNED;
 import static com.tianyigps.xiepeng.data.Data.DATA_INTENT_ORDER_NO;
 import static com.tianyigps.xiepeng.data.Data.MSG_1;
 import static com.tianyigps.xiepeng.data.Data.MSG_2;
+import static com.tianyigps.xiepeng.data.Data.MSG_3;
 import static com.tianyigps.xiepeng.data.Data.MSG_ERO;
 
 public class OrderDetailsActivity extends Activity {
@@ -33,7 +44,11 @@ public class OrderDetailsActivity extends Activity {
     private static final String TAG = "OrderDetailsActivity";
 
     private static final long TIME_2_HOUR = 7200000;
-    private static final long TIME_1_MIN = 60000;
+    private static final long TIME_1_MIN = 1000;
+
+    private static final int TYPE_INSTALL = 0;
+    private static final int TYPE_REPAIR = 1;
+    private static final int TYPE_REMOVE = 2;
 
     //Title栏
     private TextView mTextViewTitle;
@@ -45,16 +60,28 @@ public class OrderDetailsActivity extends Activity {
     private ImageView mImageViewCall;
     private Button mButtonSign;
 
+    private boolean isChecked = false;
+
     private CycleProgressView mCycleProgressView;
 
     private NetworkManager mNetworkManager;
     private MyHandler myHandler;
     private SharedpreferenceManager mSharedpreferenceManager;
+    private int eid;
+    private String token;
+    private String eName;
     private String orderNo;
+
+    private String mStringMessage;
+
+    //  签到定位
+    private static final String MAP_TYPE = "bd";
+    private LocateManager mLocateManager;
+    private LatLng mLatLngLocate;
 
     private String mStringContactPhone, mStringDetail, mStringCity, mStringOrderNum,
             mStringContactName, mStringProvince, mStringCustName, mStringDistrict, mStringTypeTitle,
-            mStringTypeContent, mStringInfoTitle, mStringInstallInfo = "";
+            mStringTypeContent, mStringInfoTitle, mStringInstallInfo = "", mStringTno;
     private int mIntOrderType, mIntWirelessNum, mIntRemoveWireNum, mIntWireNum, mIntOrderStaus, mIntRemoveWirelessNum, mIntReviseFlag, mIntOrderId;
     private long mLongDoorTime;
 
@@ -84,6 +111,10 @@ public class OrderDetailsActivity extends Activity {
 
         mReturnOrderDialogFragment = new ReturnOrderDialogFragment();
 
+        Intent intent = getIntent();
+        orderNo = intent.getStringExtra(DATA_INTENT_ORDER_NO);
+        isChecked = intent.getBooleanExtra(Data.DATA_INTENT_ORDER_DETAILS_IS_CHECKED, false);
+
         //  内容
         mTextViewOrderName = findViewById(R.id.tv_layout_order_details_content_order_title);
         mTextViewOrderNum = findViewById(R.id.tv_layout_order_details_content_order_number);
@@ -100,6 +131,11 @@ public class OrderDetailsActivity extends Activity {
 
         mButtonSign = findViewById(R.id.btn_layout_order_details_sign);
 
+        if (isChecked) {
+            mButtonSign.setText("开始");
+            mTextViewReturnOrder.setVisibility(View.GONE);
+        }
+
         mImageViewCall = findViewById(R.id.iv_layout_order_details_content_call);
 
         mCycleProgressView = findViewById(R.id.cpv_activity_order_details);
@@ -110,11 +146,11 @@ public class OrderDetailsActivity extends Activity {
         mNetworkManager = NetworkManager.getInstance();
         myHandler = new MyHandler();
         mSharedpreferenceManager = new SharedpreferenceManager(this);
+        mLocateManager = new LocateManager(this);
 
-        int eid = mSharedpreferenceManager.getEid();
-        String token = mSharedpreferenceManager.getToken();
-        orderNo = getIntent().getStringExtra(DATA_INTENT_ORDER_NO);
-        Log.i(TAG, "init: orderNo-->" + orderNo);
+        eid = mSharedpreferenceManager.getEid();
+        token = mSharedpreferenceManager.getToken();
+        eName = mSharedpreferenceManager.getName();
 
         mNetworkManager.getWorkerOrderInfoHanding(eid, token, orderNo);
     }
@@ -134,6 +170,22 @@ public class OrderDetailsActivity extends Activity {
             }
         });
 
+        mButtonSign.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isChecked) {
+                    // 2017/8/2 已签到，开始
+                    Intent intent = new Intent(OrderDetailsActivity.this, InstallingActivity.class);
+                    intent.putExtra(Data.DATA_INTENT_ORDER_NO, orderNo);
+                    intent.putExtra(Data.DATA_INTENT_INSTALL_TYPE, (mIntOrderType - 1));
+                    startActivity(intent);
+                    return;
+                }
+                // 2017/8/2 签到
+                showAskSignDialog();
+            }
+        });
+
         mTextViewReturnOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -146,6 +198,14 @@ public class OrderDetailsActivity extends Activity {
             @Override
             public void onFinish() {
                 onBackPressed();
+            }
+        });
+
+        mLocateManager.setOnReceiveLocationListener(new LocateManager.OnReceiveLocationListener() {
+            @Override
+            public void onReceive(LatLng latLng) {
+                mLatLngLocate = latLng;
+                myHandler.sendEmptyMessage(Data.MSG_3);
             }
         });
 
@@ -177,6 +237,7 @@ public class OrderDetailsActivity extends Activity {
                 mStringDistrict = objBean.getDistrict();
                 mStringDetail = objBean.getInstallDemand();
                 mIntOrderType = objBean.getOrderType();
+                mIntOrderStaus = objBean.getOrderStatus();
 
                 switch (mIntOrderType) {
                     case 1: {
@@ -209,6 +270,7 @@ public class OrderDetailsActivity extends Activity {
                 }
 
                 for (OrderDetailsBean.ObjBean.CarInfoBean carInfoBean : objBean.getCarInfo()) {
+                    mStringTno = carInfoBean.getCarVin();
                     mStringInstallInfo += carInfoBean.getCarVin();
                     String carBrand = carInfoBean.getCarBrand();
                     if (null != carBrand && !"".equals(carBrand)) {
@@ -218,6 +280,26 @@ public class OrderDetailsActivity extends Activity {
                 }
 
                 myHandler.sendEmptyMessage(MSG_1);
+            }
+        });
+
+        mNetworkManager.setSignedWorkerListener(new OnSignedWorkerListener() {
+            @Override
+            public void onFailure() {
+                mStringMessage = "数据请求失败，请检查网络！";
+                myHandler.sendEmptyMessage(Data.MSG_ERO);
+            }
+
+            @Override
+            public void onSuccess(String result) {
+                Gson gson = new Gson();
+                SignWorkerBean signWorkerBean = gson.fromJson(result, SignWorkerBean.class);
+                if (!signWorkerBean.isSuccess()) {
+                    mStringMessage = signWorkerBean.getMsg();
+                    myHandler.sendEmptyMessage(Data.MSG_ERO);
+                    return;
+                }
+                myHandler.sendEmptyMessage(Data.MSG_4);
             }
         });
     }
@@ -233,11 +315,13 @@ public class OrderDetailsActivity extends Activity {
         long timeNow = System.currentTimeMillis();
         long timeRemain = mLongDoorTime - timeNow;
 
+        Log.i(TAG, "updateTime.timeRemain: -->" + timeRemain);
+        Log.i(TAG, "updateTime.TIME_2_HOUR: -->" + TIME_2_HOUR);
         Log.i(TAG, "updateTime: -->" + new TimeFormatU().millisToColock(timeRemain));
 
         if (timeRemain > TIME_2_HOUR) {
             mCycleProgressView.setProgress(100);
-            mTextViewTimeRemain.setText(new TimeFormatU().millisToColock(timeRemain));
+            mTextViewTimeRemain.setText(new TimeFormatU().millisToColock(TIME_2_HOUR));
         } else if (timeRemain < 0) {
             mCycleProgressView.setProgress(0);
             mCycleProgressView.setDefaultColor(getResources().getColor(R.color.colorOrange));
@@ -251,12 +335,57 @@ public class OrderDetailsActivity extends Activity {
         myHandler.sendEmptyMessageDelayed(MSG_2, TIME_1_MIN);
     }
 
+    //  显示信息Dialog
+    private void showMessageDialog(String msg) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(msg);
+        builder.setPositiveButton(R.string.ensure, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                //  do nothing
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
     //  显示退单对话框
     private void showReturnOrderDialog() {
         Bundle bundle = new Bundle();
         bundle.putString(DATA_INTENT_ORDER_NO, orderNo);
         mReturnOrderDialogFragment.setArguments(bundle);
         mReturnOrderDialogFragment.show(getFragmentManager(), "ReturnOrder");
+    }
+
+    //  确认签到对话框
+    private void showAskSignDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(false);
+        View viewDialog = LayoutInflater.from(this).inflate(R.layout.dialog_ask_sign, null);
+        builder.setView(viewDialog);
+
+        final Dialog dialog = builder.create();
+        Button buttonCancel = viewDialog.findViewById(R.id.btn_dialog_ask_sign_cancel);
+        Button buttonEnsure = viewDialog.findViewById(R.id.btn_dialog_ask_sign_ensure);
+
+        buttonCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO: 2017/7/20 dismiss
+                dialog.dismiss();
+            }
+        });
+
+        buttonEnsure.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // 2017/7/20 签到
+                mLocateManager.startLocate();
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
     }
 
     //  Handler
@@ -267,6 +396,7 @@ public class OrderDetailsActivity extends Activity {
             super.handleMessage(msg);
             switch (msg.what) {
                 case MSG_ERO: {
+                    showMessageDialog(mStringMessage);
                     break;
                 }
                 case MSG_1: {
@@ -288,6 +418,18 @@ public class OrderDetailsActivity extends Activity {
                 }
                 case MSG_2: {
                     updateTime();
+                    break;
+                }
+                case MSG_3: {
+                    //  获取到当前位置，并签到
+                    mNetworkManager.signedWorker(eid, token, eName, orderNo
+                            , mLatLngLocate.latitude, mLatLngLocate.longitude, MAP_TYPE);
+                    break;
+                }
+                case Data.MSG_4: {
+                    //  签到成功，应该finish，然后显示HandingFragment
+                    getIntent().putExtra(DATA_INTENT_ORDER_DETAILS_RESULT_SIGNED, true);
+                    finish();
                     break;
                 }
                 default: {

@@ -18,16 +18,23 @@ public class Data {
     public final static int DATA_INTENT_SCANNER_REQUEST = 0x001;
     public final static int DATA_INTENT_SCANNER_RESULT = 0x002;
 
+    public final static int DATA_INTENT_ORDER_DETAILS_REQUEST = 0x003;
+    public final static int DATA_INTENT_ORDER_DETAILS_RESULT = 0x004;
+
     //  intent传值
     public final static String DATA_INTENT_EID = "paigong_intent_eid";
     public final static String DATA_INTENT_TOKEN = "paigong_intent_token";
     public final static String DATA_INTENT_ORDER_NO = "paigong_intent_order_no";
     public final static String DATA_INTENT_T_NO = "paigong_intent_t_no";
+    public final static String DATA_INTENT_FRAME_NO = "paigong_intent_frame_no";
     public final static String DATA_INTENT_ADDRESS = "paigong_intent_address";
     public final static String DATA_INTENT_INSTALL_TYPE = "paigong_intent_install_type";
-    public final static String DATA_INTENT_INSTALL_T_IDS = "paigong_intent_install_t_ids";
-    public final static String DATA_INTENT_INSTALL_T_MODELS = "paigong_intent_install_t_models";
+    public final static String DATA_INTENT_INSTALL_WIRED_NUM = "paigong_intent_install_wired_num";
+    public final static String DATA_INTENT_INSTALL_WIRELESS_NUM = "paigong_intent_install_wireless_num";
     public final static String DATA_INTENT_INSTALL_CAR_ID = "paigong_intent_install_car_id";
+
+    public final static String DATA_INTENT_ORDER_DETAILS_RESULT_SIGNED = "paigong_intent_order_details_is_signed";
+    public final static String DATA_INTENT_ORDER_DETAILS_IS_CHECKED = "paigong_intent_order_details_is_checked";
 
     public final static String DATA_INTENT_LOCATE_TYPE = "paigong_intent_locate_type";
     public final static String DATA_INTENT_LOCATE_IMEI = "paigong_intent_locate_imei";

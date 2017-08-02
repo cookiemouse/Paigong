@@ -109,8 +109,8 @@
                 android:layout_toRightOf="@+id/iv_layout_operate_install_frame_no"
                 android:text="@string/frame_no"/>
 
-            <EditText
-                android:id="@+id/et_layout_operate_install_frame_no"
+            <TextView
+                android:id="@+id/tv_layout_operate_install_frame_no"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/iv_layout_operate_install_frame_no"
@@ -118,11 +118,8 @@
                 android:layout_marginRight="@dimen/dp_80"
                 android:layout_toEndOf="@+id/iv_layout_operate_install_frame_no"
                 android:layout_toRightOf="@+id/iv_layout_operate_install_frame_no"
-                android:background="@null"
-                android:hint="@string/enter_frame_no"
                 android:lines="1"
-                android:maxWidth="@dimen/dp_240"
-                android:textSize="@dimen/sp_14"/>
+                android:maxWidth="@dimen/dp_240"/>
 
         </RelativeLayout>
 

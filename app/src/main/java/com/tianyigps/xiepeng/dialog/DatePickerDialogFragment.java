@@ -81,8 +81,8 @@ public class DatePickerDialogFragment extends DialogFragment {
             @Override
             public void onClick(View view) {
                 // TODO: 2017/7/14 选择时间
-                Log.i(TAG, "onClick: year-->" + (mIntYear + mNumberPickerYear.getValue()));
-                Log.i(TAG, "onClick: month-->" + (mNumberPickerMonth.getValue() + 1));
+                Log.i(TAG, "onSignClick: year-->" + (mIntYear + mNumberPickerYear.getValue()));
+                Log.i(TAG, "onSignClick: month-->" + (mNumberPickerMonth.getValue() + 1));
                 if (null == mOnEnsureListener){
                     throw new NullPointerException("OnEnsureListener is null, pleases setOnEnsureListener");
                 }
