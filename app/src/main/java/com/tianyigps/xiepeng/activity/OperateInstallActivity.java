@@ -707,7 +707,7 @@ public class OperateInstallActivity extends BaseActivity {
                 Log.i(TAG, "loadTerminalData: position-->" + position);
                 Log.i(TAG, "loadTerminalData: positionPic-->" + positionPic);
                 Log.i(TAG, "loadTerminalData: installPic-->" + installPic);
-                Log.i(TAG, "loadTerminalData: positionPicUrl-->" + position);
+                Log.i(TAG, "loadTerminalData: positionPicUrl-->" + positionPicUrl);
                 Log.i(TAG, "loadTerminalData: installPicUrl-->" + installPicUrl);
                 Log.i(TAG, "........................................");
 
