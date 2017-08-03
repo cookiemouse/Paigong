@@ -101,7 +101,7 @@ public class WorkerFragmentContentActivity extends AppCompatActivity implements 
 
     private void showFinishDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("是否要退出程序！");
+        builder.setMessage("是否要退出派工！");
         builder.setPositiveButton(R.string.ensure, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {

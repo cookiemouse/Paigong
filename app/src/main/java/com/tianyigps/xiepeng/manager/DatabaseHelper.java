@@ -33,7 +33,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + ",pic1Uri TEXT,pic2Uri TEXT,pic3Uri TEXT,pic4Uri TEXT,pic5Uri TEXT,pic6Uri TEXT)";
 
     private static final String TABLE_INSTALL_TERMINAL = "create table " + Data.DATA_TAB_INSTALL_TERMINAL
-            + "(idMain INTEGER,tNoOle TEXT,tNoNew TEXT,position TEXT,positionPic TEXT,installPic TEXT" +
+            + "(idMain TEXT,tNoOld TEXT,tNoNew TEXT,position TEXT,positionPic TEXT,installPic TEXT" +
             ",positionPicUri TEXT,installPicUri TEXT)";
 
     /*

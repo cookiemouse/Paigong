@@ -4,7 +4,7 @@ package com.tianyigps.xiepeng.data;
  * Created by djc on 2017/7/10.
  */
 
-public class Data {
+public final class Data {
     public final static String DATA_SHAREDPREFERENCES = "paigong_sharedpreferences";
 
     //  账号类型，worker或manager
@@ -60,6 +60,9 @@ public class Data {
     public final static int MSG_2 = 0x02;
     public final static int MSG_3 = 0x03;
     public final static int MSG_4 = 0x04;
+    public final static int MSG_5 = 0x05;
+    public final static int MSG_6 = 0x06;
+    public final static int MSG_7 = 0x07;
 
     //  数据库
     public final static String DATA_TAB_REPAIR = "paigong_database_tab_repair";
@@ -83,7 +86,11 @@ public class Data {
     public final static int DATA_PIC_SIZE_WIDTH = 300;  //宽度
     public final static int DATA_PIC_SIZE_HEIGHT = 150; //高度
 
+    //  签字图片
+    public final static String DATA_PIC_SIGN = "sign.png";
+    public final static String DATA_PIC_SIGN_HEAD = "data:image/png;base64,";
+
     //  测试
-    public final static int EID = 204;
+    public final static int EID = 248;
     public final static String TOKEN = "25d55ad283aa400af464c76d713c07ad";
 }

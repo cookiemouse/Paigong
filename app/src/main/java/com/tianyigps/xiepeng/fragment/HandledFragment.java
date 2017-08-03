@@ -25,16 +25,15 @@ import com.tianyigps.xiepeng.data.AdapterHandledData;
 import com.tianyigps.xiepeng.data.Data;
 import com.tianyigps.xiepeng.interfaces.OnGetWorkerOrderHandedListener;
 import com.tianyigps.xiepeng.manager.NetworkManager;
+import com.tianyigps.xiepeng.manager.SharedpreferenceManager;
 import com.tianyigps.xiepeng.utils.TimeFormatU;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.tianyigps.xiepeng.data.Data.EID;
 import static com.tianyigps.xiepeng.data.Data.MSG_1;
 import static com.tianyigps.xiepeng.data.Data.MSG_3;
 import static com.tianyigps.xiepeng.data.Data.MSG_ERO;
-import static com.tianyigps.xiepeng.data.Data.TOKEN;
 
 /**
  * Created by djc on 2017/7/13.
@@ -46,6 +45,7 @@ public class HandledFragment extends Fragment {
 
     private static final int DELAY_GONE = 1000;
     private static final int DELAY_LAST = 2000;
+    private static final int DELAY_ERROR = 3000;
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private ImageView mImageViewSearch;
@@ -67,6 +67,9 @@ public class HandledFragment extends Fragment {
 
     private NetworkManager mNetworkManager;
     private MyHandler myHandler;
+    private SharedpreferenceManager mSharedpreferenceManager;
+    private int eid;
+    private String token;
 
     @Nullable
     @Override
@@ -109,8 +112,12 @@ public class HandledFragment extends Fragment {
         mNetworkManager = NetworkManager.getInstance();
         myHandler = new MyHandler();
 
+        mSharedpreferenceManager = new SharedpreferenceManager(getContext());
+        eid = mSharedpreferenceManager.getEid();
+        token = mSharedpreferenceManager.getToken();
+
         mSwipeRefreshLayout.setRefreshing(true);
-        mNetworkManager.getWorkerOrderHanded(EID, TOKEN, "", "");
+        mNetworkManager.getWorkerOrderHanded(eid, token, "", "");
     }
 
     private void initTitle() {
@@ -124,7 +131,7 @@ public class HandledFragment extends Fragment {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mNetworkManager.getWorkerOrderHanded(EID, TOKEN, "", "");
+                mNetworkManager.getWorkerOrderHanded(eid, token, "", "");
             }
         });
 
@@ -151,7 +158,7 @@ public class HandledFragment extends Fragment {
                 }
                 if (totalItemCount == (firstVisibleItem + visibleItemCount)) {
                     // TODO: 2017/8/2 开始加载
-                    if (addAble) {
+                    if (addAble && !mSwipeRefreshLayout.isRefreshing()) {
                         addAble = false;
                         if (isLast) {
                             mProgressBarMore.setVisibility(View.GONE);
@@ -164,6 +171,10 @@ public class HandledFragment extends Fragment {
                         mTextViewMore.setVisibility(View.VISIBLE);
                         mTextViewMore.setText("正在加载...");
                         // TODO: 17-8-2 加载下面数据
+                        mNetworkManager.getWorkerOrderHanded(eid
+                                , token
+                                , ""
+                                , "" + mAdapterHandledDataList.get(mAdapterHandledDataList.size() - 1).getLastId());
                     }
                 }
             }
@@ -196,11 +207,13 @@ public class HandledFragment extends Fragment {
 
                 isLast = (workerHandedBean.getObj().size() == 0);
                 if (isLast) {
-                    myHandler.sendEmptyMessage(MSG_3);
+                    myHandler.sendEmptyMessageDelayed(MSG_3, DELAY_LAST);
                     return;
                 }
 
-                mAdapterHandledDataList.clear();
+                if (mSwipeRefreshLayout.isRefreshing()) {
+                    mAdapterHandledDataList.clear();
+                }
                 for (WorkerHandedBean.ObjBean objBean : workerHandedBean.getObj()) {
 
                     String orderType;
@@ -235,7 +248,9 @@ public class HandledFragment extends Fragment {
                     mAdapterHandledDataList.add(new AdapterHandledData(objBean.getCustName()
                             , new TimeFormatU().millisToDate(objBean.getDoorTime())
                             , objBean.getProvince() + objBean.getCity() + objBean.getDistrict()
-                            , objBean.getOrderNo(), orderType, wire, wireless));
+                            , objBean.getOrderNo()
+                            , orderType, wire, wireless
+                            , objBean.getOrderId()));
                 }
 
                 myHandler.sendEmptyMessage(MSG_1);
@@ -252,6 +267,7 @@ public class HandledFragment extends Fragment {
 
             switch (msg.what) {
                 case MSG_ERO: {
+                    myHandler.sendEmptyMessageDelayed(Data.MSG_3, DELAY_ERROR);
                     break;
                 }
                 case MSG_1: {
@@ -272,11 +288,17 @@ public class HandledFragment extends Fragment {
                     //  加载完成，隐藏footer，并归零
                     mProgressBarMore.setVisibility(View.GONE);
                     mTextViewMore.setVisibility(View.GONE);
+
+                    myHandler.sendEmptyMessageDelayed(Data.MSG_4, 200);
+                    break;
+                }
+                case Data.MSG_4: {
+                    //  保存不刷新两次
                     addAble = true;
                     break;
                 }
                 default: {
-                    Log.i(TAG, "handleMessage: default");
+                    Log.i(TAG, "handleMessage: default-->" + msg.what);
                 }
             }
         }

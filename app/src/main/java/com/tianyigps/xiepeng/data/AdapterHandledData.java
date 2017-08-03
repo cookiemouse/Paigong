@@ -8,8 +8,10 @@ public class AdapterHandledData {
     private String name, time, address, id, orderType;
     private int online, lineLess;
 
+    private int lastId;
+
     public AdapterHandledData(String name, String time, String address, String id, String orderType
-            , int online, int lineLess) {
+            , int online, int lineLess, int lastId) {
         this.name = name;
         this.time = time;
         this.address = address;
@@ -17,6 +19,7 @@ public class AdapterHandledData {
         this.orderType = orderType;
         this.online = online;
         this.lineLess = lineLess;
+        this.lastId = lastId;
     }
 
     public String getName() {
@@ -73,5 +76,13 @@ public class AdapterHandledData {
 
     public void setLineLess(int lineLess) {
         this.lineLess = lineLess;
+    }
+
+    public int getLastId() {
+        return lastId;
+    }
+
+    public void setLastId(int lastId) {
+        this.lastId = lastId;
     }
 }

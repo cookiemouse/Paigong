@@ -1,4 +1,14 @@
 package com.tianyigps.xiepeng.utils;
+
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
+import android.util.Log;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
 /**
@@ -6,22 +16,27 @@ import java.io.UnsupportedEncodingException;
  * as specified in RFC 2045 (http://www.ietf.org/rfc/rfc2045.txt).
  */
 public final class Base64U {
-    
-    /** utility class should not have a public constructor. */
-    private Base64U() { }
-    
+
+    /**
+     * utility class should not have a public constructor.
+     */
+    private Base64U() {
+    }
+
     /**
      * 对输入进行base64编码。
+     *
      * @param in 输入
      * @return base64编码字符串。
      */
     public static byte[] decode(byte[] in) {
         return decode(in, in.length);
     }
-    
+
     /**
      * 对base64编码数据进行解码。
-     * @param in base64编码输入数据
+     *
+     * @param in  base64编码输入数据
      * @param len 长度
      * @return 解码后的数据
      */
@@ -39,7 +54,7 @@ public final class Base64U {
         byte chr;
         // compute the number of the padding characters
         // and adjust the length of the input
-        for ( ;; len--) {
+        for (; ; len--) {
             chr = in[len - 1];
             // skip the neutral characters
             if ((chr == '\n') || (chr == '\r') || (chr == ' ') || (chr == '\t')) {
@@ -89,7 +104,7 @@ public final class Base64U {
             }
             // append the value to the quantum
             quantum = (quantum << 6) | (byte) bits; // SUPPRESS CHECKSTYLE
-            if (inIndex%4 == 3) { // SUPPRESS CHECKSTYLE
+            if (inIndex % 4 == 3) { // SUPPRESS CHECKSTYLE
                 // 4 characters were read, so make the output:
                 out[outIndex++] = (byte) ((quantum & 0x00FF0000) >> 16); // SUPPRESS CHECKSTYLE
                 out[outIndex++] = (byte) ((quantum & 0x0000FF00) >> 8); // SUPPRESS CHECKSTYLE
@@ -116,15 +131,16 @@ public final class Base64U {
      * BASE 64 MAP.
      */
     private static final byte[] MAP = new byte[]
-        {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 
-         'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 
-         'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 
-         'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2', '3', 
-         '4', '5', '6', '7', '8', '9', '+', '/'};
-    
+            {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
+                    'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b',
+                    'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p',
+                    'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2', '3',
+                    '4', '5', '6', '7', '8', '9', '+', '/'};
+
     /**
      * base64编码。
-     * @param in 原始输入
+     *
+     * @param in          原始输入
      * @param charsetName 字符串集
      * @return base64编码后的字符串。
      * @throws UnsupportedEncodingException UnsupportedEncodingException
@@ -133,22 +149,22 @@ public final class Base64U {
         int length = in.length * 4 / 3;  // SUPPRESS CHECKSTYLE
         length += length / 76 + 3; // SUPPRESS CHECKSTYLE // for crlr 
         byte[] out = new byte[length];
-        int index = 0, i, crlr = 0, end = in.length - in.length%3; // SUPPRESS CHECKSTYLE
-        for (i=0; i<end; i+=3) { // SUPPRESS CHECKSTYLE
+        int index = 0, i, crlr = 0, end = in.length - in.length % 3; // SUPPRESS CHECKSTYLE
+        for (i = 0; i < end; i += 3) { // SUPPRESS CHECKSTYLE
             out[index++] = MAP[(in[i] & 0xff) >> 2]; // SUPPRESS CHECKSTYLE
             out[index++] = MAP[((in[i] & 0x03) << 4)  // SUPPRESS CHECKSTYLE
-                                | ((in[i+1] & 0xff) >> 4)]; // SUPPRESS CHECKSTYLE
-            out[index++] = MAP[((in[i+1] & 0x0f) << 2)  // SUPPRESS CHECKSTYLE
-                                | ((in[i+2] & 0xff) >> 6)]; // SUPPRESS CHECKSTYLE
-            out[index++] = MAP[(in[i+2] & 0x3f)]; // SUPPRESS CHECKSTYLE
-            if (((index - crlr)%76 == 0) && (index != 0)) { // SUPPRESS CHECKSTYLE
-                out[index++] = '\n'; 
+                    | ((in[i + 1] & 0xff) >> 4)]; // SUPPRESS CHECKSTYLE
+            out[index++] = MAP[((in[i + 1] & 0x0f) << 2)  // SUPPRESS CHECKSTYLE
+                    | ((in[i + 2] & 0xff) >> 6)]; // SUPPRESS CHECKSTYLE
+            out[index++] = MAP[(in[i + 2] & 0x3f)]; // SUPPRESS CHECKSTYLE
+            if (((index - crlr) % 76 == 0) && (index != 0)) { // SUPPRESS CHECKSTYLE
+                out[index++] = '\n';
                 crlr++;
                 //out[index++] = '\r';
                 //crlr++;
             }
         }
-        
+
         switch (in.length % 3) { // SUPPRESS CHECKSTYLE
             case 1:
                 out[index++] = MAP[(in[end] & 0xff) >> 2]; // SUPPRESS CHECKSTYLE
@@ -159,12 +175,51 @@ public final class Base64U {
             case 2:
                 out[index++] = MAP[(in[end] & 0xff) >> 2]; // SUPPRESS CHECKSTYLE
                 out[index++] = MAP[((in[end] & 0x03) << 4)  // SUPPRESS CHECKSTYLE
-                                    | ((in[end+1] & 0xff) >> 4)]; // SUPPRESS CHECKSTYLE
-                out[index++] = MAP[((in[end+1] & 0x0f) << 2)];     // SUPPRESS CHECKSTYLE 
+                        | ((in[end + 1] & 0xff) >> 4)]; // SUPPRESS CHECKSTYLE
+                out[index++] = MAP[((in[end + 1] & 0x0f) << 2)];     // SUPPRESS CHECKSTYLE
                 out[index++] = '=';
                 break;
         }
         return new String(out, 0, index, charsetName);
+    }
+
+    public static String encode(String path) {
+        String encodedString = "";
+        File file = new File(path);
+        if (!file.exists()) {
+            return encodedString;
+        }
+        FileInputStream inputFile = null;
+        try {
+            inputFile = new FileInputStream(file);
+            byte[] buffer = new byte[(int) file.length()];
+            inputFile.read(buffer);
+            inputFile.close();
+            encodedString = Base64.encodeToString(buffer, Base64.DEFAULT);
+            Log.e("Base64", "Base64---->" + encodedString);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return encodedString;
+    }
+
+    public static String encode(Bitmap bitmap) {
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, bos);
+        try {
+            bos.flush();
+            bos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        byte[] bytes = bos.toByteArray();
+        return Base64.encodeToString(bytes, Base64.DEFAULT);
+    }
+
+    public static Bitmap decode(String base) {
+        byte[] bytes = Base64.decode(base, Base64.DEFAULT);
+        return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
     }
 }
 

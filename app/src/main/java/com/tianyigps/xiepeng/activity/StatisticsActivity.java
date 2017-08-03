@@ -26,15 +26,14 @@ import com.tianyigps.xiepeng.manager.SharedpreferenceManager;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 import static com.tianyigps.xiepeng.data.Data.DATA_LAUNCH_MODE_WORKER;
-import static com.tianyigps.xiepeng.data.Data.EID;
 import static com.tianyigps.xiepeng.data.Data.MSG_1;
 import static com.tianyigps.xiepeng.data.Data.MSG_ERO;
-import static com.tianyigps.xiepeng.data.Data.TOKEN;
 
 public class StatisticsActivity extends BaseActivity {
 
@@ -56,6 +55,8 @@ public class StatisticsActivity extends BaseActivity {
     private NetworkManager mNetworkManager;
     private MyHandler myHandler;
     private SharedpreferenceManager mSharedpreferenceManager;
+    private int eid;
+    private String token;
     private int launchMode;
     private String monthP;
 
@@ -74,10 +75,19 @@ public class StatisticsActivity extends BaseActivity {
         this.setTitleText(R.string.statistics);
 
         mSharedpreferenceManager = new SharedpreferenceManager(StatisticsActivity.this);
+        eid = mSharedpreferenceManager.getEid();
+        token = mSharedpreferenceManager.getToken();
         launchMode = mSharedpreferenceManager.getLaunchMode();
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.add(Calendar.MONTH, -1);
+        Long mills = calendar.getTimeInMillis();
+
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMM", Locale.CHINA);
-        Date date = new Date(System.currentTimeMillis());
+        Date date = new Date(mills);
         monthP = simpleDateFormat.format(date);
+
 
         mTextViewDate = findViewById(R.id.tv_activity_statistics_date);
         mImageViewDate = findViewById(R.id.iv_activity_statistics_date);
@@ -85,7 +95,7 @@ public class StatisticsActivity extends BaseActivity {
         mFrameLayoutTitle = findViewById(R.id.fl_activity_statistics_list_title);
 
         SimpleDateFormat simpleDateFormatShow = new SimpleDateFormat("yyyy年MM月", Locale.CHINA);
-        Date dateShow = new Date(System.currentTimeMillis());
+        Date dateShow = new Date(mills);
         mTextViewDate.setText(simpleDateFormatShow.format(dateShow));
 
         mDatePickerDialogFragment = new DatePickerDialogFragment();
@@ -121,15 +131,17 @@ public class StatisticsActivity extends BaseActivity {
         mDatePickerDialogFragment.setOnEnsureListener(new DatePickerDialogFragment.OnEnsureListener() {
             @Override
             public void onEnsure(int year, int month) {
-                mTextViewDate.setText(year + "年" + month + "月");
                 if (month < 10) {
-                    monthP = year + "0" + month;
-                } else {
-                    monthP = "" + year + month;
+                    monthP = "0" + month;
+                }else {
+                    monthP = "" + month;
                 }
+                mTextViewDate.setText(year + "年" + monthP + "月");
+
+                monthP = "" + year + monthP;
 
                 if (DATA_LAUNCH_MODE_WORKER == launchMode) {
-                    mNetworkManager.getQualityCount(EID, TOKEN, monthP);
+                    mNetworkManager.getQualityCount(eid, token, monthP);
                 } else {
                     // TODO: 2017/7/18 Manager质量统计
                 }
@@ -203,7 +215,7 @@ public class StatisticsActivity extends BaseActivity {
 
         mListViewStatistics.setAdapter(mStatisticsWorkerAdapter);
 
-        mNetworkManager.getQualityCount(EID, TOKEN, monthP);
+        mNetworkManager.getQualityCount(eid, token, monthP);
     }
 
     //  显示Manager列表

@@ -17,9 +17,9 @@ public class UploadPicU {
 
     //  上传单张图片
     public void uploadPic(int eid, String token, String orderNo
-            , @Nullable int tId, int type, int model
+            , @Nullable int carId, int type, int model
             , @Nullable String imgUrl, String upfile) {
-        mNetworkManager.uploadPic(eid, token, orderNo, tId, type, model, imgUrl, upfile);
+        mNetworkManager.uploadPic(eid, token, orderNo, carId, type, model, imgUrl, upfile);
     }
 
     //  上传单张图片

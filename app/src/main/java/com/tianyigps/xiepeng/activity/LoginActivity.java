@@ -43,6 +43,8 @@ public class LoginActivity extends Activity {
     private int launchMode = Data.DATA_LAUNCH_MODE_WORKER;
     private String launchAccount = "";
 
+    private String mStringMessage = "数据请求失败";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,8 +77,16 @@ public class LoginActivity extends Activity {
                 // TODO: 2017/7/14 登录
                 launchAccount = mEditTextAccount.getText().toString();
                 String password = mEditTextPassword.getText().toString();
+
+                if (null == launchAccount || "".equals(launchAccount)) {
+                    showToast("请输入账号");
+                    return;
+                }
+                if ("".equals(password)) {
+                    showToast("请输入密码");
+                }
+
                 mNetworkManager.checkUser(launchAccount, password, "");
-                showToast("请输入密码");
             }
         });
 
@@ -94,7 +104,8 @@ public class LoginActivity extends Activity {
                 CheckUserBean checkUserBean = gson.fromJson(result, CheckUserBean.class);
 
                 if (!checkUserBean.isSuccess()) {
-                    onFailure();
+                    mStringMessage = checkUserBean.getMsg();
+                    myHandler.sendEmptyMessage(Data.MSG_ERO);
                     return;
                 }
 
@@ -146,6 +157,7 @@ public class LoginActivity extends Activity {
             super.handleMessage(msg);
             switch (msg.what) {
                 case MSG_ERO: {
+                    showToast(mStringMessage);
                     break;
                 }
                 case MSG_1: {

@@ -709,7 +709,7 @@ public class NetworkManager {
 
     //  上转图片    19
     public void uploadPic(int eid, String token, String orderNo
-            , @Nullable int tId, int type, int model
+            , @Nullable int carId, int type, int model
             , @Nullable String imgUrl, String upfile) {
         MultipartBody.Builder builder = new MultipartBody.Builder();
         builder.setType(MultipartBody.FORM);
@@ -723,12 +723,20 @@ public class NetworkManager {
         builder.addFormDataPart("eid", "" + eid);
         builder.addFormDataPart("token", token);
         builder.addFormDataPart("orderNo", orderNo);
-        builder.addFormDataPart("tId", ("" + tId));
+        builder.addFormDataPart("carId", ("" + carId));
         builder.addFormDataPart("type", ("" + type));
         builder.addFormDataPart("model", ("" + model));
         if (null != imgUrl) {
             builder.addFormDataPart("imgUrl", ("" + imgUrl));
         }
+
+        Log.i(TAG, "uploadPic: eid-->" + eid);
+        Log.i(TAG, "uploadPic: token-->" + token);
+        Log.i(TAG, "uploadPic: orderNo-->" + orderNo);
+        Log.i(TAG, "uploadPic: carId-->" + carId);
+        Log.i(TAG, "uploadPic: type-->" + type);
+        Log.i(TAG, "uploadPic: model-->" + model);
+        Log.i(TAG, "uploadPic: imgUrl-->" + imgUrl);
 
         RequestBody requestBody = builder.build();
 

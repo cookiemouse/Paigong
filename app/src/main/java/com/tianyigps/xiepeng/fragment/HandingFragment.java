@@ -57,6 +57,8 @@ public class HandingFragment extends Fragment implements View.OnClickListener {
     private MyHandler myHandler;
 
     private SharedpreferenceManager mSharedpreferenceManager;
+    private int eid;
+    private String token;
 
     @Nullable
     @Override
@@ -121,9 +123,12 @@ public class HandingFragment extends Fragment implements View.OnClickListener {
         mNetworkManager = NetworkManager.getInstance();
         myHandler = new MyHandler();
 
-        mSwipeRefreshLayout.setRefreshing(true);
-        mNetworkManager.getWorkerOrderHanding(Data.EID, Data.TOKEN);
         mSharedpreferenceManager = new SharedpreferenceManager(getContext());
+        eid = mSharedpreferenceManager.getEid();
+        token = mSharedpreferenceManager.getToken();
+
+        mSwipeRefreshLayout.setRefreshing(true);
+        mNetworkManager.getWorkerOrderHanding(eid, token);
     }
 
     private void initTitle() {
@@ -140,7 +145,7 @@ public class HandingFragment extends Fragment implements View.OnClickListener {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mNetworkManager.getWorkerOrderHanding(Data.EID, Data.TOKEN);
+                mNetworkManager.getWorkerOrderHanding(eid, token);
             }
         });
 

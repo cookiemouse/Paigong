@@ -13,13 +13,14 @@
         android:layout_height="0dp"
         android:layout_margin="@dimen/dp_16"
         android:layout_weight="1"
-        android:background="@drawable/bg_edit"
-        android:padding="0dp">
+        android:padding="@dimen/dp_4"
+        android:background="@drawable/bg_edit">
 
         <com.tianyigps.signviewlibrary.SignView
             android:id="@+id/sv_activity_custom_sign"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:background="@color/colorWhite"/>
 
         <LinearLayout
             android:id="@+id/ll_activity_custom_sign"

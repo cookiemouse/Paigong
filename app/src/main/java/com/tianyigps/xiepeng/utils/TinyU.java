@@ -1,9 +1,11 @@
 package com.tianyigps.xiepeng.utils;
 
+import android.graphics.Bitmap;
 import android.util.Log;
 
 import com.tianyigps.xiepeng.manager.FileManager;
 import com.zxy.tiny.Tiny;
+import com.zxy.tiny.callback.BitmapCallback;
 import com.zxy.tiny.callback.FileCallback;
 
 import java.io.File;
@@ -16,6 +18,7 @@ public class TinyU {
 
     private static final String TAG = "TinyU";
     private static String tempPath;
+    private static Bitmap bitmapR;
 
     public static String tinyPic(String path) {
         FileManager fileManager = new FileManager();
@@ -35,5 +38,10 @@ public class TinyU {
             }
         });
         return tempPath;
+    }
+
+    public static void tinyPic(Bitmap bitmap, BitmapCallback bitmapCallback) {
+        Tiny.BitmapCompressOptions options = new Tiny.BatchFileCompressOptions();
+        Tiny.getInstance().source(bitmap).asBitmap().withOptions(options).compress(bitmapCallback);
     }
 }

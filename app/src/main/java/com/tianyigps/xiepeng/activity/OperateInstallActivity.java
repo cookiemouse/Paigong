@@ -90,7 +90,8 @@ public class OperateInstallActivity extends BaseActivity {
 
     // id，主键
     // TODO: 2017/8/1 测试车辆数据库
-    private int idMainCar = 100, idMainTerminal;
+    private int idMainCar = 100;
+    private String idMainTerminal = idMainCar + "T";
 
     private DatabaseManager mDatabaseManager;
 
@@ -215,13 +216,6 @@ public class OperateInstallActivity extends BaseActivity {
                 Log.i(TAG, "onActivityResult: path-->" + path);
                 itemPath = path;
 
-                Picasso.with(this)
-                        .load(selectedImage)
-                        .fit()
-                        .centerInside()
-                        .error(R.drawable.ic_camera)
-                        .into(mImageViewCarNo);
-
                 uploadCarPic(Data.DATA_UPLOAD_TYPE_1, urlCarNoPic, path);
                 break;
             }
@@ -236,13 +230,6 @@ public class OperateInstallActivity extends BaseActivity {
                     }
                 }
 
-                Picasso.with(this)
-                        .load(uri)
-                        .fit()
-                        .centerInside()
-                        .error(R.drawable.ic_camera)
-                        .into(mImageViewCarNo);
-
                 String path = new Uri2FileU(OperateInstallActivity.this).getRealPathFromUri(uri);
                 itemPath = path;
                 uploadCarPic(Data.DATA_UPLOAD_TYPE_1, urlCarNoPic, path);
@@ -255,13 +242,6 @@ public class OperateInstallActivity extends BaseActivity {
                 Log.i(TAG, "onActivityResult: path-->" + path);
 
                 itemPath = path;
-
-                Picasso.with(this)
-                        .load(selectedImage)
-                        .fit()
-                        .centerInside()
-                        .error(R.drawable.ic_camera)
-                        .into(mImageViewFrameNo);
 
                 uploadCarPic(Data.DATA_UPLOAD_TYPE_2, urlFrameNoPic, path);
                 break;
@@ -276,13 +256,6 @@ public class OperateInstallActivity extends BaseActivity {
                         uri = mUriPhoto;
                     }
                 }
-
-                Picasso.with(this)
-                        .load(uri)
-                        .fit()
-                        .centerInside()
-                        .error(R.drawable.ic_camera)
-                        .into(mImageViewFrameNo);
 
                 String path = new Uri2FileU(OperateInstallActivity.this).getRealPathFromUri(uri);
                 itemPath = path;
@@ -323,13 +296,6 @@ public class OperateInstallActivity extends BaseActivity {
                 Log.i(TAG, "onActivityResult: default");
             }
         }
-    }
-
-    @Override
-    protected void onStop() {
-        // TODO: 2017/7/31 保存数据
-        mDatabaseManager.addCarInfo(idMainCar, "测试车牌号", "测试车架号", "测试车型");
-        super.onStop();
     }
 
     @Override
@@ -403,13 +369,15 @@ public class OperateInstallActivity extends BaseActivity {
         token = mSharedpreferenceManager.getToken();
 
         loadCarData();
+
+        loadTerminalData();
     }
 
     private void setEventListener() {
         mImageViewCarNo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: 2017/7/31 选择图片
+                // 2017/7/31 选择图片
                 picType = 5;
                 showChoiceDialog();
             }
@@ -418,9 +386,39 @@ public class OperateInstallActivity extends BaseActivity {
         mImageViewFrameNo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: 2017/7/31 选择图片
+                //  2017/7/31 选择图片
                 picType = 7;
                 showChoiceDialog();
+            }
+        });
+
+        mButtonSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //  2017/8/3
+                String carNo = mEditTextCarNo.getText().toString();
+                String carType = mEditTextCarType.getText().toString();
+
+                mDatabaseManager.addCarInfo(idMainCar, carNo, carType);
+
+                int i = 0;
+                for (AdapterOperateInstallListData data : mAdapterOperateInstallListDataList) {
+                    String tNoOld = data.gettNoOld();
+                    String tNoNew = data.gettNoNew();
+                    EditText editText = mListView.getChildAt(i).findViewById(R.id.et_item_operate_install_position);
+                    String position = editText.getText().toString();
+
+                    Log.i(TAG, "onClick: tNoOld-->" + tNoOld);
+                    Log.i(TAG, "onClick: tNoNew-->" + tNoNew);
+                    Log.i(TAG, "onClick: position-->" + position);
+
+                    String id = idMainTerminal + i;
+                    Log.i(TAG, "onClick: idMainTerminal-->" + id);
+
+                    mDatabaseManager.addTerInfo(id, tNoOld, tNoNew, position);
+                    Log.i(TAG, "----------------------------------------");
+                    i++;
+                }
             }
         });
 
@@ -516,7 +514,6 @@ public class OperateInstallActivity extends BaseActivity {
         mNetworkManager.setOnGetWholeIMEIListener(new OnGetWholeIMEIListener() {
             @Override
             public void onFailure() {
-                mStringMessage = "请求数据失败，请检查网络！";
                 myHandler.sendEmptyMessage(Data.MSG_ERO);
             }
 
@@ -540,7 +537,6 @@ public class OperateInstallActivity extends BaseActivity {
         mNetworkManager.setOnUploadPicListener(new OnUploadPicListener() {
             @Override
             public void onFailure() {
-                mStringMessage = "请求数据失败，请检查网络！";
                 myHandler.sendEmptyMessage(Data.MSG_ERO);
             }
 
@@ -550,12 +546,14 @@ public class OperateInstallActivity extends BaseActivity {
                 Gson gson = new Gson();
                 UploadPicBean uploadPicBean = gson.fromJson(result, UploadPicBean.class);
                 if (!uploadPicBean.isSuccess()) {
+                    mStringMessage = uploadPicBean.getMsg();
                     onFailure();
                     return;
                 }
                 UploadPicBean.ObjBean objBean = uploadPicBean.getObj();
                 String imgUrl = objBean.getImgUrl();
 
+                Log.i(TAG, "onSuccess: picType-->" + picType);
                 switch (picType) {
                     //  Recycler
                     case INTENT_CHOICE_R: {
@@ -570,6 +568,7 @@ public class OperateInstallActivity extends BaseActivity {
                     }
                     case INTENT_PHOTO_C: {
                         mDatabaseManager.addCarNoPic(idMainCar, itemPath, imgUrl);
+                        myHandler.sendEmptyMessage(Data.MSG_4);
                         break;
                     }
                     // frameNo
@@ -577,6 +576,7 @@ public class OperateInstallActivity extends BaseActivity {
                     }
                     case INTENT_PHOTO_F: {
                         mDatabaseManager.addCarFrameNoPic(idMainCar, itemPath, imgUrl);
+                        myHandler.sendEmptyMessage(Data.MSG_5);
                         break;
                     }
 
@@ -584,6 +584,25 @@ public class OperateInstallActivity extends BaseActivity {
                     case INTENT_CHOICE_P: {
                     }
                     case INTENT_PHOTO_P: {
+                        idMainTerminal = idMainTerminal + itemPosition;
+                        mDatabaseManager.addTerPositionPic(idMainTerminal, itemPath, imgUrl);
+                        AdapterOperateInstallListData data = mAdapterOperateInstallListDataList.get(itemPosition);
+                        data.setPositionPic(itemPath);
+                        data.setPositionPicUrl(imgUrl);
+                        myHandler.sendEmptyMessage(Data.MSG_6);
+                        break;
+                    }
+
+                    //  installPic
+                    case INTENT_CHOICE_I: {
+                    }
+                    case INTENT_PHOTO_I: {
+                        idMainTerminal = idMainTerminal + itemPosition;
+                        mDatabaseManager.addTerInstallPic(idMainTerminal, itemPath, imgUrl);
+                        AdapterOperateInstallListData data = mAdapterOperateInstallListDataList.get(itemPosition);
+                        data.setInstallPic(itemPath);
+                        data.setInstallPicUrl(imgUrl);
+                        myHandler.sendEmptyMessage(Data.MSG_7);
                         break;
                     }
                 }
@@ -666,6 +685,44 @@ public class OperateInstallActivity extends BaseActivity {
             mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData());
         }
         mOperateInstallAdapter.notifyDataSetChanged();
+    }
+
+    //  加载ListView数据库里的数据
+    private void loadTerminalData() {
+        for (int i = 0; i < mAdapterOperateInstallListDataList.size(); i++) {
+            Cursor cursor = mDatabaseManager.getTer(idMainTerminal + i);
+            if (null != cursor && cursor.moveToFirst()) {
+                String id = cursor.getString(0);
+                String tNoOld = cursor.getString(1);
+                String tNoNew = cursor.getString(2);
+                String position = cursor.getString(3);
+                String positionPic = cursor.getString(4);
+                String installPic = cursor.getString(5);
+                String positionPicUrl = cursor.getString(6);
+                String installPicUrl = cursor.getString(7);
+
+                Log.i(TAG, "loadTerminalData: id-->" + id);
+                Log.i(TAG, "loadTerminalData: tNoOld-->" + tNoOld);
+                Log.i(TAG, "loadTerminalData: tNoNew-->" + tNoNew);
+                Log.i(TAG, "loadTerminalData: position-->" + position);
+                Log.i(TAG, "loadTerminalData: positionPic-->" + positionPic);
+                Log.i(TAG, "loadTerminalData: installPic-->" + installPic);
+                Log.i(TAG, "loadTerminalData: positionPicUrl-->" + position);
+                Log.i(TAG, "loadTerminalData: installPicUrl-->" + installPicUrl);
+                Log.i(TAG, "........................................");
+
+                cursor.close();
+
+                AdapterOperateInstallListData data = mAdapterOperateInstallListDataList.get(i);
+                data.settNoNew(tNoNew);
+                data.setPosition(position);
+                data.setPositionPic(positionPic);
+                data.setInstallPic(installPic);
+                data.setPositionPicUrl(positionPicUrl);
+                data.setInstallPic(installPicUrl);
+            }
+        }
+        mOperateInstallListAdapter.notifyDataSetChanged();
     }
 
     //  RecycleView删除图片
@@ -759,7 +816,7 @@ public class OperateInstallActivity extends BaseActivity {
         //  压缩图片
         String pathT = TinyU.tinyPic(path);
         // TODO: 2017/8/1 上传图片，从intent传相关值
-        new UploadPicU(mNetworkManager).uploadCarPic(eid, token, "TY20170731093521248", 671, type, imgUrl, pathT);
+        new UploadPicU(mNetworkManager).uploadCarPic(eid, token, orderNo, carId, type, imgUrl, pathT);
     }
 
     //  上传图片
@@ -767,7 +824,7 @@ public class OperateInstallActivity extends BaseActivity {
         //  压缩图片
         String pathT = TinyU.tinyPic(path);
         //  上传
-        new UploadPicU(mNetworkManager).uploadPic(eid, token, "TY20170731093521248", 379, type, 1, imgUrl, pathT);
+        new UploadPicU(mNetworkManager).uploadPic(eid, token, orderNo, carId, type, 1, imgUrl, pathT);
     }
 
     //  获取完整imei
@@ -800,6 +857,48 @@ public class OperateInstallActivity extends BaseActivity {
                 case Data.MSG_3: {
                     //  loadCarPics, 加载Recycler图片
                     loadCarPics();
+                    break;
+                }
+                case Data.MSG_4: {
+                    //  加载carNo图片
+                    Picasso.with(OperateInstallActivity.this)
+                            .load(new File(itemPath))
+                            .fit()
+                            .centerInside()
+                            .error(R.drawable.ic_camera)
+                            .into(mImageViewCarNo);
+                    break;
+                }
+                case Data.MSG_5: {
+                    //  加载frameNo图片
+                    Picasso.with(OperateInstallActivity.this)
+                            .load(new File(itemPath))
+                            .fit()
+                            .centerInside()
+                            .error(R.drawable.ic_camera)
+                            .into(mImageViewFrameNo);
+                    break;
+                }
+                case Data.MSG_6: {
+                    //  加载listview position图片
+                    ImageView imageView = mListView.getChildAt(itemPosition).findViewById(R.id.iv_item_operate_install_position_pic);
+                    Picasso.with(OperateInstallActivity.this)
+                            .load(new File(itemPath))
+                            .fit()
+                            .centerInside()
+                            .error(R.drawable.ic_camera)
+                            .into(imageView);
+                    break;
+                }
+                case Data.MSG_7: {
+                    //  加载listview install图片
+                    ImageView imageView = mListView.getChildAt(itemPosition).findViewById(R.id.iv_item_operate_install_install_pic);
+                    Picasso.with(OperateInstallActivity.this)
+                            .load(new File(itemPath))
+                            .fit()
+                            .centerInside()
+                            .error(R.drawable.ic_camera)
+                            .into(imageView);
                     break;
                 }
                 default: {
