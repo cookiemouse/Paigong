@@ -5,12 +5,14 @@ package com.tianyigps.xiepeng.data;
  */
 
 public class AdapterRepairData {
+    private int tId;
     private int type;
     private String id, name, carNo, frameNo;
     //  是否完成，即item背景
     private boolean complete;
 
-    public AdapterRepairData(int type, String id, String name, String carNo, String frameNo) {
+    public AdapterRepairData(int tId, int type, String id, String name, String carNo, String frameNo) {
+        this.tId = tId;
         this.type = type;
         this.id = id;
         this.name = name;
@@ -65,5 +67,13 @@ public class AdapterRepairData {
 
     public void setComplete(boolean complete) {
         this.complete = complete;
+    }
+
+    public int gettId() {
+        return tId;
+    }
+
+    public void settId(int tId) {
+        this.tId = tId;
     }
 }

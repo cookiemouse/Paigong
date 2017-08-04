@@ -12,6 +12,8 @@ public class AdapterOperateInstallListData {
 
     private String tNoOld;
 
+    private boolean complete = true;
+
     public AdapterOperateInstallListData(boolean wire) {
         this.wire = wire;
     }
@@ -102,5 +104,13 @@ public class AdapterOperateInstallListData {
 
     public void settNoOld(String tNoOld) {
         this.tNoOld = tNoOld;
+    }
+
+    public boolean isComplete() {
+        return complete;
+    }
+
+    public void setComplete(boolean complete) {
+        this.complete = complete;
     }
 }

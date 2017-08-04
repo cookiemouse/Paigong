@@ -1,6 +1,8 @@
 package com.tianyigps.xiepeng.activity;
 
+import android.app.AlertDialog;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -126,8 +128,8 @@ public class OperateRepairActivity extends BaseActivity {
                 String path = new Uri2FileU(OperateRepairActivity.this).getRealPathFromUri(selectedImage);
                 Log.i(TAG, "onActivityResult: path-->" + path);
 
-                mDatabaseManager.addRepairPositionPic(tNo, path);
-                String imgUrl = mDatabaseManager.getRepairPositionUrl(tNo);
+                mDatabaseManager.addRepairPositionPic(tid, path);
+                String imgUrl = mDatabaseManager.getRepairPositionUrl(tid);
                 uploadPic(Data.DATA_UPLOAD_TYPE_3, imgUrl, path);
 
                 Picasso.with(this).load(selectedImage).resize(PIC_WIDTH, PIC_HEIGHT).error(R.drawable.ic_camera).into
@@ -148,8 +150,8 @@ public class OperateRepairActivity extends BaseActivity {
                 String path = new Uri2FileU(OperateRepairActivity.this).getRealPathFromUri(uri);
                 Log.i(TAG, "onActivityResult: path-->" + path);
 
-                mDatabaseManager.addRepairPositionPic(tNo, path);
-                String imgUrl = mDatabaseManager.getRepairPositionUrl(tNo);
+                mDatabaseManager.addRepairPositionPic(tid, path);
+                String imgUrl = mDatabaseManager.getRepairPositionUrl(tid);
                 uploadPic(Data.DATA_UPLOAD_TYPE_3, imgUrl, path);
 
                 Picasso.with(this).load(uri).resize(PIC_WIDTH, PIC_HEIGHT).error(R.drawable.ic_camera).into(mImageViewPositionNew);
@@ -161,8 +163,8 @@ public class OperateRepairActivity extends BaseActivity {
                 String path = new Uri2FileU(OperateRepairActivity.this).getRealPathFromUri(selectedImage);
                 Log.i(TAG, "onActivityResult: path-->" + path);
 
-                mDatabaseManager.addRepairInstallPic(tNo, path);
-                String imgUrl = mDatabaseManager.getRepairInstallUrl(tNo);
+                mDatabaseManager.addRepairInstallPic(tid, path);
+                String imgUrl = mDatabaseManager.getRepairInstallUrl(tid);
                 uploadPic(Data.DATA_UPLOAD_TYPE_4, imgUrl, path);
 
                 Picasso.with(this).load(selectedImage).resize(PIC_WIDTH, PIC_HEIGHT).error(R.drawable.ic_camera).into(mImageViewInstallNew);
@@ -181,8 +183,8 @@ public class OperateRepairActivity extends BaseActivity {
                 }
                 String path = new Uri2FileU(OperateRepairActivity.this).getRealPathFromUri(uri);
                 Log.i(TAG, "onActivityResult: path-->" + path);
-                mDatabaseManager.addRepairInstallPic(tNo, path);
-                String imgUrl = mDatabaseManager.getRepairInstallUrl(tNo);
+                mDatabaseManager.addRepairInstallPic(tid, path);
+                String imgUrl = mDatabaseManager.getRepairInstallUrl(tid);
                 uploadPic(Data.DATA_UPLOAD_TYPE_4, imgUrl, path);
 
                 Picasso.with(this).load(uri).resize(PIC_WIDTH, PIC_HEIGHT).error(R.drawable.ic_camera).into(mImageViewInstallNew);
@@ -208,6 +210,7 @@ public class OperateRepairActivity extends BaseActivity {
         token = intent.getStringExtra(Data.DATA_INTENT_TOKEN);
         orderNo = intent.getStringExtra(Data.DATA_INTENT_ORDER_NO);
         tNo = intent.getStringExtra(Data.DATA_INTENT_T_NO);
+        tid = intent.getIntExtra(Data.DATA_INTENT_T_ID, 0);
 
         mImageViewLocate = findViewById(R.id.iv_activity_operate_default_locate);
         mImageViewPositionOld = findViewById(R.id.iv_activity_operate_default_position_pic);
@@ -276,9 +279,9 @@ public class OperateRepairActivity extends BaseActivity {
                     mStringExplain = null;
                 }
                 if ("".equals(mStringNewtNo) || mRelativeLayoutReplace.getVisibility() == View.GONE) {
-                    mDatabaseManager.addRepair(tNo, mStringPosition, mStringExplain);
+                    mDatabaseManager.addRepair(tid, mStringPosition, mStringExplain);
                 } else {
-                    mDatabaseManager.addRepair(tNo, mStringPosition, mStringExplain, mStringNewtNo);
+                    mDatabaseManager.addRepair(tid, mStringPosition, mStringExplain, mStringNewtNo);
                 }
 
                 showFinishDialog("数据已保存！");
@@ -402,7 +405,6 @@ public class OperateRepairActivity extends BaseActivity {
                             installPicG = baseUrl + carTerminalListBean.getNewWiringDiagramPic();
                             installNameG = objBean.getDispatchContactName();
                             installPhoneG = objBean.getDispatchContactPhone();
-                            tid = carTerminalListBean.getId();
                             tType = carTerminalListBean.getNewTerminalType();
 
                             myHandler.sendEmptyMessage(Data.MSG_1);
@@ -453,10 +455,10 @@ public class OperateRepairActivity extends BaseActivity {
                 UploadPicBean.ObjBean objBean = uploadPicBean.getObj();
                 String imgUrl = objBean.getImgUrl();
                 if (picType < 3) {
-                    mDatabaseManager.addRepairPositionUrl(tNo, imgUrl);
+                    mDatabaseManager.addRepairPositionUrl(tid, imgUrl);
                     return;
                 }
-                mDatabaseManager.addRepairInstallUrl(tNo, imgUrl);
+                mDatabaseManager.addRepairInstallUrl(tid, imgUrl);
             }
         });
     }
@@ -503,7 +505,17 @@ public class OperateRepairActivity extends BaseActivity {
     }
 
     private void showFinishDialog(String msg) {
-        new MessageDialogU(this).showAndFinish(msg);
+        AlertDialog.Builder builder = new AlertDialog.Builder(OperateRepairActivity.this);
+        builder.setMessage(msg);
+        builder.setCancelable(false);
+        builder.setPositiveButton(R.string.ensure, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                OperateRepairActivity.this.finish();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     private void showMessageDialog(String msg) {
@@ -511,42 +523,42 @@ public class OperateRepairActivity extends BaseActivity {
     }
 
     private void loadSavedData() {
-        Cursor cursor = mDatabaseManager.getRepairs();
+        Cursor cursor = mDatabaseManager.getRepair(tid);
         if (null != cursor && cursor.moveToFirst()) {
-            do {
-                Log.i(TAG, "onResume:-->" + cursor.getString(0));
-                if (tNo.equals(cursor.getString(0))) {
-                    mStringPosition = cursor.getString(1);
-                    mStringPositionPath = cursor.getString(2);
-                    mStringInstallPath = cursor.getString(3);
-                    mStringExplain = cursor.getString(4);
-                    mStringNewtNo = cursor.getString(5);
-                    Log.i(TAG, "loadSavedData: newtNo-->" + mStringNewtNo);
+            mStringPosition = cursor.getString(2);
+            mStringPositionPath = cursor.getString(3);
+            mStringInstallPath = cursor.getString(4);
+            mStringExplain = cursor.getString(5);
+            mStringNewtNo = cursor.getString(6);
+            Log.i(TAG, "loadSavedData: tid-->" + cursor.getInt(0));
+            Log.i(TAG, "loadSavedData: mStringPosition-->" + mStringPosition);
+            Log.i(TAG, "loadSavedData: mStringPositionPath-->" + mStringPositionPath);
+            Log.i(TAG, "loadSavedData: mStringInstallPath-->" + mStringInstallPath);
+            Log.i(TAG, "loadSavedData: mStringExplain-->" + mStringExplain);
+            Log.i(TAG, "loadSavedData: mStringNewtNo-->" + mStringNewtNo);
 
-                    mEditTextPosition.setText(mStringPosition);
-                    mEditTextExplain.setText(mStringExplain);
-                    if (null != mStringPositionPath) {
-                        File file = new File(mStringPositionPath);
-                        if (file.exists()) {
-                            Picasso.with(this).load(file).resize(PIC_WIDTH, PIC_HEIGHT).error(R.drawable.ic_camera).into(mImageViewPositionNew);
-                        }
-                    }
-                    if (null != mStringInstallPath) {
-                        File file = new File(mStringInstallPath);
-                        if (file.exists()) {
-                            Picasso.with(this).load(file).resize(PIC_WIDTH, PIC_HEIGHT).error(R.drawable.ic_camera).into(mImageViewInstallNew);
-                        }
-                    }
-                    if (null != mStringNewtNo) {
-                        mRelativeLayoutReplace.setVisibility(View.VISIBLE);
-                        mEditTextNewImei.setText(mStringNewtNo);
-                        mTextViewCount.setText(R.string.not_replace);
-                    } else {
-                        mRelativeLayoutReplace.setVisibility(View.GONE);
-                        mTextViewCount.setText(R.string.repair_replace);
-                    }
+            mEditTextPosition.setText(mStringPosition);
+            mEditTextExplain.setText(mStringExplain);
+            if (null != mStringPositionPath) {
+                File file = new File(mStringPositionPath);
+                if (file.exists()) {
+                    Picasso.with(this).load(file).resize(PIC_WIDTH, PIC_HEIGHT).error(R.drawable.ic_camera).into(mImageViewPositionNew);
                 }
-            } while (cursor.moveToNext());
+            }
+            if (null != mStringInstallPath) {
+                File file = new File(mStringInstallPath);
+                if (file.exists()) {
+                    Picasso.with(this).load(file).resize(PIC_WIDTH, PIC_HEIGHT).error(R.drawable.ic_camera).into(mImageViewInstallNew);
+                }
+            }
+            if (null != mStringNewtNo) {
+                mRelativeLayoutReplace.setVisibility(View.VISIBLE);
+                mEditTextNewImei.setText(mStringNewtNo);
+                mTextViewCount.setText(R.string.not_replace);
+            } else {
+                mRelativeLayoutReplace.setVisibility(View.GONE);
+                mTextViewCount.setText(R.string.repair_replace);
+            }
             cursor.close();
         }
     }

@@ -108,7 +108,7 @@ public class NetworkManager {
                     + "&password=" + MD5U.getMd5(password));
         }
         mRequest = builder.build();
-        Log.i(TAG, "checkUser: url-mOnModifyPasswordListener->" + mRequest.url());
+        Log.i(TAG, "checkUser: url-OnCheckUserListener->" + mRequest.url());
         Call call = mOkHttpClient.newCall(mRequest);
         call.enqueue(new Callback() {
             @Override

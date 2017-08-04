@@ -182,7 +182,8 @@ public class InstallingActivity extends BaseActivity {
                         break;
                     }
                     case TYPE_REPAIR: {
-                        toRepairActivity(mAdapterRepairDataList.get(position).getId());
+                        AdapterRepairData data = mAdapterRepairDataList.get(position);
+                        toRepairActivity(data.gettId(), data.getId());
                         break;
                     }
                     default: {
@@ -238,19 +239,6 @@ public class InstallingActivity extends BaseActivity {
 //                    }
 //                }
 
-                //  保存订单信息orderNo, frameNo, carid, tId
-                String orderNo = objBean.getOrderNo();
-                for (StartOrderInfoBean.ObjBean.CarListBean carListBean : objBean.getCarList()) {
-                    String frameNo = carListBean.getCarVin();
-                    int carId = carListBean.getId();
-                    for (StartOrderInfoBean.ObjBean.CarListBean.CarTerminalListBean carTerminalListBean
-                            : carListBean.getCarTerminalList()) {
-                        int tId = carTerminalListBean.getId();
-
-                        mDatabaseManager.addOrder(orderNo, frameNo, carId, tId);
-                    }
-                }
-
                 switch (mAdapterType) {
                     case TYPE_INSTALL: {
                         for (StartOrderInfoBean.ObjBean.CarListBean carListBean : objBean.getCarList()) {
@@ -279,7 +267,8 @@ public class InstallingActivity extends BaseActivity {
                         for (StartOrderInfoBean.ObjBean.CarListBean carListBean : objBean.getCarList()) {
                             String frameNo = carListBean.getCarVin();
                             if (carListBean.getRemoveFlag() == 0) {
-                                mAdapterRemoveDataList.add(new AdapterRemoveData(carListBean.getId()
+                                mAdapterRemoveDataList.add(new AdapterRemoveData(
+                                        carListBean.getId()
                                         , frameNo
                                         , carListBean.getWiredNum()
                                         , carListBean.getWirelessNum()));
@@ -303,8 +292,15 @@ public class InstallingActivity extends BaseActivity {
                                     terminalName = "";
                                 }
 
-                                mAdapterRepairDataList.add(new AdapterRepairData(type
-                                        , carTerminalListBean.getTNo()
+                                int tId = carTerminalListBean.getId();
+                                String tNo = carTerminalListBean.getTNo();
+
+                                mDatabaseManager.addRepair(tId, tNo);
+
+                                mAdapterRepairDataList.add(new AdapterRepairData(
+                                        tId
+                                        , type
+                                        , tNo
                                         , terminalName
                                         , carNo
                                         , frameNo));
@@ -337,12 +333,13 @@ public class InstallingActivity extends BaseActivity {
         startActivity(intent);
     }
 
-    private void toRepairActivity(String tNo) {
+    private void toRepairActivity(int tId, String tNo) {
         Intent intent = new Intent(InstallingActivity.this, OperateRepairActivity.class);
         intent.putExtra(Data.DATA_INTENT_EID, eid);
         intent.putExtra(Data.DATA_INTENT_TOKEN, token);
         intent.putExtra(Data.DATA_INTENT_ORDER_NO, orderNo);
         intent.putExtra(Data.DATA_INTENT_T_NO, tNo);
+        intent.putExtra(Data.DATA_INTENT_T_ID, tId);
         startActivity(intent);
     }
 
@@ -416,12 +413,12 @@ public class InstallingActivity extends BaseActivity {
         if (mAdapterRepairDataList.size() > 0) {
             for (AdapterRepairData data : mAdapterRepairDataList) {
                 boolean isComplete = false;
-                Cursor cursor = mDatabaseManager.getRepair(data.getId());
+                Cursor cursor = mDatabaseManager.getRepair(data.gettId());
                 if (cursor.moveToFirst()) {
-                    String position = cursor.getString(1);
-                    String explain = cursor.getString(4);
-                    String positionUrl = cursor.getString(6);
-                    String installUrl = cursor.getString(7);
+                    String position = cursor.getString(2);
+                    String explain = cursor.getString(5);
+                    String positionUrl = cursor.getString(7);
+                    String installUrl = cursor.getString(8);
 
                     Log.i(TAG, "onResume: 1-->" + position);
                     Log.i(TAG, "onResume: 2-->" + explain);

@@ -6,6 +6,7 @@
              android:orientation="vertical">
 
     <RelativeLayout
+        android:id="@+id/rl_item_operate_install_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/dp_8"

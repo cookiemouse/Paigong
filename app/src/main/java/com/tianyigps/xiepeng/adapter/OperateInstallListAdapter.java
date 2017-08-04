@@ -79,6 +79,7 @@ public class OperateInstallListAdapter extends BaseAdapter {
             viewHolder.ivInstallPic = contentView.findViewById(R.id.iv_item_operate_install_install_pic);
 
             viewHolder.rlOld = contentView.findViewById(R.id.rl_item_operate_install_old);
+            viewHolder.rlItem = contentView.findViewById(R.id.rl_item_operate_install_list);
 
             viewHolder.etTNoNew.addTextChangedListener(new TextWatcher() {
                 @Override
@@ -156,6 +157,12 @@ public class OperateInstallListAdapter extends BaseAdapter {
                     .into(viewHolder.ivInstallPic);
         }
 
+        if (data.isComplete()) {
+            viewHolder.rlItem.setBackgroundResource(R.drawable.bg_item);
+        }else {
+            viewHolder.rlItem.setBackgroundResource(R.drawable.bg_item_orange);
+        }
+
 
         viewHolder.tvStatus.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -217,7 +224,7 @@ public class OperateInstallListAdapter extends BaseAdapter {
         private TextView tvTitle, tvStatus, tvTNoOld;
         private EditText etTNoNew, etPosition;
         private ImageView ivScanner, ivLocate, ivPositionPic, ivInstallPic;
-        private RelativeLayout rlOld;
+        private RelativeLayout rlOld, rlItem;
     }
 
     public interface OnItemOperateListener {

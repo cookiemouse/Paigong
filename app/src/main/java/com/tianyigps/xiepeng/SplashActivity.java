@@ -108,11 +108,13 @@ public class SplashActivity extends Activity {
         mNetworkManager.setCheckUserListener(new OnCheckUserListener() {
             @Override
             public void onFailure() {
+                Log.i(TAG, "onFailure: ");
                 myHandler.sendEmptyMessage(MSG_ERO);
             }
 
             @Override
             public void onSuccess(String result) {
+                Log.i(TAG, "onSuccess: result-->" + result);
                 Gson gson = new Gson();
                 CheckUserBean checkUserBean = gson.fromJson(result, CheckUserBean.class);
                 if (!checkUserBean.isSuccess()) {

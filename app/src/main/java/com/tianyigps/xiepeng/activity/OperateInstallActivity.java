@@ -299,6 +299,15 @@ public class OperateInstallActivity extends BaseActivity {
     }
 
     @Override
+    public void onBackPressed() {
+//        super.onBackPressed();
+        saveData();
+        if (isComplete()) {
+            finish();
+        }
+    }
+
+    @Override
     protected void onDestroy() {
         mDatabaseManager.close();
         super.onDestroy();
@@ -374,6 +383,13 @@ public class OperateInstallActivity extends BaseActivity {
     }
 
     private void setEventListener() {
+        this.setOnTitleBackClickListener(new OnTitleBackClickListener() {
+            @Override
+            public void onClick() {
+                onBackPressed();
+            }
+        });
+
         mImageViewCarNo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -396,29 +412,7 @@ public class OperateInstallActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 //  2017/8/3
-                String carNo = mEditTextCarNo.getText().toString();
-                String carType = mEditTextCarType.getText().toString();
-
-                mDatabaseManager.addCarInfo(idMainCar, carNo, carType);
-
-                int i = 0;
-                for (AdapterOperateInstallListData data : mAdapterOperateInstallListDataList) {
-                    String tNoOld = data.gettNoOld();
-                    String tNoNew = data.gettNoNew();
-                    EditText editText = mListView.getChildAt(i).findViewById(R.id.et_item_operate_install_position);
-                    String position = editText.getText().toString();
-
-                    Log.i(TAG, "onClick: tNoOld-->" + tNoOld);
-                    Log.i(TAG, "onClick: tNoNew-->" + tNoNew);
-                    Log.i(TAG, "onClick: position-->" + position);
-
-                    String id = idMainTerminal + i;
-                    Log.i(TAG, "onClick: idMainTerminal-->" + id);
-
-                    mDatabaseManager.addTerInfo(id, tNoOld, tNoNew, position);
-                    Log.i(TAG, "----------------------------------------");
-                    i++;
-                }
+                saveData();
             }
         });
 
@@ -551,6 +545,9 @@ public class OperateInstallActivity extends BaseActivity {
                     return;
                 }
                 UploadPicBean.ObjBean objBean = uploadPicBean.getObj();
+
+                int id = objBean.getId();
+
                 String imgUrl = objBean.getImgUrl();
 
                 Log.i(TAG, "onSuccess: picType-->" + picType);
@@ -584,8 +581,12 @@ public class OperateInstallActivity extends BaseActivity {
                     case INTENT_CHOICE_P: {
                     }
                     case INTENT_PHOTO_P: {
+
+                        mDatabaseManager.addOrder(orderNo, carId, id);
+
                         idMainTerminal = idMainTerminal + itemPosition;
                         mDatabaseManager.addTerPositionPic(idMainTerminal, itemPath, imgUrl);
+                        mDatabaseManager.addTerId(idMainTerminal, id);
                         AdapterOperateInstallListData data = mAdapterOperateInstallListDataList.get(itemPosition);
                         data.setPositionPic(itemPath);
                         data.setPositionPicUrl(imgUrl);
@@ -597,8 +598,12 @@ public class OperateInstallActivity extends BaseActivity {
                     case INTENT_CHOICE_I: {
                     }
                     case INTENT_PHOTO_I: {
+
+                        mDatabaseManager.addOrder(orderNo, carId, id);
+
                         idMainTerminal = idMainTerminal + itemPosition;
                         mDatabaseManager.addTerInstallPic(idMainTerminal, itemPath, imgUrl);
+                        mDatabaseManager.addTerId(idMainTerminal, id);
                         AdapterOperateInstallListData data = mAdapterOperateInstallListDataList.get(itemPosition);
                         data.setInstallPic(itemPath);
                         data.setInstallPicUrl(imgUrl);
@@ -719,10 +724,43 @@ public class OperateInstallActivity extends BaseActivity {
                 data.setPositionPic(positionPic);
                 data.setInstallPic(installPic);
                 data.setPositionPicUrl(positionPicUrl);
-                data.setInstallPic(installPicUrl);
+                data.setInstallPicUrl(installPicUrl);
             }
         }
         mOperateInstallListAdapter.notifyDataSetChanged();
+    }
+
+    //  保存数据
+    private void saveData() {
+        String carNo = mEditTextCarNo.getText().toString();
+        String carType = mEditTextCarType.getText().toString();
+
+        mDatabaseManager.addCarInfo(idMainCar, carNo, carType);
+
+        int i = 0;
+        for (AdapterOperateInstallListData data : mAdapterOperateInstallListDataList) {
+            String tNoOld = data.gettNoOld();
+            String tNoNew = data.gettNoNew();
+            EditText editText = mListView.getChildAt(i).findViewById(R.id.et_item_operate_install_position);
+            String position = editText.getText().toString();
+
+            Log.i(TAG, "onClick: tNoOld-->" + tNoOld);
+            Log.i(TAG, "onClick: tNoNew-->" + tNoNew);
+            Log.i(TAG, "onClick: position-->" + position);
+            data.setPosition(position);
+
+            String id = idMainTerminal + i;
+            Log.i(TAG, "onClick: idMainTerminal-->" + id);
+
+            mDatabaseManager.addTerInfo(id, tNoOld, tNoNew, position);
+            i++;
+//            if (null != tNoNew && !"".equals(tNoNew) || !"".equals(position) || null != tNoOld) {
+//            }
+
+            Log.i(TAG, "----------------------------------------");
+        }
+
+        isComplete();
     }
 
     //  RecycleView删除图片
@@ -830,6 +868,57 @@ public class OperateInstallActivity extends BaseActivity {
     //  获取完整imei
     private void getWholeImei(String imei) {
         mNetworkManager.getWholeImei(eid, token, imei);
+    }
+
+    //  check数据
+    private boolean isComplete() {
+        // TODO: 2017/8/4 检测数据完整性
+
+        boolean complete = true;
+        boolean completeAll = true;
+
+        for (int i = 0; i < mAdapterOperateInstallListDataList.size(); i++) {
+            Cursor cursor = mDatabaseManager.getTer(idMainTerminal + i);
+            if (null != cursor && cursor.moveToFirst()) {
+                String id = cursor.getString(0);
+                String tNoOld = cursor.getString(1);
+                String tNoNew = cursor.getString(2);
+                String position = cursor.getString(3);
+                String positionPic = cursor.getString(4);
+                String installPic = cursor.getString(5);
+                String positionPicUrl = cursor.getString(6);
+                String installPicUrl = cursor.getString(7);
+
+                Log.i(TAG, "loadTerminalData: tNoOld-->" + tNoOld);
+                Log.i(TAG, "loadTerminalData: tNoNew-->" + tNoNew);
+                Log.i(TAG, "loadTerminalData: position-->" + position);
+                Log.i(TAG, "loadTerminalData: positionPic-->" + positionPic);
+                Log.i(TAG, "loadTerminalData: installPic-->" + installPic);
+
+                if (null == tNoNew || "".equals(tNoNew) || "".equals(position) && null == positionPic && null == installPic) {
+                    complete = true;
+                } else if ("".equals(position) || null == positionPic || null == installPic) {
+                    complete = false;
+                } else if (!"".equals(tNoNew) && !"".equals(position) && !"".equals(positionPic) && !"".equals(installPic)) {
+                    complete = true;
+                }
+
+                Log.i(TAG, "isComplete: position-->" + idMainTerminal + i);
+                Log.i(TAG, "isComplete: complete-->" + complete);
+
+                if (!complete) {
+                    AdapterOperateInstallListData data = mAdapterOperateInstallListDataList.get(i);
+                    data.setComplete(false);
+                    completeAll = false;
+                }
+
+                cursor.close();
+            }
+        }
+        if (!completeAll) {
+            mOperateInstallListAdapter.notifyDataSetChanged();
+        }
+        return completeAll;
     }
 
     private class MyHandler extends Handler {

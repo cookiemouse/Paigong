@@ -14,6 +14,7 @@ import com.tianyigps.signviewlibrary.SignView;
 import com.tianyigps.xiepeng.R;
 import com.tianyigps.xiepeng.base.BaseActivity;
 import com.tianyigps.xiepeng.bean.CarInfo;
+import com.tianyigps.xiepeng.bean.CarInfoOut;
 import com.tianyigps.xiepeng.bean.TerminalInfo;
 import com.tianyigps.xiepeng.data.Data;
 import com.tianyigps.xiepeng.interfaces.OnSaveOrderInfoListener;
@@ -120,8 +121,10 @@ public class CustomSignActivity extends BaseActivity {
 
                 Log.i(TAG, "onClick: json-->" + json);
 
-                mNetworkManager.saveOrderInfo(eid, token, mOrderNo, json, mPartReason, mSignature, "", "", Data
-                        .LOCATE_TYPE_BAIDU);
+                getOrder();
+
+//                mNetworkManager.saveOrderInfo(eid, token, mOrderNo, json, mPartReason, mSignature, "", "", Data
+//                        .LOCATE_TYPE_BAIDU);
 
 
                 //保存图片，可以不要
@@ -151,32 +154,48 @@ public class CustomSignActivity extends BaseActivity {
         });
     }
 
+    private void getOrder() {
+        Cursor cursor = mDatabaseManager.getOrder(mOrderNo);
+        if (null != cursor && cursor.moveToFirst()) {
+            do {
+                String orderNo = cursor.getString(0);
+                int carId = cursor.getInt(1);
+                int tId = cursor.getInt(2);
+
+                Log.i(TAG, "getRepairJson: orderNo-->" + orderNo + " ,carId-->" + carId + " ,tId-->" + tId);
+            } while (cursor.moveToNext());
+        }
+    }
+
     private String getInstallJson() {
-        CarInfo.TerminalInfo terminalInfo1 = new CarInfo.TerminalInfo(111, "222", "333", 1, 1, "444");
-        CarInfo.TerminalInfo terminalInfo2 = new CarInfo.TerminalInfo(1111, "222", "333", 2, 2, "444");
-        CarInfo.TerminalInfo terminalInfo3 = new CarInfo.TerminalInfo(111, "222", "333", 3, 3, "444");
+        TerminalInfo terminalInfo1 = new TerminalInfo(111, "222", "333", 1, 1, "444");
+        TerminalInfo terminalInfo2 = new TerminalInfo(1111, "222", "333", 2, 2, "444");
+        TerminalInfo terminalInfo3 = new TerminalInfo(111, "222", "333", 3, 3, "444");
 
-        CarInfo.TerminalInfo terminalInfo4 = new CarInfo.TerminalInfo(111, "222", "333", 4, 4, "444");
-        CarInfo.TerminalInfo terminalInfo5 = new CarInfo.TerminalInfo(111, "222", "333", 5, 5, "444");
+        TerminalInfo terminalInfo4 = new TerminalInfo(111, "222", "333", 4, 4, "444");
+        TerminalInfo terminalInfo5 = new TerminalInfo(111, "222", "333", 5, 5, "444", "5555");
 
-        List<CarInfo.TerminalInfo> terminalInfoList1 = new ArrayList<>();
+        List<TerminalInfo> terminalInfoList1 = new ArrayList<>();
         terminalInfoList1.add(terminalInfo1);
         terminalInfoList1.add(terminalInfo2);
         terminalInfoList1.add(terminalInfo3);
 
-        List<CarInfo.TerminalInfo> terminalInfoList2 = new ArrayList<>();
+        List<TerminalInfo> terminalInfoList2 = new ArrayList<>();
         terminalInfoList2.add(terminalInfo4);
         terminalInfoList2.add(terminalInfo5);
 
         CarInfo carInfo1 = new CarInfo(1, "cN1111", "cV1111", "111", terminalInfoList1);
         CarInfo carInfo2 = new CarInfo(2, "cN2222", "cV2222", "222", terminalInfoList2);
 
-        List<CarInfo> carInfoList = new ArrayList<>();
-        carInfoList.add(carInfo1);
-        carInfoList.add(carInfo2);
+        CarInfoOut carInfoOut1 = new CarInfoOut(carInfo1);
+        CarInfoOut carInfoOut2 = new CarInfoOut(carInfo2);
+
+        List<CarInfoOut> carInfoOutList = new ArrayList<>();
+        carInfoOutList.add(carInfoOut1);
+        carInfoOutList.add(carInfoOut2);
 
         Gson gson = new Gson();
-        String json = gson.toJson(carInfoList);
+        String json = gson.toJson(carInfoOutList);
         Log.i(TAG, "getInstallJson: json-->" + json);
         return json;
     }
@@ -186,15 +205,14 @@ public class CustomSignActivity extends BaseActivity {
         if (null != cursor && cursor.moveToFirst()) {
             do {
                 String orderNo = cursor.getString(0);
-                String frameNo = cursor.getString(1);
-                int carId = cursor.getInt(2);
-                int tId = cursor.getInt(3);
+                int carId = cursor.getInt(1);
+                int tId = cursor.getInt(2);
 
-                Log.i(TAG, "getRepairJson: orderNo-->" + orderNo + " ,frameNo-->" + frameNo + " ,carId-->" + carId + " ,tId-->" + tId);
+                Log.i(TAG, "getRepairJson: orderNo-->" + orderNo + " ,carId-->" + carId + " ,tId-->" + tId);
 
-                Cursor cursorR = mDatabaseManager.getRepair(frameNo);
+                Cursor cursorR = mDatabaseManager.getRepair(tId);
 
-                if (null != cursorR && cursorR.moveToFirst()){
+                if (null != cursorR && cursorR.moveToFirst()) {
 
                     cursorR.close();
                 }
@@ -204,9 +222,10 @@ public class CustomSignActivity extends BaseActivity {
         }
 
 
-        TerminalInfo terminalInfo1 = new TerminalInfo(1, "", "", 1, 1, "", "");
-        TerminalInfo terminalInfo2 = new TerminalInfo(2, "", "", 2, 2, "", "");
-        TerminalInfo terminalInfo3 = new TerminalInfo(3, "", "", 3, 3, "", "");
+        TerminalInfo terminalInfo1 = new TerminalInfo(111, "222", "333", 1, 1, "444", "5555");
+        TerminalInfo terminalInfo2 = new TerminalInfo(111, "222", "333", 2, 2, "444", "5555");
+        TerminalInfo terminalInfo3 = new TerminalInfo(111, "222", "333", 3, 3, "444", "5555");
+        TerminalInfo terminalInfo4 = new TerminalInfo(111, "222", "333", 4, 4, "444", "5555");
 
         List<TerminalInfo> terminalInfoList = new ArrayList<>();
 

@@ -22,4 +22,13 @@ public class TerminalInfo {
         this.newInstallPosition = newInstallPosition;
         this.repaireRemark = repaireRemark;
     }
+
+    public TerminalInfo(int tid, String oldImei, String newImei, int modle, int locateType, String newInstallPosition) {
+        this.tid = tid;
+        this.oldImei = oldImei;
+        this.newImei = newImei;
+        this.modle = modle;
+        this.locateType = locateType;
+        this.newInstallPosition = newInstallPosition;
+    }
 }

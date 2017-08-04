@@ -21,6 +21,7 @@ public class BaseActivity extends Activity {
     private LinearLayout mLinearLayoutTitleAll;
 
     private OnTitleRightClickListener mOnTitleRightClickListener;
+    private OnTitleBackClickListener mOnTitleBackClickListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +48,11 @@ public class BaseActivity extends Activity {
         mImageViewLeft.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onBackPressed();
+                if (null == mOnTitleRightClickListener) {
+                    onBackPressed();
+                    return;
+                }
+                mOnTitleBackClickListener.onClick();
             }
         });
 
@@ -87,8 +92,16 @@ public class BaseActivity extends Activity {
         void onClick();
     }
 
+    public interface OnTitleBackClickListener {
+        void onClick();
+    }
+
     public void setOnTitleRightClickListener(OnTitleRightClickListener listener) {
         this.mOnTitleRightClickListener = listener;
+    }
+
+    public void setOnTitleBackClickListener(OnTitleBackClickListener listener) {
+        this.mOnTitleBackClickListener = listener;
     }
 
     //  设置标题右按钮是否可见
