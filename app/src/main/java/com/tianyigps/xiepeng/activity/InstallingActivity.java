@@ -197,7 +197,7 @@ public class InstallingActivity extends BaseActivity {
             public void onClick(View view) {
                 // TODO: 2017/8/2 check
                 if (checkRepairList()) {
-                    toActivity(CustomSignActivity.class);
+                    toCustomSign();
                     return;
                 }
 //                toActivity(EditRemarksActivity.class);
@@ -223,18 +223,31 @@ public class InstallingActivity extends BaseActivity {
 
                 if (!startOrderInfoBean.isSuccess()) {
                     mStringMsg = startOrderInfoBean.getMsg();
-                    onFailure();
+                    myHandler.sendEmptyMessage(Data.MSG_ERO);
                     return;
                 }
                 StartOrderInfoBean.ObjBean objBean = startOrderInfoBean.getObj();
                 mStringRemarks = objBean.getRemark();
 
-                int sizeCar = objBean.getCarList().size();
-                int sizeT = 0;
+//                int sizeCar = objBean.getCarList().size();
+//                int sizeT = 0;
+//                for (StartOrderInfoBean.ObjBean.CarListBean carListBean : objBean.getCarList()) {
+//                    int temp = carListBean.getCarTerminalList().size();
+//                    if (temp > sizeT) {
+//                        sizeT = temp;
+//                    }
+//                }
+
+                //  保存订单信息orderNo, frameNo, carid, tId
+                String orderNo = objBean.getOrderNo();
                 for (StartOrderInfoBean.ObjBean.CarListBean carListBean : objBean.getCarList()) {
-                    int temp = carListBean.getCarTerminalList().size();
-                    if (temp > sizeT) {
-                        sizeT = temp;
+                    String frameNo = carListBean.getCarVin();
+                    int carId = carListBean.getId();
+                    for (StartOrderInfoBean.ObjBean.CarListBean.CarTerminalListBean carTerminalListBean
+                            : carListBean.getCarTerminalList()) {
+                        int tId = carTerminalListBean.getId();
+
+                        mDatabaseManager.addOrder(orderNo, frameNo, carId, tId);
                     }
                 }
 
@@ -309,8 +322,10 @@ public class InstallingActivity extends BaseActivity {
         });
     }
 
-    private void toActivity(Class cls) {
-        Intent intent = new Intent(InstallingActivity.this, cls);
+    private void toCustomSign() {
+        Intent intent = new Intent(InstallingActivity.this, CustomSignActivity.class);
+        intent.putExtra(Data.DATA_INTENT_INSTALL_TYPE, mAdapterType);
+        intent.putExtra(Data.DATA_INTENT_ORDER_NO, orderNo);
         startActivity(intent);
     }
 

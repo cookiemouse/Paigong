@@ -634,21 +634,41 @@ public class NetworkManager {
     //  提交订单    17
     public void saveOrderInfo(int eid, String token, String orderNo
             , String infoData, String partSubReason, String signature
-            , String lat, String log, String type
-    ) {
+            , String lat, String log, String type) {
 
-        Request.Builder builder = new Request.Builder();
-        builder.url(Urls.URL_WORKER_SAVE_ORDER_INFO + "eid=" + eid
-                + "&token=" + token
-                + "&orderNo=" + orderNo
-                + "&infoData=" + infoData
-                + "&partSubReason=" + partSubReason
-                + "&signature=" + signature
-                + "&lat=" + lat
-                + "&log=" + log
-                + "&type=" + type);
-        mRequest = builder.build();
-        Log.i(TAG, "saveOrderInfo: url-->" + mRequest.url());
+
+        MultipartBody.Builder builder = new MultipartBody.Builder();
+        builder.setType(MultipartBody.FORM);
+
+        builder.addFormDataPart("eid", "" + eid);
+        builder.addFormDataPart("token", token);
+        builder.addFormDataPart("orderNo", orderNo);
+        builder.addFormDataPart("infoData", ("" + infoData));
+        builder.addFormDataPart("partSubReason", ("" + partSubReason));
+        builder.addFormDataPart("signature", signature);
+        builder.addFormDataPart("lat", lat);
+        builder.addFormDataPart("lon", log);
+        builder.addFormDataPart("type", type);
+
+        Log.i(TAG, "uploadPic: eid-->" + eid);
+        Log.i(TAG, "uploadPic: token-->" + token);
+        Log.i(TAG, "uploadPic: orderNo-->" + orderNo);
+        Log.i(TAG, "uploadPic: infoData-->" + infoData);
+        Log.i(TAG, "uploadPic: partSubReason-->" + partSubReason);
+        Log.i(TAG, "uploadPic: signature-->" + signature);
+        Log.i(TAG, "uploadPic: lat-->" + lat);
+        Log.i(TAG, "uploadPic: lon-->" + log);
+        Log.i(TAG, "uploadPic: type-->" + type);
+
+        RequestBody requestBody = builder.build();
+
+        mRequest = new Request.Builder()
+                .url(Urls.URL_WORKER_SAVE_ORDER_INFO)
+                .post(requestBody)
+                .build();
+
+        Log.i(TAG, "uploadPic: url-->" + mRequest.url());
+
         Call call = mOkHttpClient.newCall(mRequest);
         call.enqueue(new Callback() {
             @Override

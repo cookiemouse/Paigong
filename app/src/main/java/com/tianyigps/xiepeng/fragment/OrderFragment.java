@@ -79,7 +79,6 @@ public class OrderFragment extends Fragment {
 
     //  获取定位
     private LocateManager mLocateManager;
-    private static final String MAP_TYPE = "bd";
     private LatLng mLatLngLocate;
     private String orderNoPosition;
 
@@ -403,7 +402,10 @@ public class OrderFragment extends Fragment {
                     break;
                 }
                 case MSG_2: {
-                    mNetworkManager.signedWorker(eid, token, name, orderNoPosition, mLatLngLocate.latitude, mLatLngLocate.longitude, MAP_TYPE);
+                    mNetworkManager.signedWorker(eid, token, name, orderNoPosition
+                            , mLatLngLocate.latitude
+                            , mLatLngLocate.longitude
+                            , Data.LOCATE_TYPE_BAIDU);
                     break;
                 }
                 case MSG_3: {

@@ -1,5 +1,7 @@
 package com.tianyigps.xiepeng.activity;
 
+import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,9 +13,12 @@ import com.google.gson.Gson;
 import com.tianyigps.signviewlibrary.SignView;
 import com.tianyigps.xiepeng.R;
 import com.tianyigps.xiepeng.base.BaseActivity;
-import com.tianyigps.xiepeng.bean.UploadInstallBean;
+import com.tianyigps.xiepeng.bean.CarInfo;
+import com.tianyigps.xiepeng.bean.TerminalInfo;
 import com.tianyigps.xiepeng.data.Data;
-import com.tianyigps.xiepeng.manager.FileManager;
+import com.tianyigps.xiepeng.interfaces.OnSaveOrderInfoListener;
+import com.tianyigps.xiepeng.manager.DatabaseManager;
+import com.tianyigps.xiepeng.manager.NetworkManager;
 import com.tianyigps.xiepeng.manager.SharedpreferenceManager;
 import com.tianyigps.xiepeng.utils.Base64U;
 
@@ -24,16 +29,24 @@ public class CustomSignActivity extends BaseActivity {
 
     private static final String TAG = "CustomSignActivity";
 
+    private static final int TYPE_INSTALL = 0;
+    private static final int TYPE_REPAIR = 1;
+    private static final int TYPE_REMOVE = 2;
+
     private SignView mSignView;
     private LinearLayout mLinearLayoutClear;
     private Button mButtonSubmit;
 
     private SharedpreferenceManager mSharedpreferenceManager;
+    private NetworkManager mNetworkManager;
+    private DatabaseManager mDatabaseManager;
     private int eid;
     private String token;
-    private String orderNo;
-    private String partReason;
-    private String signature;
+    private String mOrderNo;
+    private String mPartReason;
+    private String mSignature;
+
+    private int installType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +64,17 @@ public class CustomSignActivity extends BaseActivity {
         mSignView = findViewById(R.id.sv_activity_custom_sign);
         mLinearLayoutClear = findViewById(R.id.ll_activity_custom_sign);
         mButtonSubmit = findViewById(R.id.btn_activity_custom_sign_submit);
+
+        mSharedpreferenceManager = new SharedpreferenceManager(this);
+        eid = mSharedpreferenceManager.getEid();
+        token = mSharedpreferenceManager.getToken();
+
+        mNetworkManager = new NetworkManager();
+        mDatabaseManager = new DatabaseManager(this);
+
+        Intent intent = getIntent();
+        installType = intent.getIntExtra(Data.DATA_INTENT_INSTALL_TYPE, TYPE_INSTALL);
+        mOrderNo = intent.getStringExtra(Data.DATA_INTENT_ORDER_NO);
     }
 
     private void setEventListener() {
@@ -70,35 +94,38 @@ public class CustomSignActivity extends BaseActivity {
 
                 String base64 = Base64U.encode(bitmap);
 
-                base64 = Data.DATA_PIC_SIGN_HEAD + base64;
+                mSignature = Data.DATA_PIC_SIGN_HEAD + base64;
 
-                Log.i(TAG, "onClick: base64-->" + base64);
+                Log.i(TAG, "onClick: base64-->" + mSignature);
 
+                String json = null;
 
-                //  json
-                Gson gson = new Gson();
-                List<UploadInstallBean> uploadInstallBeanList = new ArrayList<>();
+                switch (installType) {
+                    case TYPE_INSTALL: {
+                        json = getInstallJson();
+                        break;
+                    }
+                    case TYPE_REMOVE: {
+                        Log.i(TAG, "onClick: 拆除");
+                        break;
+                    }
+                    case TYPE_REPAIR: {
+                        json = getRepairJson();
+                        break;
+                    }
+                    default: {
+                        Log.i(TAG, "onClick: default-->" + installType);
+                    }
+                }
 
-                UploadInstallBean uploadInstallBean = new UploadInstallBean();
-                UploadInstallBean.CarInfoBean carInfoBean = new UploadInstallBean.CarInfoBean();
-                UploadInstallBean.CarInfoBean.TerminalInfoBean terminalInfoBean =
-                        new UploadInstallBean.CarInfoBean.TerminalInfoBean();
-
-                carInfoBean.setCarId(123);
-                carInfoBean.setCarNo("777888999");
-                carInfoBean.setCarBrand("BMW");
-                carInfoBean.setCarVin("9879865466432");
-//                carInfoBean.setTerminalInfo();
-                terminalInfoBean.setLocateType(1);
-
-                uploadInstallBean.setCarInfo(carInfoBean);
-
-                uploadInstallBeanList.add(uploadInstallBean);
-
-                String json = gson.toJson(uploadInstallBeanList);
                 Log.i(TAG, "onClick: json-->" + json);
 
+                mNetworkManager.saveOrderInfo(eid, token, mOrderNo, json, mPartReason, mSignature, "", "", Data
+                        .LOCATE_TYPE_BAIDU);
+
+
                 //保存图片，可以不要
+                /*
                 Thread thread = new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -107,7 +134,89 @@ public class CustomSignActivity extends BaseActivity {
                     }
                 });
                 thread.start();
+                */
             }
         });
+
+        mNetworkManager.setOnSaveOrderInfoListener(new OnSaveOrderInfoListener() {
+            @Override
+            public void onFailure() {
+                Log.i(TAG, "onFailure: ");
+            }
+
+            @Override
+            public void onSuccess(String result) {
+                Log.i(TAG, "onSuccess: result-->" + result);
+            }
+        });
+    }
+
+    private String getInstallJson() {
+        CarInfo.TerminalInfo terminalInfo1 = new CarInfo.TerminalInfo(111, "222", "333", 1, 1, "444");
+        CarInfo.TerminalInfo terminalInfo2 = new CarInfo.TerminalInfo(1111, "222", "333", 2, 2, "444");
+        CarInfo.TerminalInfo terminalInfo3 = new CarInfo.TerminalInfo(111, "222", "333", 3, 3, "444");
+
+        CarInfo.TerminalInfo terminalInfo4 = new CarInfo.TerminalInfo(111, "222", "333", 4, 4, "444");
+        CarInfo.TerminalInfo terminalInfo5 = new CarInfo.TerminalInfo(111, "222", "333", 5, 5, "444");
+
+        List<CarInfo.TerminalInfo> terminalInfoList1 = new ArrayList<>();
+        terminalInfoList1.add(terminalInfo1);
+        terminalInfoList1.add(terminalInfo2);
+        terminalInfoList1.add(terminalInfo3);
+
+        List<CarInfo.TerminalInfo> terminalInfoList2 = new ArrayList<>();
+        terminalInfoList2.add(terminalInfo4);
+        terminalInfoList2.add(terminalInfo5);
+
+        CarInfo carInfo1 = new CarInfo(1, "cN1111", "cV1111", "111", terminalInfoList1);
+        CarInfo carInfo2 = new CarInfo(2, "cN2222", "cV2222", "222", terminalInfoList2);
+
+        List<CarInfo> carInfoList = new ArrayList<>();
+        carInfoList.add(carInfo1);
+        carInfoList.add(carInfo2);
+
+        Gson gson = new Gson();
+        String json = gson.toJson(carInfoList);
+        Log.i(TAG, "getInstallJson: json-->" + json);
+        return json;
+    }
+
+    private String getRepairJson() {
+        Cursor cursor = mDatabaseManager.getOrder(mOrderNo);
+        if (null != cursor && cursor.moveToFirst()) {
+            do {
+                String orderNo = cursor.getString(0);
+                String frameNo = cursor.getString(1);
+                int carId = cursor.getInt(2);
+                int tId = cursor.getInt(3);
+
+                Log.i(TAG, "getRepairJson: orderNo-->" + orderNo + " ,frameNo-->" + frameNo + " ,carId-->" + carId + " ,tId-->" + tId);
+
+                Cursor cursorR = mDatabaseManager.getRepair(frameNo);
+
+                if (null != cursorR && cursorR.moveToFirst()){
+
+                    cursorR.close();
+                }
+            } while (cursor.moveToNext());
+
+            cursor.close();
+        }
+
+
+        TerminalInfo terminalInfo1 = new TerminalInfo(1, "", "", 1, 1, "", "");
+        TerminalInfo terminalInfo2 = new TerminalInfo(2, "", "", 2, 2, "", "");
+        TerminalInfo terminalInfo3 = new TerminalInfo(3, "", "", 3, 3, "", "");
+
+        List<TerminalInfo> terminalInfoList = new ArrayList<>();
+
+        terminalInfoList.add(terminalInfo1);
+        terminalInfoList.add(terminalInfo2);
+        terminalInfoList.add(terminalInfo3);
+
+        Gson gson = new Gson();
+        String json = gson.toJson(terminalInfoList);
+        Log.i(TAG, "getRepairJson: json-->" + json);
+        return json;
     }
 }

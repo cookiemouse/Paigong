@@ -65,6 +65,7 @@ public final class Data {
     public final static int MSG_7 = 0x07;
 
     //  数据库
+    public final static String DATA_TAB_ORDER = "paigong_database_tab_order";
     public final static String DATA_TAB_REPAIR = "paigong_database_tab_repair";
     public final static String DATA_TAB_REMOVE = "paigong_database_tab_remove";
     public final static String DATA_TAB_INSTALL_CAR = "paigong_database_tab_install_car";
@@ -89,6 +90,10 @@ public final class Data {
     //  签字图片
     public final static String DATA_PIC_SIGN = "sign.png";
     public final static String DATA_PIC_SIGN_HEAD = "data:image/png;base64,";
+
+    //  定位类型
+    public static final String LOCATE_TYPE_BAIDU = "bd";
+    public static final String LOCATE_TYPE_GPS = "gps";
 
     //  测试
     public final static int EID = 248;

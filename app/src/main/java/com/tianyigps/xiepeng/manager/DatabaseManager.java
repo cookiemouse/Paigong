@@ -23,9 +23,100 @@ public class DatabaseManager {
         mSqLiteDatabase = databaseHelper.getWritableDatabase();
     }
 
+    //  增，订单
+    public void addOrder(String orderNo, int carId, int tid) {
+        if (orderExist(orderNo)) {
+            modifyOrder(orderNo, carId, tid);
+            return;
+        }
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("orderNo", orderNo);
+        contentValues.put("carId", carId);
+        contentValues.put("tid", tid);
+
+        mSqLiteDatabase.beginTransaction();
+        try {
+            mSqLiteDatabase.insert(Data.DATA_TAB_ORDER, null, contentValues);
+            mSqLiteDatabase.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.e(TAG, e + "SqliteDatabase insert error");
+        } finally {
+            mSqLiteDatabase.endTransaction();
+        }
+    }
+
+    //  删，订单
+    public void deleteOrder(String orderNo) {
+        if (!orderExist(orderNo)) {
+            return;
+        }
+        mSqLiteDatabase.beginTransaction();
+        try {
+            mSqLiteDatabase.delete(Data.DATA_TAB_ORDER
+                    , "orderNo=?"
+                    , new String[]{orderNo});
+            mSqLiteDatabase.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.e(TAG, e + "SqliteDatabase delete error");
+        } finally {
+            mSqLiteDatabase.endTransaction();
+        }
+    }
+
+    //  改，订单
+    public void modifyOrder(String orderNo, int carId, int tid) {
+        if (!orderExist(orderNo)) {
+            return;
+        }
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("carId", carId);
+        contentValues.put("tid", tid);
+
+        mSqLiteDatabase.beginTransaction();
+        try {
+            mSqLiteDatabase.update(Data.DATA_TAB_ORDER
+                    , contentValues
+                    , "orderNo=?"
+                    , new String[]{orderNo});
+            mSqLiteDatabase.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.e(TAG, e + "SqLiteDatabase update error");
+        } finally {
+            mSqLiteDatabase.endTransaction();
+        }
+    }
+
+    //  查，是否存在该订单
+    public boolean orderExist(String orderNo) {
+        Cursor cursor = getOrder(orderNo);
+        return null != cursor && cursor.moveToFirst();
+    }
+
+    //  查，订单
+    public Cursor getOrder(String orderNo) {
+        mSqLiteDatabase.beginTransaction();
+        try {
+            Cursor cursor = mSqLiteDatabase.query(Data.DATA_TAB_ORDER
+                    , new String[]{"orderNo, carId, tid"}
+                    , "orderNo=?"
+                    , new String[]{orderNo}
+                    , null, null, null);
+            mSqLiteDatabase.setTransactionSuccessful();
+
+            return cursor;
+        } catch (Exception e) {
+            Log.e(TAG, e + "SqliteDatabase query error");
+        } finally {
+            mSqLiteDatabase.endTransaction();
+        }
+        return null;
+    }
+
+    //=====================订单========================华丽的分割线=======================维修============================
+
     //  增，维修
-    public void addRepair(String tNo, String position, String positionPic, String installPic, String explain, String newtNo,
-                          String positionUrl, String installUrl) {
+    public void addRepair(String tNo, String position, String positionPic, String installPic, String explain
+            , String newtNo, String positionUrl, String installUrl) {
         if (repairExist(tNo)) {
             modifyRepair(tNo, position, positionPic, installPic, explain, newtNo, positionUrl, installUrl);
             return;
