@@ -16,6 +16,7 @@ import com.tianyigps.xiepeng.base.BaseActivity;
 import com.tianyigps.xiepeng.bean.CarInfo;
 import com.tianyigps.xiepeng.bean.CarInfoOut;
 import com.tianyigps.xiepeng.bean.TerminalInfo;
+import com.tianyigps.xiepeng.bean.TerminalInfoOut;
 import com.tianyigps.xiepeng.data.Data;
 import com.tianyigps.xiepeng.interfaces.OnSaveOrderInfoListener;
 import com.tianyigps.xiepeng.manager.DatabaseManager;
@@ -227,14 +228,20 @@ public class CustomSignActivity extends BaseActivity {
         TerminalInfo terminalInfo3 = new TerminalInfo(111, "222", "333", 3, 3, "444", "5555");
         TerminalInfo terminalInfo4 = new TerminalInfo(111, "222", "333", 4, 4, "444", "5555");
 
-        List<TerminalInfo> terminalInfoList = new ArrayList<>();
+        TerminalInfoOut terminalInfoOut1 = new TerminalInfoOut(terminalInfo1);
+        TerminalInfoOut terminalInfoOut2 = new TerminalInfoOut(terminalInfo2);
+        TerminalInfoOut terminalInfoOut3 = new TerminalInfoOut(terminalInfo3);
+        TerminalInfoOut terminalInfoOut4 = new TerminalInfoOut(terminalInfo4);
 
-        terminalInfoList.add(terminalInfo1);
-        terminalInfoList.add(terminalInfo2);
-        terminalInfoList.add(terminalInfo3);
+        List<TerminalInfoOut> terminalInfoOurList = new ArrayList<>();
+
+        terminalInfoOurList.add(terminalInfoOut1);
+        terminalInfoOurList.add(terminalInfoOut2);
+        terminalInfoOurList.add(terminalInfoOut3);
+        terminalInfoOurList.add(terminalInfoOut4);
 
         Gson gson = new Gson();
-        String json = gson.toJson(terminalInfoList);
+        String json = gson.toJson(terminalInfoOurList);
         Log.i(TAG, "getRepairJson: json-->" + json);
         return json;
     }
