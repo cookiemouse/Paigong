@@ -26,6 +26,7 @@ import com.tianyigps.xiepeng.R;
 import com.tianyigps.xiepeng.adapter.OperateInstallAdapter;
 import com.tianyigps.xiepeng.adapter.OperateInstallListAdapter;
 import com.tianyigps.xiepeng.base.BaseActivity;
+import com.tianyigps.xiepeng.bean.DeletePicBean;
 import com.tianyigps.xiepeng.bean.UploadPicBean;
 import com.tianyigps.xiepeng.bean.WholeImeiBean;
 import com.tianyigps.xiepeng.customview.MyListView;
@@ -33,6 +34,7 @@ import com.tianyigps.xiepeng.customview.MyRecyclerView;
 import com.tianyigps.xiepeng.data.AdapterOperateInstallListData;
 import com.tianyigps.xiepeng.data.AdapterOperateInstallRecyclerData;
 import com.tianyigps.xiepeng.data.Data;
+import com.tianyigps.xiepeng.interfaces.OnDeletePicListener;
 import com.tianyigps.xiepeng.interfaces.OnGetWholeIMEIListener;
 import com.tianyigps.xiepeng.interfaces.OnUploadPicListener;
 import com.tianyigps.xiepeng.manager.DatabaseManager;
@@ -420,6 +422,7 @@ public class OperateInstallActivity extends BaseActivity {
             @Override
             public void onDeleteClick(int position) {
                 //  2017/8/1 删除图片
+                itemRecycler = position;
                 removePicFromRecycler(position);
             }
 
@@ -613,6 +616,28 @@ public class OperateInstallActivity extends BaseActivity {
                 }
             }
         });
+
+        mNetworkManager.setOnDeletePicListener(new OnDeletePicListener() {
+            @Override
+            public void onFailure() {
+                Log.i(TAG, "onFailure: ");
+                myHandler.sendEmptyMessage(Data.MSG_ERO);
+            }
+
+            @Override
+            public void onSuccess(String result) {
+                Log.i(TAG, "onSuccess: result-->" + result);
+                Gson gson = new Gson();
+                DeletePicBean deletePicBean = gson.fromJson(result, DeletePicBean.class);
+                mStringMessage = deletePicBean.getMsg();
+                if (!deletePicBean.isSuccess()) {
+                    myHandler.sendEmptyMessage(Data.MSG_ERO);
+                    return;
+                }
+
+                myHandler.sendEmptyMessage(Data.MSG_8);
+            }
+        });
     }
 
     //  获取并显示数据库里的车辆数据
@@ -765,12 +790,13 @@ public class OperateInstallActivity extends BaseActivity {
 
     //  RecycleView删除图片
     private void removePicFromRecycler(int position) {
-        mAdapterOperateInstallRecyclerDataList.remove(position);
-        int last = mAdapterOperateInstallRecyclerDataList.size() - 1;
-        if (null != mAdapterOperateInstallRecyclerDataList.get(last).getPath()) {
-            mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData());
+
+        AdapterOperateInstallRecyclerData data = mAdapterOperateInstallRecyclerDataList.get(position);
+        String url = data.getImgUrl();
+        if (null == url || "".equals(url)) {
+            return;
         }
-        mOperateInstallAdapter.notifyDataSetChanged();
+        mNetworkManager.deletePic(eid, token, orderNo, carId, Data.DATA_UPLOAD_TYPE_5, url);
     }
 
     //  跳转到快速定位页面
@@ -988,6 +1014,19 @@ public class OperateInstallActivity extends BaseActivity {
                             .centerInside()
                             .error(R.drawable.ic_camera)
                             .into(imageView);
+                    break;
+                }
+                case Data.MSG_8: {
+                    showMessageDialog(mStringMessage);
+                    //  删除图片
+                    mAdapterOperateInstallRecyclerDataList.remove(itemRecycler);
+                    int last = mAdapterOperateInstallRecyclerDataList.size() - 1;
+                    if (null != mAdapterOperateInstallRecyclerDataList.get(last).getPath()) {
+                        mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData());
+                    }
+                    mOperateInstallAdapter.notifyDataSetChanged();
+
+                    mDatabaseManager.modifyCarPics(idMainCar, itemRecycler, null, null);
                     break;
                 }
                 default: {

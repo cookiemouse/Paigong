@@ -1,5 +1,7 @@
 package com.tianyigps.xiepeng.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,9 +15,11 @@ import com.google.gson.Gson;
 import com.tianyigps.xiepeng.R;
 import com.tianyigps.xiepeng.base.BaseActivity;
 import com.tianyigps.xiepeng.bean.ModifyPasswordBean;
+import com.tianyigps.xiepeng.data.Data;
 import com.tianyigps.xiepeng.interfaces.OnModifyPasswordListener;
 import com.tianyigps.xiepeng.manager.NetworkManager;
 import com.tianyigps.xiepeng.manager.SharedpreferenceManager;
+import com.tianyigps.xiepeng.utils.MD5U;
 
 import static com.tianyigps.xiepeng.data.Data.MSG_1;
 import static com.tianyigps.xiepeng.data.Data.MSG_ERO;
@@ -31,6 +35,8 @@ public class ModifyPasswordActivity extends BaseActivity {
     private MyHandler myHandler;
 
     private SharedpreferenceManager mSharedpreferenceManager;
+
+    private String mStringMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,9 +69,15 @@ public class ModifyPasswordActivity extends BaseActivity {
                 String ensurePsd = mEditTextEnsure.getText().toString();
                 String userName = mSharedpreferenceManager.getAccount();
                 String token = mSharedpreferenceManager.getToken();
+
+                oldPsd = MD5U.getMd5(oldPsd);
+
                 if (newPsd.equals(ensurePsd)) {
-                    mNetworkManager.modifyPassword(userName, token, oldPsd, newPsd);
+                    mStringMessage = "两次密码输入不同，请检查后提交！";
+                    showMessageDialog(mStringMessage);
+                    return;
                 }
+                mNetworkManager.modifyPassword(userName, token, oldPsd, newPsd);
             }
         });
 
@@ -73,6 +85,7 @@ public class ModifyPasswordActivity extends BaseActivity {
             @Override
             public void onFailure() {
                 Log.i(TAG, "onFailure: ");
+                mStringMessage = Data.DEFAULT_MESSAGE;
                 myHandler.sendEmptyMessage(MSG_ERO);
             }
 
@@ -81,7 +94,8 @@ public class ModifyPasswordActivity extends BaseActivity {
                 Gson gson = new Gson();
                 ModifyPasswordBean modifyPasswordBean = gson.fromJson(result, ModifyPasswordBean.class);
                 if (!modifyPasswordBean.isSuccess()) {
-                    onFailure();
+                    mStringMessage = modifyPasswordBean.getMsg();
+                    myHandler.sendEmptyMessage(MSG_ERO);
                     return;
                 }
                 myHandler.sendEmptyMessage(MSG_1);
@@ -96,16 +110,46 @@ public class ModifyPasswordActivity extends BaseActivity {
         startActivity(intent);
     }
 
+    //  显示修改成功对话框
+    private void showLoginDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(ModifyPasswordActivity.this);
+        builder.setMessage("修改密码成功，需重新登陆");
+        builder.setCancelable(false);
+        builder.setPositiveButton(R.string.ensure, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                toLogin();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    //  显示信息对话框
+    private void showMessageDialog(String msg) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(ModifyPasswordActivity.this);
+        builder.setMessage(msg);
+        builder.setPositiveButton(R.string.ensure, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                //  do nothing
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
     private class MyHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what) {
                 case MSG_ERO: {
+                    showMessageDialog(mStringMessage);
                     break;
                 }
                 case MSG_1: {
-                    toLogin();
+                    showLoginDialog();
                     break;
                 }
                 default: {

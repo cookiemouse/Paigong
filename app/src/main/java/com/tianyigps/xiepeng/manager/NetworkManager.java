@@ -893,14 +893,13 @@ public class NetworkManager {
 
     //  删除图片    20
     public void deletePic(int eid, String token, String orderNo
-            , String carId, String tId, String type
+            , int carId, int type
             , String imgUrl) {
         Request.Builder builder = new Request.Builder();
         builder.url(Urls.URL_WORKER_DELETE_PIC + "eid=" + eid
                 + "&token=" + token
                 + "&orderNo=" + orderNo
                 + "&carId=" + carId
-                + "&tId=" + tId
                 + "&type=" + type
                 + "&imgUrl=" + imgUrl);
         mRequest = builder.build();

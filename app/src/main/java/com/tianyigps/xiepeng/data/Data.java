@@ -54,6 +54,7 @@ public final class Data {
 
     //  default
     public final static String DEFAULT_TOKEN = "";
+    public final static String DEFAULT_MESSAGE = "请求数据失败，请检网络！";
 
     //  Handler分类
     public final static int MSG_ERO = 0x8888;
@@ -64,6 +65,7 @@ public final class Data {
     public final static int MSG_5 = 0x05;
     public final static int MSG_6 = 0x06;
     public final static int MSG_7 = 0x07;
+    public final static int MSG_8 = 0x08;
 
     //  数据库
     public final static String DATA_TAB_ORDER = "paigong_database_tab_order";
