@@ -3,7 +3,7 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="horizontal"
-              android:padding="@dimen/dp_8">
+              android:padding="@dimen/dp_10">
 
     <TextView
         android:id="@+id/tv_item_choice_worker_id"

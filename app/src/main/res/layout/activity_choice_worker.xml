@@ -26,7 +26,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="100002"
             android:textColor="@color/colorBlueTheme"/>
 
         <TextView
@@ -35,7 +34,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="张师傅"
             android:textColor="@color/colorBlueTheme"/>
 
         <TextView
@@ -43,7 +41,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="宝山区、嘉定区"
             android:textColor="@color/colorBlueTheme"/>
 
     </LinearLayout>
@@ -119,6 +116,7 @@
             android:orientation="horizontal">
 
             <Button
+                android:id="@+id/btn_activity_choice_worker_self"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/dp_8"
@@ -129,6 +127,7 @@
                 android:textColor="@color/colorWhite"/>
 
             <Button
+                android:id="@+id/btn_activity_choice_worker_pend"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dp_8"

@@ -26,6 +26,7 @@ import com.tianyigps.xiepeng.interfaces.OnSaveOrderInfoListener;
 import com.tianyigps.xiepeng.interfaces.OnSignedWorkerListener;
 import com.tianyigps.xiepeng.interfaces.OnStartHandingListener;
 import com.tianyigps.xiepeng.interfaces.OnUploadPicListener;
+import com.tianyigps.xiepeng.interfaces.OnWorkersListener;
 import com.tianyigps.xiepeng.utils.MD5U;
 
 import java.io.File;
@@ -80,6 +81,7 @@ public class NetworkManager {
 
     //  服务主任
     private OnPendingOrderListener mOnPendingOrderListener;
+    private OnWorkersListener mOnWorkersListener;
 
     public NetworkManager() {
         mOkHttpClient = new OkHttpClient();
@@ -987,7 +989,7 @@ public class NetworkManager {
 
     /***************************************华丽的化割线*************************************************/
 
-    //  查询待处理订单
+    //  查询待处理订单 22
     public void getPenddingOrder(String jobNo, String token, String status, String condition, String userName) {
         Request.Builder builder = new Request.Builder();
         builder.url(Urls.URL_MANAGER_PENDING_ORDER + "jobNo=" + jobNo
@@ -1019,6 +1021,41 @@ public class NetworkManager {
 
     public void setOnPendingOrderListener(OnPendingOrderListener listener) {
         this.mOnPendingOrderListener = listener;
+    }
+
+    /***
+     * 获取所有的工程师
+     */
+    public void getWorkers(String jobNo, String token, String condition, String userName) {
+        Request.Builder builder = new Request.Builder();
+        builder.url(Urls.URL_MANAGER_WORKER + "jobNo=" + jobNo
+                + "&token=" + token
+                + "&userName=" + userName
+                + "&condition=" + condition);
+        mRequest = builder.build();
+        Log.i(TAG, "getPenddingOrder: url-->" + mRequest.url());
+        Call call = mOkHttpClient.newCall(mRequest);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                if (null == mOnWorkersListener) {
+                    throw new NullPointerException("OnWorkersListener is null");
+                }
+                mOnWorkersListener.onFailure();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (null == mOnWorkersListener) {
+                    throw new NullPointerException("OnWorkersListener is null");
+                }
+                mOnWorkersListener.onSuccess(response.body().string());
+            }
+        });
+    }
+
+    public void setOnWorkersListener(OnWorkersListener listener) {
+        this.mOnWorkersListener = listener;
     }
 
 }

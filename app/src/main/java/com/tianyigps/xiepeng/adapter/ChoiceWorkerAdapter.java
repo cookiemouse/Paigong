@@ -64,14 +64,14 @@ public class ChoiceWorkerAdapter extends BaseAdapter {
         viewHolder.tvArea.setText(data.getArea());
 
         if (data.isSelect()) {
-            viewHolder.tvId.setTextSize(18);
-            viewHolder.tvName.setTextSize(18);
-            viewHolder.tvArea.setTextSize(18);
-            contentView.setBackgroundColor(context.getResources().getColor(R.color.colorBlueDis));
-        } else {
             viewHolder.tvId.setTextSize(16);
             viewHolder.tvName.setTextSize(16);
             viewHolder.tvArea.setTextSize(16);
+            contentView.setBackgroundColor(context.getResources().getColor(R.color.colorBlueDis));
+        } else {
+            viewHolder.tvId.setTextSize(14);
+            viewHolder.tvName.setTextSize(14);
+            viewHolder.tvArea.setTextSize(14);
             contentView.setBackgroundColor(context.getResources().getColor(R.color.colorWhite));
         }
 
