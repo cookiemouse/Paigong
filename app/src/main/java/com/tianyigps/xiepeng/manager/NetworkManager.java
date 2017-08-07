@@ -19,6 +19,7 @@ import com.tianyigps.xiepeng.interfaces.OnGetWorkerOrderInfoStartListener;
 import com.tianyigps.xiepeng.interfaces.OnGetWorkerOrderListener;
 import com.tianyigps.xiepeng.interfaces.OnInstallBackListener;
 import com.tianyigps.xiepeng.interfaces.OnModifyPasswordListener;
+import com.tianyigps.xiepeng.interfaces.OnPendingOrderListener;
 import com.tianyigps.xiepeng.interfaces.OnRemoveTerminalInfoListener;
 import com.tianyigps.xiepeng.interfaces.OnRemoveTerminalListener;
 import com.tianyigps.xiepeng.interfaces.OnSaveOrderInfoListener;
@@ -76,6 +77,9 @@ public class NetworkManager {
     private OnDeletePicListener mOnDeletePicListener;
     //  20
     private OnGetWholeIMEIListener mOnGetWholeIMEIListener;
+
+    //  服务主任
+    private OnPendingOrderListener mOnPendingOrderListener;
 
     public NetworkManager() {
         mOkHttpClient = new OkHttpClient();
@@ -961,5 +965,38 @@ public class NetworkManager {
     }
 
     /***************************************华丽的化割线*************************************************/
+
+    //  查询待处理订单
+    public void getPenddingOrder(String jobNo, String token, String status, String condition) {
+        Request.Builder builder = new Request.Builder();
+        builder.url(Urls.URL_MANAGER_PENDING_ORDER + "jobNo=" + jobNo
+                + "&token=" + token
+                + "&status=" + status
+                + "&condition=" + condition);
+        mRequest = builder.build();
+        Log.i(TAG, "getPenddingOrder: url-->" + mRequest.url());
+        Call call = mOkHttpClient.newCall(mRequest);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                if (null == mOnPendingOrderListener) {
+                    throw new NullPointerException("OnPendingOrderListener is null");
+                }
+                mOnPendingOrderListener.onFailure();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (null == mOnPendingOrderListener) {
+                    throw new NullPointerException("OnPendingOrderListener is null");
+                }
+                mOnPendingOrderListener.onSuccess(response.body().string());
+            }
+        });
+    }
+
+    public void setOnPendingOrderListener(OnPendingOrderListener listener) {
+        this.mOnPendingOrderListener = listener;
+    }
 
 }

@@ -59,15 +59,15 @@ public class PendingAdapter extends BaseAdapter {
             viewHolder = new ViewHolder();
             view = LayoutInflater.from(context).inflate(R.layout.item_pending, null);
 
-            viewHolder.imageViewCall = view.findViewById(R.id.iv_adapter_pending_call);
-            viewHolder.imageViewLocate = view.findViewById(R.id.iv_adapter_pending_locate);
-            viewHolder.textViewOrder = view.findViewById(R.id.tv_adapter_pending_order);
-            viewHolder.textViewName = view.findViewById(R.id.tv_adapter_pending_name);
-            viewHolder.textViewTime = view.findViewById(R.id.tv_adapter_pending_time);
-            viewHolder.textViewAddress = view.findViewById(R.id.tv_adapter_pending_address);
-            viewHolder.textViewOrderType = view.findViewById(R.id.tv_adapter_pending_order_type);
-            viewHolder.textViewOrderContent = view.findViewById(R.id.tv_adapter_pending_setting_content);
-            viewHolder.buttonSign = view.findViewById(R.id.btn_adapter_pending_sign);
+            viewHolder.imageViewCall = view.findViewById(R.id.iv_item_pending_phone);
+            viewHolder.imageViewLocate = view.findViewById(R.id.iv_item_pending_map);
+            viewHolder.textViewOrder = view.findViewById(R.id.tv_item_pending_id);
+            viewHolder.textViewName = view.findViewById(R.id.tv_item_pending_name);
+            viewHolder.textViewTime = view.findViewById(R.id.tv_item_pending_time);
+            viewHolder.textViewAddress = view.findViewById(R.id.tv_item_pending_address);
+            viewHolder.textViewOrderType = view.findViewById(R.id.tv_item_pending_content_title);
+            viewHolder.textViewOrderContent = view.findViewById(R.id.tv_item_pending_content_wire);
+            viewHolder.imageViewSign = view.findViewById(R.id.iv_item_pending_sign);
 
             view.setTag(viewHolder);
         } else {
@@ -100,7 +100,7 @@ public class PendingAdapter extends BaseAdapter {
             }
         });
 
-        viewHolder.buttonSign.setOnClickListener(new View.OnClickListener() {
+        viewHolder.imageViewSign.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showSignDialog();
@@ -121,9 +121,8 @@ public class PendingAdapter extends BaseAdapter {
     }
 
     private class ViewHolder {
-        private ImageView imageViewCall, imageViewLocate;
+        private ImageView imageViewCall, imageViewLocate, imageViewSign;
         private TextView textViewOrder, textViewName, textViewTime, textViewAddress, textViewOrderType, textViewOrderContent;
-        private TextView buttonSign;
     }
 
     //  确认签到对话框

@@ -6,7 +6,6 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,9 +23,6 @@ import com.tianyigps.xiepeng.adapter.PendingAdapter;
 import com.tianyigps.xiepeng.adapter.PopupAdapter;
 import com.tianyigps.xiepeng.data.AdapterPendingData;
 import com.tianyigps.xiepeng.data.AdapterPopupData;
-import com.tianyigps.xiepeng.interfaces.OnPendingOrderListener;
-import com.tianyigps.xiepeng.manager.NetworkManager;
-import com.tianyigps.xiepeng.manager.SharedpreferenceManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,9 +31,7 @@ import java.util.List;
  * Created by djc on 2017/7/11.
  */
 
-public class PendingFragment extends Fragment {
-
-    private static final String TAG = "PendingFragment";
+public class PendedFragment extends Fragment {
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private ImageView mImageViewSearch;
@@ -51,16 +45,11 @@ public class PendingFragment extends Fragment {
     private List<AdapterPendingData> mAdapterPendingDataList;
     private PendingAdapter mPendingAdapter;
 
-    private SharedpreferenceManager mSharedpreferenceManager;
-    private NetworkManager mNetworkManager;
-    private String jobNo;
-    private String token;
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 //        return super.onCreateView(inflater, container, savedInstanceState);
-        View viewRoot = inflater.inflate(R.layout.fragment_pending, container, false);
+        View viewRoot = inflater.inflate(R.layout.fragment_pended, container, false);
 
         init(viewRoot);
 
@@ -75,10 +64,10 @@ public class PendingFragment extends Fragment {
         mTextViewTitle = view.findViewById(R.id.tv_layout_title_base_middle);
         initTitle();
 
-        mSwipeRefreshLayout = view.findViewById(R.id.srl_fragment_pending);
+        mSwipeRefreshLayout = view.findViewById(R.id.srl_fragment_pended);
         mImageViewSearch = view.findViewById(R.id.iv_layout_search);
         mEditTextSearch = view.findViewById(R.id.et_layout_search);
-        mListView = view.findViewById(R.id.lv_fragment_pending);
+        mListView = view.findViewById(R.id.lv_fragment_pended);
 
         mEditTextSearch.clearFocus();
 
@@ -93,18 +82,10 @@ public class PendingFragment extends Fragment {
         mPendingAdapter = new PendingAdapter(getContext(), mAdapterPendingDataList);
 
         mListView.setAdapter(mPendingAdapter);
-
-        mSharedpreferenceManager = new SharedpreferenceManager(getContext());
-        mNetworkManager = new NetworkManager();
-
-        jobNo = mSharedpreferenceManager.getJobNo();
-        token = mSharedpreferenceManager.getToken();
-
-        mNetworkManager.getPenddingOrder(jobNo, token, "", "");
     }
 
     private void initTitle() {
-        mTextViewTitle.setText(R.string.pending);
+        mTextViewTitle.setText(R.string.handled);
         mImageViewTitleLeft.setImageResource(R.drawable.ic_switch_account);
         mImageViewTitleRight.setImageResource(R.drawable.ic_popup_window);
     }
@@ -130,9 +111,6 @@ public class PendingFragment extends Fragment {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-
-                mNetworkManager.getPenddingOrder(jobNo, token, "", "");
-
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -152,18 +130,6 @@ public class PendingFragment extends Fragment {
                                 || mListView.getChildAt(0).getTop() < mListView.getPaddingTop());
             }
         });
-
-        mNetworkManager.setOnPendingOrderListener(new OnPendingOrderListener() {
-            @Override
-            public void onFailure() {
-                Log.i(TAG, "onFailure: ");
-            }
-
-            @Override
-            public void onSuccess(String result) {
-                Log.i(TAG, "onSuccess: result-->" + result);
-            }
-        });
     }
 
     //显示popupWindow
@@ -179,9 +145,8 @@ public class PendingFragment extends Fragment {
                 , true);
 
         List<AdapterPopupData> adapterPopupDataList = new ArrayList<>();
-        adapterPopupDataList.add(new AdapterPopupData("待派单", 12));
-        adapterPopupDataList.add(new AdapterPopupData("安装退回", 2));
-        adapterPopupDataList.add(new AdapterPopupData("待审核", 12));
+        adapterPopupDataList.add(new AdapterPopupData("已派单", 12));
+        adapterPopupDataList.add(new AdapterPopupData("改约不通过", 2));
         PopupAdapter popupAdapter = new PopupAdapter(getContext(), adapterPopupDataList);
         listView.setAdapter(popupAdapter);
 

@@ -13,6 +13,8 @@ public final class Data {
     public final static int DATA_LAUNCH_MODE_WORKER = 1;
     public final static int DATA_LAUNCH_MODE_MANAGER = 2;
 
+    public final static String DATA_UI_MODE = "paigong_sharedpreferences_ui_mode";
+
     //  二维码扫描，Activity跳转
     public final static String DATA_SCANNER = "paigong_scanner";
     public final static int DATA_INTENT_SCANNER_REQUEST = 0x001;

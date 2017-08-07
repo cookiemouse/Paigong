@@ -19,6 +19,7 @@ import com.tianyigps.xiepeng.base.BaseActivity;
 import com.tianyigps.xiepeng.bean.WorkerQualityBean;
 import com.tianyigps.xiepeng.data.AdapterStatisticsManagerData;
 import com.tianyigps.xiepeng.data.AdapterStatisticsWorkderData;
+import com.tianyigps.xiepeng.data.Data;
 import com.tianyigps.xiepeng.dialog.DatePickerDialogFragment;
 import com.tianyigps.xiepeng.interfaces.OnGetQualityCountListener;
 import com.tianyigps.xiepeng.manager.NetworkManager;
@@ -57,7 +58,7 @@ public class StatisticsActivity extends BaseActivity {
     private SharedpreferenceManager mSharedpreferenceManager;
     private int eid;
     private String token;
-    private int launchMode;
+    private int uiMode;
     private String monthP;
 
     @Override
@@ -77,7 +78,7 @@ public class StatisticsActivity extends BaseActivity {
         mSharedpreferenceManager = new SharedpreferenceManager(StatisticsActivity.this);
         eid = mSharedpreferenceManager.getEid();
         token = mSharedpreferenceManager.getToken();
-        launchMode = mSharedpreferenceManager.getLaunchMode();
+        uiMode = mSharedpreferenceManager.getUiMode();
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
@@ -106,7 +107,7 @@ public class StatisticsActivity extends BaseActivity {
         myHandler = new MyHandler();
 
         // TODO: 2017/7/14 由帐户类型决定添加什么Title，以及加载什么Adapter
-        if (DATA_LAUNCH_MODE_WORKER == launchMode) {
+        if (Data.DATA_LAUNCH_MODE_WORKER == uiMode) {
             showWorkerList();
         } else {
             showManagerList();
@@ -133,14 +134,14 @@ public class StatisticsActivity extends BaseActivity {
             public void onEnsure(int year, int month) {
                 if (month < 10) {
                     monthP = "0" + month;
-                }else {
+                } else {
                     monthP = "" + month;
                 }
                 mTextViewDate.setText(year + "年" + monthP + "月");
 
                 monthP = "" + year + monthP;
 
-                if (DATA_LAUNCH_MODE_WORKER == launchMode) {
+                if (DATA_LAUNCH_MODE_WORKER == uiMode) {
                     mNetworkManager.getQualityCount(eid, token, monthP);
                 } else {
                     // TODO: 2017/7/18 Manager质量统计
@@ -250,7 +251,7 @@ public class StatisticsActivity extends BaseActivity {
                     break;
                 }
                 case MSG_1: {
-                    if (DATA_LAUNCH_MODE_WORKER == launchMode) {
+                    if (DATA_LAUNCH_MODE_WORKER == uiMode) {
                         mStatisticsWorkerAdapter.notifyDataSetChanged();
                     } else {
                         mStatisticsManagerAdapter.notifyDataSetChanged();
