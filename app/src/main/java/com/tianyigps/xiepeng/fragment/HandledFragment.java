@@ -1,11 +1,14 @@
 package com.tianyigps.xiepeng.fragment;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +22,7 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.tianyigps.xiepeng.R;
+import com.tianyigps.xiepeng.activity.ManagerFragmentContentActivity;
 import com.tianyigps.xiepeng.adapter.HandledAdapter;
 import com.tianyigps.xiepeng.bean.WorkerHandedBean;
 import com.tianyigps.xiepeng.data.AdapterHandledData;
@@ -64,12 +68,15 @@ public class HandledFragment extends Fragment {
 
     private List<AdapterHandledData> mAdapterHandledDataList;
     private HandledAdapter mHandledAdapter;
+    //  搜索列表
+    private List<AdapterHandledData> mAdapterHandledDataListSearch;
 
     private NetworkManager mNetworkManager;
     private MyHandler myHandler;
     private SharedpreferenceManager mSharedpreferenceManager;
     private int eid;
     private String token;
+    private String userName;
 
     @Nullable
     @Override
@@ -103,7 +110,8 @@ public class HandledFragment extends Fragment {
         mSwipeRefreshLayout.setColorSchemeColors(0xff3cabfa);
 
         mAdapterHandledDataList = new ArrayList<>();
-        mHandledAdapter = new HandledAdapter(getContext(), mAdapterHandledDataList);
+        mAdapterHandledDataListSearch = new ArrayList<>();
+        mHandledAdapter = new HandledAdapter(getContext(), mAdapterHandledDataListSearch);
 
         mListViewHandled.setAdapter(mHandledAdapter);
 
@@ -115,9 +123,10 @@ public class HandledFragment extends Fragment {
         mSharedpreferenceManager = new SharedpreferenceManager(getContext());
         eid = mSharedpreferenceManager.getEid();
         token = mSharedpreferenceManager.getToken();
+        userName = mSharedpreferenceManager.getAccount();
 
         mSwipeRefreshLayout.setRefreshing(true);
-        mNetworkManager.getWorkerOrderHanded(eid, token, "", "");
+        mNetworkManager.getWorkerOrderHanded(eid, token, "", "", userName);
     }
 
     private void initTitle() {
@@ -128,10 +137,21 @@ public class HandledFragment extends Fragment {
 
     private void setEventListener() {
 
+        mImageViewTitleLeft.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), ManagerFragmentContentActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
+            }
+        });
+
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mNetworkManager.getWorkerOrderHanded(eid, token, "", "");
+                mEditTextSearch.setText(null);
+                mNetworkManager.getWorkerOrderHanded(eid, token, "", "", userName);
             }
         });
 
@@ -174,7 +194,8 @@ public class HandledFragment extends Fragment {
                         mNetworkManager.getWorkerOrderHanded(eid
                                 , token
                                 , ""
-                                , "" + mAdapterHandledDataList.get(mAdapterHandledDataList.size() - 1).getLastId());
+                                , "" + mAdapterHandledDataList.get(mAdapterHandledDataList.size() - 1).getLastId()
+                                , userName);
                     }
                 }
             }
@@ -183,7 +204,9 @@ public class HandledFragment extends Fragment {
         mImageViewSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: 2017/7/13 搜索
+                // 2017/7/13 搜索
+                String strSearch = mEditTextSearch.getText().toString();
+                searchString(strSearch);
             }
         });
 
@@ -258,6 +281,39 @@ public class HandledFragment extends Fragment {
         });
     }
 
+    //  显示信息Dialog
+    private void showMessageDialog(String msg) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setMessage(msg);
+        builder.setPositiveButton(R.string.ensure, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                //  do nothing
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    //  搜索
+    private void searchString(String key) {
+        mAdapterHandledDataListSearch.clear();
+        if (null == key) {
+            mAdapterHandledDataListSearch.addAll(mAdapterHandledDataList);
+            mHandledAdapter.notifyDataSetChanged();
+            return;
+        }
+        for (AdapterHandledData data : mAdapterHandledDataList) {
+            String order = data.getId();
+            String name = data.getName();
+
+            if (order.contains(key) || name.contains(key)) {
+                mAdapterHandledDataListSearch.add(data);
+            }
+        }
+        mHandledAdapter.notifyDataSetChanged();
+    }
+
     private class MyHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
@@ -271,7 +327,7 @@ public class HandledFragment extends Fragment {
                     break;
                 }
                 case MSG_1: {
-                    mHandledAdapter.notifyDataSetChanged();
+                    searchString(null);
                     myHandler.sendEmptyMessage(Data.MSG_2);
                     break;
                 }

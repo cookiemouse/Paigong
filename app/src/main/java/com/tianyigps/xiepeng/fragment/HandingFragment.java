@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.tianyigps.xiepeng.R;
 import com.tianyigps.xiepeng.activity.InstallingActivity;
+import com.tianyigps.xiepeng.activity.ManagerFragmentContentActivity;
 import com.tianyigps.xiepeng.adapter.HandingAdapter;
 import com.tianyigps.xiepeng.bean.WorkerHandingBean;
 import com.tianyigps.xiepeng.data.AdapterHandingData;
@@ -59,6 +60,7 @@ public class HandingFragment extends Fragment implements View.OnClickListener {
     private SharedpreferenceManager mSharedpreferenceManager;
     private int eid;
     private String token;
+    private String userName;
 
     @Nullable
     @Override
@@ -126,9 +128,10 @@ public class HandingFragment extends Fragment implements View.OnClickListener {
         mSharedpreferenceManager = new SharedpreferenceManager(getContext());
         eid = mSharedpreferenceManager.getEid();
         token = mSharedpreferenceManager.getToken();
+        userName = mSharedpreferenceManager.getAccount();
 
         mSwipeRefreshLayout.setRefreshing(true);
-        mNetworkManager.getWorkerOrderHanding(eid, token);
+        mNetworkManager.getWorkerOrderHanding(eid, token, userName);
     }
 
     private void initTitle() {
@@ -142,10 +145,20 @@ public class HandingFragment extends Fragment implements View.OnClickListener {
         mTextViewHead.setOnClickListener(this);
         mTextViewManager.setOnClickListener(this);
 
+        mImageViewTitleLeft.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), ManagerFragmentContentActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
+            }
+        });
+
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mNetworkManager.getWorkerOrderHanding(eid, token);
+                mNetworkManager.getWorkerOrderHanding(eid, token, userName);
             }
         });
 

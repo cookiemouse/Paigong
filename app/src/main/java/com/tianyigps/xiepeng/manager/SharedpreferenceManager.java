@@ -41,6 +41,18 @@ public class SharedpreferenceManager {
         return mSharedPreferences.getInt(DATA_LAUNCH_MODE, DATA_LAUNCH_MODE_WORKER);
     }
 
+    //  显示模式
+    public void saveUiMode(int state) {
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putInt(Data.DATA_UI_MODE, state);
+        editor.apply();
+    }
+
+    //  获取显示模式
+    public int getUiMode() {
+        return mSharedPreferences.getInt(Data.DATA_UI_MODE, Data.DATA_LAUNCH_MODE_WORKER);
+    }
+
     //  保存eid
     public void saveEid(int eid) {
         SharedPreferences.Editor editor = mSharedPreferences.edit();
@@ -50,8 +62,7 @@ public class SharedpreferenceManager {
 
     //  获取Eid
     public int getEid() {
-//        return mSharedPreferences.getInt(DATA_JSON_EID, 0);
-        return Data.EID;
+        return mSharedPreferences.getInt(DATA_JSON_EID, 0);
     }
 
     //  保存token

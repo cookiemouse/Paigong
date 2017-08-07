@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="horizontal"
+              android:padding="@dimen/dp_10">
+
+    <TextView
+        android:id="@+id/tv_item_choice_worker_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="100002"/>
+
+    <TextView
+        android:id="@+id/tv_item_choice_worker_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="张师傅"/>
+
+    <TextView
+        android:id="@+id/tv_item_choice_worker_area"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="宝山区、嘉定区"/>
+
+</LinearLayout>

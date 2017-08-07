@@ -41,6 +41,7 @@ public class ReturnOrderDialogFragment extends DialogFragment {
     private SharedpreferenceManager mSharedpreferenceManager;
 
     private int eid;
+    private String userName;
     private String token, orderNo, chooseReason, filledReason;
 
     private OnFinishListener mOnFinishListener;
@@ -63,6 +64,7 @@ public class ReturnOrderDialogFragment extends DialogFragment {
 
         eid = mSharedpreferenceManager.getEid();
         token = mSharedpreferenceManager.getToken();
+        userName = mSharedpreferenceManager.getAccount();
         orderNo = getArguments().getString(DATA_INTENT_ORDER_NO);
 
         mNetworkManager.setInstallBackListener(new OnInstallBackListener() {
@@ -159,7 +161,7 @@ public class ReturnOrderDialogFragment extends DialogFragment {
 
                 filledReason = editTextReason.getText().toString();
 
-                mNetworkManager.installBack(eid, token, orderNo, chooseReason, filledReason);
+                mNetworkManager.installBack(eid, token, orderNo, chooseReason, filledReason, userName);
             }
         });
 

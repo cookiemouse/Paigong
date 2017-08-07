@@ -16,10 +16,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.tianyigps.xiepeng.R;
+import com.tianyigps.xiepeng.data.Data;
 import com.tianyigps.xiepeng.fragment.HandingFragment;
 import com.tianyigps.xiepeng.fragment.HandledFragment;
 import com.tianyigps.xiepeng.fragment.MineFragment;
 import com.tianyigps.xiepeng.fragment.OrderFragment;
+import com.tianyigps.xiepeng.manager.SharedpreferenceManager;
 
 public class WorkerFragmentContentActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -31,6 +33,8 @@ public class WorkerFragmentContentActivity extends AppCompatActivity implements 
     private LinearLayout mLinearLayoutOrder, mLinearLayoutHandling, mLinearLayoutHistory, mLinearLayoutMine;
     private ImageView mImageViewOrder, mImageViewHandling, mImageViewHistory, mImageViewMine;
     private TextView mTextViewOrder, mTextViewHandling, mTextViewHistory, mTextViewMine;
+
+    private SharedpreferenceManager mSharedpreferenceManager;
 
     private OrderFragment mOrderFragment;
     private HandingFragment mHandingFragment;
@@ -53,6 +57,12 @@ public class WorkerFragmentContentActivity extends AppCompatActivity implements 
         init();
 
         setEventListener();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mSharedpreferenceManager.saveUiMode(Data.DATA_LAUNCH_MODE_WORKER);
     }
 
     @Override
@@ -134,6 +144,8 @@ public class WorkerFragmentContentActivity extends AppCompatActivity implements 
         mTextViewHandling = (TextView) findViewById(R.id.tv_fragment_content_bottom_handling);
         mTextViewHistory = (TextView) findViewById(R.id.tv_fragment_content_bottom_history);
         mTextViewMine = (TextView) findViewById(R.id.tv_fragment_content_bottom_mine);
+
+        mSharedpreferenceManager = new SharedpreferenceManager(this);
 
         //  底部按钮标记第一个
         mImageViewOrder.setImageResource(R.drawable.ic_tab_task_selected);

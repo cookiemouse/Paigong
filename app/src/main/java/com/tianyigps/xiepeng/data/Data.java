@@ -13,6 +13,8 @@ public final class Data {
     public final static int DATA_LAUNCH_MODE_WORKER = 1;
     public final static int DATA_LAUNCH_MODE_MANAGER = 2;
 
+    public final static String DATA_UI_MODE = "paigong_sharedpreferences_ui_mode";
+
     //  二维码扫描，Activity跳转
     public final static String DATA_SCANNER = "paigong_scanner";
     public final static int DATA_INTENT_SCANNER_REQUEST = 0x001;
@@ -54,6 +56,7 @@ public final class Data {
 
     //  default
     public final static String DEFAULT_TOKEN = "";
+    public final static String DEFAULT_MESSAGE = "请求数据失败，请检网络！";
 
     //  Handler分类
     public final static int MSG_ERO = 0x8888;
@@ -64,6 +67,7 @@ public final class Data {
     public final static int MSG_5 = 0x05;
     public final static int MSG_6 = 0x06;
     public final static int MSG_7 = 0x07;
+    public final static int MSG_8 = 0x08;
 
     //  数据库
     public final static String DATA_TAB_ORDER = "paigong_database_tab_order";
@@ -95,8 +99,4 @@ public final class Data {
     //  定位类型
     public static final String LOCATE_TYPE_BAIDU = "bd";
     public static final String LOCATE_TYPE_GPS = "gps";
-
-    //  测试
-    public final static int EID = 248;
-    public final static String TOKEN = "25d55ad283aa400af464c76d713c07ad";
 }

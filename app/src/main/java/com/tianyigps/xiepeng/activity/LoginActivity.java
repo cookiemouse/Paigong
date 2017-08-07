@@ -23,7 +23,6 @@ import com.tianyigps.xiepeng.interfaces.OnCheckUserListener;
 import com.tianyigps.xiepeng.manager.NetworkManager;
 import com.tianyigps.xiepeng.manager.SharedpreferenceManager;
 
-import static com.tianyigps.xiepeng.data.Data.DATA_LAUNCH_MODE_WORKER;
 import static com.tianyigps.xiepeng.data.Data.MSG_1;
 import static com.tianyigps.xiepeng.data.Data.MSG_ERO;
 
@@ -99,7 +98,7 @@ public class LoginActivity extends Activity {
 
             @Override
             public void onSuccess(String result) {
-
+                Log.i(TAG, "onSuccess: result-->" + result);
                 Gson gson = new Gson();
                 CheckUserBean checkUserBean = gson.fromJson(result, CheckUserBean.class);
 
@@ -111,6 +110,7 @@ public class LoginActivity extends Activity {
 
                 CheckUserBean.ObjBean objBean = checkUserBean.getObj();
 
+                // TODO: 2017/8/7 先进入worker页面
                 launchMode = 1;
 
                 mSharedpreferenceManager.saveUserData(objBean.getEid()
@@ -162,7 +162,7 @@ public class LoginActivity extends Activity {
                 }
                 case MSG_1: {
                     Log.i(TAG, "handleMessage: launchMode-->" + launchMode);
-                    if (DATA_LAUNCH_MODE_WORKER == launchMode) {
+                    if (Data.DATA_LAUNCH_MODE_WORKER == launchMode) {
                         toWorker();
                         break;
                     }

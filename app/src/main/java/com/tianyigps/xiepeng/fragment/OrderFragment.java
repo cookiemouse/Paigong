@@ -23,6 +23,7 @@ import com.baidu.mapapi.model.LatLng;
 import com.google.gson.Gson;
 import com.tianyigps.xiepeng.R;
 import com.tianyigps.xiepeng.activity.LocateActivity;
+import com.tianyigps.xiepeng.activity.ManagerFragmentContentActivity;
 import com.tianyigps.xiepeng.activity.OrderDetailsActivity;
 import com.tianyigps.xiepeng.activity.WorkerFragmentContentActivity;
 import com.tianyigps.xiepeng.adapter.OrderAdapter;
@@ -66,6 +67,7 @@ public class OrderFragment extends Fragment {
     private TextView mTextViewTitle;
 
     private List<AdapterOrderData> mAdapterOrderDataList;
+    private List<AdapterOrderData> mAdapterOrderDataListSearch;
     private OrderAdapter mOrderAdapter;
 
     private NetworkManager mNetworkManager;
@@ -87,6 +89,7 @@ public class OrderFragment extends Fragment {
     private SharedpreferenceManager mSharedpreferenceManager;
     private int eid;
     private String token;
+    private String userName;
     private String name;
 
     @Nullable
@@ -135,6 +138,7 @@ public class OrderFragment extends Fragment {
         mSwipeRefreshLayout.setColorSchemeColors(0xff3cabfa);
 
         mAdapterOrderDataList = new ArrayList<>();
+        mAdapterOrderDataListSearch = new ArrayList<>();
 //        for (int i = 0; i < 6; i++) {
 //            mAdapterOrderDataList.add(new AdapterOrderData("万惠南宁"
 //                    , "2017-01-02 17:30"
@@ -146,7 +150,7 @@ public class OrderFragment extends Fragment {
 //                    , i, 2));
 //        }
 
-        mOrderAdapter = new OrderAdapter(getContext(), mAdapterOrderDataList);
+        mOrderAdapter = new OrderAdapter(getContext(), mAdapterOrderDataListSearch);
 
         mListView.setAdapter(mOrderAdapter);
 
@@ -160,10 +164,11 @@ public class OrderFragment extends Fragment {
 
         eid = mSharedpreferenceManager.getEid();
         token = mSharedpreferenceManager.getToken();
+        userName = mSharedpreferenceManager.getAccount();
         name = mSharedpreferenceManager.getName();
 
         mSwipeRefreshLayout.setRefreshing(true);
-        mNetworkManager.getWorkerOrder(Data.EID, Data.TOKEN, "");
+        mNetworkManager.getWorkerOrder(eid, token, "", userName);
     }
 
     private void initTitle() {
@@ -176,7 +181,8 @@ public class OrderFragment extends Fragment {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mNetworkManager.getWorkerOrder(Data.EID, Data.TOKEN, "");
+                mEditTextSearch.setText(null);
+                mNetworkManager.getWorkerOrder(eid, token, "", userName);
             }
         });
 
@@ -191,11 +197,29 @@ public class OrderFragment extends Fragment {
             }
         });
 
+        mImageViewTitleLeft.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), ManagerFragmentContentActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
+            }
+        });
+
         mImageViewTitleRight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getContext(), LocateActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        mImageViewSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String strSearch = mEditTextSearch.getText().toString();
+                searchString(strSearch);
             }
         });
 
@@ -383,6 +407,25 @@ public class OrderFragment extends Fragment {
         dialog.show();
     }
 
+    //  搜索
+    private void searchString(String key) {
+        mAdapterOrderDataListSearch.clear();
+        if (null == key) {
+            mAdapterOrderDataListSearch.addAll(mAdapterOrderDataList);
+            mOrderAdapter.notifyDataSetChanged();
+            return;
+        }
+        for (AdapterOrderData data : mAdapterOrderDataList) {
+            String order = data.getId();
+            String name = data.getName();
+
+            if (order.contains(key) || name.contains(key)) {
+                mAdapterOrderDataListSearch.add(data);
+            }
+        }
+        mOrderAdapter.notifyDataSetChanged();
+    }
+
     private class MyHandler extends Handler {
 
         //  MSG_1   获取Order数据
@@ -398,14 +441,15 @@ public class OrderFragment extends Fragment {
                     break;
                 }
                 case MSG_1: {
-                    mOrderAdapter.notifyDataSetChanged();
+                    searchString(null);
                     break;
                 }
                 case MSG_2: {
                     mNetworkManager.signedWorker(eid, token, name, orderNoPosition
                             , mLatLngLocate.latitude
                             , mLatLngLocate.longitude
-                            , Data.LOCATE_TYPE_BAIDU);
+                            , Data.LOCATE_TYPE_BAIDU
+                            , userName);
                     break;
                 }
                 case MSG_3: {

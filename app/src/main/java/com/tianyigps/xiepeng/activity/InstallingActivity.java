@@ -72,6 +72,7 @@ public class InstallingActivity extends BaseActivity {
     private NetworkManager mNetworkManager;
     private int eid;
     private String token;
+    private String userName;
     private String orderNo;
     private SharedpreferenceManager mSharedpreferenceManager;
 
@@ -117,6 +118,7 @@ public class InstallingActivity extends BaseActivity {
         mSharedpreferenceManager = new SharedpreferenceManager(InstallingActivity.this);
         eid = mSharedpreferenceManager.getEid();
         token = mSharedpreferenceManager.getToken();
+        userName = mSharedpreferenceManager.getAccount();
 
         Intent intent = getIntent();
         orderNo = intent.getStringExtra(Data.DATA_INTENT_ORDER_NO);
@@ -124,7 +126,7 @@ public class InstallingActivity extends BaseActivity {
 
         Log.i(TAG, "init: orderType-->" + mAdapterType);
 
-        mNetworkManager = NetworkManager.getInstance();
+        mNetworkManager = new NetworkManager();
 
         mDatabaseManager = new DatabaseManager(this);
 
@@ -155,7 +157,7 @@ public class InstallingActivity extends BaseActivity {
         mListView.addHeaderView(mViewRemarks);
         mListView.addFooterView(mViewNext);
 
-        mNetworkManager.getWorkerOrderInfoStart(eid, token, orderNo);
+        mNetworkManager.getWorkerOrderInfoStart(eid, token, orderNo, userName);
     }
 
     private void setEventListener() {
@@ -327,16 +329,12 @@ public class InstallingActivity extends BaseActivity {
 
     private void toRemoveActivity() {
         Intent intent = new Intent(InstallingActivity.this, OperateRemoveActivity.class);
-        intent.putExtra(Data.DATA_INTENT_EID, eid);
-        intent.putExtra(Data.DATA_INTENT_TOKEN, token);
         intent.putExtra(Data.DATA_INTENT_ORDER_NO, orderNo);
         startActivity(intent);
     }
 
     private void toRepairActivity(int tId, String tNo) {
         Intent intent = new Intent(InstallingActivity.this, OperateRepairActivity.class);
-        intent.putExtra(Data.DATA_INTENT_EID, eid);
-        intent.putExtra(Data.DATA_INTENT_TOKEN, token);
         intent.putExtra(Data.DATA_INTENT_ORDER_NO, orderNo);
         intent.putExtra(Data.DATA_INTENT_T_NO, tNo);
         intent.putExtra(Data.DATA_INTENT_T_ID, tId);

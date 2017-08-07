@@ -69,6 +69,7 @@ public class OrderDetailsActivity extends Activity {
     private SharedpreferenceManager mSharedpreferenceManager;
     private int eid;
     private String token;
+    private String userName;
     private String eName;
     private String orderNo;
 
@@ -156,9 +157,10 @@ public class OrderDetailsActivity extends Activity {
 
         eid = mSharedpreferenceManager.getEid();
         token = mSharedpreferenceManager.getToken();
+        userName = mSharedpreferenceManager.getAccount();
         eName = mSharedpreferenceManager.getName();
 
-        mNetworkManager.getWorkerOrderInfoHanding(eid, token, orderNo);
+        mNetworkManager.getWorkerOrderInfoHanding(eid, token, orderNo, userName);
     }
 
     private void setEventListener() {
@@ -429,7 +431,9 @@ public class OrderDetailsActivity extends Activity {
                 case MSG_3: {
                     //  获取到当前位置，并签到
                     mNetworkManager.signedWorker(eid, token, eName, orderNo
-                            , mLatLngLocate.latitude, mLatLngLocate.longitude, MAP_TYPE);
+                            , mLatLngLocate.latitude, mLatLngLocate.longitude
+                            , MAP_TYPE
+                            , userName);
                     break;
                 }
                 case Data.MSG_4: {
