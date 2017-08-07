@@ -79,6 +79,7 @@ public class OperateRepairActivity extends BaseActivity {
     private SharedpreferenceManager mSharedpreferenceManager;
     private int eid;
     private String token;
+    private String userName;
     private String orderNo;
     private String tNo;
     private String baseUrl;
@@ -205,9 +206,12 @@ public class OperateRepairActivity extends BaseActivity {
     private void init() {
         this.setTitleText("维修");
 
+        mSharedpreferenceManager = new SharedpreferenceManager(this);
+
         Intent intent = getIntent();
-        eid = intent.getIntExtra(Data.DATA_INTENT_EID, 0);
-        token = intent.getStringExtra(Data.DATA_INTENT_TOKEN);
+        eid = mSharedpreferenceManager.getEid();
+        token = mSharedpreferenceManager.getToken();
+        userName = mSharedpreferenceManager.getAccount();
         orderNo = intent.getStringExtra(Data.DATA_INTENT_ORDER_NO);
         tNo = intent.getStringExtra(Data.DATA_INTENT_T_NO);
         tid = intent.getIntExtra(Data.DATA_INTENT_T_ID, 0);
@@ -248,10 +252,9 @@ public class OperateRepairActivity extends BaseActivity {
 
         mNetworkManager = new NetworkManager();
         myHandler = new MyHandler();
-        mSharedpreferenceManager = new SharedpreferenceManager(this);
         baseUrl = mSharedpreferenceManager.getImageBaseUrl();
 
-        mNetworkManager.getWorkerOrderInfoStart(eid, token, orderNo);
+        mNetworkManager.getWorkerOrderInfoStart(eid, token, orderNo, userName);
     }
 
     private void setEventListener() {
@@ -567,12 +570,12 @@ public class OperateRepairActivity extends BaseActivity {
     private void uploadPic(int type, String imgUrl, String path) {
         //  压缩图片
         String pathT = TinyU.tinyPic(path);
-        new UploadPicU(mNetworkManager).uploadPic(eid, token, orderNo, tid, type, tType, imgUrl, pathT);
+        new UploadPicU(mNetworkManager).uploadPic(eid, token, orderNo, tid, type, tType, imgUrl, pathT, userName);
     }
 
     //  获取完整imei
     private void getWholeImei(String imei) {
-        mNetworkManager.getWholeImei(eid, token, imei);
+        mNetworkManager.getWholeImei(eid, token, imei, userName);
     }
 
     private void toLocate(String imei) {

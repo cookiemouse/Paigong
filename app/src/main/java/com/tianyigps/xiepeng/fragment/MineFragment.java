@@ -15,6 +15,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.tianyigps.xiepeng.R;
+import com.tianyigps.xiepeng.activity.ChoiceWorkerActivity;
 import com.tianyigps.xiepeng.activity.ManagerFragmentContentActivity;
 import com.tianyigps.xiepeng.activity.ModifyPasswordActivity;
 import com.tianyigps.xiepeng.activity.StatisticsActivity;
@@ -76,6 +77,8 @@ public class MineFragment extends Fragment {
         mAdapterMineDataList.add(new AdapterMineData(R.drawable.ic_statistics, "质量统计"));
         mAdapterMineDataList.add(new AdapterMineData(R.drawable.ic_modify_password, "修改密码"));
 
+        mAdapterMineDataList.add(new AdapterMineData(R.drawable.ic_modify_password, "测试选择工程师"));
+
         mMineAdapter = new MineAdapter(getContext(), mAdapterMineDataList);
 
         mListViewMine.setAdapter(mMineAdapter);
@@ -122,6 +125,12 @@ public class MineFragment extends Fragment {
                     case 1: {
                         // 2017/7/13 修改密码
                         Intent intent = new Intent(getContext(), ModifyPasswordActivity.class);
+                        startActivity(intent);
+                        break;
+                    }
+                    case 2: {
+                        // 2017/7/13 修改密码
+                        Intent intent = new Intent(getContext(), ChoiceWorkerActivity.class);
                         startActivity(intent);
                         break;
                     }

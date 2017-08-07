@@ -18,21 +18,21 @@ public class UploadPicU {
     //  上传单张图片
     public void uploadPic(int eid, String token, String orderNo
             , @Nullable int carId, int type, int model
-            , @Nullable String imgUrl, String upfile) {
-        mNetworkManager.uploadPic(eid, token, orderNo, carId, type, model, imgUrl, upfile);
+            , @Nullable String imgUrl, String upfile, String userName) {
+        mNetworkManager.uploadPic(eid, token, orderNo, carId, type, model, imgUrl, upfile, userName);
     }
 
     //  上传单张图片
     public void uploadCarPic(int eid, String token, String orderNo
             , @Nullable int carId, int type
-            , @Nullable String imgUrl, String upfile) {
-        mNetworkManager.uploadCarPic(eid, token, orderNo, carId, type, imgUrl, upfile);
+            , @Nullable String imgUrl, String upfile, String userName) {
+        mNetworkManager.uploadCarPic(eid, token, orderNo, carId, type, imgUrl, upfile, userName);
     }
 
     //  上传多张图片
     public void uploadPics(int eid, String token, String orderNo
-            , @Nullable int carId, @Nullable int tId, int type, int model
+            , @Nullable int carId, @Nullable int tId, int type, int model, String userName
             , String... upfiles) {
-        mNetworkManager.uploadPic(eid, token, orderNo, carId, tId, type, model, upfiles);
+        mNetworkManager.uploadPic(eid, token, orderNo, carId, tId, type, model, userName, upfiles);
     }
 }

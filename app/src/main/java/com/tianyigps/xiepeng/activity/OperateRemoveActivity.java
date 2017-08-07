@@ -23,6 +23,7 @@ import com.tianyigps.xiepeng.data.Data;
 import com.tianyigps.xiepeng.interfaces.OnGetWorkerOrderInfoStartListener;
 import com.tianyigps.xiepeng.interfaces.OnRemoveTerminalListener;
 import com.tianyigps.xiepeng.manager.NetworkManager;
+import com.tianyigps.xiepeng.manager.SharedpreferenceManager;
 import com.tianyigps.xiepeng.utils.TimeFormatU;
 
 import java.util.ArrayList;
@@ -41,8 +42,10 @@ public class OperateRemoveActivity extends BaseActivity {
     private OperateRemoveAdapter mOperateRemoveAdapter;
 
     private NetworkManager mNetworkManager;
+    private SharedpreferenceManager mSharedpreferenceManager;
     private int eid;
     private String token;
+    private String userName;
     private String orderNo;
 
     private String mStringMsg = "数据请求失败，请检查网络！";
@@ -63,15 +66,18 @@ public class OperateRemoveActivity extends BaseActivity {
     private void init() {
         mListViewRemove = findViewById(R.id.lv_activity_operate_remove);
 
+        mSharedpreferenceManager = new SharedpreferenceManager(this);
+
         Intent intent = getIntent();
-        eid = intent.getIntExtra(Data.DATA_INTENT_EID, 0);
-        token = intent.getStringExtra(Data.DATA_INTENT_TOKEN);
+        eid = mSharedpreferenceManager.getEid();
+        token = mSharedpreferenceManager.getToken();
+        userName = mSharedpreferenceManager.getAccount();
         orderNo = intent.getStringExtra(Data.DATA_INTENT_ORDER_NO);
 
         mNetworkManager = NetworkManager.getInstance();
         myHandler = new MyHandler();
 
-        mNetworkManager.getWorkerOrderInfoStart(eid, token, orderNo);
+        mNetworkManager.getWorkerOrderInfoStart(eid, token, orderNo, userName);
 
 //        for (int i = 0; i < 10; i++) {
 //            mAdapterOperateRemoveDataList.add(new AdapterOperateRemoveData("carNo"
@@ -203,7 +209,7 @@ public class OperateRemoveActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 String imei = mAdapterOperateRemoveDataList.get(positionNow).gettNo();
-                mNetworkManager.removeTerminal(eid, token, orderNo, imei);
+                mNetworkManager.removeTerminal(eid, token, orderNo, imei, userName);
             }
         });
         cancel.setOnClickListener(new View.OnClickListener() {

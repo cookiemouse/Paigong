@@ -19,9 +19,9 @@ import android.widget.TextView;
 
 import com.tianyigps.xiepeng.R;
 import com.tianyigps.xiepeng.activity.WorkerFragmentContentActivity;
-import com.tianyigps.xiepeng.adapter.PendingAdapter;
+import com.tianyigps.xiepeng.adapter.PendedAdapter;
 import com.tianyigps.xiepeng.adapter.PopupAdapter;
-import com.tianyigps.xiepeng.data.AdapterPendingData;
+import com.tianyigps.xiepeng.data.AdapterPendedData;
 import com.tianyigps.xiepeng.data.AdapterPopupData;
 
 import java.util.ArrayList;
@@ -42,8 +42,8 @@ public class PendedFragment extends Fragment {
     private ImageView mImageViewTitleLeft, mImageViewTitleRight;
     private TextView mTextViewTitle;
 
-    private List<AdapterPendingData> mAdapterPendingDataList;
-    private PendingAdapter mPendingAdapter;
+    private List<AdapterPendedData> mAdapterPendedDataList;
+    private PendedAdapter mPendedAdapter;
 
     @Nullable
     @Override
@@ -73,15 +73,15 @@ public class PendedFragment extends Fragment {
 
         mSwipeRefreshLayout.setColorSchemeColors(0xff3cabfa);
 
-        mAdapterPendingDataList = new ArrayList<>();
+        mAdapterPendedDataList = new ArrayList<>();
         for (int i = 0; i < 6; i++) {
-            mAdapterPendingDataList.add(new AdapterPendingData("order", "name", "phoneNumber", "time"
-                    , "address", "orderType", i, 2));
+            mAdapterPendedDataList.add(new AdapterPendedData("title", "time", "address", "contactName"
+                    , "contactphone", "worker", i));
         }
 
-        mPendingAdapter = new PendingAdapter(getContext(), mAdapterPendingDataList);
+        mPendedAdapter = new PendedAdapter(getContext(), mAdapterPendedDataList);
 
-        mListView.setAdapter(mPendingAdapter);
+        mListView.setAdapter(mPendedAdapter);
     }
 
     private void initTitle() {

@@ -84,6 +84,7 @@ public class OperateInstallActivity extends BaseActivity {
     private String mStringMessage = "请求数据失败，请检查网络！";
     private int eid;
     private String token;
+    private String userName;
     private String orderNo;
     private String frameNo;
     private int carId;
@@ -378,6 +379,7 @@ public class OperateInstallActivity extends BaseActivity {
 
         eid = mSharedpreferenceManager.getEid();
         token = mSharedpreferenceManager.getToken();
+        userName = mSharedpreferenceManager.getAccount();
 
         loadCarData();
 
@@ -796,7 +798,7 @@ public class OperateInstallActivity extends BaseActivity {
         if (null == url || "".equals(url)) {
             return;
         }
-        mNetworkManager.deletePic(eid, token, orderNo, carId, Data.DATA_UPLOAD_TYPE_5, url);
+        mNetworkManager.deletePic(eid, token, orderNo, carId, Data.DATA_UPLOAD_TYPE_5, url, userName);
     }
 
     //  跳转到快速定位页面
@@ -880,7 +882,7 @@ public class OperateInstallActivity extends BaseActivity {
         //  压缩图片
         String pathT = TinyU.tinyPic(path);
         // TODO: 2017/8/1 上传图片，从intent传相关值
-        new UploadPicU(mNetworkManager).uploadCarPic(eid, token, orderNo, carId, type, imgUrl, pathT);
+        new UploadPicU(mNetworkManager).uploadCarPic(eid, token, orderNo, carId, type, imgUrl, pathT, userName);
     }
 
     //  上传图片
@@ -888,12 +890,12 @@ public class OperateInstallActivity extends BaseActivity {
         //  压缩图片
         String pathT = TinyU.tinyPic(path);
         //  上传
-        new UploadPicU(mNetworkManager).uploadPic(eid, token, orderNo, carId, type, 1, imgUrl, pathT);
+        new UploadPicU(mNetworkManager).uploadPic(eid, token, orderNo, carId, type, 1, imgUrl, pathT, userName);
     }
 
     //  获取完整imei
     private void getWholeImei(String imei) {
-        mNetworkManager.getWholeImei(eid, token, imei);
+        mNetworkManager.getWholeImei(eid, token, imei, userName);
     }
 
     //  check数据

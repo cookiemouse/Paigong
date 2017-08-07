@@ -99,8 +99,4 @@ public final class Data {
     //  定位类型
     public static final String LOCATE_TYPE_BAIDU = "bd";
     public static final String LOCATE_TYPE_GPS = "gps";
-
-    //  测试
-    public final static int EID = 248;
-    public final static String TOKEN = "25d55ad283aa400af464c76d713c07ad";
 }

@@ -76,6 +76,7 @@ public class HandledFragment extends Fragment {
     private SharedpreferenceManager mSharedpreferenceManager;
     private int eid;
     private String token;
+    private String userName;
 
     @Nullable
     @Override
@@ -122,9 +123,10 @@ public class HandledFragment extends Fragment {
         mSharedpreferenceManager = new SharedpreferenceManager(getContext());
         eid = mSharedpreferenceManager.getEid();
         token = mSharedpreferenceManager.getToken();
+        userName = mSharedpreferenceManager.getAccount();
 
         mSwipeRefreshLayout.setRefreshing(true);
-        mNetworkManager.getWorkerOrderHanded(eid, token, "", "");
+        mNetworkManager.getWorkerOrderHanded(eid, token, "", "", userName);
     }
 
     private void initTitle() {
@@ -149,7 +151,7 @@ public class HandledFragment extends Fragment {
             @Override
             public void onRefresh() {
                 mEditTextSearch.setText(null);
-                mNetworkManager.getWorkerOrderHanded(eid, token, "", "");
+                mNetworkManager.getWorkerOrderHanded(eid, token, "", "", userName);
             }
         });
 
@@ -192,7 +194,8 @@ public class HandledFragment extends Fragment {
                         mNetworkManager.getWorkerOrderHanded(eid
                                 , token
                                 , ""
-                                , "" + mAdapterHandledDataList.get(mAdapterHandledDataList.size() - 1).getLastId());
+                                , "" + mAdapterHandledDataList.get(mAdapterHandledDataList.size() - 1).getLastId()
+                                , userName);
                     }
                 }
             }

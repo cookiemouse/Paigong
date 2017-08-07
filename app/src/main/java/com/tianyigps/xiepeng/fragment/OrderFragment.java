@@ -89,6 +89,7 @@ public class OrderFragment extends Fragment {
     private SharedpreferenceManager mSharedpreferenceManager;
     private int eid;
     private String token;
+    private String userName;
     private String name;
 
     @Nullable
@@ -163,10 +164,11 @@ public class OrderFragment extends Fragment {
 
         eid = mSharedpreferenceManager.getEid();
         token = mSharedpreferenceManager.getToken();
+        userName = mSharedpreferenceManager.getAccount();
         name = mSharedpreferenceManager.getName();
 
         mSwipeRefreshLayout.setRefreshing(true);
-        mNetworkManager.getWorkerOrder(Data.EID, Data.TOKEN, "");
+        mNetworkManager.getWorkerOrder(eid, token, "", userName);
     }
 
     private void initTitle() {
@@ -180,7 +182,7 @@ public class OrderFragment extends Fragment {
             @Override
             public void onRefresh() {
                 mEditTextSearch.setText(null);
-                mNetworkManager.getWorkerOrder(Data.EID, Data.TOKEN, "");
+                mNetworkManager.getWorkerOrder(eid, token, "", userName);
             }
         });
 
@@ -446,7 +448,8 @@ public class OrderFragment extends Fragment {
                     mNetworkManager.signedWorker(eid, token, name, orderNoPosition
                             , mLatLngLocate.latitude
                             , mLatLngLocate.longitude
-                            , Data.LOCATE_TYPE_BAIDU);
+                            , Data.LOCATE_TYPE_BAIDU
+                            , userName);
                     break;
                 }
                 case MSG_3: {

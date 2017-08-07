@@ -55,6 +55,7 @@ public class PendingFragment extends Fragment {
     private NetworkManager mNetworkManager;
     private String jobNo;
     private String token;
+    private String userName;
 
     @Nullable
     @Override
@@ -99,8 +100,9 @@ public class PendingFragment extends Fragment {
 
         jobNo = mSharedpreferenceManager.getJobNo();
         token = mSharedpreferenceManager.getToken();
+        userName = mSharedpreferenceManager.getAccount();
 
-        mNetworkManager.getPenddingOrder(jobNo, token, "", "");
+        mNetworkManager.getPenddingOrder(jobNo, token, "", "",userName);
     }
 
     private void initTitle() {
@@ -131,7 +133,7 @@ public class PendingFragment extends Fragment {
             @Override
             public void onRefresh() {
 
-                mNetworkManager.getPenddingOrder(jobNo, token, "", "");
+                mNetworkManager.getPenddingOrder(jobNo, token, "", "", userName);
 
                 new Handler().postDelayed(new Runnable() {
                     @Override

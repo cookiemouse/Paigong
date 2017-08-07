@@ -79,6 +79,7 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
     private MyHandler myHandler;
     private int eid;
     private String token;
+    private String userName;
     private String mStringTitle, mStringContent;
     private double lat, lng;
 
@@ -216,6 +217,7 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
         mSharedpreferenceManager = new SharedpreferenceManager(this);
         eid = mSharedpreferenceManager.getEid();
         token = mSharedpreferenceManager.getToken();
+        userName = mSharedpreferenceManager.getAccount();
 
         mNetworkManager = new NetworkManager();
         myHandler = new MyHandler();
@@ -420,12 +422,12 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
 
     //  获取完整imei
     private void getWholeImei(String imei) {
-        mNetworkManager.getWholeImei(eid, token, imei);
+        mNetworkManager.getWholeImei(eid, token, imei, userName);
     }
 
     //  获取目标位置
     private void getImeiLocation(String imei) {
-        mNetworkManager.getTerminalInfo(eid, token, imei);
+        mNetworkManager.getTerminalInfo(eid, token, imei, userName);
     }
 
     private void showToast(String message) {

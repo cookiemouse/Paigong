@@ -6,7 +6,7 @@
                 android:background="@drawable/bg_item">
 
     <TextView
-        android:id="@+id/tv_item_pended_name"
+        android:id="@+id/tv_item_pended_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp_8"
@@ -20,9 +20,9 @@
         android:id="@+id/tv_item_pended_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/tv_item_pended_name"
-        android:layout_alignStart="@+id/tv_item_pended_name"
-        android:layout_below="@+id/tv_item_pended_name"
+        android:layout_alignLeft="@+id/tv_item_pended_title"
+        android:layout_alignStart="@+id/tv_item_pended_title"
+        android:layout_below="@+id/tv_item_pended_title"
         android:layout_marginTop="@dimen/dp_8"
         android:text="time" />
 
@@ -111,6 +111,7 @@
                 android:src="@drawable/ic_mobile" />
 
             <TextView
+                android:id="@+id/tv_item_pended_worker"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_4"

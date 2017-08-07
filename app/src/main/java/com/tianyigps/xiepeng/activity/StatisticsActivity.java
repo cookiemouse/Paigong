@@ -58,6 +58,7 @@ public class StatisticsActivity extends BaseActivity {
     private SharedpreferenceManager mSharedpreferenceManager;
     private int eid;
     private String token;
+    private String userName;
     private int uiMode;
     private String monthP;
 
@@ -78,6 +79,7 @@ public class StatisticsActivity extends BaseActivity {
         mSharedpreferenceManager = new SharedpreferenceManager(StatisticsActivity.this);
         eid = mSharedpreferenceManager.getEid();
         token = mSharedpreferenceManager.getToken();
+        userName = mSharedpreferenceManager.getAccount();
         uiMode = mSharedpreferenceManager.getUiMode();
 
         Calendar calendar = Calendar.getInstance();
@@ -142,7 +144,7 @@ public class StatisticsActivity extends BaseActivity {
                 monthP = "" + year + monthP;
 
                 if (DATA_LAUNCH_MODE_WORKER == uiMode) {
-                    mNetworkManager.getQualityCount(eid, token, monthP);
+                    mNetworkManager.getQualityCount(eid, token, monthP, userName);
                 } else {
                     // TODO: 2017/7/18 Manager质量统计
                 }
@@ -216,7 +218,7 @@ public class StatisticsActivity extends BaseActivity {
 
         mListViewStatistics.setAdapter(mStatisticsWorkerAdapter);
 
-        mNetworkManager.getQualityCount(eid, token, monthP);
+        mNetworkManager.getQualityCount(eid, token, monthP, userName);
     }
 
     //  显示Manager列表
