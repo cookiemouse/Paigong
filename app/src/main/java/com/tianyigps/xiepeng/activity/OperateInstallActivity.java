@@ -933,10 +933,10 @@ public class OperateInstallActivity extends BaseActivity {
                 Log.i(TAG, "isComplete: complete-->" + complete);
 
                 if (!complete) {
-                    AdapterOperateInstallListData data = mAdapterOperateInstallListDataList.get(i);
-                    data.setComplete(false);
                     completeAll = false;
                 }
+                AdapterOperateInstallListData data = mAdapterOperateInstallListDataList.get(i);
+                data.setComplete(complete);
 
                 cursor.close();
             }

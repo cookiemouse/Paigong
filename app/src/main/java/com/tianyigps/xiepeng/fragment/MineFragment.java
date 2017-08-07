@@ -15,6 +15,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.tianyigps.xiepeng.R;
+import com.tianyigps.xiepeng.activity.ManagerFragmentContentActivity;
 import com.tianyigps.xiepeng.activity.ModifyPasswordActivity;
 import com.tianyigps.xiepeng.activity.StatisticsActivity;
 import com.tianyigps.xiepeng.adapter.MineAdapter;
@@ -91,7 +92,10 @@ public class MineFragment extends Fragment {
         mImageViewTitleLeft.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: 2017/7/13 切换用户
+                Intent intent = new Intent(getContext(), ManagerFragmentContentActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
             }
         });
 

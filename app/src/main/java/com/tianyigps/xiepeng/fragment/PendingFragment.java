@@ -1,5 +1,6 @@
 package com.tianyigps.xiepeng.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -14,6 +15,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.tianyigps.xiepeng.R;
+import com.tianyigps.xiepeng.activity.WorkerFragmentContentActivity;
 import com.tianyigps.xiepeng.adapter.PendingAdapter;
 import com.tianyigps.xiepeng.data.AdapterPendingData;
 
@@ -84,6 +86,16 @@ public class PendingFragment extends Fragment {
     }
 
     private void setEventListener() {
+        mImageViewTitleLeft.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), WorkerFragmentContentActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
+            }
+        });
+
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
