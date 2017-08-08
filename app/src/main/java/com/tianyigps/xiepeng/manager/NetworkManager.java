@@ -18,7 +18,9 @@ import com.tianyigps.xiepeng.interfaces.OnGetWorkerOrderInfoHandingListener;
 import com.tianyigps.xiepeng.interfaces.OnGetWorkerOrderInfoStartListener;
 import com.tianyigps.xiepeng.interfaces.OnGetWorkerOrderListener;
 import com.tianyigps.xiepeng.interfaces.OnInstallBackListener;
+import com.tianyigps.xiepeng.interfaces.OnInstallCountListener;
 import com.tianyigps.xiepeng.interfaces.OnModifyPasswordListener;
+import com.tianyigps.xiepeng.interfaces.OnOrderTrackListener;
 import com.tianyigps.xiepeng.interfaces.OnPendingOrderListener;
 import com.tianyigps.xiepeng.interfaces.OnRemoveTerminalInfoListener;
 import com.tianyigps.xiepeng.interfaces.OnRemoveTerminalListener;
@@ -82,6 +84,8 @@ public class NetworkManager {
     //  服务主任
     private OnPendingOrderListener mOnPendingOrderListener;
     private OnWorkersListener mOnWorkersListener;
+    private OnInstallCountListener mOnInstallCountListener;
+    private OnOrderTrackListener mOnOrderTrackListener;
 
     public NetworkManager() {
         mOkHttpClient = new OkHttpClient();
@@ -1023,8 +1027,10 @@ public class NetworkManager {
         this.mOnPendingOrderListener = listener;
     }
 
-    /***
-     * 获取所有的工程师
+    /**
+     * 获取所有的工程师 22
+     *
+     * @param token 令牌
      */
     public void getWorkers(String jobNo, String token, String condition, String userName) {
         Request.Builder builder = new Request.Builder();
@@ -1056,6 +1062,103 @@ public class NetworkManager {
 
     public void setOnWorkersListener(OnWorkersListener listener) {
         this.mOnWorkersListener = listener;
+    }
+
+    //  获取服务主任安装统计  23
+    public void getInstallCount(String jobNo, String token, String month, String userName) {
+        Request.Builder builder = new Request.Builder();
+        builder.url(Urls.URL_MANAGER_INSTALL_COUNT + "jobNo=" + jobNo
+                + "&token=" + token
+                + "&userName=" + userName
+                + "&month=" + month);
+        mRequest = builder.build();
+        Log.i(TAG, "getQualityCount: url-->" + mRequest.url());
+        Call call = mOkHttpClient.newCall(mRequest);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                if (null == mOnInstallCountListener) {
+                    throw new NullPointerException("OnInstallCountListener is null");
+                }
+                mOnInstallCountListener.onFailure();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (null == mOnInstallCountListener) {
+                    throw new NullPointerException("OnInstallCountListener is null");
+                }
+                mOnInstallCountListener.onSuccess(response.body().string());
+            }
+        });
+    }
+
+    public void setOnInstallCountListener(OnInstallCountListener listener) {
+        this.mOnInstallCountListener = listener;
+    }
+
+    //  获取订单跟踪信息    24
+    public void getOrderTrack(String jobNo, String token, String userName, int orderId) {
+        Request.Builder builder = new Request.Builder();
+        builder.url(Urls.URL_MANAGER_ORDER_TRACK + "jobNo=" + jobNo
+                + "&token=" + token
+                + "&userName=" + userName
+                + "&orderId=" + orderId);
+        mRequest = builder.build();
+        Log.i(TAG, "getQualityCount: url-->" + mRequest.url());
+        Call call = mOkHttpClient.newCall(mRequest);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                if (null == mOnOrderTrackListener) {
+                    throw new NullPointerException("OnOrderTrackListener is null");
+                }
+                mOnOrderTrackListener.onFailure();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (null == mOnOrderTrackListener) {
+                    throw new NullPointerException("OnOrderTrackListener is null");
+                }
+                mOnOrderTrackListener.onSuccess(response.body().string());
+            }
+        });
+    }
+
+    public void setOnOrderTrackListener(OnOrderTrackListener listener) {
+        this.mOnOrderTrackListener = listener;
+    }
+
+    //  获取历史订单列表    25
+    public void getPended(String jobNo, String token, String status, String condition, String lastOrderId, String userName) {
+        Request.Builder builder = new Request.Builder();
+        builder.url(Urls.URL_MANAGER_ORDER_TRACK + "jobNo=" + jobNo
+                + "&token=" + token
+                + "&status=" + status
+                + "&condition=" + condition
+                + "&lastOrderId=" + lastOrderId
+                + "&userName=" + userName);
+        mRequest = builder.build();
+        Log.i(TAG, "getQualityCount: url-->" + mRequest.url());
+        Call call = mOkHttpClient.newCall(mRequest);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                if (null == mOnOrderTrackListener) {
+                    throw new NullPointerException("OnOrderTrackListener is null");
+                }
+                mOnOrderTrackListener.onFailure();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (null == mOnOrderTrackListener) {
+                    throw new NullPointerException("OnOrderTrackListener is null");
+                }
+                mOnOrderTrackListener.onSuccess(response.body().string());
+            }
+        });
     }
 
 }

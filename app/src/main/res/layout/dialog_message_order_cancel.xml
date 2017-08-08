@@ -2,8 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:padding="@dimen/dp_8"
-              android:orientation="vertical">
+              android:orientation="vertical"
+              android:padding="@dimen/dp_8">
 
     <TextView
         android:layout_width="wrap_content"
@@ -28,11 +28,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="@dimen/dp_16"
         android:layout_marginTop="@dimen/dp_16"
         android:background="@drawable/bg_button"
         android:paddingLeft="@dimen/dp_64"
         android:paddingRight="@dimen/dp_64"
-        android:layout_marginBottom="@dimen/dp_16"
-        android:text="@string/known"/>
+        android:text="@string/known"
+        android:textColor="@color/colorWhite"/>
 
 </LinearLayout>

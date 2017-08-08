@@ -53,8 +53,8 @@ public class PendedAdapter extends BaseAdapter {
             viewHolder.tvTitle = contentView.findViewById(R.id.tv_item_pended_title);
             viewHolder.tvTime = contentView.findViewById(R.id.tv_item_pended_time);
             viewHolder.tvAddress = contentView.findViewById(R.id.tv_item_pended_address);
-            viewHolder.tvContactName = contentView.findViewById(R.id.tv_item_pended_phone_name);
-            viewHolder.tvWorker = contentView.findViewById(R.id.tv_item_pended_worker);
+            viewHolder.tvContactName = contentView.findViewById(R.id.tv_item_pended_custom);
+            viewHolder.tvWorker = contentView.findViewById(R.id.tv_item_pended_phone_worker_name);
 
             contentView.setTag(viewHolder);
         } else {
@@ -64,13 +64,13 @@ public class PendedAdapter extends BaseAdapter {
         viewHolder.tvTitle.setText(data.getTitle());
         viewHolder.tvTime.setText(data.getTime());
         viewHolder.tvAddress.setText(data.getAddress());
-        viewHolder.tvContactName.setText(data.getContactName());
         viewHolder.tvWorker.setText(data.getWorker());
+        viewHolder.tvContactName.setText(data.getContactName());
 
         return contentView;
     }
 
     private class ViewHolder {
-        TextView tvTitle, tvTime, tvAddress, tvContactName, tvWorker;
+        TextView tvTitle, tvTime, tvAddress, tvWorker, tvContactName;
     }
 }

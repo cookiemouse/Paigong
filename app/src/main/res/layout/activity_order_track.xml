@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.tianyigps.xiepeng.activity.OrderTrackActivity">
+
+    <ListView
+        android:id="@+id/lv_activity_order_track"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@color/colorNull"
+        android:padding="@dimen/dp_16"
+        android:dividerHeight="0dp"
+        android:scrollbars="none"/>
+
+</FrameLayout>

@@ -75,8 +75,8 @@ public class PendedFragment extends Fragment {
 
         mAdapterPendedDataList = new ArrayList<>();
         for (int i = 0; i < 6; i++) {
-            mAdapterPendedDataList.add(new AdapterPendedData("title", "time", "address", "contactName"
-                    , "contactphone", "worker", i));
+//            mAdapterPendedDataList.add(new AdapterPendedData("title", "time", "address", "contactName"
+//                    , "contactphone", "worker", i));
         }
 
         mPendedAdapter = new PendedAdapter(getContext(), mAdapterPendedDataList);

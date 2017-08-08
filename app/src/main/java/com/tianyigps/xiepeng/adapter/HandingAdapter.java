@@ -150,10 +150,9 @@ public class HandingAdapter extends BaseAdapter {
         viewHolder.imageViewCall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                data.getCallNumber();
                 Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_DIAL);
-                intent.setData(Uri.parse("tel:" + "123456789"));
+                intent.setData(Uri.parse("tel:" + data.getCallNumber()));
                 context.startActivity(intent);
             }
         });

@@ -1,5 +1,7 @@
 package com.tianyigps.xiepeng.fragment;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -18,6 +20,7 @@ import com.tianyigps.xiepeng.R;
 import com.tianyigps.xiepeng.activity.ChoiceWorkerActivity;
 import com.tianyigps.xiepeng.activity.ManagerFragmentContentActivity;
 import com.tianyigps.xiepeng.activity.ModifyPasswordActivity;
+import com.tianyigps.xiepeng.activity.OrderTrackActivity;
 import com.tianyigps.xiepeng.activity.StatisticsActivity;
 import com.tianyigps.xiepeng.activity.WorkerFragmentContentActivity;
 import com.tianyigps.xiepeng.adapter.MineAdapter;
@@ -78,6 +81,7 @@ public class MineFragment extends Fragment {
         mAdapterMineDataList.add(new AdapterMineData(R.drawable.ic_modify_password, "修改密码"));
 
         mAdapterMineDataList.add(new AdapterMineData(R.drawable.ic_modify_password, "测试选择工程师"));
+        mAdapterMineDataList.add(new AdapterMineData(R.drawable.ic_modify_password, "测试订单跟踪"));
 
         mMineAdapter = new MineAdapter(getContext(), mAdapterMineDataList);
 
@@ -134,6 +138,12 @@ public class MineFragment extends Fragment {
                         startActivity(intent);
                         break;
                     }
+                    case 3: {
+                        // 2017/7/13 修改密码
+                        Intent intent = new Intent(getContext(), OrderTrackActivity.class);
+                        startActivity(intent);
+                        break;
+                    }
                     default: {
                         Log.i(TAG, "onItemClick: default");
                     }
@@ -145,10 +155,29 @@ public class MineFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 // 2017/7/13 退出登陆
+                showExitDialog();
+            }
+        });
+    }
+
+    private void showExitDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setMessage("是否要退出登陆！");
+        builder.setPositiveButton(R.string.ensure, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
                 exitLogin();
                 getActivity().finish();
             }
         });
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                //  do nothing
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     //  退出登陆，数据清零

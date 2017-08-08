@@ -3,6 +3,7 @@ package com.tianyigps.xiepeng.activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -92,13 +93,19 @@ public class CustomSignActivity extends BaseActivity {
             public void onClick(View view) {
                 // TODO: 2017/7/20 提交
 
-                final Bitmap bitmap = mSignView.getPic();
+                Bitmap bitmap = mSignView.getPic();
 
-                String base64 = Base64U.encode(bitmap);
+                Matrix matrix = new Matrix();
+                matrix.postScale(0.2f, 0.2f);
+                Bitmap bitmap2 = bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, false);
+
+
+                String base64 = Base64U.encode(bitmap2);
 
                 mSignature = Data.DATA_PIC_SIGN_HEAD + base64;
 
                 Log.i(TAG, "onClick: base64-->" + mSignature);
+                Log.i(TAG, "onClick: base64.size-->" + mSignature.length());
 
                 String json = null;
 
@@ -129,12 +136,13 @@ public class CustomSignActivity extends BaseActivity {
 
 
                 //保存图片，可以不要
+
                 /*
                 Thread thread = new Thread(new Runnable() {
                     @Override
                     public void run() {
                         FileManager f = new FileManager(Data.DATA_PIC_SIGN);
-                        f.saveBitmapPng(bitmap);
+                        f.saveBitmapPng(bitmap2);
                     }
                 });
                 thread.start();

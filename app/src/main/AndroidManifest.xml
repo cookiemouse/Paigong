@@ -85,6 +85,10 @@
         </activity>
         <activity android:name=".activity.ChoiceWorkerActivity">
         </activity>
+        <activity android:name=".activity.OrderTrackActivity">
+        </activity>
+        <activity android:name=".activity.PendingDetailsActivity">
+        </activity>
     </application>
 
 </manifest>

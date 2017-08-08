@@ -40,6 +40,7 @@
             android:layout_weight="1"
             android:background="@drawable/bg_button"
             android:gravity="center"
+            android:textColor="@color/colorWhite"
             android:text="@string/ensure"/>
 
         <Button
@@ -52,6 +53,7 @@
             android:layout_weight="1"
             android:background="@drawable/bg_button"
             android:gravity="center"
+            android:textColor="@color/colorWhite"
             android:text="@string/cancel"/>
 
     </LinearLayout>

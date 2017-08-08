@@ -6,20 +6,24 @@ package com.tianyigps.xiepeng.data;
 
 public class AdapterPendingData {
 
-    private String order, name, phoneNumber, time, address, orderType;
+    private String order, name, contactName, phoneNumber, time, address, orderType;
     int lineNumber, linelessNumber;
 
-    public AdapterPendingData(String order, String name, String phoneNumber
+    int orderId;
+
+    public AdapterPendingData(String order, String name, String contactName, String phoneNumber
             , String time, String address, String orderType
-            , int lineNumber, int linelessNumber) {
+            , int lineNumber, int linelessNumber, int orderId) {
         this.order = order;
         this.name = name;
+        this.contactName = contactName;
         this.phoneNumber = phoneNumber;
         this.time = time;
         this.address = address;
         this.orderType = orderType;
         this.lineNumber = lineNumber;
         this.linelessNumber = linelessNumber;
+        this.orderId = orderId;
     }
 
     public String getOrder() {
@@ -36,6 +40,14 @@ public class AdapterPendingData {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getContactName() {
+        return contactName;
+    }
+
+    public void setContactName(String contactName) {
+        this.contactName = contactName;
     }
 
     public String getPhoneNumber() {
