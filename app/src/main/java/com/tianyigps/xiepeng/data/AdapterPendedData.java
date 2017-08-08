@@ -6,18 +6,18 @@ package com.tianyigps.xiepeng.data;
 
 public class AdapterPendedData {
     private String title, time, address;
-    private String contactName, contactPhone, worker;
-
+    private String worker, workerPhone, contactName, contactPhone;
     //
     private int status;
 
-    public AdapterPendedData(String title, String time, String address, String contactName, String contactPhone, String worker, int status) {
+    public AdapterPendedData(String title, String time, String address, String worker, String workerPhone, String contactName, String contactPhone, int status) {
         this.title = title;
         this.time = time;
         this.address = address;
+        this.worker = worker;
+        this.workerPhone = workerPhone;
         this.contactName = contactName;
         this.contactPhone = contactPhone;
-        this.worker = worker;
         this.status = status;
     }
 
@@ -45,6 +45,22 @@ public class AdapterPendedData {
         this.address = address;
     }
 
+    public String getWorker() {
+        return worker;
+    }
+
+    public void setWorker(String worker) {
+        this.worker = worker;
+    }
+
+    public String getWorkerPhone() {
+        return workerPhone;
+    }
+
+    public void setWorkerPhone(String workerPhone) {
+        this.workerPhone = workerPhone;
+    }
+
     public String getContactName() {
         return contactName;
     }
@@ -59,14 +75,6 @@ public class AdapterPendedData {
 
     public void setContactPhone(String contactPhone) {
         this.contactPhone = contactPhone;
-    }
-
-    public String getWorker() {
-        return worker;
-    }
-
-    public void setWorker(String worker) {
-        this.worker = worker;
     }
 
     public int getStatus() {

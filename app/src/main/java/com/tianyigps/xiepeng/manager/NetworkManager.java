@@ -1130,4 +1130,35 @@ public class NetworkManager {
         this.mOnOrderTrackListener = listener;
     }
 
+    //  获取历史订单列表    25
+    public void getPended(String jobNo, String token, String status, String condition, String lastOrderId, String userName) {
+        Request.Builder builder = new Request.Builder();
+        builder.url(Urls.URL_MANAGER_ORDER_TRACK + "jobNo=" + jobNo
+                + "&token=" + token
+                + "&status=" + status
+                + "&condition=" + condition
+                + "&lastOrderId=" + lastOrderId
+                + "&userName=" + userName);
+        mRequest = builder.build();
+        Log.i(TAG, "getQualityCount: url-->" + mRequest.url());
+        Call call = mOkHttpClient.newCall(mRequest);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                if (null == mOnOrderTrackListener) {
+                    throw new NullPointerException("OnOrderTrackListener is null");
+                }
+                mOnOrderTrackListener.onFailure();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (null == mOnOrderTrackListener) {
+                    throw new NullPointerException("OnOrderTrackListener is null");
+                }
+                mOnOrderTrackListener.onSuccess(response.body().string());
+            }
+        });
+    }
+
 }

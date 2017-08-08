@@ -14,7 +14,7 @@
         android:lines="1"
         android:text="@string/app_name"
         android:textColor="@color/colorGrayBlack"
-        android:textSize="@dimen/sp_20" />
+        android:textSize="@dimen/sp_20"/>
 
     <TextView
         android:id="@+id/tv_item_pended_time"
@@ -24,7 +24,7 @@
         android:layout_alignStart="@+id/tv_item_pended_title"
         android:layout_below="@+id/tv_item_pended_title"
         android:layout_marginTop="@dimen/dp_8"
-        android:text="time" />
+        android:text="time"/>
 
     <TextView
         android:id="@+id/tv_item_pended_address"
@@ -33,7 +33,7 @@
         android:layout_alignLeft="@+id/tv_item_pended_time"
         android:layout_alignStart="@+id/tv_item_pended_time"
         android:layout_below="@+id/tv_item_pended_time"
-        android:text="address" />
+        android:text="address"/>
 
     <View
         android:id="@+id/line_item_pended_1"
@@ -41,7 +41,7 @@
         android:layout_height="@dimen/dp_1"
         android:layout_below="@+id/tv_item_pended_address"
         android:layout_marginTop="@dimen/dp_8"
-        android:background="@color/color_cut_line" />
+        android:background="@color/color_cut_line"/>
 
     <LinearLayout
         android:id="@+id/ll_item_pended_"
@@ -64,18 +64,19 @@
                 android:id="@+id/iv_item_pended_map"
                 android:layout_width="@dimen/dp_32"
                 android:layout_height="@dimen/dp_32"
-                android:src="@drawable/ic_map_blue" />
+                android:src="@drawable/ic_map_blue"/>
 
             <TextView
                 android:id="@+id/tv_item_pended_map"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_4"
-                android:text="@string/look_map" />
+                android:text="@string/look_map"/>
 
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/ll_item_pended_worker"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -86,14 +87,14 @@
                 android:id="@+id/iv_item_pended_phone"
                 android:layout_width="@dimen/dp_32"
                 android:layout_height="@dimen/dp_32"
-                android:src="@drawable/ic_phone_blue" />
+                android:src="@drawable/ic_phone_blue"/>
 
             <TextView
-                android:id="@+id/tv_item_pended_phone_name"
+                android:id="@+id/tv_item_pended_phone_worker_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_4"
-                android:text="@string/app_name" />
+                android:text="@string/app_name"/>
 
         </LinearLayout>
 
@@ -108,14 +109,14 @@
                 android:id="@+id/iv_item_pended_sign"
                 android:layout_width="@dimen/dp_32"
                 android:layout_height="@dimen/dp_32"
-                android:src="@drawable/ic_mobile" />
+                android:src="@drawable/ic_mobile"/>
 
             <TextView
-                android:id="@+id/tv_item_pended_worker"
+                android:id="@+id/tv_item_pended_custom"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_4"
-                android:text="姓名" />
+                android:text="姓名"/>
 
         </LinearLayout>
 
@@ -131,6 +132,6 @@
         android:layout_toRightOf="@+id/tv_item_pended_time"
         android:text="@string/modify"
         android:textColor="@color/colorRed"
-        android:visibility="gone" />
+        android:visibility="gone"/>
 
 </RelativeLayout>
