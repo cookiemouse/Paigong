@@ -59,16 +59,13 @@ public class OrderTrackActivity extends BaseActivity {
         userName = mSharedpreferenceManager.getAccount();
 
         // TODO: 2017/8/8 测试
-        orderId = 846;
+        orderId = 858;
 
         mNetworkManager = new NetworkManager();
         myHandler = new MyHandler();
 
         mListView = findViewById(R.id.lv_activity_order_track);
         mAdapterOrderTrackDataList = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            mAdapterOrderTrackDataList.add(new AdapterOrderTrackData(150000000, "info"));
-        }
 
         mOrderTrackAdapter = new OrderTrackAdapter(this, mAdapterOrderTrackDataList);
 

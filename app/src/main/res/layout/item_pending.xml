@@ -176,12 +176,13 @@
             android:orientation="vertical">
 
             <ImageView
-                android:id="@+id/iv_item_pending_sign"
+                android:id="@+id/iv_item_pending_pend"
                 android:layout_width="@dimen/dp_32"
                 android:layout_height="@dimen/dp_32"
                 android:src="@drawable/ic_pending" />
 
             <TextView
+                android:id="@+id/tv_item_pending_contact"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_4"

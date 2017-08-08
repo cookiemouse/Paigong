@@ -1,8 +1,12 @@
 package com.tianyigps.xiepeng.fragment;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -12,21 +16,28 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.tianyigps.xiepeng.R;
+import com.tianyigps.xiepeng.activity.OrderDetailsActivity;
 import com.tianyigps.xiepeng.activity.WorkerFragmentContentActivity;
 import com.tianyigps.xiepeng.adapter.PendingAdapter;
 import com.tianyigps.xiepeng.adapter.PopupAdapter;
+import com.tianyigps.xiepeng.bean.PendingBean;
 import com.tianyigps.xiepeng.data.AdapterPendingData;
 import com.tianyigps.xiepeng.data.AdapterPopupData;
+import com.tianyigps.xiepeng.data.Data;
+import com.tianyigps.xiepeng.dialog.ChoiceMapDialogFragment;
 import com.tianyigps.xiepeng.interfaces.OnPendingOrderListener;
 import com.tianyigps.xiepeng.manager.NetworkManager;
 import com.tianyigps.xiepeng.manager.SharedpreferenceManager;
+import com.tianyigps.xiepeng.utils.TimeFormatU;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,9 +64,11 @@ public class PendingFragment extends Fragment {
 
     private SharedpreferenceManager mSharedpreferenceManager;
     private NetworkManager mNetworkManager;
+    private MyHandler myHandler;
     private String jobNo;
     private String token;
     private String userName;
+    private String mStringMessage;
 
     @Nullable
     @Override
@@ -86,10 +99,6 @@ public class PendingFragment extends Fragment {
         mSwipeRefreshLayout.setColorSchemeColors(0xff3cabfa);
 
         mAdapterPendingDataList = new ArrayList<>();
-        for (int i = 0; i < 6; i++) {
-            mAdapterPendingDataList.add(new AdapterPendingData("order", "name", "phoneNumber", "time"
-                    , "address", "orderType", i, 2));
-        }
 
         mPendingAdapter = new PendingAdapter(getContext(), mAdapterPendingDataList);
 
@@ -97,12 +106,14 @@ public class PendingFragment extends Fragment {
 
         mSharedpreferenceManager = new SharedpreferenceManager(getContext());
         mNetworkManager = new NetworkManager();
+        myHandler = new MyHandler();
 
         jobNo = mSharedpreferenceManager.getJobNo();
         token = mSharedpreferenceManager.getToken();
         userName = mSharedpreferenceManager.getAccount();
 
-        mNetworkManager.getPenddingOrder(jobNo, token, "", "",userName);
+        mSwipeRefreshLayout.setRefreshing(true);
+        mNetworkManager.getPenddingOrder(jobNo, token, "", "", userName);
     }
 
     private void initTitle() {
@@ -132,15 +143,7 @@ public class PendingFragment extends Fragment {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-
                 mNetworkManager.getPenddingOrder(jobNo, token, "", "", userName);
-
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        mSwipeRefreshLayout.setRefreshing(false);
-                    }
-                }, 2000);
             }
         });
 
@@ -155,17 +158,149 @@ public class PendingFragment extends Fragment {
             }
         });
 
+        mPendingAdapter.setOnItemListener(new PendingAdapter.OnItemListener() {
+            @Override
+            public void onMap(int position) {
+                Log.i(TAG, "onMap: position-->" + position);
+                ChoiceMapDialogFragment mChoiceMapDialogFragment = new ChoiceMapDialogFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString(Data.DATA_INTENT_ADDRESS, mAdapterPendingDataList.get(position).getAddress());
+                mChoiceMapDialogFragment.setArguments(bundle);
+                mChoiceMapDialogFragment.show(getChildFragmentManager(), "ChoiceMapDialog");
+            }
+
+            @Override
+            public void onCall(int position) {
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_DIAL);
+                intent.setData(Uri.parse("tel:" + mAdapterPendingDataList.get(position).getPhoneNumber()));
+                startActivity(intent);
+            }
+
+            @Override
+            public void onPend(int position) {
+                Log.i(TAG, "onPend: position-->" + position);
+                showFlushDialog();
+            }
+
+            @Override
+            public void onItem(int position) {
+                Log.i(TAG, "onItem: position-->" + position);
+                Intent intent = new Intent(getContext(), OrderDetailsActivity.class);
+                intent.putExtra(Data.DATA_INTENT_ORDER_NO, mAdapterPendingDataList.get(position).getOrder());
+                intent.putExtra(Data.DATA_INTENT_ORDER_DETAILS_IS_CHECKED, true);
+                startActivity(intent);
+            }
+        });
+
         mNetworkManager.setOnPendingOrderListener(new OnPendingOrderListener() {
             @Override
             public void onFailure() {
                 Log.i(TAG, "onFailure: ");
+                mStringMessage = Data.DEFAULT_MESSAGE;
+                myHandler.sendEmptyMessage(Data.MSG_ERO);
             }
 
             @Override
             public void onSuccess(String result) {
                 Log.i(TAG, "onSuccess: result-->" + result);
+                Gson gson = new Gson();
+                PendingBean pendingBean = gson.fromJson(result, PendingBean.class);
+                if (!pendingBean.isSuccess()) {
+                    mStringMessage = pendingBean.getMsg();
+                    myHandler.sendEmptyMessage(Data.MSG_ERO);
+                    return;
+                }
+
+                mAdapterPendingDataList.clear();
+
+                for (PendingBean.ObjBean objBean : pendingBean.getObj()) {
+                    String custName = objBean.getCustName();
+                    long time = objBean.getDoorTime();
+                    String address = objBean.getProvince() + objBean.getCity() + objBean.getDistrict();
+                    String orderType;
+                    int wire = 0;
+                    int wireless = 0;
+                    switch (objBean.getOrderType()) {
+                        case 1: {
+                            orderType = "安装：";
+                            wire = objBean.getWiredNum();
+                            wireless = objBean.getWirelessNum();
+                            break;
+                        }
+                        case 2: {
+                            orderType = "维修：";
+                            wire = objBean.getWiredNum();
+                            wireless = objBean.getWirelessNum();
+                            break;
+                        }
+                        case 3: {
+                            orderType = "折改：";
+                            wire = objBean.getRemoveWiredNum();
+                            wireless = objBean.getRemoveWirelessNum();
+                            break;
+                        }
+                        default: {
+                            orderType = "";
+                            Log.i(TAG, "onSuccess: orderType.default-->" + objBean.getOrderType());
+                        }
+                    }
+
+                    mAdapterPendingDataList.add(new AdapterPendingData(objBean.getOrderNo()
+                            , custName
+                            , objBean.getContactName()
+                            , objBean.getContactPhone()
+                            , new TimeFormatU().millisToDate(time)
+                            , address
+                            , orderType
+                            , wire
+                            , wireless
+                            , objBean.getOrderId()));
+                }
+
+                myHandler.sendEmptyMessage(Data.MSG_1);
             }
         });
+    }
+
+    //  显示信息Dialog
+    private void showMessageDialog(String msg) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setMessage(msg);
+        builder.setPositiveButton(R.string.ensure, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                //  do nothing
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    //  显示刷新Dialog
+    private void showFlushDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.dialog_message_editable, null);
+        TextView tvInfo = view.findViewById(R.id.tv_dialog_message_message);
+        Button button = view.findViewById(R.id.btn_dialog_message_cancel);
+
+        builder.setView(view);
+
+        tvInfo.setText("订单变更为待审核，无法派单!");
+        button.setText("刷新");
+
+        final AlertDialog dialog = builder.create();
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mSwipeRefreshLayout.setRefreshing(true);
+                mNetworkManager.getPenddingOrder(jobNo, token, "", "", userName);
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
     }
 
     //显示popupWindow
@@ -211,5 +346,30 @@ public class PendingFragment extends Fragment {
         WindowManager.LayoutParams lp = getActivity().getWindow().getAttributes();
         lp.alpha = alpha;
         getActivity().getWindow().setAttributes(lp);
+    }
+
+    private class MyHandler extends Handler {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+
+            if (mSwipeRefreshLayout.isRefreshing()) {
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+
+            switch (msg.what) {
+                case Data.MSG_ERO: {
+                    showMessageDialog(mStringMessage);
+                    break;
+                }
+                case Data.MSG_1: {
+                    mPendingAdapter.notifyDataSetChanged();
+                    break;
+                }
+                default: {
+                    Log.i(TAG, "handleMessage: default-->" + msg.what);
+                }
+            }
+        }
     }
 }

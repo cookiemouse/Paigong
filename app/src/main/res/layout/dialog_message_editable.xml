@@ -31,11 +31,10 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="@dimen/dp_16"
         android:background="@drawable/bg_button"
-        android:paddingBottom="@dimen/dp_16"
         android:paddingLeft="@dimen/dp_64"
         android:paddingRight="@dimen/dp_64"
-        android:paddingTop="@dimen/dp_16"
         android:layout_marginBottom="@dimen/dp_16"
+        android:textColor="@color/colorWhite"
         android:text="@string/known"/>
 
 </LinearLayout>
