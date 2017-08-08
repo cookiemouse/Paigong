@@ -16,12 +16,14 @@ import com.tianyigps.xiepeng.R;
 import com.tianyigps.xiepeng.adapter.StatisticsManagerAdapter;
 import com.tianyigps.xiepeng.adapter.StatisticsWorkerAdapter;
 import com.tianyigps.xiepeng.base.BaseActivity;
+import com.tianyigps.xiepeng.bean.InstallCountBean;
 import com.tianyigps.xiepeng.bean.WorkerQualityBean;
 import com.tianyigps.xiepeng.data.AdapterStatisticsManagerData;
 import com.tianyigps.xiepeng.data.AdapterStatisticsWorkderData;
 import com.tianyigps.xiepeng.data.Data;
 import com.tianyigps.xiepeng.dialog.DatePickerDialogFragment;
 import com.tianyigps.xiepeng.interfaces.OnGetQualityCountListener;
+import com.tianyigps.xiepeng.interfaces.OnInstallCountListener;
 import com.tianyigps.xiepeng.manager.NetworkManager;
 import com.tianyigps.xiepeng.manager.SharedpreferenceManager;
 
@@ -34,7 +36,6 @@ import java.util.Locale;
 
 import static com.tianyigps.xiepeng.data.Data.DATA_LAUNCH_MODE_WORKER;
 import static com.tianyigps.xiepeng.data.Data.MSG_1;
-import static com.tianyigps.xiepeng.data.Data.MSG_ERO;
 
 public class StatisticsActivity extends BaseActivity {
 
@@ -57,10 +58,13 @@ public class StatisticsActivity extends BaseActivity {
     private MyHandler myHandler;
     private SharedpreferenceManager mSharedpreferenceManager;
     private int eid;
+    private String jobNo;
     private String token;
     private String userName;
     private int uiMode;
     private String monthP;
+
+    private String mStringMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +82,7 @@ public class StatisticsActivity extends BaseActivity {
 
         mSharedpreferenceManager = new SharedpreferenceManager(StatisticsActivity.this);
         eid = mSharedpreferenceManager.getEid();
+        jobNo = mSharedpreferenceManager.getJobNo();
         token = mSharedpreferenceManager.getToken();
         userName = mSharedpreferenceManager.getAccount();
         uiMode = mSharedpreferenceManager.getUiMode();
@@ -155,15 +160,18 @@ public class StatisticsActivity extends BaseActivity {
             @Override
             public void onFailure() {
                 Log.i(TAG, "onFailure: ");
-                myHandler.sendEmptyMessage(MSG_ERO);
+                mStringMessage = Data.DEFAULT_MESSAGE;
+                myHandler.sendEmptyMessage(Data.MSG_ERO);
             }
 
             @Override
             public void onSuccess(String result) {
-                mStatisticsWorkderDataList.clear();
+                Log.i(TAG, "onSuccess: result-->" + result);
                 Gson gson = new Gson();
                 WorkerQualityBean workerQualityBean = gson.fromJson(result, WorkerQualityBean.class);
                 if (!workerQualityBean.isSuccess()) {
+                    mStringMessage = workerQualityBean.getMsg();
+                    myHandler.sendEmptyMessage(Data.MSG_ERO);
                     return;
                 }
 
@@ -172,6 +180,8 @@ public class StatisticsActivity extends BaseActivity {
                     myHandler.sendEmptyMessage(MSG_1);
                     return;
                 }
+
+                mStatisticsWorkderDataList.clear();
 
                 mStatisticsWorkderDataList.add(new AdapterStatisticsWorkderData("离线设备-新装&改装（有线）"
                         , objBean.getInstallWiredOfflineNum()));
@@ -203,6 +213,42 @@ public class StatisticsActivity extends BaseActivity {
                 myHandler.sendEmptyMessage(MSG_1);
             }
         });
+
+        mNetworkManager.setOnInstallCountListener(new OnInstallCountListener() {
+            @Override
+            public void onFailure() {
+                Log.i(TAG, "onFailure: ");
+                mStringMessage = Data.DEFAULT_MESSAGE;
+                myHandler.sendEmptyMessage(Data.MSG_ERO);
+            }
+
+            @Override
+            public void onSuccess(String result) {
+                Log.i(TAG, "onSuccess: result-->" + result);
+                Gson gson = new Gson();
+                InstallCountBean installCountBean = gson.fromJson(result, InstallCountBean.class);
+                if (!installCountBean.isSuccess()) {
+                    mStringMessage = installCountBean.getMsg();
+                    myHandler.sendEmptyMessage(Data.MSG_ERO);
+                    return;
+                }
+
+                mStatisticsManagerDataList.clear();
+
+                for (InstallCountBean.ObjBean objBean : installCountBean.getObj()) {
+                    String temp = objBean.getEngineerJobNo() + objBean.getEngineerName();
+                    mStatisticsManagerDataList.add(new AdapterStatisticsManagerData(temp
+                            , objBean.getDoorNum()
+                            , objBean.getFinishCarNum()
+                            , objBean.getFinishWiredNum()
+                            , objBean.getFinishWirelessNum()));
+                }
+                for (int i = 0; i < 20; i++) {
+                    mStatisticsManagerDataList.add(new AdapterStatisticsManagerData("1001南柱赫", 21, 25, 21, 25));
+                }
+                myHandler.sendEmptyMessage(Data.MSG_2);
+            }
+        });
     }
 
     //  显示Worker列表
@@ -229,14 +275,12 @@ public class StatisticsActivity extends BaseActivity {
         mFrameLayoutTitle.addView(viewTitleManager);
 
         mStatisticsManagerDataList = new ArrayList<>();
-        for (int i = 0; i < 20; i++) {
-            mStatisticsManagerDataList.add(new AdapterStatisticsManagerData("1001南柱赫", 21, 25, 21, 25));
-        }
 
         mStatisticsManagerAdapter = new StatisticsManagerAdapter(StatisticsActivity.this, mStatisticsManagerDataList);
+
         mListViewStatistics.setAdapter(mStatisticsManagerAdapter);
 
-
+        mNetworkManager.getInstallCount(jobNo, token, monthP, userName);
     }
 
     //  选择日期
@@ -249,15 +293,15 @@ public class StatisticsActivity extends BaseActivity {
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what) {
-                case MSG_ERO: {
+                case Data.MSG_ERO: {
                     break;
                 }
-                case MSG_1: {
-                    if (DATA_LAUNCH_MODE_WORKER == uiMode) {
-                        mStatisticsWorkerAdapter.notifyDataSetChanged();
-                    } else {
-                        mStatisticsManagerAdapter.notifyDataSetChanged();
-                    }
+                case Data.MSG_1: {
+                    mStatisticsWorkerAdapter.notifyDataSetChanged();
+                    break;
+                }
+                case Data.MSG_2: {
+                    mStatisticsManagerAdapter.notifyDataSetChanged();
                     break;
                 }
                 default: {

@@ -173,6 +173,9 @@ public class HandledFragment extends Fragment {
 
             @Override
             public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                if (visibleItemCount < 0) {
+                    return;
+                }
                 if (totalItemCount == visibleItemCount) {
                     return;
                 }
