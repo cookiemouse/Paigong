@@ -36,4 +36,5 @@ public class Urls {
     public static final String URL_MANAGER_INSTALL_COUNT = IP + "/dispatch4AppController/getInstallCount4Director?";
     public static final String URL_MANAGER_ORDER_TRACK = IP + "/dispatch4AppController/getOrderFlowByOrderId?";
     public static final String URL_MANAGER_ORDER_PENDED = IP + "/dispatch4AppController/getHistoryOrders4Director?";
+    public static final String URL_MANAGER_PEND = IP + "/dispatch4AppController/dispatchOrder?";
 }

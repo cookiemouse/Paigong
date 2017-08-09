@@ -147,7 +147,7 @@ public class MineFragment extends Fragment {
                         if (orderTrackDialogFragment.isAdded()){
                             return;
                         }
-                        orderTrackDialogFragment.show(getFragmentManager(), "OrderTrackDialogFragment");
+                        orderTrackDialogFragment.show(getChildFragmentManager(), "OrderTrackDialogFragment");
                         break;
                     }
                     default: {

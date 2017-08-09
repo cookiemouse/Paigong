@@ -14,7 +14,7 @@
         android:lines="1"
         android:text="@string/app_name"
         android:textColor="@color/colorGrayBlack"
-        android:textSize="@dimen/sp_20" />
+        android:textSize="@dimen/sp_20"/>
 
     <View
         android:id="@+id/line_item_pending_1"
@@ -22,7 +22,7 @@
         android:layout_height="@dimen/dp_1"
         android:layout_below="@+id/tv_item_pending_content_1"
         android:layout_marginTop="@dimen/dp_8"
-        android:background="@color/color_cut_line" />
+        android:background="@color/color_cut_line"/>
 
     <TextView
         android:id="@+id/tv_item_pending_time"
@@ -32,7 +32,7 @@
         android:layout_alignStart="@+id/tv_item_pending_name"
         android:layout_below="@+id/tv_item_pending_name"
         android:layout_marginTop="@dimen/dp_8"
-        android:text="time" />
+        android:text="time"/>
 
     <TextView
         android:id="@+id/tv_item_pending_address"
@@ -41,7 +41,7 @@
         android:layout_alignLeft="@+id/tv_item_pending_time"
         android:layout_alignStart="@+id/tv_item_pending_time"
         android:layout_below="@+id/tv_item_pending_time"
-        android:text="address" />
+        android:text="address"/>
 
     <TextView
         android:id="@+id/tv_item_pending_id"
@@ -51,26 +51,26 @@
         android:layout_alignStart="@+id/tv_item_pending_address"
         android:layout_below="@+id/tv_item_pending_address"
         android:layout_marginTop="@dimen/dp_8"
-        android:text="orderNo" />
+        android:text="orderNo"/>
 
     <TextView
         android:id="@+id/tv_item_pending_content_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/tv_item_pending_id"
-        android:layout_alignStart="@+id/tv_item_pending_id"
-        android:layout_below="@+id/tv_item_pending_id"
-        android:text="安装：" />
+        android:layout_marginLeft="@dimen/dp_8"
+        android:layout_marginStart="@dimen/dp_8"
+        android:layout_below="@+id/ll_item_pending_remove"
+        android:text="安装："/>
 
     <TextView
         android:id="@+id/tv_item_pending_content_1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/tv_item_pending_content_title"
+        android:layout_below="@+id/tv_item_pending_id"
         android:layout_toEndOf="@+id/tv_item_pending_content_title"
         android:layout_toRightOf="@+id/tv_item_pending_content_title"
-        android:layout_below="@+id/tv_item_pending_id"
-        android:text="@string/wire" />
+        android:text="@string/wire"/>
 
     <TextView
         android:id="@+id/tv_item_pending_content_wire"
@@ -82,7 +82,7 @@
         android:layout_toEndOf="@+id/tv_item_pending_content_1"
         android:layout_toRightOf="@+id/tv_item_pending_content_1"
         android:text="0"
-        android:textColor="@color/colorBlueTheme" />
+        android:textColor="@color/colorBlueTheme"/>
 
     <TextView
         android:id="@+id/tv_item_pending_content_2"
@@ -91,7 +91,7 @@
         android:layout_alignTop="@+id/tv_item_pending_content_wire"
         android:layout_toEndOf="@+id/tv_item_pending_content_wire"
         android:layout_toRightOf="@+id/tv_item_pending_content_wire"
-        android:text="@string/ge_middle" />
+        android:text="@string/ge_middle"/>
 
     <TextView
         android:id="@+id/tv_item_pending_content_wireless"
@@ -103,7 +103,7 @@
         android:layout_toEndOf="@+id/tv_item_pending_content_2"
         android:layout_toRightOf="@+id/tv_item_pending_content_2"
         android:text="0"
-        android:textColor="@color/colorBlueTheme" />
+        android:textColor="@color/colorBlueTheme"/>
 
     <TextView
         android:id="@+id/tv_item_pending_content_3"
@@ -112,7 +112,60 @@
         android:layout_alignTop="@+id/tv_item_pending_content_wireless"
         android:layout_toEndOf="@+id/tv_item_pending_content_wireless"
         android:layout_toRightOf="@+id/tv_item_pending_content_wireless"
-        android:text="@string/ge" />
+        android:text="@string/ge"/>
+
+    <LinearLayout
+        android:id="@+id/ll_item_pending_remove"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_item_pending_id"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_item_pending_remove_content_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_8"
+            android:layout_marginStart="@dimen/dp_8"
+            android:text="拆除："/>
+
+        <TextView
+            android:id="@+id/tv_item_pending_remove_content_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/wire"/>
+
+        <TextView
+            android:id="@+id/tv_item_pending_remove_content_wire"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_4"
+            android:layout_marginRight="@dimen/dp_4"
+            android:text="0"
+            android:textColor="@color/colorBlueTheme"/>
+
+        <TextView
+            android:id="@+id/tv_item_pending_remove_content_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/ge_middle"/>
+
+        <TextView
+            android:id="@+id/tv_item_pending_remove_content_wireless"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_4"
+            android:layout_marginRight="@dimen/dp_4"
+            android:text="0"
+            android:textColor="@color/colorBlueTheme"/>
+
+        <TextView
+            android:id="@+id/tv_item_pending_remove_content_3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/ge"/>
+
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/ll_item_pending_"
@@ -135,14 +188,14 @@
                 android:id="@+id/iv_item_pending_map"
                 android:layout_width="@dimen/dp_32"
                 android:layout_height="@dimen/dp_32"
-                android:src="@drawable/ic_map_blue" />
+                android:src="@drawable/ic_map_blue"/>
 
             <TextView
                 android:id="@+id/tv_item_pending_map"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_4"
-                android:text="@string/look_map" />
+                android:text="@string/look_map"/>
 
         </LinearLayout>
 
@@ -157,14 +210,14 @@
                 android:id="@+id/iv_item_pending_phone"
                 android:layout_width="@dimen/dp_32"
                 android:layout_height="@dimen/dp_32"
-                android:src="@drawable/ic_phone_blue" />
+                android:src="@drawable/ic_phone_blue"/>
 
             <TextView
                 android:id="@+id/tv_item_pending_phone_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_4"
-                android:text="@string/app_name" />
+                android:text="@string/app_name"/>
 
         </LinearLayout>
 
@@ -179,14 +232,14 @@
                 android:id="@+id/iv_item_pending_pend"
                 android:layout_width="@dimen/dp_32"
                 android:layout_height="@dimen/dp_32"
-                android:src="@drawable/ic_pending" />
+                android:src="@drawable/ic_pending"/>
 
             <TextView
                 android:id="@+id/tv_item_pending_contact"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_4"
-                android:text="@string/pend" />
+                android:text="@string/pend"/>
 
         </LinearLayout>
 
@@ -202,6 +255,6 @@
         android:layout_toRightOf="@+id/tv_item_pending_time"
         android:text="@string/modify"
         android:textColor="@color/colorRed"
-        android:visibility="gone" />
+        android:visibility="gone"/>
 
 </RelativeLayout>

@@ -1,5 +1,8 @@
 package com.tianyigps.xiepeng.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -13,9 +16,11 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.tianyigps.xiepeng.R;
 import com.tianyigps.xiepeng.adapter.ChoiceWorkerAdapter;
 import com.tianyigps.xiepeng.base.BaseActivity;
+import com.tianyigps.xiepeng.bean.ChoiceWorkerBean;
 import com.tianyigps.xiepeng.data.AdapterChoiceWorkerData;
 import com.tianyigps.xiepeng.data.Data;
 import com.tianyigps.xiepeng.interfaces.OnWorkersListener;
@@ -42,10 +47,15 @@ public class ChoiceWorkerActivity extends BaseActivity {
 
     private SharedpreferenceManager mSharedpreferenceManager;
     private NetworkManager mNetworkManager;
-    private String jobNo;
+    private int eid, eidChoice;
+    private String jobNo, jobNoChoice;
     private String token;
     private String userName;
     private MyHandler myHandler;
+
+    private String mStringMessage;
+
+    private Intent mIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,10 +71,13 @@ public class ChoiceWorkerActivity extends BaseActivity {
         this.setTitleText("选择工程师");
         this.setTitleRightButtonVisibilite(false);
 
+        mIntent = getIntent();
+
         mSharedpreferenceManager = new SharedpreferenceManager(this);
         mNetworkManager = new NetworkManager();
         myHandler = new MyHandler();
 
+        eid = mSharedpreferenceManager.getEid();
         jobNo = mSharedpreferenceManager.getJobNo();
         token = mSharedpreferenceManager.getToken();
         userName = mSharedpreferenceManager.getAccount();
@@ -81,10 +94,6 @@ public class ChoiceWorkerActivity extends BaseActivity {
 
         mAdapterChoiceWorkerDataList = new ArrayList<>();
         mAdapterChoiceWorkerDataListSearch = new ArrayList<>();
-
-        for (int i = 0; i < 10; i++) {
-            mAdapterChoiceWorkerDataList.add(new AdapterChoiceWorkerData("100002", "张师傅", "宝山区/嘉定区"));
-        }
 
         mChoiceWorkerAdapter = new ChoiceWorkerAdapter(this, mAdapterChoiceWorkerDataListSearch);
         mListView.setAdapter(mChoiceWorkerAdapter);
@@ -112,13 +121,19 @@ public class ChoiceWorkerActivity extends BaseActivity {
                     mTextViewId.setText(null);
                     mTextViewName.setText(null);
                     mTextViewArea.setText(null);
+
+                    eidChoice = 0;
+                    jobNoChoice = null;
                     return;
                 }
                 for (AdapterChoiceWorkerData dataF : mAdapterChoiceWorkerDataList) {
                     dataF.setSelect(false);
-                    mTextViewId.setText(dataF.getId());
+                    mTextViewId.setText(data.getJobNo());
                     mTextViewName.setText(dataF.getName());
                     mTextViewArea.setText(dataF.getArea());
+
+                    eidChoice = data.getId();
+                    jobNoChoice = data.getJobNo();
                 }
                 mAdapterChoiceWorkerDataList.get(i).setSelect(true);
                 mChoiceWorkerAdapter.notifyDataSetChanged();
@@ -128,14 +143,29 @@ public class ChoiceWorkerActivity extends BaseActivity {
         mButtonSelf.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: 2017/8/7 派单给自己
+                // 2017/8/7 派单给自己
+                int isPay = 0;
+                if (mCheckBoxPay.isChecked()) {
+                    isPay = 1;
+                }
+                pendResult(eid, jobNo, isPay);
             }
         });
 
         mButtonPend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: 2017/8/7 派单
+                // 2017/8/7 派单
+                if ("".equals(jobNoChoice) || null == jobNoChoice) {
+                    mStringMessage = "请选择安装工程师！";
+                    myHandler.sendEmptyMessage(Data.MSG_ERO);
+                    return;
+                }
+                int isPay = 0;
+                if (mCheckBoxPay.isChecked()) {
+                    isPay = 1;
+                }
+                pendResult(eidChoice, jobNoChoice, isPay);
             }
         });
 
@@ -143,12 +173,30 @@ public class ChoiceWorkerActivity extends BaseActivity {
             @Override
             public void onFailure() {
                 Log.i(TAG, "onFailure: ");
+                mStringMessage = Data.DEFAULT_MESSAGE;
                 myHandler.sendEmptyMessage(Data.MSG_ERO);
             }
 
             @Override
             public void onSuccess(String result) {
                 Log.i(TAG, "onSuccess: result-->" + result);
+                myHandler.sendEmptyMessage(Data.MSG_1);
+                Gson gson = new Gson();
+                ChoiceWorkerBean choiceWorkerBean = gson.fromJson(result, ChoiceWorkerBean.class);
+                if (!choiceWorkerBean.isSuccess()) {
+                    mStringMessage = choiceWorkerBean.getMsg();
+                    myHandler.sendEmptyMessage(Data.MSG_ERO);
+                    return;
+                }
+
+                mAdapterChoiceWorkerDataList.clear();
+                for (ChoiceWorkerBean.ObjBean objBean : choiceWorkerBean.getObj()) {
+                    mAdapterChoiceWorkerDataList.add(new AdapterChoiceWorkerData(objBean.getId()
+                            , objBean.getJobNo()
+                            , objBean.getName()
+                            , objBean.getChargeArea()));
+                }
+
                 myHandler.sendEmptyMessage(Data.MSG_1);
             }
         });
@@ -165,7 +213,8 @@ public class ChoiceWorkerActivity extends BaseActivity {
         }
 
         for (AdapterChoiceWorkerData data : mAdapterChoiceWorkerDataList) {
-            if (data.getId().contains(key)
+            String id = "" + data.getId();
+            if (id.contains(key)
                     || data.getName().contains(key)
                     || data.getArea().contains(key)) {
 
@@ -176,12 +225,35 @@ public class ChoiceWorkerActivity extends BaseActivity {
         mChoiceWorkerAdapter.notifyDataSetChanged();
     }
 
+    //  返回数据
+    private void pendResult(int eid, String jobNo, int isPay) {
+        mIntent.putExtra(Data.DATA_INTENT_CHOICE_WORKER_EID, eid);
+        mIntent.putExtra(Data.DATA_INTENT_CHOICE_WORKER_JOBNO, jobNo);
+        mIntent.putExtra(Data.DATA_INTENT_CHOICE_WORKER_ISPAY, isPay);
+        setResult(Data.DATA_INTENT_CHOICE_WORKER_RESULT, mIntent);
+        finish();
+    }
+
+    private void showMessageDialog(String msg) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(ChoiceWorkerActivity.this);
+        builder.setMessage(msg);
+        builder.setPositiveButton(R.string.ensure, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                //  do nothing
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
     private class MyHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what) {
                 case Data.MSG_ERO: {
+                    showMessageDialog(mStringMessage);
                     Log.i(TAG, "handleMessage: mes_ero");
                 }
                 case Data.MSG_1: {

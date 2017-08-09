@@ -23,6 +23,9 @@ public final class Data {
     public final static int DATA_INTENT_ORDER_DETAILS_REQUEST = 0x003;
     public final static int DATA_INTENT_ORDER_DETAILS_RESULT = 0x004;
 
+    public final static int DATA_INTENT_CHOICE_WORKER_REQUEST = 0x005;
+    public final static int DATA_INTENT_CHOICE_WORKER_RESULT = 0x006;
+
     //  intent传值
     public final static String DATA_INTENT_EID = "paigong_intent_eid";
     public final static String DATA_INTENT_TOKEN = "paigong_intent_token";
@@ -41,6 +44,10 @@ public final class Data {
 
     public final static String DATA_INTENT_LOCATE_TYPE = "paigong_intent_locate_type";
     public final static String DATA_INTENT_LOCATE_IMEI = "paigong_intent_locate_imei";
+
+    public final static String DATA_INTENT_CHOICE_WORKER_JOBNO = "paigong_intent_choice_worker_jobno";
+    public final static String DATA_INTENT_CHOICE_WORKER_EID = "paigong_intent_choice_worker_eid";
+    public final static String DATA_INTENT_CHOICE_WORKER_ISPAY = "paigong_intent_choice_worker_ispay";
 
     //  数据请求所需数据
     private final static String DATA_JSON = "paigong_json_";

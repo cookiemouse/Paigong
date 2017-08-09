@@ -21,6 +21,8 @@ import com.tianyigps.xiepeng.interfaces.OnInstallBackListener;
 import com.tianyigps.xiepeng.interfaces.OnInstallCountListener;
 import com.tianyigps.xiepeng.interfaces.OnModifyPasswordListener;
 import com.tianyigps.xiepeng.interfaces.OnOrderTrackListener;
+import com.tianyigps.xiepeng.interfaces.OnPendListener;
+import com.tianyigps.xiepeng.interfaces.OnPendedListener;
 import com.tianyigps.xiepeng.interfaces.OnPendingOrderListener;
 import com.tianyigps.xiepeng.interfaces.OnRemoveTerminalInfoListener;
 import com.tianyigps.xiepeng.interfaces.OnRemoveTerminalListener;
@@ -86,6 +88,8 @@ public class NetworkManager {
     private OnWorkersListener mOnWorkersListener;
     private OnInstallCountListener mOnInstallCountListener;
     private OnOrderTrackListener mOnOrderTrackListener;
+    private OnPendedListener mOnPendedListener;
+    private OnPendListener mOnPendListener;
 
     public NetworkManager() {
         mOkHttpClient = new OkHttpClient();
@@ -1133,7 +1137,7 @@ public class NetworkManager {
     //  获取历史订单列表    25
     public void getPended(String jobNo, String token, String status, String condition, String lastOrderId, String userName) {
         Request.Builder builder = new Request.Builder();
-        builder.url(Urls.URL_MANAGER_ORDER_TRACK + "jobNo=" + jobNo
+        builder.url(Urls.URL_MANAGER_ORDER_PENDED + "jobNo=" + jobNo
                 + "&token=" + token
                 + "&status=" + status
                 + "&condition=" + condition
@@ -1145,20 +1149,62 @@ public class NetworkManager {
         call.enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                if (null == mOnOrderTrackListener) {
-                    throw new NullPointerException("OnOrderTrackListener is null");
+                if (null == mOnPendedListener) {
+                    throw new NullPointerException("OnPendedListener is null");
                 }
-                mOnOrderTrackListener.onFailure();
+                mOnPendedListener.onFailure();
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                if (null == mOnOrderTrackListener) {
-                    throw new NullPointerException("OnOrderTrackListener is null");
+                if (null == mOnPendedListener) {
+                    throw new NullPointerException("OnPendedListener is null");
                 }
-                mOnOrderTrackListener.onSuccess(response.body().string());
+                mOnPendedListener.onSuccess(response.body().string());
             }
         });
+    }
+
+    public void setOnPendedListener(OnPendedListener listener) {
+        this.mOnPendedListener = listener;
+    }
+
+    //  派单
+    public void pendOrder(String jobNo, String userName, String token, String orderNo, int orderStatus, int eid
+            , int isPay) {
+
+        Request.Builder builder = new Request.Builder();
+        builder.url(Urls.URL_MANAGER_PEND + "jobNo=" + jobNo
+                + "&token=" + token
+                + "&orderNo=" + orderNo
+                + "&orderStatus=" + orderStatus
+                + "&eid=" + eid
+                + "&isPay=" + isPay
+                + "&userName=" + userName);
+        mRequest = builder.build();
+        Log.i(TAG, "getQualityCount: url-->" + mRequest.url());
+        Call call = mOkHttpClient.newCall(mRequest);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                if (null == mOnPendListener) {
+                    throw new NullPointerException("OnPendListener is null");
+                }
+                mOnPendListener.onFailure();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (null == mOnPendListener) {
+                    throw new NullPointerException("OnPendListener is null");
+                }
+                mOnPendListener.onSuccess(response.body().string());
+            }
+        });
+    }
+
+    public void setOnPendListener(OnPendListener listener) {
+        this.mOnPendListener = listener;
     }
 
 }
