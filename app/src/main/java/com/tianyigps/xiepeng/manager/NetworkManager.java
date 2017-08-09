@@ -23,6 +23,8 @@ import com.tianyigps.xiepeng.interfaces.OnModifyPasswordListener;
 import com.tianyigps.xiepeng.interfaces.OnOrderTrackListener;
 import com.tianyigps.xiepeng.interfaces.OnPendListener;
 import com.tianyigps.xiepeng.interfaces.OnPendedListener;
+import com.tianyigps.xiepeng.interfaces.OnPendedNumListener;
+import com.tianyigps.xiepeng.interfaces.OnPendingNumListener;
 import com.tianyigps.xiepeng.interfaces.OnPendingOrderListener;
 import com.tianyigps.xiepeng.interfaces.OnRemoveTerminalInfoListener;
 import com.tianyigps.xiepeng.interfaces.OnRemoveTerminalListener;
@@ -90,6 +92,8 @@ public class NetworkManager {
     private OnOrderTrackListener mOnOrderTrackListener;
     private OnPendedListener mOnPendedListener;
     private OnPendListener mOnPendListener;
+    private OnPendingNumListener mOnPendingNumListener;
+    private OnPendedNumListener mOnPendedNumListener;
 
     public NetworkManager() {
         mOkHttpClient = new OkHttpClient();
@@ -1169,7 +1173,7 @@ public class NetworkManager {
         this.mOnPendedListener = listener;
     }
 
-    //  派单
+    //  派单      26
     public void pendOrder(String jobNo, String userName, String token, String orderNo, int orderStatus, int eid
             , int isPay) {
 
@@ -1205,6 +1209,70 @@ public class NetworkManager {
 
     public void setOnPendListener(OnPendListener listener) {
         this.mOnPendListener = listener;
+    }
+
+    //  获取待处理数量     27
+    public void getPendingNum(String jobNo, String token, String userName) {
+        Request.Builder builder = new Request.Builder();
+        builder.url(Urls.URL_MANAGER_PENDING_NUM + "jobNo=" + jobNo
+                + "&token=" + token
+                + "&userName=" + userName);
+        mRequest = builder.build();
+        Log.i(TAG, "getQualityCount: url-->" + mRequest.url());
+        Call call = mOkHttpClient.newCall(mRequest);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                if (null == mOnPendingNumListener) {
+                    throw new NullPointerException("OnPendingNumListener is null");
+                }
+                mOnPendingNumListener.onFailure();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (null == mOnPendingNumListener) {
+                    throw new NullPointerException("OnPendingNumListener is null");
+                }
+                mOnPendingNumListener.onSuccess(response.body().string());
+            }
+        });
+    }
+
+    public void setOnPendingNumListener(OnPendingNumListener listener) {
+        this.mOnPendingNumListener = listener;
+    }
+
+    //  获取已处理数量     28
+    public void getPendedNum(String jobNo, String token, String userName) {
+        Request.Builder builder = new Request.Builder();
+        builder.url(Urls.URL_MANAGER_PENDED_NUM + "jobNo=" + jobNo
+                + "&token=" + token
+                + "&userName=" + userName);
+        mRequest = builder.build();
+        Log.i(TAG, "getQualityCount: url-->" + mRequest.url());
+        Call call = mOkHttpClient.newCall(mRequest);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                if (null == mOnPendedNumListener) {
+                    throw new NullPointerException("OnPendedNumListener is null");
+                }
+                mOnPendedNumListener.onFailure();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (null == mOnPendedNumListener) {
+                    throw new NullPointerException("OnPendedNumListener is null");
+                }
+                mOnPendedNumListener.onSuccess(response.body().string());
+            }
+        });
+    }
+
+    public void setOnPendedNumListener(OnPendedNumListener listener) {
+        this.mOnPendedNumListener = listener;
     }
 
 }

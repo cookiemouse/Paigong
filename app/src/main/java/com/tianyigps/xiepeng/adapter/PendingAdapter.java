@@ -71,7 +71,7 @@ public class PendingAdapter extends BaseAdapter {
             viewHolder.tvWire = view.findViewById(R.id.tv_item_pending_content_wire);
             viewHolder.tvWireless = view.findViewById(R.id.tv_item_pending_content_wireless);
             viewHolder.imageViewPend = view.findViewById(R.id.iv_item_pending_pend);
-            viewHolder.tvContactName = view.findViewById(R.id.tv_item_pending_contact);
+            viewHolder.tvWorkerName = view.findViewById(R.id.tv_item_pending_phone_name);
             viewHolder.llRemove = view.findViewById(R.id.ll_item_pending_remove);
             viewHolder.tvWireRemove = view.findViewById(R.id.tv_item_pending_remove_content_wire);
             viewHolder.tvWirelessRemove = view.findViewById(R.id.tv_item_pending_remove_content_wireless);
@@ -87,7 +87,7 @@ public class PendingAdapter extends BaseAdapter {
         viewHolder.tvAddress.setText(data.getAddress());
         viewHolder.tvWire.setText("" + data.getLineNumber());
         viewHolder.tvWireless.setText("" + data.getLinelessNumber());
-//        viewHolder.tvContactName.setText(data.getContactName());
+        viewHolder.tvWorkerName.setText(data.getContactName());
 
         String orderType;
         switch (data.getOrderType()) {
@@ -104,8 +104,8 @@ public class PendingAdapter extends BaseAdapter {
             case 3: {
                 orderType = "安装：";
                 viewHolder.llRemove.setVisibility(View.VISIBLE);
-                viewHolder.tvWireRemove.setText("" + data.getLineNumber());
-                viewHolder.tvWirelessRemove.setText("" + data.getLinelessNumber());
+                viewHolder.tvWireRemove.setText("" + data.getWireRemove());
+                viewHolder.tvWirelessRemove.setText("" + data.getWirelessRemove());
                 break;
             }
             default: {
@@ -162,7 +162,7 @@ public class PendingAdapter extends BaseAdapter {
 
     private class ViewHolder {
         private ImageView imageViewCall, imageViewLocate, imageViewPend;
-        private TextView tvOrderNo, tvName, tvTime, tvAddress, tvOrderType, tvWire, tvWireless, tvContactName;
+        private TextView tvOrderNo, tvName, tvTime, tvAddress, tvOrderType, tvWire, tvWireless, tvWorkerName;
         private TextView tvWireRemove, tvWirelessRemove;
         private LinearLayout llRemove;
     }

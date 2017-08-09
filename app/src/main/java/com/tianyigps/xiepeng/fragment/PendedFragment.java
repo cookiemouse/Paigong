@@ -28,11 +28,13 @@ import com.tianyigps.xiepeng.R;
 import com.tianyigps.xiepeng.activity.WorkerFragmentContentActivity;
 import com.tianyigps.xiepeng.adapter.PendedAdapter;
 import com.tianyigps.xiepeng.adapter.PopupAdapter;
+import com.tianyigps.xiepeng.bean.NumberBean;
 import com.tianyigps.xiepeng.bean.PendedBean;
 import com.tianyigps.xiepeng.data.AdapterPendedData;
 import com.tianyigps.xiepeng.data.AdapterPopupData;
 import com.tianyigps.xiepeng.data.Data;
 import com.tianyigps.xiepeng.interfaces.OnPendedListener;
+import com.tianyigps.xiepeng.interfaces.OnPendedNumListener;
 import com.tianyigps.xiepeng.manager.NetworkManager;
 import com.tianyigps.xiepeng.manager.SharedpreferenceManager;
 
@@ -80,6 +82,9 @@ public class PendedFragment extends Fragment {
     private ProgressBar mProgressBarMore;
     private boolean addAble = true, isLast = false;
 
+    //  popup
+    private List<AdapterPopupData> mAdapterPopupDataList;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -120,6 +125,7 @@ public class PendedFragment extends Fragment {
         mSwipeRefreshLayout.setColorSchemeColors(0xff3cabfa);
 
         mAdapterPendedDataList = new ArrayList<>();
+        mAdapterPopupDataList = new ArrayList<>();
         mAdapterPendedDataListSearch = new ArrayList<>();
 
         mPendedAdapter = new PendedAdapter(getContext(), mAdapterPendedDataListSearch);
@@ -152,7 +158,7 @@ public class PendedFragment extends Fragment {
         mImageViewTitleRight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showPopupWindow();
+                getPendedNumber();
             }
         });
 
@@ -276,6 +282,78 @@ public class PendedFragment extends Fragment {
                 myHandler.sendEmptyMessage(Data.MSG_1);
             }
         });
+
+        mNetworkManager.setOnPendedNumListener(new OnPendedNumListener() {
+            @Override
+            public void onFailure() {
+                Log.i(TAG, "onFailure: ");
+                mStringMessage = Data.DEFAULT_MESSAGE;
+                myHandler.sendEmptyMessage(Data.MSG_ERO);
+            }
+
+            @Override
+            public void onSuccess(String result) {
+                Log.i(TAG, "onSuccess: result-->" + result);
+                Gson gson = new Gson();
+
+                NumberBean numberBean = gson.fromJson(result, NumberBean.class);
+                if (!numberBean.isSuccess()) {
+                    mStringMessage = numberBean.getMsg();
+                    myHandler.sendEmptyMessage(Data.MSG_ERO);
+                    return;
+                }
+
+                mAdapterPopupDataList.clear();
+
+                for (NumberBean.ObjBean objBean : numberBean.getObj()) {
+                    String type;
+                    switch (objBean.getStatus()) {
+                        case 1: {
+                            type = "待派单";
+                            break;
+                        }
+                        case 2: {
+                            type = "空单";
+                            break;
+                        }
+                        case 3: {
+                            type = "已派单";
+                            break;
+                        }
+                        case 4: {
+                            type = "退回客户";
+                            break;
+                        }
+                        case 5: {
+                            type = "已取消";
+                            break;
+                        }
+                        case 6: {
+                            type = "安装退回";
+                            break;
+                        }
+                        case 7: {
+                            type = "已完成";
+                            break;
+                        }
+                        case 98: {
+                            type = "改约不通过";
+                            break;
+                        }
+                        case 99: {
+                            type = "待审核";
+                            break;
+                        }
+                        default: {
+                            type = "未知";
+                        }
+                    }
+                    mAdapterPopupDataList.add(new AdapterPopupData(type, objBean.getNum()));
+                }
+
+                myHandler.sendEmptyMessage(Data.MSG_5);
+            }
+        });
     }
 
     //  搜索
@@ -298,6 +376,11 @@ public class PendedFragment extends Fragment {
         mPendedAdapter.notifyDataSetChanged();
     }
 
+    //  获取popupNumber
+    private void getPendedNumber() {
+        mNetworkManager.getPendedNum(jobNo, token, userName);
+    }
+
     //显示popupWindow
     private void showPopupWindow() {
 
@@ -310,10 +393,7 @@ public class PendedFragment extends Fragment {
                 , ViewGroup.LayoutParams.WRAP_CONTENT
                 , true);
 
-        List<AdapterPopupData> adapterPopupDataList = new ArrayList<>();
-        adapterPopupDataList.add(new AdapterPopupData("已派单", 12));
-        adapterPopupDataList.add(new AdapterPopupData("改约不通过", 2));
-        PopupAdapter popupAdapter = new PopupAdapter(getContext(), adapterPopupDataList);
+        PopupAdapter popupAdapter = new PopupAdapter(getContext(), mAdapterPopupDataList);
         listView.setAdapter(popupAdapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -394,6 +474,10 @@ public class PendedFragment extends Fragment {
                 case Data.MSG_4: {
                     //  保存不刷新两次
                     addAble = true;
+                    break;
+                }
+                case Data.MSG_5: {
+                    showPopupWindow();
                     break;
                 }
                 default: {

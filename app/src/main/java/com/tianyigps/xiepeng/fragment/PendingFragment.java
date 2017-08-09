@@ -30,6 +30,7 @@ import com.tianyigps.xiepeng.activity.OrderDetailsActivity;
 import com.tianyigps.xiepeng.activity.WorkerFragmentContentActivity;
 import com.tianyigps.xiepeng.adapter.PendingAdapter;
 import com.tianyigps.xiepeng.adapter.PopupAdapter;
+import com.tianyigps.xiepeng.bean.NumberBean;
 import com.tianyigps.xiepeng.bean.PendBean;
 import com.tianyigps.xiepeng.bean.PendingBean;
 import com.tianyigps.xiepeng.data.AdapterPendingData;
@@ -37,6 +38,7 @@ import com.tianyigps.xiepeng.data.AdapterPopupData;
 import com.tianyigps.xiepeng.data.Data;
 import com.tianyigps.xiepeng.dialog.ChoiceMapDialogFragment;
 import com.tianyigps.xiepeng.interfaces.OnPendListener;
+import com.tianyigps.xiepeng.interfaces.OnPendingNumListener;
 import com.tianyigps.xiepeng.interfaces.OnPendingOrderListener;
 import com.tianyigps.xiepeng.manager.NetworkManager;
 import com.tianyigps.xiepeng.manager.SharedpreferenceManager;
@@ -78,6 +80,9 @@ public class PendingFragment extends Fragment {
     private int isPay;
     private String orderNo;
     private int orderStatus;
+
+    //  popup
+    private List<AdapterPopupData> mAdapterPopupDataList;
 
     @Nullable
     @Override
@@ -124,6 +129,7 @@ public class PendingFragment extends Fragment {
         mSwipeRefreshLayout.setColorSchemeColors(0xff3cabfa);
 
         mAdapterPendingDataList = new ArrayList<>();
+        mAdapterPopupDataList = new ArrayList<>();
 
         mPendingAdapter = new PendingAdapter(getContext(), mAdapterPendingDataList);
 
@@ -161,7 +167,7 @@ public class PendingFragment extends Fragment {
         mImageViewTitleRight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showPopupWindow();
+                getPendingNumber();
             }
         });
 
@@ -169,6 +175,7 @@ public class PendingFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 // TODO: 2017/8/9 搜索
+                mNetworkManager.getPenddingOrder(jobNo, token, "", "", userName);
             }
         });
 
@@ -270,9 +277,9 @@ public class PendingFragment extends Fragment {
                                 , objBean.getOrderType()
                                 , wire
                                 , wireless
-                                , objBean.getOrderId()
                                 , objBean.getRemoveWiredNum()
                                 , objBean.getRemoveWirelessNum()
+                                , objBean.getOrderId()
                                 , objBean.getOrderStatus());
                     } else {
                         data = new AdapterPendingData(objBean.getOrderNo()
@@ -312,6 +319,77 @@ public class PendingFragment extends Fragment {
                     return;
                 }
                 myHandler.sendEmptyMessage(Data.MSG_2);
+            }
+        });
+
+        mNetworkManager.setOnPendingNumListener(new OnPendingNumListener() {
+            @Override
+            public void onFailure() {
+                Log.i(TAG, "onFailure: ");
+                mStringMessage = Data.DEFAULT_MESSAGE;
+                myHandler.sendEmptyMessage(Data.MSG_ERO);
+            }
+
+            @Override
+            public void onSuccess(String result) {
+                Log.i(TAG, "onSuccess: result-->" + result);
+                Gson gson = new Gson();
+                NumberBean numberBean = gson.fromJson(result, NumberBean.class);
+                if (!numberBean.isSuccess()) {
+                    mStringMessage = numberBean.getMsg();
+                    myHandler.sendEmptyMessage(Data.MSG_ERO);
+                    return;
+                }
+
+                mAdapterPopupDataList.clear();
+
+                for (NumberBean.ObjBean objBean : numberBean.getObj()) {
+                    String type;
+                    switch (objBean.getStatus()) {
+                        case 1: {
+                            type = "待派单";
+                            break;
+                        }
+                        case 2: {
+                            type = "空单";
+                            break;
+                        }
+                        case 3: {
+                            type = "已派单";
+                            break;
+                        }
+                        case 4: {
+                            type = "退回客户";
+                            break;
+                        }
+                        case 5: {
+                            type = "已取消";
+                            break;
+                        }
+                        case 6: {
+                            type = "安装退回";
+                            break;
+                        }
+                        case 7: {
+                            type = "已完成";
+                            break;
+                        }
+                        case 98: {
+                            type = "改约不通过";
+                            break;
+                        }
+                        case 99: {
+                            type = "待审核";
+                            break;
+                        }
+                        default: {
+                            type = "未知";
+                        }
+                    }
+                    mAdapterPopupDataList.add(new AdapterPopupData(type, objBean.getNum()));
+                }
+
+                myHandler.sendEmptyMessage(Data.MSG_4);
             }
         });
     }
@@ -367,6 +445,11 @@ public class PendingFragment extends Fragment {
         dialog.show();
     }
 
+    //  获取popupNumber
+    private void getPendingNumber() {
+        mNetworkManager.getPendingNum(jobNo, token, userName);
+    }
+
     //显示popupWindow
     private void showPopupWindow() {
 
@@ -378,12 +461,7 @@ public class PendingFragment extends Fragment {
                 , ViewGroup.LayoutParams.WRAP_CONTENT
                 , ViewGroup.LayoutParams.WRAP_CONTENT
                 , true);
-
-        List<AdapterPopupData> adapterPopupDataList = new ArrayList<>();
-        adapterPopupDataList.add(new AdapterPopupData("待派单", 12));
-        adapterPopupDataList.add(new AdapterPopupData("安装退回", 2));
-        adapterPopupDataList.add(new AdapterPopupData("待审核", 12));
-        PopupAdapter popupAdapter = new PopupAdapter(getContext(), adapterPopupDataList);
+        PopupAdapter popupAdapter = new PopupAdapter(getContext(), mAdapterPopupDataList);
         listView.setAdapter(popupAdapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -439,6 +517,10 @@ public class PendingFragment extends Fragment {
                 case Data.MSG_3: {
                     //  派单失败
                     showFlushDialog();
+                    break;
+                }
+                case Data.MSG_4:{
+                    showPopupWindow();
                     break;
                 }
                 default: {
