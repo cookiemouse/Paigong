@@ -20,12 +20,12 @@ import com.tianyigps.xiepeng.R;
 import com.tianyigps.xiepeng.activity.ChoiceWorkerActivity;
 import com.tianyigps.xiepeng.activity.ManagerFragmentContentActivity;
 import com.tianyigps.xiepeng.activity.ModifyPasswordActivity;
-import com.tianyigps.xiepeng.activity.OrderTrackActivity;
 import com.tianyigps.xiepeng.activity.StatisticsActivity;
 import com.tianyigps.xiepeng.activity.WorkerFragmentContentActivity;
 import com.tianyigps.xiepeng.adapter.MineAdapter;
 import com.tianyigps.xiepeng.data.AdapterMineData;
 import com.tianyigps.xiepeng.data.Data;
+import com.tianyigps.xiepeng.dialog.OrderTrackDialogFragment;
 import com.tianyigps.xiepeng.manager.SharedpreferenceManager;
 
 import java.util.ArrayList;
@@ -83,11 +83,11 @@ public class MineFragment extends Fragment {
         mAdapterMineDataList.add(new AdapterMineData(R.drawable.ic_modify_password, "测试选择工程师"));
         mAdapterMineDataList.add(new AdapterMineData(R.drawable.ic_modify_password, "测试订单跟踪"));
 
-        mMineAdapter = new MineAdapter(getContext(), mAdapterMineDataList);
+        mMineAdapter = new MineAdapter(getActivity(), mAdapterMineDataList);
 
         mListViewMine.setAdapter(mMineAdapter);
 
-        mSharedpreferenceManager = new SharedpreferenceManager(getContext());
+        mSharedpreferenceManager = new SharedpreferenceManager(getActivity());
         uiMode = mSharedpreferenceManager.getUiMode();
     }
 
@@ -106,9 +106,9 @@ public class MineFragment extends Fragment {
                 Log.i(TAG, "onClick: getActivity-->" + getActivity().getCallingActivity());
                 Intent intent = new Intent();
                 if (Data.DATA_LAUNCH_MODE_WORKER == uiMode) {
-                    intent.setClass(getContext(), ManagerFragmentContentActivity.class);
+                    intent.setClass(getActivity(), ManagerFragmentContentActivity.class);
                 } else {
-                    intent.setClass(getContext(), WorkerFragmentContentActivity.class);
+                    intent.setClass(getActivity(), WorkerFragmentContentActivity.class);
                 }
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
@@ -122,26 +122,32 @@ public class MineFragment extends Fragment {
                 switch (position) {
                     case 0: {
                         //  2017/7/13 质量统计
-                        Intent intent = new Intent(getContext(), StatisticsActivity.class);
+                        Intent intent = new Intent(getActivity(), StatisticsActivity.class);
                         startActivity(intent);
                         break;
                     }
                     case 1: {
                         // 2017/7/13 修改密码
-                        Intent intent = new Intent(getContext(), ModifyPasswordActivity.class);
+                        Intent intent = new Intent(getActivity(), ModifyPasswordActivity.class);
                         startActivity(intent);
                         break;
                     }
                     case 2: {
                         // 2017/7/13 修改密码
-                        Intent intent = new Intent(getContext(), ChoiceWorkerActivity.class);
+                        Intent intent = new Intent(getActivity(), ChoiceWorkerActivity.class);
                         startActivity(intent);
                         break;
                     }
                     case 3: {
                         // 2017/7/13 修改密码
-                        Intent intent = new Intent(getContext(), OrderTrackActivity.class);
-                        startActivity(intent);
+//                        Intent intent = new Intent(getContext(), OrderTrackActivity.class);
+//                        startActivity(intent);
+
+                        OrderTrackDialogFragment orderTrackDialogFragment = OrderTrackDialogFragment.getInstance();
+                        if (orderTrackDialogFragment.isAdded()){
+                            return;
+                        }
+                        orderTrackDialogFragment.show(getFragmentManager(), "OrderTrackDialogFragment");
                         break;
                     }
                     default: {

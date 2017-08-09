@@ -97,7 +97,7 @@ public class CustomSignActivity extends BaseActivity {
 
                 Matrix matrix = new Matrix();
                 matrix.postScale(0.2f, 0.2f);
-                Bitmap bitmap2 = bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, false);
+                Bitmap bitmap2 = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, false);
 
 
                 String base64 = Base64U.encode(bitmap2);
