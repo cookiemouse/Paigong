@@ -17,7 +17,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.tianyigps.xiepeng.R;
-import com.tianyigps.xiepeng.activity.ChoiceWorkerActivity;
 import com.tianyigps.xiepeng.activity.ManagerFragmentContentActivity;
 import com.tianyigps.xiepeng.activity.ModifyPasswordActivity;
 import com.tianyigps.xiepeng.activity.StatisticsActivity;
@@ -80,7 +79,6 @@ public class MineFragment extends Fragment {
         mAdapterMineDataList.add(new AdapterMineData(R.drawable.ic_statistics, "质量统计"));
         mAdapterMineDataList.add(new AdapterMineData(R.drawable.ic_modify_password, "修改密码"));
 
-        mAdapterMineDataList.add(new AdapterMineData(R.drawable.ic_modify_password, "测试选择工程师"));
         mAdapterMineDataList.add(new AdapterMineData(R.drawable.ic_modify_password, "测试订单跟踪"));
 
         mMineAdapter = new MineAdapter(getActivity(), mAdapterMineDataList);
@@ -133,18 +131,8 @@ public class MineFragment extends Fragment {
                         break;
                     }
                     case 2: {
-                        // 2017/7/13 修改密码
-                        Intent intent = new Intent(getActivity(), ChoiceWorkerActivity.class);
-                        startActivity(intent);
-                        break;
-                    }
-                    case 3: {
-                        // 2017/7/13 修改密码
-//                        Intent intent = new Intent(getContext(), OrderTrackActivity.class);
-//                        startActivity(intent);
-
                         OrderTrackDialogFragment orderTrackDialogFragment = OrderTrackDialogFragment.getInstance();
-                        if (orderTrackDialogFragment.isAdded()){
+                        if (orderTrackDialogFragment.isAdded()) {
                             return;
                         }
                         orderTrackDialogFragment.show(getChildFragmentManager(), "OrderTrackDialogFragment");

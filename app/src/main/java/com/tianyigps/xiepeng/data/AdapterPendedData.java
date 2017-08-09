@@ -5,20 +5,24 @@ package com.tianyigps.xiepeng.data;
  */
 
 public class AdapterPendedData {
-    private String title, time, address;
-    private String worker, workerPhone, contactName, contactPhone;
-    //
-    private int status;
+    private String title, address, jobNo, worker, workerPhone, contact, contactPhone, orderNo;
+    private long time;
+    private int orderStatus, reviseFlag, orderId;
 
-    public AdapterPendedData(String title, String time, String address, String worker, String workerPhone, String contactName, String contactPhone, int status) {
+    public AdapterPendedData(String title, String address, String jobNo, String worker, String workerPhone, String contact
+            , String contactPhone, long time, int orderStatus, int reviseFlag, String orderNo, int orderId) {
         this.title = title;
-        this.time = time;
         this.address = address;
+        this.jobNo = jobNo;
         this.worker = worker;
         this.workerPhone = workerPhone;
-        this.contactName = contactName;
+        this.contact = contact;
         this.contactPhone = contactPhone;
-        this.status = status;
+        this.time = time;
+        this.orderStatus = orderStatus;
+        this.reviseFlag = reviseFlag;
+        this.orderNo = orderNo;
+        this.orderId = orderId;
     }
 
     public String getTitle() {
@@ -29,20 +33,20 @@ public class AdapterPendedData {
         this.title = title;
     }
 
-    public String getTime() {
-        return time;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
-    }
-
     public String getAddress() {
         return address;
     }
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getJobNo() {
+        return jobNo;
+    }
+
+    public void setJobNo(String jobNo) {
+        this.jobNo = jobNo;
     }
 
     public String getWorker() {
@@ -61,12 +65,12 @@ public class AdapterPendedData {
         this.workerPhone = workerPhone;
     }
 
-    public String getContactName() {
-        return contactName;
+    public String getContact() {
+        return contact;
     }
 
-    public void setContactName(String contactName) {
-        this.contactName = contactName;
+    public void setContact(String contact) {
+        this.contact = contact;
     }
 
     public String getContactPhone() {
@@ -77,11 +81,43 @@ public class AdapterPendedData {
         this.contactPhone = contactPhone;
     }
 
-    public int getStatus() {
-        return status;
+    public long getTime() {
+        return time;
     }
 
-    public void setStatus(int status) {
-        this.status = status;
+    public void setTime(long time) {
+        this.time = time;
+    }
+
+    public int getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(int orderStatus) {
+        this.orderStatus = orderStatus;
+    }
+
+    public int getReviseFlag() {
+        return reviseFlag;
+    }
+
+    public void setReviseFlag(int reviseFlag) {
+        this.reviseFlag = reviseFlag;
+    }
+
+    public String getOrderNo() {
+        return orderNo;
+    }
+
+    public void setOrderNo(String orderNo) {
+        this.orderNo = orderNo;
+    }
+
+    public int getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(int orderId) {
+        this.orderId = orderId;
     }
 }

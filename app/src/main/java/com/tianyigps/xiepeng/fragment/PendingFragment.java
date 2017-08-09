@@ -243,6 +243,8 @@ public class PendingFragment extends Fragment {
                 PendingBean pendingBean = gson.fromJson(result, PendingBean.class);
                 if (!pendingBean.isSuccess()) {
                     mStringMessage = pendingBean.getMsg();
+                    Log.i(TAG, "onSuccess: msg-->" + mStringMessage);
+                    // TODO: 2017/8/9 感觉这里有漏洞
                     myHandler.sendEmptyMessage(Data.MSG_ERO);
                     return;
                 }
@@ -306,7 +308,7 @@ public class PendingFragment extends Fragment {
                 PendBean pendBean = gson.fromJson(result, PendBean.class);
                 if (!pendBean.isSuccess()) {
                     mStringMessage = pendBean.getMsg();
-                    myHandler.sendEmptyMessage(Data.MSG_ERO);
+                    myHandler.sendEmptyMessage(Data.MSG_3);
                     return;
                 }
                 myHandler.sendEmptyMessage(Data.MSG_2);
@@ -327,7 +329,7 @@ public class PendingFragment extends Fragment {
 
     //  显示信息Dialog
     private void showMessageDialog(String msg) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage(msg);
         builder.setPositiveButton(R.string.ensure, new DialogInterface.OnClickListener() {
             @Override
