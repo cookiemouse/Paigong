@@ -59,7 +59,50 @@ public class PopupAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) contentView.getTag();
         }
 
-        viewHolder.tvTitle.setText(data.getTitle());
+        String type;
+        switch (data.getOrderStatus()) {
+            case 1: {
+                type = "待派单";
+                break;
+            }
+            case 2: {
+                type = "空单";
+                break;
+            }
+            case 3: {
+                type = "已派单";
+                break;
+            }
+            case 4: {
+                type = "退回客户";
+                break;
+            }
+            case 5: {
+                type = "已取消";
+                break;
+            }
+            case 6: {
+                type = "安装退回";
+                break;
+            }
+            case 7: {
+                type = "已完成";
+                break;
+            }
+            case 98: {
+                type = "改约不通过";
+                break;
+            }
+            case 99: {
+                type = "待审核";
+                break;
+            }
+            default: {
+                type = "未知";
+            }
+        }
+
+        viewHolder.tvTitle.setText(type);
         String count = "" + data.getCount();
         viewHolder.tvCount.setText(count);
 

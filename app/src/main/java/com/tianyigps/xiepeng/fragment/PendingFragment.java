@@ -144,7 +144,7 @@ public class PendingFragment extends Fragment {
         userName = mSharedpreferenceManager.getAccount();
 
         mSwipeRefreshLayout.setRefreshing(true);
-        mNetworkManager.getPenddingOrder(jobNo, token, "", "", userName);
+        mNetworkManager.getPendingOrder(jobNo, token, "", "", userName);
     }
 
     private void initTitle() {
@@ -174,15 +174,17 @@ public class PendingFragment extends Fragment {
         mImageViewSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: 2017/8/9 搜索
-                mNetworkManager.getPenddingOrder(jobNo, token, "", "", userName);
+                // 2017/8/9 搜索
+                String key = mEditTextSearch.getText().toString();
+                mSwipeRefreshLayout.setRefreshing(true);
+                mNetworkManager.getPendingOrder(jobNo, token, "", key, userName);
             }
         });
 
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mNetworkManager.getPenddingOrder(jobNo, token, "", "", userName);
+                mNetworkManager.getPendingOrder(jobNo, token, "", "", userName);
             }
         });
 
@@ -344,49 +346,8 @@ public class PendingFragment extends Fragment {
                 mAdapterPopupDataList.clear();
 
                 for (NumberBean.ObjBean objBean : numberBean.getObj()) {
-                    String type;
-                    switch (objBean.getStatus()) {
-                        case 1: {
-                            type = "待派单";
-                            break;
-                        }
-                        case 2: {
-                            type = "空单";
-                            break;
-                        }
-                        case 3: {
-                            type = "已派单";
-                            break;
-                        }
-                        case 4: {
-                            type = "退回客户";
-                            break;
-                        }
-                        case 5: {
-                            type = "已取消";
-                            break;
-                        }
-                        case 6: {
-                            type = "安装退回";
-                            break;
-                        }
-                        case 7: {
-                            type = "已完成";
-                            break;
-                        }
-                        case 98: {
-                            type = "改约不通过";
-                            break;
-                        }
-                        case 99: {
-                            type = "待审核";
-                            break;
-                        }
-                        default: {
-                            type = "未知";
-                        }
-                    }
-                    mAdapterPopupDataList.add(new AdapterPopupData(type, objBean.getNum()));
+
+                    mAdapterPopupDataList.add(new AdapterPopupData(objBean.getStatus(), objBean.getNum()));
                 }
 
                 myHandler.sendEmptyMessage(Data.MSG_4);
@@ -437,7 +398,7 @@ public class PendingFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 mSwipeRefreshLayout.setRefreshing(true);
-                mNetworkManager.getPenddingOrder(jobNo, token, "", "", userName);
+                mNetworkManager.getPendingOrder(jobNo, token, "", "", userName);
                 dialog.dismiss();
             }
         });
@@ -467,6 +428,9 @@ public class PendingFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                int status = mAdapterPopupDataList.get(i).getOrderStatus();
+                mSwipeRefreshLayout.setRefreshing(true);
+                mNetworkManager.getPendingOrder(jobNo, token, "" + status, "", userName);
                 popupWindow.dismiss();
             }
         });
@@ -511,7 +475,7 @@ public class PendingFragment extends Fragment {
                 case Data.MSG_2: {
                     //  派单成功
                     mSwipeRefreshLayout.setRefreshing(true);
-                    mNetworkManager.getPenddingOrder(jobNo, token, "", "", userName);
+                    mNetworkManager.getPendingOrder(jobNo, token, "", "", userName);
                     break;
                 }
                 case Data.MSG_3: {
@@ -519,7 +483,7 @@ public class PendingFragment extends Fragment {
                     showFlushDialog();
                     break;
                 }
-                case Data.MSG_4:{
+                case Data.MSG_4: {
                     showPopupWindow();
                     break;
                 }

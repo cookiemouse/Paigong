@@ -65,7 +65,6 @@ public class PendedFragment extends Fragment {
     private TextView mTextViewTitle;
 
     private List<AdapterPendedData> mAdapterPendedDataList;
-    private List<AdapterPendedData> mAdapterPendedDataListSearch;
     private PendedAdapter mPendedAdapter;
 
     private NetworkManager mNetworkManager;
@@ -75,6 +74,8 @@ public class PendedFragment extends Fragment {
     private String token;
     private String userName;
     private String mStringMessage;
+
+    private String mKey = "";
 
     //  加载更多
     private View mViewMore;
@@ -126,9 +127,8 @@ public class PendedFragment extends Fragment {
 
         mAdapterPendedDataList = new ArrayList<>();
         mAdapterPopupDataList = new ArrayList<>();
-        mAdapterPendedDataListSearch = new ArrayList<>();
 
-        mPendedAdapter = new PendedAdapter(getContext(), mAdapterPendedDataListSearch);
+        mPendedAdapter = new PendedAdapter(getContext(), mAdapterPendedDataList);
 
         mListView.setAdapter(mPendedAdapter);
 
@@ -165,6 +165,7 @@ public class PendedFragment extends Fragment {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                mKey = "";
                 mEditTextSearch.setText(null);
                 mNetworkManager.getPended(jobNo, token, "", "", "", userName);
             }
@@ -184,8 +185,9 @@ public class PendedFragment extends Fragment {
         mImageViewSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String key = mEditTextSearch.getText().toString();
-                search(key);
+                mKey = mEditTextSearch.getText().toString();
+                mSwipeRefreshLayout.setRefreshing(true);
+                mNetworkManager.getPended(jobNo, token, "", mKey, "", userName);
             }
         });
 
@@ -227,7 +229,7 @@ public class PendedFragment extends Fragment {
                         mNetworkManager.getPended(jobNo
                                 , token
                                 , ""
-                                , ""
+                                , mKey
                                 , "" + mAdapterPendedDataList.get(mAdapterPendedDataList.size() - 1).getOrderId()
                                 , userName);
                     }
@@ -257,7 +259,7 @@ public class PendedFragment extends Fragment {
                 isLast = (pendedBean.getObj().size() == 0);
                 if (isLast) {
                     myHandler.sendEmptyMessageDelayed(MSG_3, DELAY_LAST);
-                    return;
+//                    return;
                 }
 
                 if (mSwipeRefreshLayout.isRefreshing()) {
@@ -306,74 +308,12 @@ public class PendedFragment extends Fragment {
                 mAdapterPopupDataList.clear();
 
                 for (NumberBean.ObjBean objBean : numberBean.getObj()) {
-                    String type;
-                    switch (objBean.getStatus()) {
-                        case 1: {
-                            type = "待派单";
-                            break;
-                        }
-                        case 2: {
-                            type = "空单";
-                            break;
-                        }
-                        case 3: {
-                            type = "已派单";
-                            break;
-                        }
-                        case 4: {
-                            type = "退回客户";
-                            break;
-                        }
-                        case 5: {
-                            type = "已取消";
-                            break;
-                        }
-                        case 6: {
-                            type = "安装退回";
-                            break;
-                        }
-                        case 7: {
-                            type = "已完成";
-                            break;
-                        }
-                        case 98: {
-                            type = "改约不通过";
-                            break;
-                        }
-                        case 99: {
-                            type = "待审核";
-                            break;
-                        }
-                        default: {
-                            type = "未知";
-                        }
-                    }
-                    mAdapterPopupDataList.add(new AdapterPopupData(type, objBean.getNum()));
+                    mAdapterPopupDataList.add(new AdapterPopupData(objBean.getStatus(), objBean.getNum()));
                 }
 
                 myHandler.sendEmptyMessage(Data.MSG_5);
             }
         });
-    }
-
-    //  搜索
-    private void search(String key) {
-        mAdapterPendedDataListSearch.clear();
-
-        if (null == key || "".equals(key)) {
-            mAdapterPendedDataListSearch.addAll(mAdapterPendedDataList);
-            mPendedAdapter.notifyDataSetChanged();
-            return;
-        }
-
-        for (AdapterPendedData data : mAdapterPendedDataList) {
-            if (data.getTitle().contains(key) || data.getOrderNo().contains(key)) {
-
-                mAdapterPendedDataListSearch.add(data);
-            }
-        }
-
-        mPendedAdapter.notifyDataSetChanged();
     }
 
     //  获取popupNumber
@@ -399,6 +339,9 @@ public class PendedFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                int status = mAdapterPopupDataList.get(i).getOrderStatus();
+                mSwipeRefreshLayout.setRefreshing(true);
+                mNetworkManager.getPended(jobNo, token, "" + status, "", "", userName);
                 popupWindow.dismiss();
             }
         });
@@ -450,7 +393,7 @@ public class PendedFragment extends Fragment {
                     break;
                 }
                 case Data.MSG_1: {
-                    search(null);
+                    mPendedAdapter.notifyDataSetChanged();
                     myHandler.sendEmptyMessage(Data.MSG_2);
                     break;
                 }

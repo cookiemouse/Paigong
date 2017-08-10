@@ -1002,7 +1002,7 @@ public class NetworkManager {
     /***************************************华丽的化割线*************************************************/
 
     //  查询待处理订单 22
-    public void getPenddingOrder(String jobNo, String token, String status, String condition, String userName) {
+    public void getPendingOrder(String jobNo, String token, String status, String condition, String userName) {
         Request.Builder builder = new Request.Builder();
         builder.url(Urls.URL_MANAGER_PENDING_ORDER + "jobNo=" + jobNo
                 + "&token=" + token
@@ -1010,7 +1010,7 @@ public class NetworkManager {
                 + "&status=" + status
                 + "&condition=" + condition);
         mRequest = builder.build();
-        Log.i(TAG, "getPenddingOrder: url-->" + mRequest.url());
+        Log.i(TAG, "getPendingOrder: url-->" + mRequest.url());
         Call call = mOkHttpClient.newCall(mRequest);
         call.enqueue(new Callback() {
             @Override
@@ -1047,7 +1047,7 @@ public class NetworkManager {
                 + "&userName=" + userName
                 + "&condition=" + condition);
         mRequest = builder.build();
-        Log.i(TAG, "getPenddingOrder: url-->" + mRequest.url());
+        Log.i(TAG, "getPendingOrder: url-->" + mRequest.url());
         Call call = mOkHttpClient.newCall(mRequest);
         call.enqueue(new Callback() {
             @Override

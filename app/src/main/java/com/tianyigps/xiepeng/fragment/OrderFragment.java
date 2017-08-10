@@ -67,7 +67,6 @@ public class OrderFragment extends Fragment {
     private TextView mTextViewTitle;
 
     private List<AdapterOrderData> mAdapterOrderDataList;
-    private List<AdapterOrderData> mAdapterOrderDataListSearch;
     private OrderAdapter mOrderAdapter;
 
     private NetworkManager mNetworkManager;
@@ -100,9 +99,6 @@ public class OrderFragment extends Fragment {
         init(viewRoot);
 
         setEventListener();
-
-//        mSwipeRefreshLayout.setRefreshing(true);
-//        mNetworkManager.getWorkerOrder(Data.EID, Data.TOKEN, "");
 
         return viewRoot;
     }
@@ -138,7 +134,6 @@ public class OrderFragment extends Fragment {
         mSwipeRefreshLayout.setColorSchemeColors(0xff3cabfa);
 
         mAdapterOrderDataList = new ArrayList<>();
-        mAdapterOrderDataListSearch = new ArrayList<>();
 //        for (int i = 0; i < 6; i++) {
 //            mAdapterOrderDataList.add(new AdapterOrderData("万惠南宁"
 //                    , "2017-01-02 17:30"
@@ -150,7 +145,7 @@ public class OrderFragment extends Fragment {
 //                    , i, 2));
 //        }
 
-        mOrderAdapter = new OrderAdapter(getContext(), mAdapterOrderDataListSearch);
+        mOrderAdapter = new OrderAdapter(getContext(), mAdapterOrderDataList);
 
         mListView.setAdapter(mOrderAdapter);
 
@@ -218,8 +213,9 @@ public class OrderFragment extends Fragment {
         mImageViewSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String strSearch = mEditTextSearch.getText().toString();
-                searchString(strSearch);
+                String key = mEditTextSearch.getText().toString();
+                mSwipeRefreshLayout.setRefreshing(true);
+                mNetworkManager.getWorkerOrder(eid, token, key, userName);
             }
         });
 
@@ -407,25 +403,6 @@ public class OrderFragment extends Fragment {
         dialog.show();
     }
 
-    //  搜索
-    private void searchString(String key) {
-        mAdapterOrderDataListSearch.clear();
-        if (null == key) {
-            mAdapterOrderDataListSearch.addAll(mAdapterOrderDataList);
-            mOrderAdapter.notifyDataSetChanged();
-            return;
-        }
-        for (AdapterOrderData data : mAdapterOrderDataList) {
-            String order = data.getId();
-            String name = data.getName();
-
-            if (order.contains(key) || name.contains(key)) {
-                mAdapterOrderDataListSearch.add(data);
-            }
-        }
-        mOrderAdapter.notifyDataSetChanged();
-    }
-
     private class MyHandler extends Handler {
 
         //  MSG_1   获取Order数据
@@ -441,7 +418,7 @@ public class OrderFragment extends Fragment {
                     break;
                 }
                 case MSG_1: {
-                    searchString(null);
+                    mOrderAdapter.notifyDataSetChanged();
                     break;
                 }
                 case MSG_2: {

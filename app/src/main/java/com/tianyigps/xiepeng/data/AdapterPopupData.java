@@ -5,20 +5,13 @@ package com.tianyigps.xiepeng.data;
  */
 
 public class AdapterPopupData {
-    private String title;
     private int count;
 
-    public AdapterPopupData(String title, int count) {
-        this.title = title;
+    private int orderStatus;
+
+    public AdapterPopupData(int orderStatus, int count) {
         this.count = count;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
+        this.orderStatus = orderStatus;
     }
 
     public int getCount() {
@@ -27,5 +20,13 @@ public class AdapterPopupData {
 
     public void setCount(int count) {
         this.count = count;
+    }
+
+    public int getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(int orderStatus) {
+        this.orderStatus = orderStatus;
     }
 }
