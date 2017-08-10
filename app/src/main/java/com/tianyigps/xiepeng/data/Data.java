@@ -30,6 +30,8 @@ public final class Data {
     public final static String DATA_INTENT_EID = "paigong_intent_eid";
     public final static String DATA_INTENT_TOKEN = "paigong_intent_token";
     public final static String DATA_INTENT_ORDER_NO = "paigong_intent_order_no";
+    public final static String DATA_INTENT_ORDER_ID = "paigong_intent_order_id";
+    public final static String DATA_INTENT_ORDER_STATUS = "paigong_intent_order_status";
     public final static String DATA_INTENT_T_ID = "paigong_intent_t_id";
     public final static String DATA_INTENT_T_NO = "paigong_intent_t_no";
     public final static String DATA_INTENT_FRAME_NO = "paigong_intent_frame_no";

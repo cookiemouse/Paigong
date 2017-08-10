@@ -2,17 +2,19 @@ package com.tianyigps.xiepeng.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.DialogFragment;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
@@ -72,6 +74,8 @@ public class OrderTrackDialogFragment extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //  获取参数
+        Bundle bundle = getArguments();
+        orderId = bundle.getInt(Data.DATA_INTENT_ORDER_ID);
 
         mView = LayoutInflater.from(getActivity()).inflate(R.layout.activity_order_track, null);
 
@@ -103,6 +107,14 @@ public class OrderTrackDialogFragment extends DialogFragment {
     public void onStart() {
         super.onStart();
         getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        setBackgroundAlpha(0.4f);
+    }
+
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        super.onDismiss(dialog);
+        setBackgroundAlpha(1f);
     }
 
     private void init(View view) {
@@ -111,9 +123,6 @@ public class OrderTrackDialogFragment extends DialogFragment {
         jobNo = mSharedpreferenceManager.getJobNo();
         token = mSharedpreferenceManager.getToken();
         userName = mSharedpreferenceManager.getAccount();
-
-        // TODO: 2017/8/8 测试
-        orderId = 858;
 
         mNetworkManager = new NetworkManager();
         myHandler = new MyHandler();
@@ -258,6 +267,13 @@ public class OrderTrackDialogFragment extends DialogFragment {
             }
         }
         return info;
+    }
+
+    //  显示时背景的改变
+    private void setBackgroundAlpha(float alpha) {
+        WindowManager.LayoutParams lp = getActivity().getWindow().getAttributes();
+        lp.alpha = alpha;
+        getActivity().getWindow().setAttributes(lp);
     }
 
     private class MyHandler extends Handler {

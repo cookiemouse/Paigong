@@ -44,7 +44,7 @@ public class OrderDetailsActivity extends Activity {
     private static final String TAG = "OrderDetailsActivity";
 
     private static final long TIME_2_HOUR = 7200000;
-    private static final long TIME_1_MIN = 1000;
+    private static final long TIME_1_SEC = 1000;
 
     private static final int TYPE_INSTALL = 0;
     private static final int TYPE_REPAIR = 1;
@@ -99,6 +99,14 @@ public class OrderDetailsActivity extends Activity {
         init();
 
         setEventListener();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mLongDoorTime > 0) {
+            updateTime();
+        }
     }
 
     @Override
@@ -340,12 +348,12 @@ public class OrderDetailsActivity extends Activity {
             mCycleProgressView.setProgress((int) (timeRemain * 100 / TIME_2_HOUR));
         }
 
-        myHandler.sendEmptyMessageDelayed(MSG_2, TIME_1_MIN);
+        myHandler.sendEmptyMessageDelayed(MSG_2, TIME_1_SEC);
     }
 
     //  显示信息Dialog
     private void showMessageDialog(String msg) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(OrderDetailsActivity.this);
         builder.setMessage(msg);
         builder.setPositiveButton(R.string.ensure, new DialogInterface.OnClickListener() {
             @Override

@@ -26,7 +26,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.tianyigps.xiepeng.R;
 import com.tianyigps.xiepeng.activity.ChoiceWorkerActivity;
-import com.tianyigps.xiepeng.activity.OrderDetailsActivity;
+import com.tianyigps.xiepeng.activity.PendDetailsActivity;
 import com.tianyigps.xiepeng.activity.WorkerFragmentContentActivity;
 import com.tianyigps.xiepeng.adapter.PendingAdapter;
 import com.tianyigps.xiepeng.adapter.PopupAdapter;
@@ -230,9 +230,10 @@ public class PendingFragment extends Fragment {
             @Override
             public void onItem(int position) {
                 Log.i(TAG, "onItem: position-->" + position);
-                Intent intent = new Intent(getContext(), OrderDetailsActivity.class);
-                intent.putExtra(Data.DATA_INTENT_ORDER_NO, mAdapterPendingDataList.get(position).getOrder());
-                intent.putExtra(Data.DATA_INTENT_ORDER_DETAILS_IS_CHECKED, true);
+                Intent intent = new Intent(getContext(), PendDetailsActivity.class);
+                AdapterPendingData data = mAdapterPendingDataList.get(position);
+                intent.putExtra(Data.DATA_INTENT_ORDER_NO, data.getOrder());
+                intent.putExtra(Data.DATA_INTENT_ORDER_STATUS, data.getOrderStatus());
                 startActivity(intent);
             }
         });

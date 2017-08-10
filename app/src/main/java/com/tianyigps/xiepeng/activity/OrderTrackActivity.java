@@ -58,8 +58,7 @@ public class OrderTrackActivity extends BaseActivity {
         token = mSharedpreferenceManager.getToken();
         userName = mSharedpreferenceManager.getAccount();
 
-        // TODO: 2017/8/8 测试
-        orderId = 858;
+        orderId = getIntent().getIntExtra(Data.DATA_INTENT_ORDER_ID, 0);
 
         mNetworkManager = new NetworkManager();
         myHandler = new MyHandler();

@@ -21,6 +21,7 @@ import com.tianyigps.xiepeng.interfaces.OnInstallBackListener;
 import com.tianyigps.xiepeng.interfaces.OnInstallCountListener;
 import com.tianyigps.xiepeng.interfaces.OnModifyPasswordListener;
 import com.tianyigps.xiepeng.interfaces.OnOrderTrackListener;
+import com.tianyigps.xiepeng.interfaces.OnPendDetailsListener;
 import com.tianyigps.xiepeng.interfaces.OnPendListener;
 import com.tianyigps.xiepeng.interfaces.OnPendedListener;
 import com.tianyigps.xiepeng.interfaces.OnPendedNumListener;
@@ -94,6 +95,7 @@ public class NetworkManager {
     private OnPendListener mOnPendListener;
     private OnPendingNumListener mOnPendingNumListener;
     private OnPendedNumListener mOnPendedNumListener;
+    private OnPendDetailsListener mOnPendDetailsListener;
 
     public NetworkManager() {
         mOkHttpClient = new OkHttpClient();
@@ -1273,6 +1275,40 @@ public class NetworkManager {
 
     public void setOnPendedNumListener(OnPendedNumListener listener) {
         this.mOnPendedNumListener = listener;
+    }
+
+    //  获取派单详情  29
+    public void getPendDetails(String jobNo, String token, String orderNo, String userName, int orderStatus) {
+        Request.Builder builder = new Request.Builder();
+        builder.url(Urls.URL_MANAGER_PENDED_DETAILS + "jobNo=" + jobNo
+                + "&token=" + token
+                + "&orderNo=" + orderNo
+                + "&orderStatus=" + orderStatus
+                + "&userName=" + userName);
+        mRequest = builder.build();
+        Log.i(TAG, "getQualityCount: url-->" + mRequest.url());
+        Call call = mOkHttpClient.newCall(mRequest);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                if (null == mOnPendDetailsListener) {
+                    throw new NullPointerException("OnPendDetailsListener is null");
+                }
+                mOnPendDetailsListener.onFailure();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (null == mOnPendDetailsListener) {
+                    throw new NullPointerException("OnPendDetailsListener is null");
+                }
+                mOnPendDetailsListener.onSuccess(response.body().string());
+            }
+        });
+    }
+
+    public void setOnPendDetailsListener(OnPendDetailsListener listener) {
+        this.mOnPendDetailsListener = listener;
     }
 
 }

@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@drawable/bg_item"
+              android:elevation="@dimen/dp_8"
+              android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_48"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/dp_8"
+        android:paddingRight="@dimen/dp_8">
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp_1"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/tv_layout_pend_details_content_node"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_pend_blue"
+            android:gravity="center"
+            android:text="审核改约>"
+            android:textColor="@color/colorBlueTheme"/>
+
+        <View
+            android:id="@+id/view_layout_pend_details_content_node"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp_1"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:overScrollMode="never"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.tianyigps.xiepeng.customview.MyListView
+                android:id="@+id/lv_layout_pend_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <RelativeLayout
+                android:id="@+id/rl_layout_pend_details_content_contact"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_8">
+
+                <ImageView
+                    android:id="@+id/iv_layout_pend_details_content_contact"
+                    android:layout_width="@dimen/dp_40"
+                    android:layout_height="@dimen/dp_40"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_margin="@dimen/dp_4"
+                    android:padding="@dimen/dp_4"
+                    android:src="@drawable/ic_order_details_contacts"/>
+
+                <TextView
+                    android:id="@+id/tv_layout_pend_details_content_contact_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/iv_layout_pend_details_content_contact"
+                    android:layout_toEndOf="@+id/iv_layout_pend_details_content_contact"
+                    android:layout_toRightOf="@+id/iv_layout_pend_details_content_contact"
+                    android:text="@string/contact"
+                    android:textColor="@color/colorBlueTheme"/>
+
+                <TextView
+                    android:id="@+id/tv_layout_pend_details_content_contact_phone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/iv_layout_pend_details_content_contact"
+                    android:layout_toEndOf="@+id/iv_layout_pend_details_content_contact"
+                    android:layout_toRightOf="@+id/iv_layout_pend_details_content_contact"
+                    android:text="333"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_layout_pend_details_content_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/iv_layout_pend_details_content_time"
+                    android:layout_width="@dimen/dp_40"
+                    android:layout_height="@dimen/dp_40"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_margin="@dimen/dp_4"
+                    android:padding="@dimen/dp_4"
+                    android:src="@drawable/ic_order_details_address"/>
+
+                <TextView
+                    android:id="@+id/tv_layout_pend_details_content_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/iv_layout_pend_details_content_time"
+                    android:layout_toEndOf="@+id/iv_layout_pend_details_content_time"
+                    android:layout_toRightOf="@+id/iv_layout_pend_details_content_time"
+                    android:text="44444444"
+                    android:textColor="@color/colorBlueTheme"/>
+
+                <TextView
+                    android:id="@+id/tv_layout_pend_details_content_modify"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignTop="@+id/iv_layout_pend_details_content_time"
+                    android:layout_marginEnd="@dimen/dp_8"
+                    android:layout_marginRight="@dimen/dp_8"
+                    android:text="改约>>"
+                    android:textColor="@color/colorBlueTheme"/>
+
+                <TextView
+                    android:id="@+id/tv_layout_pend_details_content_order_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/tv_layout_pend_details_content_time"
+                    android:layout_alignStart="@+id/tv_layout_pend_details_content_time"
+                    android:layout_below="@+id/tv_layout_pend_details_content_time"
+                    android:text="555"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_layout_pend_details_content_remarks"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/iv_layout_pend_details_content_remarks"
+                    android:layout_width="@dimen/dp_40"
+                    android:layout_height="@dimen/dp_40"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_margin="@dimen/dp_4"
+                    android:padding="@dimen/dp_4"
+                    android:src="@drawable/ic_order_details_remarks"/>
+
+                <TextView
+                    android:id="@+id/tv_layout_pend_details_content_order_remarks_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/iv_layout_pend_details_content_remarks"
+                    android:layout_toEndOf="@+id/iv_layout_pend_details_content_remarks"
+                    android:layout_toRightOf="@+id/iv_layout_pend_details_content_remarks"
+                    android:text="@string/remarks"
+                    android:textColor="@color/colorBlueTheme"/>
+
+                <TextView
+                    android:id="@+id/tv_layout_pend_details_content_order_remarks_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/tv_layout_pend_details_content_order_remarks_title"
+                    android:layout_alignStart="@+id/tv_layout_pend_details_content_order_remarks_title"
+                    android:layout_below="@+id/tv_layout_pend_details_content_order_remarks_title"
+                    android:text="666"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_layout_pend_details_content_install"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/iv_layout_pend_details_install"
+                    android:layout_width="@dimen/dp_40"
+                    android:layout_height="@dimen/dp_40"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_margin="@dimen/dp_4"
+                    android:padding="@dimen/dp_4"
+                    android:src="@drawable/ic_order_details_install"/>
+
+                <TextView
+                    android:id="@+id/tv_layout_pend_details_content_order_install_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/iv_layout_pend_details_install"
+                    android:layout_toEndOf="@+id/iv_layout_pend_details_install"
+                    android:layout_toRightOf="@+id/iv_layout_pend_details_install"
+                    android:text="拆改"
+                    android:textColor="@color/colorBlueTheme"/>
+
+                <TextView
+                    android:id="@+id/tv_layout_pend_details_content_order_install_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/tv_layout_pend_details_content_order_install_title"
+                    android:layout_alignStart="@+id/tv_layout_pend_details_content_order_install_title"
+                    android:layout_below="@+id/tv_layout_pend_details_content_order_install_title"
+                    android:text="888"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_layout_pend_details_content_remove"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/iv_layout_pend_details_remove"
+                    android:layout_width="@dimen/dp_40"
+                    android:layout_height="@dimen/dp_40"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_margin="@dimen/dp_4"
+                    android:padding="@dimen/dp_4"
+                    android:src="@drawable/ic_order_details_info_remove"/>
+
+                <TextView
+                    android:id="@+id/tv_layout_pend_details_content_remove_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/iv_layout_pend_details_remove"
+                    android:layout_toEndOf="@+id/iv_layout_pend_details_remove"
+                    android:layout_toRightOf="@+id/iv_layout_pend_details_remove"
+                    android:text="拆除车辆信息"
+                    android:textColor="@color/colorBlueTheme"/>
+
+                <TextView
+                    android:id="@+id/tv_layout_pend_details_content_remove_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/tv_layout_pend_details_content_remove_title"
+                    android:layout_alignStart="@+id/tv_layout_pend_details_content_remove_title"
+                    android:layout_below="@+id/tv_layout_pend_details_content_remove_title"
+                    android:text="000"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_layout_pend_details_content_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/iv_layout_pend_details_info"
+                    android:layout_width="@dimen/dp_40"
+                    android:layout_height="@dimen/dp_40"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_margin="@dimen/dp_4"
+                    android:padding="@dimen/dp_4"
+                    android:src="@drawable/ic_order_details_info_add"/>
+
+                <TextView
+                    android:id="@+id/tv_layout_pend_details_content_info_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/iv_layout_pend_details_info"
+                    android:layout_toEndOf="@+id/iv_layout_pend_details_info"
+                    android:layout_toRightOf="@+id/iv_layout_pend_details_info"
+                    android:text="车辆信息"
+                    android:textColor="@color/colorBlueTheme"/>
+
+                <TextView
+                    android:id="@+id/tv_layout_pend_details_content_info_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/tv_layout_pend_details_content_info_title"
+                    android:layout_alignStart="@+id/tv_layout_pend_details_content_info_title"
+                    android:layout_below="@+id/tv_layout_pend_details_content_info_title"
+                    android:text="000"/>
+            </RelativeLayout>
+
+            <Button
+                android:id="@+id/btn_layout_pend_details"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="@dimen/dp_16"
+                android:layout_marginTop="@dimen/dp_16"
+                android:background="@drawable/bg_button_flush"
+                android:paddingLeft="@dimen/dp_80"
+                android:paddingRight="@dimen/dp_80"
+                android:text="@string/pend"
+                android:textColor="@color/colorWhite"/>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
