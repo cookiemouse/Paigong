@@ -1,15 +1,26 @@
-package com.tianyigps.xiepeng.activity;
+package com.tianyigps.xiepeng.dialog;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
+import android.content.DialogInterface;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.google.gson.Gson;
 import com.tianyigps.xiepeng.R;
 import com.tianyigps.xiepeng.adapter.OrderTrackAdapter;
-import com.tianyigps.xiepeng.base.BaseActivity;
 import com.tianyigps.xiepeng.bean.OrderTrackBean;
 import com.tianyigps.xiepeng.data.AdapterOrderTrackData;
 import com.tianyigps.xiepeng.data.Data;
@@ -21,9 +32,13 @@ import com.tianyigps.xiepeng.utils.TimeFormatU;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OrderTrackActivity extends BaseActivity {
+/**
+ * Created by cookiemouse on 2017/8/9.
+ */
 
-    private static final String TAG = "OrderTrackActivity";
+public class OrderTrackDialogFragment extends DialogFragment {
+
+    private static final String TAG = "OrderTrack";
 
     private ListView mListView;
     private List<AdapterOrderTrackData> mAdapterOrderTrackDataList;
@@ -39,34 +54,83 @@ public class OrderTrackActivity extends BaseActivity {
     private MyHandler myHandler;
     private String mStringMessage;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_order_track);
+    private View mView;
 
-        init();
+    private static OrderTrackDialogFragment mROrderTrackDialogFragment;
+
+    public static OrderTrackDialogFragment getInstance() {
+        if (null == mROrderTrackDialogFragment) {
+            mROrderTrackDialogFragment = new OrderTrackDialogFragment();
+            synchronized (OrderTrackDialogFragment.class) {
+                if (null == mROrderTrackDialogFragment) {
+                    mROrderTrackDialogFragment = new OrderTrackDialogFragment();
+                }
+            }
+        }
+        return mROrderTrackDialogFragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        //  获取参数
+        Bundle bundle = getArguments();
+        orderId = bundle.getInt(Data.DATA_INTENT_ORDER_ID);
+
+        mView = LayoutInflater.from(getActivity()).inflate(R.layout.activity_order_track, null);
+
+        init(mView);
 
         setEventListener();
     }
 
-    private void init() {
-        this.setTitleText("订单跟踪");
-        this.setTitleRightButtonVisibilite(false);
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+//        return super.onCreateView(inflater, container, savedInstanceState);
+        return null;
+    }
 
-        mSharedpreferenceManager = new SharedpreferenceManager(this);
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+//        return super.onCreateDialog(savedInstanceState);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+        builder.setView(mView);
+
+        AlertDialog dialog = builder.create();
+
+        return dialog;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        setBackgroundAlpha(0.4f);
+    }
+
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        super.onDismiss(dialog);
+        setBackgroundAlpha(1f);
+    }
+
+    private void init(View view) {
+
+        mSharedpreferenceManager = new SharedpreferenceManager(getActivity());
         jobNo = mSharedpreferenceManager.getJobNo();
         token = mSharedpreferenceManager.getToken();
         userName = mSharedpreferenceManager.getAccount();
 
-        orderId = getIntent().getIntExtra(Data.DATA_INTENT_ORDER_ID, 0);
-
         mNetworkManager = new NetworkManager();
         myHandler = new MyHandler();
 
-        mListView = findViewById(R.id.lv_activity_order_track);
+        mListView = view.findViewById(R.id.lv_activity_order_track);
         mAdapterOrderTrackDataList = new ArrayList<>();
 
-        mOrderTrackAdapter = new OrderTrackAdapter(this, mAdapterOrderTrackDataList);
+        mOrderTrackAdapter = new OrderTrackAdapter(getActivity(), mAdapterOrderTrackDataList);
 
         mListView.setAdapter(mOrderTrackAdapter);
 
@@ -101,6 +165,13 @@ public class OrderTrackActivity extends BaseActivity {
                 }
 
                 myHandler.sendEmptyMessage(Data.MSG_1);
+            }
+        });
+
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                OrderTrackDialogFragment.this.dismiss();
             }
         });
     }
@@ -196,6 +267,13 @@ public class OrderTrackActivity extends BaseActivity {
             }
         }
         return info;
+    }
+
+    //  显示时背景的改变
+    private void setBackgroundAlpha(float alpha) {
+        WindowManager.LayoutParams lp = getActivity().getWindow().getAttributes();
+        lp.alpha = alpha;
+        getActivity().getWindow().setAttributes(lp);
     }
 
     private class MyHandler extends Handler {

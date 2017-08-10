@@ -44,12 +44,6 @@ public class OrderTrackAdapter extends BaseAdapter {
     }
 
     @Override
-    public boolean isEnabled(int position) {
-//        return super.isEnabled(position);
-        return false;
-    }
-
-    @Override
     public View getView(int position, View contentView, ViewGroup viewGroup) {
 
         AdapterOrderTrackData data = mDataList.get(position);
@@ -72,7 +66,7 @@ public class OrderTrackAdapter extends BaseAdapter {
         viewHolder.tvInfo.setText(data.getInfo());
 
         if (position == 0) {
-            int green = context.getResources().getColor(R.color.colorGreen);
+            int green = context.getResources().getColor(R.color.colorBlueTheme);
             viewHolder.ivLeft.setImageResource(R.drawable.ic_cycle_green);
             viewHolder.tvTime.setTextColor(green);
             viewHolder.tvInfo.setTextColor(green);

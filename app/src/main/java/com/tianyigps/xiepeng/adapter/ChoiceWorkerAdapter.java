@@ -59,7 +59,7 @@ public class ChoiceWorkerAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) contentView.getTag();
         }
 
-        viewHolder.tvId.setText(data.getId());
+        viewHolder.tvId.setText(data.getJobNo());
         viewHolder.tvName.setText(data.getName());
         viewHolder.tvArea.setText(data.getArea());
 

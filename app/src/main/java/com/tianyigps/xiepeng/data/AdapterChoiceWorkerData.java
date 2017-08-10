@@ -5,21 +5,23 @@ package com.tianyigps.xiepeng.data;
  */
 
 public class AdapterChoiceWorkerData {
-    private String id, name, area;
+    private int id;
+    private String jobNo, name, area;
     private boolean select;
 
-    public AdapterChoiceWorkerData(String id, String name, String area) {
+    public AdapterChoiceWorkerData(int id, String jobNo, String name, String area) {
         this.id = id;
+        this.jobNo = jobNo;
         this.name = name;
         this.area = area;
         this.select = false;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -45,5 +47,13 @@ public class AdapterChoiceWorkerData {
 
     public void setSelect(boolean select) {
         this.select = select;
+    }
+
+    public String getJobNo() {
+        return jobNo;
+    }
+
+    public void setJobNo(String jobNo) {
+        this.jobNo = jobNo;
     }
 }

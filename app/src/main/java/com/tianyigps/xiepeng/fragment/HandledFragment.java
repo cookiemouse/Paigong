@@ -68,8 +68,6 @@ public class HandledFragment extends Fragment {
 
     private List<AdapterHandledData> mAdapterHandledDataList;
     private HandledAdapter mHandledAdapter;
-    //  搜索列表
-    private List<AdapterHandledData> mAdapterHandledDataListSearch;
 
     private NetworkManager mNetworkManager;
     private MyHandler myHandler;
@@ -77,6 +75,8 @@ public class HandledFragment extends Fragment {
     private int eid;
     private String token;
     private String userName;
+
+    private String mKey = "";
 
     @Nullable
     @Override
@@ -110,8 +110,7 @@ public class HandledFragment extends Fragment {
         mSwipeRefreshLayout.setColorSchemeColors(0xff3cabfa);
 
         mAdapterHandledDataList = new ArrayList<>();
-        mAdapterHandledDataListSearch = new ArrayList<>();
-        mHandledAdapter = new HandledAdapter(getContext(), mAdapterHandledDataListSearch);
+        mHandledAdapter = new HandledAdapter(getContext(), mAdapterHandledDataList);
 
         mListViewHandled.setAdapter(mHandledAdapter);
 
@@ -150,6 +149,7 @@ public class HandledFragment extends Fragment {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                mKey = "";
                 mEditTextSearch.setText(null);
                 mNetworkManager.getWorkerOrderHanded(eid, token, "", "", userName);
             }
@@ -196,7 +196,7 @@ public class HandledFragment extends Fragment {
                         // TODO: 17-8-2 加载下面数据
                         mNetworkManager.getWorkerOrderHanded(eid
                                 , token
-                                , ""
+                                , mKey
                                 , "" + mAdapterHandledDataList.get(mAdapterHandledDataList.size() - 1).getLastId()
                                 , userName);
                     }
@@ -208,8 +208,9 @@ public class HandledFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 // 2017/7/13 搜索
-                String strSearch = mEditTextSearch.getText().toString();
-                searchString(strSearch);
+                mKey = mEditTextSearch.getText().toString();
+                mSwipeRefreshLayout.setRefreshing(true);
+                mNetworkManager.getWorkerOrderHanded(eid, token, mKey, "", userName);
             }
         });
 
@@ -298,25 +299,6 @@ public class HandledFragment extends Fragment {
         dialog.show();
     }
 
-    //  搜索
-    private void searchString(String key) {
-        mAdapterHandledDataListSearch.clear();
-        if (null == key) {
-            mAdapterHandledDataListSearch.addAll(mAdapterHandledDataList);
-            mHandledAdapter.notifyDataSetChanged();
-            return;
-        }
-        for (AdapterHandledData data : mAdapterHandledDataList) {
-            String order = data.getId();
-            String name = data.getName();
-
-            if (order.contains(key) || name.contains(key)) {
-                mAdapterHandledDataListSearch.add(data);
-            }
-        }
-        mHandledAdapter.notifyDataSetChanged();
-    }
-
     private class MyHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
@@ -330,7 +312,7 @@ public class HandledFragment extends Fragment {
                     break;
                 }
                 case MSG_1: {
-                    searchString(null);
+                    mHandledAdapter.notifyDataSetChanged();
                     myHandler.sendEmptyMessage(Data.MSG_2);
                     break;
                 }

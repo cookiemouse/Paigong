@@ -6,14 +6,18 @@ package com.tianyigps.xiepeng.data;
 
 public class AdapterPendingData {
 
-    private String order, name, contactName, phoneNumber, time, address, orderType;
+    private String order, name, contactName, phoneNumber, time, address;
+    int orderType;
     int lineNumber, linelessNumber;
+    int wireRemove, wirelessRemove;
 
     int orderId;
 
+    private int orderStatus;
+
     public AdapterPendingData(String order, String name, String contactName, String phoneNumber
-            , String time, String address, String orderType
-            , int lineNumber, int linelessNumber, int orderId) {
+            , String time, String address, int orderType
+            , int lineNumber, int linelessNumber, int orderId, int orderStatus) {
         this.order = order;
         this.name = name;
         this.contactName = contactName;
@@ -24,6 +28,25 @@ public class AdapterPendingData {
         this.lineNumber = lineNumber;
         this.linelessNumber = linelessNumber;
         this.orderId = orderId;
+        this.orderStatus = orderStatus;
+    }
+
+    public AdapterPendingData(String order, String name, String contactName, String phoneNumber, String time, String address,
+                              int orderType, int lineNumber, int linelessNumber, int wireRemove, int wirelessRemove
+            , int orderId, int orderStatus) {
+        this.order = order;
+        this.name = name;
+        this.contactName = contactName;
+        this.phoneNumber = phoneNumber;
+        this.time = time;
+        this.address = address;
+        this.orderType = orderType;
+        this.lineNumber = lineNumber;
+        this.linelessNumber = linelessNumber;
+        this.wireRemove = wireRemove;
+        this.wirelessRemove = wirelessRemove;
+        this.orderId = orderId;
+        this.orderStatus = orderStatus;
     }
 
     public String getOrder() {
@@ -74,11 +97,11 @@ public class AdapterPendingData {
         this.address = address;
     }
 
-    public String getOrderType() {
+    public int getOrderType() {
         return orderType;
     }
 
-    public void setOrderType(String orderType) {
+    public void setOrderType(int orderType) {
         this.orderType = orderType;
     }
 
@@ -96,5 +119,37 @@ public class AdapterPendingData {
 
     public void setLinelessNumber(int linelessNumber) {
         this.linelessNumber = linelessNumber;
+    }
+
+    public int getWireRemove() {
+        return wireRemove;
+    }
+
+    public void setWireRemove(int wireRemove) {
+        this.wireRemove = wireRemove;
+    }
+
+    public int getWirelessRemove() {
+        return wirelessRemove;
+    }
+
+    public void setWirelessRemove(int wirelessRemove) {
+        this.wirelessRemove = wirelessRemove;
+    }
+
+    public int getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(int orderId) {
+        this.orderId = orderId;
+    }
+
+    public int getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(int orderStatus) {
+        this.orderStatus = orderStatus;
     }
 }

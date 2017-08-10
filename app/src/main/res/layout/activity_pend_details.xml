@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:background="@color/colorBlueTheme"
+             tools:context="com.tianyigps.xiepeng.activity.OrderDetailsActivity">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_160"
+        android:scaleType="fitXY"
+        android:src="@drawable/bg_order_details_top"/>
+
+    <include layout="@layout/layout_title_base"/>
+
+    <include
+        layout="@layout/layout_pend_details_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dp_16"
+        android:layout_marginLeft="@dimen/dp_16"
+        android:layout_marginRight="@dimen/dp_16"
+        android:layout_marginTop="120dp"/>
+
+    <include
+        layout="@layout/layout_cycle_time"
+        android:layout_width="@dimen/dp_96"
+        android:layout_height="@dimen/dp_96"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/dp_72"/>
+</FrameLayout>
