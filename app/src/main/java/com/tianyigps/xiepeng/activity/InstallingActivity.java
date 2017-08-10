@@ -322,8 +322,8 @@ public class InstallingActivity extends BaseActivity {
 
     private void toCustomSign() {
         Intent intent = new Intent(InstallingActivity.this, CustomSignActivity.class);
-        intent.putExtra(Data.DATA_INTENT_INSTALL_TYPE, mAdapterType);
         intent.putExtra(Data.DATA_INTENT_ORDER_NO, orderNo);
+        intent.putExtra(Data.DATA_INTENT_INSTALL_TYPE, mAdapterType);
         startActivity(intent);
     }
 

@@ -1,26 +1,33 @@
 package com.tianyigps.xiepeng.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import com.baidu.mapapi.model.LatLng;
 import com.google.gson.Gson;
 import com.tianyigps.signviewlibrary.SignView;
 import com.tianyigps.xiepeng.R;
 import com.tianyigps.xiepeng.base.BaseActivity;
 import com.tianyigps.xiepeng.bean.CarInfo;
 import com.tianyigps.xiepeng.bean.CarInfoOut;
+import com.tianyigps.xiepeng.bean.SaveOrderInfoBean;
 import com.tianyigps.xiepeng.bean.TerminalInfo;
 import com.tianyigps.xiepeng.bean.TerminalInfoOut;
 import com.tianyigps.xiepeng.data.Data;
 import com.tianyigps.xiepeng.interfaces.OnSaveOrderInfoListener;
 import com.tianyigps.xiepeng.manager.DatabaseManager;
+import com.tianyigps.xiepeng.manager.LocateManager;
 import com.tianyigps.xiepeng.manager.NetworkManager;
 import com.tianyigps.xiepeng.manager.SharedpreferenceManager;
 import com.tianyigps.xiepeng.utils.Base64U;
@@ -43,13 +50,20 @@ public class CustomSignActivity extends BaseActivity {
     private SharedpreferenceManager mSharedpreferenceManager;
     private NetworkManager mNetworkManager;
     private DatabaseManager mDatabaseManager;
+    private LocateManager mLocateManager;
+    private MyHandler myHandler;
     private int eid;
     private String token;
+    private String userName;
     private String mOrderNo;
-    private String mPartReason;
+    private String mPartReason = "";
     private String mSignature;
 
+    private String mJson;
+
     private int installType;
+
+    private String mStringMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,9 +85,12 @@ public class CustomSignActivity extends BaseActivity {
         mSharedpreferenceManager = new SharedpreferenceManager(this);
         eid = mSharedpreferenceManager.getEid();
         token = mSharedpreferenceManager.getToken();
+        userName = mSharedpreferenceManager.getAccount();
 
         mNetworkManager = new NetworkManager();
         mDatabaseManager = new DatabaseManager(this);
+        mLocateManager = new LocateManager(this);
+        myHandler = new MyHandler();
 
         Intent intent = getIntent();
         installType = intent.getIntExtra(Data.DATA_INTENT_INSTALL_TYPE, TYPE_INSTALL);
@@ -105,7 +122,6 @@ public class CustomSignActivity extends BaseActivity {
                 mSignature = Data.DATA_PIC_SIGN_HEAD + base64;
 
                 Log.i(TAG, "onClick: base64-->" + mSignature);
-                Log.i(TAG, "onClick: base64.size-->" + mSignature.length());
 
                 String json = null;
 
@@ -115,6 +131,7 @@ public class CustomSignActivity extends BaseActivity {
                         break;
                     }
                     case TYPE_REMOVE: {
+                        json = getInstallJson();
                         Log.i(TAG, "onClick: 拆除");
                         break;
                     }
@@ -129,10 +146,11 @@ public class CustomSignActivity extends BaseActivity {
 
                 Log.i(TAG, "onClick: json-->" + json);
 
-                getOrder();
+                mJson = json;
 
-//                mNetworkManager.saveOrderInfo(eid, token, mOrderNo, json, mPartReason, mSignature, "", "", Data
-//                        .LOCATE_TYPE_BAIDU);
+                mLocateManager.startLocate();
+
+                getOrder();
 
 
                 //保存图片，可以不要
@@ -150,6 +168,24 @@ public class CustomSignActivity extends BaseActivity {
             }
         });
 
+        mLocateManager.setOnReceiveLocationListener(new LocateManager.OnReceiveLocationListener() {
+            @Override
+            public void onReceive(LatLng latLng) {
+
+                mLocateManager.stopLocate();
+
+                mNetworkManager.saveOrderInfo(eid
+                        , token
+                        , mOrderNo
+                        , mJson
+                        , mPartReason
+                        , mSignature
+                        , "" + latLng.latitude
+                        , "" + latLng.longitude
+                        , Data.LOCATE_TYPE_BAIDU, userName);
+            }
+        });
+
         mNetworkManager.setOnSaveOrderInfoListener(new OnSaveOrderInfoListener() {
             @Override
             public void onFailure() {
@@ -159,6 +195,17 @@ public class CustomSignActivity extends BaseActivity {
             @Override
             public void onSuccess(String result) {
                 Log.i(TAG, "onSuccess: result-->" + result);
+                Gson gson = new Gson();
+                SaveOrderInfoBean saveOrderInfoBean = gson.fromJson(result, SaveOrderInfoBean.class);
+
+                mStringMessage = saveOrderInfoBean.getMsg();
+
+                if (!saveOrderInfoBean.isSuccess()){
+                    myHandler.sendEmptyMessage(Data.MSG_ERO);
+                    return;
+                }
+
+                myHandler.sendEmptyMessage(Data.MSG_1);
             }
         });
     }
@@ -252,5 +299,39 @@ public class CustomSignActivity extends BaseActivity {
         String json = gson.toJson(terminalInfoOurList);
         Log.i(TAG, "getRepairJson: json-->" + json);
         return json;
+    }
+
+    //  显示信息Dialog
+    private void showMessageDialog(String msg) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(CustomSignActivity.this);
+        builder.setMessage(msg);
+        builder.setPositiveButton(R.string.ensure, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                //  do nothing
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private class MyHandler extends Handler{
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what){
+                case Data.MSG_ERO:{
+                    showMessageDialog(mStringMessage);
+                    break;
+                }
+                case Data.MSG_1:{
+                    showMessageDialog(mStringMessage);
+                    break;
+                }
+                default:{
+                    Log.i(TAG, "handleMessage: default-->" + msg.what);
+                }
+            }
+        }
     }
 }
