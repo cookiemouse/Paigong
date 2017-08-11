@@ -75,6 +75,12 @@ public class CustomSignActivity extends BaseActivity {
         setEventListener();
     }
 
+    @Override
+    protected void onDestroy() {
+        mDatabaseManager.close();
+        super.onDestroy();
+    }
+
     private void init() {
         this.setTitleText("客户签字");
 
@@ -122,6 +128,7 @@ public class CustomSignActivity extends BaseActivity {
                 mSignature = Data.DATA_PIC_SIGN_HEAD + base64;
 
                 Log.i(TAG, "onClick: base64-->" + mSignature);
+                Log.i(TAG, "onClick: base64.size-->" + mSignature.length());
 
                 String json = null;
 
@@ -149,10 +156,6 @@ public class CustomSignActivity extends BaseActivity {
                 mJson = json;
 
                 mLocateManager.startLocate();
-
-                getOrder();
-
-
                 //保存图片，可以不要
 
                 /*
@@ -200,7 +203,7 @@ public class CustomSignActivity extends BaseActivity {
 
                 mStringMessage = saveOrderInfoBean.getMsg();
 
-                if (!saveOrderInfoBean.isSuccess()){
+                if (!saveOrderInfoBean.isSuccess()) {
                     myHandler.sendEmptyMessage(Data.MSG_ERO);
                     return;
                 }
@@ -210,51 +213,87 @@ public class CustomSignActivity extends BaseActivity {
         });
     }
 
-    private void getOrder() {
+    private String getInstallJson() {
         Cursor cursor = mDatabaseManager.getOrder(mOrderNo);
+
+        List<CarInfoOut> carInfoOutList = new ArrayList<>();
+
         if (null != cursor && cursor.moveToFirst()) {
             do {
                 String orderNo = cursor.getString(0);
                 int carId = cursor.getInt(1);
                 int tId = cursor.getInt(2);
 
+                List<TerminalInfo> terminalInfoList = new ArrayList<>();
+
                 Log.i(TAG, "getRepairJson: orderNo-->" + orderNo + " ,carId-->" + carId + " ,tId-->" + tId);
+                Cursor cursorTer = mDatabaseManager.getTer(tId);
+                if (null != cursorTer && cursorTer.moveToFirst()) {
+                    String id = cursorTer.getString(0);
+                    String tNoOld = cursorTer.getString(1);
+                    String tNoNew = cursorTer.getString(2);
+                    String position = cursorTer.getString(3);
+                    String positionPic = cursorTer.getString(4);
+                    String installPic = cursorTer.getString(5);
+                    String positionPicUrl = cursorTer.getString(6);
+                    String installPicUrl = cursorTer.getString(7);
+                    int model = cursorTer.getInt(8);
+                    int tid = cursorTer.getInt(9);
+                    int locateType = cursorTer.getInt(10);
+
+                    Log.i(TAG, "loadTerminalData: id-->" + id);
+                    Log.i(TAG, "loadTerminalData: tNoOld-->" + tNoOld);
+                    Log.i(TAG, "loadTerminalData: tNoNew-->" + tNoNew);
+                    Log.i(TAG, "loadTerminalData: position-->" + position);
+                    Log.i(TAG, "loadTerminalData: positionPic-->" + positionPic);
+                    Log.i(TAG, "loadTerminalData: installPic-->" + installPic);
+                    Log.i(TAG, "loadTerminalData: positionPicUrl-->" + positionPicUrl);
+                    Log.i(TAG, "loadTerminalData: installPicUrl-->" + installPicUrl);
+                    Log.i(TAG, "loadTerminalData: model-->" + model);
+                    Log.i(TAG, "loadTerminalData: tid-->" + tid);
+                    Log.i(TAG, "loadTerminalData: locateType-->" + locateType);
+                    if (null == tNoOld) {
+                        tNoOld = "";
+                    }
+                    if (locateType == 0) {
+                        locateType = 3;
+                    }
+                    TerminalInfo terminalInfo = new TerminalInfo(tid, tNoOld, tNoNew, model, locateType, position);
+                    terminalInfoList.add(terminalInfo);
+                }
+
+                Cursor cursorCar = mDatabaseManager.getCar(carId);
+                Log.i(TAG, "getOrder: cursorCar-->" + cursorCar);
+                if (null != cursorCar && cursorCar.moveToFirst()) {
+
+                    String carNo = cursorCar.getString(1);
+                    String carVin = cursorCar.getString(2);
+                    String carType = cursorCar.getString(3);
+
+                    Log.i(TAG, "getOrder: carNo-->" + carNo);
+                    Log.i(TAG, "getOrder: carVin-->" + carVin);
+                    Log.i(TAG, "getOrder: carType-->" + carType);
+
+                    CarInfo carInfo = new CarInfo(carId, carNo, carVin, carType, terminalInfoList);
+
+                    CarInfoOut carInfoOut = new CarInfoOut(carInfo);
+
+                    carInfoOutList.add(carInfoOut);
+
+                    cursorCar.close();
+                }
             } while (cursor.moveToNext());
+
+            cursor.close();
         }
-    }
-
-    private String getInstallJson() {
-        TerminalInfo terminalInfo1 = new TerminalInfo(111, "222", "333", 1, 1, "444");
-        TerminalInfo terminalInfo2 = new TerminalInfo(1111, "222", "333", 2, 2, "444");
-        TerminalInfo terminalInfo3 = new TerminalInfo(111, "222", "333", 3, 3, "444");
-
-        TerminalInfo terminalInfo4 = new TerminalInfo(111, "222", "333", 4, 4, "444");
-        TerminalInfo terminalInfo5 = new TerminalInfo(111, "222", "333", 5, 5, "444", "5555");
-
-        List<TerminalInfo> terminalInfoList1 = new ArrayList<>();
-        terminalInfoList1.add(terminalInfo1);
-        terminalInfoList1.add(terminalInfo2);
-        terminalInfoList1.add(terminalInfo3);
-
-        List<TerminalInfo> terminalInfoList2 = new ArrayList<>();
-        terminalInfoList2.add(terminalInfo4);
-        terminalInfoList2.add(terminalInfo5);
-
-        CarInfo carInfo1 = new CarInfo(1, "cN1111", "cV1111", "111", terminalInfoList1);
-        CarInfo carInfo2 = new CarInfo(2, "cN2222", "cV2222", "222", terminalInfoList2);
-
-        CarInfoOut carInfoOut1 = new CarInfoOut(carInfo1);
-        CarInfoOut carInfoOut2 = new CarInfoOut(carInfo2);
-
-        List<CarInfoOut> carInfoOutList = new ArrayList<>();
-        carInfoOutList.add(carInfoOut1);
-        carInfoOutList.add(carInfoOut2);
 
         Gson gson = new Gson();
         String json = gson.toJson(carInfoOutList);
-        Log.i(TAG, "getInstallJson: json-->" + json);
+        Log.i(TAG, "getOrder: json-->" + json);
+
         return json;
     }
+
 
     private String getRepairJson() {
         Cursor cursor = mDatabaseManager.getOrder(mOrderNo);
@@ -315,20 +354,20 @@ public class CustomSignActivity extends BaseActivity {
         dialog.show();
     }
 
-    private class MyHandler extends Handler{
+    private class MyHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            switch (msg.what){
-                case Data.MSG_ERO:{
+            switch (msg.what) {
+                case Data.MSG_ERO: {
                     showMessageDialog(mStringMessage);
                     break;
                 }
-                case Data.MSG_1:{
+                case Data.MSG_1: {
                     showMessageDialog(mStringMessage);
                     break;
                 }
-                default:{
+                default: {
                     Log.i(TAG, "handleMessage: default-->" + msg.what);
                 }
             }

@@ -20,11 +20,16 @@ public final class Data {
     public final static int DATA_INTENT_SCANNER_REQUEST = 0x001;
     public final static int DATA_INTENT_SCANNER_RESULT = 0x002;
 
+
     public final static int DATA_INTENT_ORDER_DETAILS_REQUEST = 0x003;
     public final static int DATA_INTENT_ORDER_DETAILS_RESULT = 0x004;
 
     public final static int DATA_INTENT_CHOICE_WORKER_REQUEST = 0x005;
     public final static int DATA_INTENT_CHOICE_WORKER_RESULT = 0x006;
+
+    public final static String DATA_LOCATE = "paigong_locate";
+    public final static int DATA_INTENT_LOCATE_REQUEST = 0x007;
+    public final static int DATA_INTENT_LOCATE_RESULT = 0x008;
 
     //  intent传值
     public final static String DATA_INTENT_EID = "paigong_intent_eid";

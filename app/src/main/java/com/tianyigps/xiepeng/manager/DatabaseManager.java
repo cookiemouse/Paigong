@@ -1015,6 +1015,26 @@ public class DatabaseManager {
         this.addTerId(idMain, tId);
     }
 
+    //  增,T，model
+    public void addTerModel(String idMain, int model){
+        if (terExist(idMain)) {
+            modifyTerModel(idMain, model);
+            return;
+        }
+        this.addTer(idMain);
+        this.addTerModel(idMain, model);
+    }
+
+    //  增,T，locateType
+    public void addTerLocateType(String idMain, int locateType){
+        if (terExist(idMain)) {
+            modifyTerLocateType(idMain, locateType);
+            return;
+        }
+        this.addTer(idMain);
+        this.addTerLocateType(idMain, locateType);
+    }
+
     //  增，T，PositionPic
     public void addTerPositionPic(String idMain, String positionPic, String positionPicUri) {
         if (terExist(idMain)) {
@@ -1105,12 +1125,59 @@ public class DatabaseManager {
         }
     }
 
+    //  改，T, 重载
     public void modifyTerId(String idMain, int tId) {
         if (!terExist(idMain)) {
             return;
         }
+        if (this.getTerId(idMain) == tId){
+            return;
+        }
         ContentValues contentValues = new ContentValues();
         contentValues.put("tId", tId);
+
+        mSqLiteDatabase.beginTransaction();
+        try {
+            mSqLiteDatabase.update(Data.DATA_TAB_INSTALL_TERMINAL
+                    , contentValues
+                    , "idMain=?"
+                    , new String[]{(idMain)});
+            mSqLiteDatabase.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.e(TAG, e + "SqLiteDatabase update error");
+        } finally {
+            mSqLiteDatabase.endTransaction();
+        }
+    }
+    //  改，T, 重载
+    public void modifyTerLocateType(String idMain, int locateType) {
+        if (!terExist(idMain)) {
+            return;
+        }
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("locateType", locateType);
+
+        mSqLiteDatabase.beginTransaction();
+        try {
+            mSqLiteDatabase.update(Data.DATA_TAB_INSTALL_TERMINAL
+                    , contentValues
+                    , "idMain=?"
+                    , new String[]{(idMain)});
+            mSqLiteDatabase.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.e(TAG, e + "SqLiteDatabase update error");
+        } finally {
+            mSqLiteDatabase.endTransaction();
+        }
+    }
+
+    //  改，T，重载
+    public void modifyTerModel(String idMain, int model){
+        if (!terExist(idMain)) {
+            return;
+        }
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("model", model);
 
         mSqLiteDatabase.beginTransaction();
         try {
@@ -1203,7 +1270,8 @@ public class DatabaseManager {
             Cursor cursor = mSqLiteDatabase.query(Data.DATA_TAB_INSTALL_TERMINAL
                     , new String[]{"idMain, tNoOld, tNoNew, position"
                             + ", positionPic, installPic"
-                            + ", positionPicUri, installPicUri"}
+                            + ", positionPicUri, installPicUri"
+                            + ", model, tId, locateType"}
                     , "idMain=?"
                     , new String[]{(idMain)}
                     , null, null, null);
@@ -1216,6 +1284,38 @@ public class DatabaseManager {
             mSqLiteDatabase.endTransaction();
         }
         return null;
+    }
+
+    //  查，T
+    public Cursor getTer(int tId) {
+        mSqLiteDatabase.beginTransaction();
+        try {
+            Cursor cursor = mSqLiteDatabase.query(Data.DATA_TAB_INSTALL_TERMINAL
+                    , new String[]{"idMain, tNoOld, tNoNew, position"
+                            + ", positionPic, installPic"
+                            + ", positionPicUri, installPicUri"
+                            + ", model, tId, locateType"}
+                    , "tId=?"
+                    , new String[]{("" + tId)}
+                    , null, null, null);
+            mSqLiteDatabase.setTransactionSuccessful();
+
+            return cursor;
+        } catch (Exception e) {
+            Log.e(TAG, e + "SqliteDatabase query error");
+        } finally {
+            mSqLiteDatabase.endTransaction();
+        }
+        return null;
+    }
+
+    public int getTerId(String idMain) {
+        int id = 0;
+        Cursor cursor = this.getTer(idMain);
+        if (null != cursor && cursor.moveToFirst()) {
+            id = cursor.getInt(9);
+        }
+        return id;
     }
 
     //  查，T，重载

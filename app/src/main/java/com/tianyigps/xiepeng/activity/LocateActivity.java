@@ -92,6 +92,8 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
 
     private Toast mToast;
 
+    private Intent mIntent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -224,9 +226,9 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
 
         mGeoCoderSearch = GeoCoder.newInstance();
 
-        Intent intent = getIntent();
-        boolean isShow = intent.getBooleanExtra(Data.DATA_INTENT_LOCATE_TYPE, true);
-        wholeImei = intent.getStringExtra(Data.DATA_INTENT_LOCATE_IMEI);
+        mIntent = getIntent();
+        boolean isShow = mIntent.getBooleanExtra(Data.DATA_INTENT_LOCATE_TYPE, true);
+        wholeImei = mIntent.getStringExtra(Data.DATA_INTENT_LOCATE_IMEI);
         if (isShow) {
             mTextViewLook.setVisibility(View.VISIBLE);
             mLinearLayout.setVisibility(View.VISIBLE);
@@ -346,6 +348,10 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
                         type = "";
                     }
                 }
+
+                mIntent.putExtra(Data.DATA_LOCATE, (redisObjBean.getLocate_type() + 1));
+                setResult(Data.DATA_INTENT_LOCATE_RESULT, mIntent);
+
                 mStringContent = "设备编号：" + objBean.getImei()
                         + "\n状态：" + objBean.getInfoWindowStatus()
                         + "\n定位类型：" + type

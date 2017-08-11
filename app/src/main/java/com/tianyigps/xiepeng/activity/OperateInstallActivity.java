@@ -36,6 +36,7 @@ import com.tianyigps.xiepeng.data.AdapterOperateInstallRecyclerData;
 import com.tianyigps.xiepeng.data.Data;
 import com.tianyigps.xiepeng.interfaces.OnDeletePicListener;
 import com.tianyigps.xiepeng.interfaces.OnGetWholeIMEIListener;
+import com.tianyigps.xiepeng.interfaces.OnGetWorkerOrderInfoStartListener;
 import com.tianyigps.xiepeng.interfaces.OnUploadPicListener;
 import com.tianyigps.xiepeng.manager.DatabaseManager;
 import com.tianyigps.xiepeng.manager.FileManager;
@@ -93,8 +94,9 @@ public class OperateInstallActivity extends BaseActivity {
 
     // id，主键
     // TODO: 2017/8/1 测试车辆数据库
-    private int idMainCar = 100;
-    private String idMainTerminal = idMainCar + "T";
+    private int idMainCar;
+    private String ID_MAIN_TERMINAL;
+    private String idMainTerminal;
 
     private DatabaseManager mDatabaseManager;
 
@@ -136,6 +138,12 @@ public class OperateInstallActivity extends BaseActivity {
             myHandler.sendMessage(message);
         }
 
+        if (requestCode == Data.DATA_INTENT_LOCATE_REQUEST && resultCode == Data.DATA_INTENT_LOCATE_RESULT) {
+            int locateType = data.getIntExtra(Data.DATA_LOCATE, 3);
+            Log.i(TAG, "onActivityResult: locateType-->" + locateType);
+            mDatabaseManager.addTerLocateType(idMainTerminal, locateType);
+        }
+
         if (RESULT_OK != resultCode) {
             if (null != fileTempName) {
                 new FileManager(fileTempName).delete();
@@ -154,7 +162,13 @@ public class OperateInstallActivity extends BaseActivity {
 
                 String imgUrl = mAdapterOperateInstallListDataList.get(itemPosition).getPositionPicUrl();
 
-                uploadTerminalPic(Data.DATA_UPLOAD_TYPE_3, imgUrl, path);
+                mDatabaseManager.getTerId(idMainTerminal);
+
+                Log.i(TAG, "onActivityResult: idMainTerminal-->" + idMainTerminal);
+                int tid = mDatabaseManager.getTerId(idMainTerminal);
+                Log.i(TAG, "onActivityResult: tid-->" + tid);
+
+                uploadTerminalPic(tid, Data.DATA_UPLOAD_TYPE_3, imgUrl, path);
                 break;
             }
             case INTENT_PHOTO_P: {
@@ -175,7 +189,10 @@ public class OperateInstallActivity extends BaseActivity {
 
                 String imgUrl = mAdapterOperateInstallListDataList.get(itemPosition).getPositionPicUrl();
 
-                uploadTerminalPic(Data.DATA_UPLOAD_TYPE_3, imgUrl, path);
+                Log.i(TAG, "onActivityResult: idMainTerminal-->" + idMainTerminal);
+                int tid = mDatabaseManager.getTerId(idMainTerminal);
+                Log.i(TAG, "onActivityResult: tid-->" + tid);
+                uploadTerminalPic(tid, Data.DATA_UPLOAD_TYPE_3, imgUrl, path);
                 break;
             }
             case INTENT_CHOICE_I: {
@@ -188,7 +205,10 @@ public class OperateInstallActivity extends BaseActivity {
 
                 String imgUrl = mAdapterOperateInstallListDataList.get(itemPosition).getInstallPicUrl();
 
-                uploadTerminalPic(Data.DATA_UPLOAD_TYPE_4, imgUrl, path);
+                Log.i(TAG, "onActivityResult: idMainTerminal-->" + idMainTerminal);
+                int tid = mDatabaseManager.getTerId(idMainTerminal);
+                Log.i(TAG, "onActivityResult: tid-->" + tid);
+                uploadTerminalPic(tid, Data.DATA_UPLOAD_TYPE_4, imgUrl, path);
                 break;
             }
             case INTENT_PHOTO_I: {
@@ -209,7 +229,11 @@ public class OperateInstallActivity extends BaseActivity {
 
                 String imgUrl = mAdapterOperateInstallListDataList.get(itemPosition).getInstallPicUrl();
 
-                uploadTerminalPic(Data.DATA_UPLOAD_TYPE_4, imgUrl, path);
+                Log.i(TAG, "onActivityResult: idMainTerminal-->" + idMainTerminal);
+                int tid = mDatabaseManager.getTerId(idMainTerminal);
+                Log.i(TAG, "onActivityResult: tid-->" + tid);
+
+                uploadTerminalPic(tid, Data.DATA_UPLOAD_TYPE_4, imgUrl, path);
                 break;
             }
             case INTENT_CHOICE_C: {
@@ -323,6 +347,8 @@ public class OperateInstallActivity extends BaseActivity {
         orderNo = intent.getStringExtra(Data.DATA_INTENT_ORDER_NO);
         frameNo = intent.getStringExtra(Data.DATA_INTENT_FRAME_NO);
         carId = intent.getIntExtra(Data.DATA_INTENT_INSTALL_CAR_ID, 0);
+        idMainCar = carId;
+        ID_MAIN_TERMINAL = idMainCar + "T";
         wiredNum = intent.getIntExtra(Data.DATA_INTENT_INSTALL_WIRED_NUM, 0);
         wirelessNum = intent.getIntExtra(Data.DATA_INTENT_INSTALL_WIRELESS_NUM, 0);
 
@@ -381,6 +407,8 @@ public class OperateInstallActivity extends BaseActivity {
         token = mSharedpreferenceManager.getToken();
         userName = mSharedpreferenceManager.getAccount();
 
+        mNetworkManager.getWorkerOrderInfoStart(eid, token, orderNo, userName);
+
         loadCarData();
 
         loadTerminalData();
@@ -416,7 +444,7 @@ public class OperateInstallActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 //  2017/8/3
-                saveData();
+                OperateInstallActivity.this.onBackPressed();
             }
         });
 
@@ -496,6 +524,15 @@ public class OperateInstallActivity extends BaseActivity {
                 //  2017/7/31 安装位置图片
                 itemPosition = position;
 
+                idMainTerminal = ID_MAIN_TERMINAL + itemPosition;
+                boolean isWire = mAdapterOperateInstallListDataList.get(position).isWire();
+                if (isWire) {
+                    mDatabaseManager.addTerModel(idMainTerminal, 1);
+                } else {
+                    mDatabaseManager.addTerModel(idMainTerminal, 2);
+                }
+
+
                 picType = 1;
                 showChoiceDialog();
             }
@@ -505,8 +542,29 @@ public class OperateInstallActivity extends BaseActivity {
                 //  2017/7/31 接线图图片
                 itemPosition = position;
 
+                idMainTerminal = ID_MAIN_TERMINAL + itemPosition;
+
+                boolean isWire = mAdapterOperateInstallListDataList.get(position).isWire();
+                if (isWire) {
+                    mDatabaseManager.addTerModel(idMainTerminal, 1);
+                } else {
+                    mDatabaseManager.addTerModel(idMainTerminal, 2);
+                }
+
                 picType = 3;
                 showChoiceDialog();
+            }
+        });
+        
+        mNetworkManager.setGetWorkerOrderInfoStartListener(new OnGetWorkerOrderInfoStartListener() {
+            @Override
+            public void onFailure() {
+                Log.i(TAG, "onFailure: ");
+            }
+
+            @Override
+            public void onSuccess(String result) {
+                Log.i(TAG, "onSuccess: result-->" + result);
             }
         });
 
@@ -589,7 +647,6 @@ public class OperateInstallActivity extends BaseActivity {
 
                         mDatabaseManager.addOrder(orderNo, carId, id);
 
-                        idMainTerminal = idMainTerminal + itemPosition;
                         mDatabaseManager.addTerPositionPic(idMainTerminal, itemPath, imgUrl);
                         mDatabaseManager.addTerId(idMainTerminal, id);
                         AdapterOperateInstallListData data = mAdapterOperateInstallListDataList.get(itemPosition);
@@ -606,7 +663,6 @@ public class OperateInstallActivity extends BaseActivity {
 
                         mDatabaseManager.addOrder(orderNo, carId, id);
 
-                        idMainTerminal = idMainTerminal + itemPosition;
                         mDatabaseManager.addTerInstallPic(idMainTerminal, itemPath, imgUrl);
                         mDatabaseManager.addTerId(idMainTerminal, id);
                         AdapterOperateInstallListData data = mAdapterOperateInstallListDataList.get(itemPosition);
@@ -722,7 +778,7 @@ public class OperateInstallActivity extends BaseActivity {
     //  加载ListView数据库里的数据
     private void loadTerminalData() {
         for (int i = 0; i < mAdapterOperateInstallListDataList.size(); i++) {
-            Cursor cursor = mDatabaseManager.getTer(idMainTerminal + i);
+            Cursor cursor = mDatabaseManager.getTer(ID_MAIN_TERMINAL + i);
             if (null != cursor && cursor.moveToFirst()) {
                 String id = cursor.getString(0);
                 String tNoOld = cursor.getString(1);
@@ -776,18 +832,13 @@ public class OperateInstallActivity extends BaseActivity {
             Log.i(TAG, "onClick: position-->" + position);
             data.setPosition(position);
 
-            String id = idMainTerminal + i;
+            String id = ID_MAIN_TERMINAL + i;
             Log.i(TAG, "onClick: idMainTerminal-->" + id);
 
             mDatabaseManager.addTerInfo(id, tNoOld, tNoNew, position);
             i++;
-//            if (null != tNoNew && !"".equals(tNoNew) || !"".equals(position) || null != tNoOld) {
-//            }
-
             Log.i(TAG, "----------------------------------------");
         }
-
-        isComplete();
     }
 
     //  RecycleView删除图片
@@ -810,7 +861,7 @@ public class OperateInstallActivity extends BaseActivity {
         Intent intent = new Intent(OperateInstallActivity.this, LocateActivity.class);
         intent.putExtra(Data.DATA_INTENT_LOCATE_TYPE, false);
         intent.putExtra(Data.DATA_INTENT_LOCATE_IMEI, imei);
-        startActivity(intent);
+        startActivityForResult(intent, Data.DATA_INTENT_LOCATE_REQUEST);
     }
 
     //  跳转到条形码扫描页面
@@ -881,16 +932,15 @@ public class OperateInstallActivity extends BaseActivity {
     private void uploadCarPic(int type, String imgUrl, String path) {
         //  压缩图片
         String pathT = TinyU.tinyPic(path);
-        // TODO: 2017/8/1 上传图片，从intent传相关值
         new UploadPicU(mNetworkManager).uploadCarPic(eid, token, orderNo, carId, type, imgUrl, pathT, userName);
     }
 
     //  上传图片
-    private void uploadTerminalPic(int type, String imgUrl, String path) {
+    private void uploadTerminalPic(int tId, int type, String imgUrl, String path) {
         //  压缩图片
         String pathT = TinyU.tinyPic(path);
         //  上传
-        new UploadPicU(mNetworkManager).uploadPic(eid, token, orderNo, carId, type, 1, imgUrl, pathT, userName);
+        new UploadPicU(mNetworkManager).uploadPic(eid, token, orderNo, tId, type, 1, imgUrl, pathT, userName);
     }
 
     //  获取完整imei
@@ -898,15 +948,15 @@ public class OperateInstallActivity extends BaseActivity {
         mNetworkManager.getWholeImei(eid, token, imei, userName);
     }
 
-    //  check数据
+    //  checkTerminal数据
     private boolean isComplete() {
         // TODO: 2017/8/4 检测数据完整性
 
-        boolean complete = true;
+        boolean complete = false;
         boolean completeAll = true;
 
         for (int i = 0; i < mAdapterOperateInstallListDataList.size(); i++) {
-            Cursor cursor = mDatabaseManager.getTer(idMainTerminal + i);
+            Cursor cursor = mDatabaseManager.getTer(ID_MAIN_TERMINAL + i);
             if (null != cursor && cursor.moveToFirst()) {
                 String id = cursor.getString(0);
                 String tNoOld = cursor.getString(1);
@@ -916,18 +966,29 @@ public class OperateInstallActivity extends BaseActivity {
                 String installPic = cursor.getString(5);
                 String positionPicUrl = cursor.getString(6);
                 String installPicUrl = cursor.getString(7);
+                int model = cursor.getInt(8);
+                int tId = cursor.getInt(9);
 
+                Log.i(TAG, "loadTerminalData: id-->" + id);
                 Log.i(TAG, "loadTerminalData: tNoOld-->" + tNoOld);
                 Log.i(TAG, "loadTerminalData: tNoNew-->" + tNoNew);
                 Log.i(TAG, "loadTerminalData: position-->" + position);
                 Log.i(TAG, "loadTerminalData: positionPic-->" + positionPic);
                 Log.i(TAG, "loadTerminalData: installPic-->" + installPic);
+                Log.i(TAG, "loadTerminalData: positionPicUrl-->" + positionPicUrl);
+                Log.i(TAG, "loadTerminalData: installPicUrl-->" + installPicUrl);
+                Log.i(TAG, "loadTerminalData: model-->" + model);
+                Log.i(TAG, "loadTerminalData: tId-->" + tId);
 
-                if (null == tNoNew || "".equals(tNoNew) || "".equals(position) && null == positionPic && null == installPic) {
+                if ((null == tNoNew || "".equals(tNoNew))
+                        && (null == position || "".equals(position))
+                        && (null == positionPic || "".equals(positionPic))
+                        && (null == installPic || "".equals(installPic))) {
                     complete = true;
-                } else if ("".equals(position) || null == positionPic || null == installPic) {
-                    complete = false;
-                } else if (!"".equals(tNoNew) && !"".equals(position) && !"".equals(positionPic) && !"".equals(installPic)) {
+                } else if (null != tNoNew && !"".equals(tNoNew)
+                        && null != position && !"".equals(position)
+                        && null != positionPic && !"".equals(positionPic)
+                        && null != installPic && !"".equals(installPic)) {
                     complete = true;
                 }
 
@@ -946,7 +1007,36 @@ public class OperateInstallActivity extends BaseActivity {
         if (!completeAll) {
             mOperateInstallListAdapter.notifyDataSetChanged();
         }
+
+        // TODO: 2017/8/11 检测CarComplete
+        isCarComplete();
+
         return completeAll;
+    }
+
+    //checkCar数据
+    private void isCarComplete() {
+        Cursor cursor = mDatabaseManager.getCar(idMainCar);
+        if (null != cursor && cursor.moveToFirst()) {
+            String carId = cursor.getString(0);
+            String carNo = cursor.getString(1);
+            String frameNo = cursor.getString(2);
+            String carType = cursor.getString(3);
+            String carNoPic = cursor.getString(4);
+            String frameNoPic = cursor.getString(5);
+            String carNoPicUrl = cursor.getString(6);
+            String frameNoPicUrl = cursor.getString(7);
+
+
+            Log.i(TAG, "isCarComplete: carId-->" + carId);
+            Log.i(TAG, "isCarComplete: carNo-->" + carNo);
+            Log.i(TAG, "isCarComplete: frameNo-->" + frameNo);
+            Log.i(TAG, "isCarComplete: carType-->" + carType);
+            Log.i(TAG, "isCarComplete: carNoPic-->" + carNoPic);
+            Log.i(TAG, "isCarComplete: frameNoPic-->" + frameNoPic);
+            Log.i(TAG, "isCarComplete: carNoPicUrl-->" + carNoPicUrl);
+            Log.i(TAG, "isCarComplete: frameNoPicUrl-->" + frameNoPicUrl);
+        }
     }
 
     private class MyHandler extends Handler {
