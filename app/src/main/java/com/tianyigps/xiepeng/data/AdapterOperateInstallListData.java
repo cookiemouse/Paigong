@@ -11,6 +11,7 @@ public class AdapterOperateInstallListData {
     private String positionPicUrl, installPicUrl;
 
     private String tNoOld;
+    private int tId;
 
     private boolean complete = true;
 
@@ -40,6 +41,14 @@ public class AdapterOperateInstallListData {
         this.positionPicUrl = positionPicUrl;
         this.installPicUrl = installPicUrl;
         this.tNoOld = tNoOld;
+    }
+
+    public int gettId() {
+        return tId;
+    }
+
+    public void settId(int tId) {
+        this.tId = tId;
     }
 
     public boolean isWire() {

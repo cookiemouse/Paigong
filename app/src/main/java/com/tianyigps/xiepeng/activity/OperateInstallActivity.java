@@ -27,6 +27,7 @@ import com.tianyigps.xiepeng.adapter.OperateInstallAdapter;
 import com.tianyigps.xiepeng.adapter.OperateInstallListAdapter;
 import com.tianyigps.xiepeng.base.BaseActivity;
 import com.tianyigps.xiepeng.bean.DeletePicBean;
+import com.tianyigps.xiepeng.bean.StartOrderInfoBean;
 import com.tianyigps.xiepeng.bean.UploadPicBean;
 import com.tianyigps.xiepeng.bean.WholeImeiBean;
 import com.tianyigps.xiepeng.customview.MyListView;
@@ -59,7 +60,7 @@ public class OperateInstallActivity extends BaseActivity {
 
     private ImageView mImageViewCarNo, mImageViewFrameNo;
     private EditText mEditTextCarNo, mEditTextCarType;
-    private TextView mTextFViewrameNo;
+    private TextView mTextViewFrameNo;
 
     private Button mButtonSave;
     private View mViewSave;
@@ -82,7 +83,7 @@ public class OperateInstallActivity extends BaseActivity {
     private NetworkManager mNetworkManager;
     private SharedpreferenceManager mSharedpreferenceManager;
     private MyHandler myHandler;
-    private String mStringMessage = "请求数据失败，请检查网络！";
+    private String mStringMessage;
     private int eid;
     private String token;
     private String userName;
@@ -115,6 +116,13 @@ public class OperateInstallActivity extends BaseActivity {
 
     private Uri mUriPhoto;
     private String fileTempName;
+
+    private String mBaseImg;
+    private String mCarNoPic;
+    private String mCarFramePic;
+    private String mCarNo;
+    private String mCarFrameNo;
+    private String mCarBrand;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,7 +166,6 @@ public class OperateInstallActivity extends BaseActivity {
 
                 String path = new Uri2FileU(OperateInstallActivity.this).getRealPathFromUri(selectedImage);
                 Log.i(TAG, "onActivityResult: path-->" + path);
-                itemPath = path;
 
                 String imgUrl = mAdapterOperateInstallListDataList.get(itemPosition).getPositionPicUrl();
 
@@ -185,8 +192,6 @@ public class OperateInstallActivity extends BaseActivity {
                 String path = new Uri2FileU(OperateInstallActivity.this).getRealPathFromUri(uri);
                 Log.i(TAG, "onActivityResult: path-->" + path);
 
-                itemPath = path;
-
                 String imgUrl = mAdapterOperateInstallListDataList.get(itemPosition).getPositionPicUrl();
 
                 Log.i(TAG, "onActivityResult: idMainTerminal-->" + idMainTerminal);
@@ -200,8 +205,6 @@ public class OperateInstallActivity extends BaseActivity {
 
                 String path = new Uri2FileU(OperateInstallActivity.this).getRealPathFromUri(selectedImage);
                 Log.i(TAG, "onActivityResult: path-->" + path);
-
-                itemPath = path;
 
                 String imgUrl = mAdapterOperateInstallListDataList.get(itemPosition).getInstallPicUrl();
 
@@ -225,8 +228,6 @@ public class OperateInstallActivity extends BaseActivity {
                 String path = new Uri2FileU(OperateInstallActivity.this).getRealPathFromUri(uri);
                 Log.i(TAG, "onActivityResult: path-->" + path);
 
-                itemPath = path;
-
                 String imgUrl = mAdapterOperateInstallListDataList.get(itemPosition).getInstallPicUrl();
 
                 Log.i(TAG, "onActivityResult: idMainTerminal-->" + idMainTerminal);
@@ -241,7 +242,6 @@ public class OperateInstallActivity extends BaseActivity {
 
                 String path = new Uri2FileU(OperateInstallActivity.this).getRealPathFromUri(selectedImage);
                 Log.i(TAG, "onActivityResult: path-->" + path);
-                itemPath = path;
 
                 uploadCarPic(Data.DATA_UPLOAD_TYPE_1, urlCarNoPic, path);
                 break;
@@ -258,7 +258,6 @@ public class OperateInstallActivity extends BaseActivity {
                 }
 
                 String path = new Uri2FileU(OperateInstallActivity.this).getRealPathFromUri(uri);
-                itemPath = path;
                 uploadCarPic(Data.DATA_UPLOAD_TYPE_1, urlCarNoPic, path);
                 break;
             }
@@ -267,8 +266,6 @@ public class OperateInstallActivity extends BaseActivity {
 
                 String path = new Uri2FileU(OperateInstallActivity.this).getRealPathFromUri(selectedImage);
                 Log.i(TAG, "onActivityResult: path-->" + path);
-
-                itemPath = path;
 
                 uploadCarPic(Data.DATA_UPLOAD_TYPE_2, urlFrameNoPic, path);
                 break;
@@ -285,7 +282,6 @@ public class OperateInstallActivity extends BaseActivity {
                 }
 
                 String path = new Uri2FileU(OperateInstallActivity.this).getRealPathFromUri(uri);
-                itemPath = path;
                 uploadCarPic(Data.DATA_UPLOAD_TYPE_2, urlFrameNoPic, path);
                 break;
             }
@@ -293,7 +289,6 @@ public class OperateInstallActivity extends BaseActivity {
                 Uri selectedImage = data.getData();
 
                 String path = new Uri2FileU(OperateInstallActivity.this).getRealPathFromUri(selectedImage);
-                itemPath = path;
                 Log.i(TAG, "onActivityResult: path-->" + path);
                 String imgUrl = mAdapterOperateInstallRecyclerDataList.get(itemRecycler).getImgUrl();
 
@@ -312,7 +307,6 @@ public class OperateInstallActivity extends BaseActivity {
                 }
 
                 String path = new Uri2FileU(OperateInstallActivity.this).getRealPathFromUri(uri);
-                itemPath = path;
 
                 String imgUrl = mAdapterOperateInstallRecyclerDataList.get(itemRecycler).getImgUrl();
 
@@ -361,14 +355,14 @@ public class OperateInstallActivity extends BaseActivity {
         mImageViewCarNo = findViewById(R.id.iv_layout_operate_install_car_pic);
         mImageViewFrameNo = findViewById(R.id.iv_layout_operate_install_frame_pic);
         mEditTextCarNo = findViewById(R.id.et_layout_operate_install_car_no);
-        mTextFViewrameNo = findViewById(R.id.tv_layout_operate_install_frame_no);
+        mTextViewFrameNo = findViewById(R.id.tv_layout_operate_install_frame_no);
         mEditTextCarType = findViewById(R.id.et_layout_operate_install_car_type);
 
         mViewSave = LayoutInflater.from(this).inflate(R.layout.layout_activity_installing_next, null);
         mButtonSave = mViewSave.findViewById(R.id.btn_layout_activity_installing_next);
         mButtonSave.setText(R.string.save);
 
-        mTextFViewrameNo.setText(frameNo);
+        mTextViewFrameNo.setText(frameNo);
 
         mRecyclerView = findViewById(R.id.rv_layout_activity_operate_install);
         mListView = findViewById(R.id.lv_activity_operate_install);
@@ -406,12 +400,11 @@ public class OperateInstallActivity extends BaseActivity {
         eid = mSharedpreferenceManager.getEid();
         token = mSharedpreferenceManager.getToken();
         userName = mSharedpreferenceManager.getAccount();
+        mBaseImg = mSharedpreferenceManager.getImageBaseUrl();
 
         mNetworkManager.getWorkerOrderInfoStart(eid, token, orderNo, userName);
 
-        loadCarData();
-
-        loadTerminalData();
+//        loadCarData();
     }
 
     private void setEventListener() {
@@ -555,16 +548,91 @@ public class OperateInstallActivity extends BaseActivity {
                 showChoiceDialog();
             }
         });
-        
+
         mNetworkManager.setGetWorkerOrderInfoStartListener(new OnGetWorkerOrderInfoStartListener() {
             @Override
             public void onFailure() {
                 Log.i(TAG, "onFailure: ");
+                mStringMessage = Data.DEFAULT_MESSAGE;
+                myHandler.sendEmptyMessage(Data.MSG_ERO);
             }
 
             @Override
             public void onSuccess(String result) {
                 Log.i(TAG, "onSuccess: result-->" + result);
+                Gson gson = new Gson();
+                StartOrderInfoBean startOrderInfoBean = gson.fromJson(result, StartOrderInfoBean.class);
+
+                if (!startOrderInfoBean.isSuccess()) {
+                    mStringMessage = startOrderInfoBean.getMsg();
+                    myHandler.sendEmptyMessage(Data.MSG_ERO);
+                    return;
+                }
+
+                StartOrderInfoBean.ObjBean objBean = startOrderInfoBean.getObj();
+                StartOrderInfoBean.ObjBean.CarListBean carListBean = objBean.getCarList().get(0);
+
+                mCarNo = carListBean.getCarNo();
+                mCarFrameNo = carListBean.getCarVin();
+                mCarBrand = carListBean.getCarBrand();
+                mCarNoPic = mBaseImg + carListBean.getCarNoPic();
+                mCarFramePic = mBaseImg + carListBean.getCarVinPic();
+
+                String pic1 = carListBean.getPic1();
+                String pic2 = carListBean.getPic2();
+                String pic3 = carListBean.getPic3();
+                String pic4 = carListBean.getPic4();
+                String pic5 = carListBean.getPic5();
+                String pic6 = carListBean.getPic6();
+
+                if (null != pic1) {
+                    mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData(mBaseImg + pic1, pic1));
+                    mDatabaseManager.addCarPics(idMainCar, 0, mBaseImg + pic1, pic1);
+                }
+                if (null != pic2) {
+                    mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData(mBaseImg + pic2, pic2));
+                    mDatabaseManager.addCarPics(idMainCar, 1, mBaseImg + pic1, pic1);
+                }
+                if (null != pic3) {
+                    mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData(mBaseImg + pic3, pic3));
+                    mDatabaseManager.addCarPics(idMainCar, 2, mBaseImg + pic1, pic1);
+                }
+                if (null != pic4) {
+                    mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData(mBaseImg + pic4, pic4));
+                    mDatabaseManager.addCarPics(idMainCar, 3, mBaseImg + pic1, pic1);
+                }
+                if (null != pic5) {
+                    mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData(mBaseImg + pic5, pic5));
+                    mDatabaseManager.addCarPics(idMainCar, 4, mBaseImg + pic1, pic1);
+                }
+                if (null != pic6) {
+                    mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData(mBaseImg + pic6, pic6));
+                    mDatabaseManager.addCarPics(idMainCar, 5, mBaseImg + pic1, pic1);
+                }
+                List<StartOrderInfoBean.ObjBean.CarListBean.CarTerminalListBean> carTerminalListBeanList = carListBean.getCarTerminalList();
+                for (int i = 0; i < carTerminalListBeanList.size(); i++) {
+
+                    if (i >= mAdapterOperateInstallListDataList.size()) {
+                        continue;
+                    }
+
+                    StartOrderInfoBean.ObjBean.CarListBean.CarTerminalListBean carTerminalListBean = carTerminalListBeanList.get(i);
+                    String tNo = carTerminalListBean.getTNo();
+                    int tId = carTerminalListBean.getId();
+                    String position = carTerminalListBean.getNewInstallLocation();
+                    String positionPic = carTerminalListBean.getNewInstallLocationPic();
+                    String installPic = carTerminalListBean.getNewWiringDiagramPic();
+
+                    AdapterOperateInstallListData data = mAdapterOperateInstallListDataList.get(i);
+                    data.settId(tId);
+                    data.settNoNew(tNo);
+                    data.setPosition(position);
+                    data.setPositionPic(mBaseImg + positionPic);
+                    data.setPositionPicUrl(positionPic);
+                    data.setInstallPic(mBaseImg + installPic);
+                    data.setInstallPicUrl(installPic);
+                }
+                myHandler.sendEmptyMessage(Data.MSG_9);
             }
         });
 
@@ -612,6 +680,7 @@ public class OperateInstallActivity extends BaseActivity {
                 int id = objBean.getId();
 
                 String imgUrl = objBean.getImgUrl();
+                itemPath = mBaseImg + imgUrl;
 
                 Log.i(TAG, "onSuccess: picType-->" + picType);
                 switch (picType) {
@@ -712,7 +781,7 @@ public class OperateInstallActivity extends BaseActivity {
             urlFrameNoPic = cursor.getString(7);
 
             mEditTextCarNo.setText(carNo);
-//            mTextFViewrameNo.setText(frameNo);
+//            mTextViewFrameNo.setText(frameNo);
             mEditTextCarType.setText(carType);
 
             Log.i(TAG, "loadCarData: carNoPic-->" + carNoPic);
@@ -835,7 +904,9 @@ public class OperateInstallActivity extends BaseActivity {
             String id = ID_MAIN_TERMINAL + i;
             Log.i(TAG, "onClick: idMainTerminal-->" + id);
 
-            mDatabaseManager.addTerInfo(id, tNoOld, tNoNew, position);
+//            mDatabaseManager.addTerInfo(id, tNoOld, tNoNew, position);
+            mDatabaseManager.addTer(id, tNoOld, tNoNew, position, data.getPositionPic(), data.getInstallPic()
+                    , data.getPositionPicUrl(), data.getInstallPicUrl());
             i++;
             Log.i(TAG, "----------------------------------------");
         }
@@ -982,20 +1053,21 @@ public class OperateInstallActivity extends BaseActivity {
 
                 if ((null == tNoNew || "".equals(tNoNew))
                         && (null == position || "".equals(position))
-                        && (null == positionPic || "".equals(positionPic))
-                        && (null == installPic || "".equals(installPic))) {
+                        && (null == positionPicUrl || "".equals(positionPicUrl))
+                        && (null == installPicUrl || "".equals(installPicUrl))) {
                     complete = true;
                 } else if (null != tNoNew && !"".equals(tNoNew)
                         && null != position && !"".equals(position)
-                        && null != positionPic && !"".equals(positionPic)
-                        && null != installPic && !"".equals(installPic)) {
+                        && null != positionPicUrl && !"".equals(positionPicUrl)
+                        && null != installPicUrl && !"".equals(installPicUrl)) {
                     complete = true;
                 }
 
                 Log.i(TAG, "isComplete: position-->" + idMainTerminal + i);
                 Log.i(TAG, "isComplete: complete-->" + complete);
+                Log.i(TAG, ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
 
-                if (!complete) {
+                if (!complete && completeAll) {
                     completeAll = false;
                 }
                 AdapterOperateInstallListData data = mAdapterOperateInstallListDataList.get(i);
@@ -1043,6 +1115,9 @@ public class OperateInstallActivity extends BaseActivity {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
+
+            Log.i(TAG, "handleMessage: msg.what-->" + msg.what);
+
             switch (msg.what) {
                 case Data.MSG_ERO: {
                     showMessageDialog(mStringMessage);
@@ -1069,7 +1144,7 @@ public class OperateInstallActivity extends BaseActivity {
                 case Data.MSG_4: {
                     //  加载carNo图片
                     Picasso.with(OperateInstallActivity.this)
-                            .load(new File(itemPath))
+                            .load(itemPath)
                             .fit()
                             .centerInside()
                             .error(R.drawable.ic_camera)
@@ -1079,7 +1154,7 @@ public class OperateInstallActivity extends BaseActivity {
                 case Data.MSG_5: {
                     //  加载frameNo图片
                     Picasso.with(OperateInstallActivity.this)
-                            .load(new File(itemPath))
+                            .load(itemPath)
                             .fit()
                             .centerInside()
                             .error(R.drawable.ic_camera)
@@ -1090,7 +1165,7 @@ public class OperateInstallActivity extends BaseActivity {
                     //  加载listview position图片
                     ImageView imageView = mListView.getChildAt(itemPosition).findViewById(R.id.iv_item_operate_install_position_pic);
                     Picasso.with(OperateInstallActivity.this)
-                            .load(new File(itemPath))
+                            .load(itemPath)
                             .fit()
                             .centerInside()
                             .error(R.drawable.ic_camera)
@@ -1101,7 +1176,7 @@ public class OperateInstallActivity extends BaseActivity {
                     //  加载listview install图片
                     ImageView imageView = mListView.getChildAt(itemPosition).findViewById(R.id.iv_item_operate_install_install_pic);
                     Picasso.with(OperateInstallActivity.this)
-                            .load(new File(itemPath))
+                            .load(itemPath)
                             .fit()
                             .centerInside()
                             .error(R.drawable.ic_camera)
@@ -1121,8 +1196,52 @@ public class OperateInstallActivity extends BaseActivity {
                     mDatabaseManager.modifyCarPics(idMainCar, itemRecycler, null, null);
                     break;
                 }
+                case Data.MSG_9: {
+
+                    if (null != mCarNoPic) {
+                        Picasso.with(OperateInstallActivity.this)
+                                .load(mCarNoPic)
+                                .fit()
+                                .centerInside()
+                                .error(R.drawable.ic_camera)
+                                .into(mImageViewCarNo);
+                    }
+
+                    if (null != mCarFramePic) {
+                        Picasso.with(OperateInstallActivity.this)
+                                .load(mCarFramePic)
+                                .fit()
+                                .centerInside()
+                                .error(R.drawable.ic_camera)
+                                .into(mImageViewFrameNo);
+                    }
+
+                    if (mAdapterOperateInstallRecyclerDataList.size() <= PIC_MAX) {
+                        mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData());
+                    }
+
+                    Log.i(TAG, "handleMessage: mCarNoPic-->" + mCarNoPic);
+                    Log.i(TAG, "handleMessage: mCarFramePic-->" + mCarFramePic);
+                    Log.i(TAG, "handleMessage: mCarFrameNo-->" + mCarFrameNo);
+                    Log.i(TAG, "handleMessage: mCarNo-->" + mCarNo);
+                    Log.i(TAG, "handleMessage: mCarBrand-->" + mCarBrand);
+
+                    mTextViewFrameNo.setText(mCarFrameNo);
+                    mEditTextCarNo.setText(mCarNo);
+                    mEditTextCarType.setText(mCarBrand);
+
+                    mOperateInstallAdapter.notifyDataSetChanged();
+                    mOperateInstallListAdapter.notifyDataSetChanged();
+
+                    myHandler.sendEmptyMessage(Data.MSG_10);
+                    break;
+                }
+                case Data.MSG_10: {
+                    loadTerminalData();
+                    break;
+                }
                 default: {
-                    Log.i(TAG, "handleMessage: default");
+                    Log.i(TAG, "handleMessage: default-->" + msg.what);
                 }
             }
         }

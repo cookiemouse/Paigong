@@ -16,7 +16,6 @@ import com.squareup.picasso.Picasso;
 import com.tianyigps.xiepeng.R;
 import com.tianyigps.xiepeng.data.AdapterOperateInstallListData;
 
-import java.io.File;
 import java.util.List;
 
 /**
@@ -141,7 +140,7 @@ public class OperateInstallListAdapter extends BaseAdapter {
 
         if (data.getPositionPic() != null) {
             Picasso.with(context)
-                    .load(new File(data.getPositionPic()))
+                    .load(data.getPositionPic())
                     .fit()
                     .centerInside()
                     .error(R.drawable.ic_camera)
@@ -150,7 +149,7 @@ public class OperateInstallListAdapter extends BaseAdapter {
 
         if (data.getInstallPic() != null) {
             Picasso.with(context)
-                    .load(new File(data.getInstallPic()))
+                    .load(data.getInstallPic())
                     .fit()
                     .centerInside()
                     .error(R.drawable.ic_camera)

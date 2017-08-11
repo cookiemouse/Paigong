@@ -985,6 +985,17 @@ public class DatabaseManager {
         }
     }
 
+    //  增，T
+    public void addTer(String idMain, String tNoOld, String tNoNew, String position, String positionPic
+            , String installPic, String positionPicUri, String installPicUri) {
+        if (terExist(idMain)) {
+            modifyTer(idMain, tNoOld, tNoNew, position, positionPic, installPic, positionPicUri, installPicUri);
+            return;
+        }
+        this.addTer(idMain);
+        this.addTer(idMain, tNoOld, tNoNew, position, positionPic, installPic, positionPicUri, installPicUri);
+    }
+
     //  增, T, info
     public void addTerInfo(String idMain, String tNoNew, String position) {
         if (terExist(idMain)) {
@@ -1016,7 +1027,7 @@ public class DatabaseManager {
     }
 
     //  增,T，model
-    public void addTerModel(String idMain, int model){
+    public void addTerModel(String idMain, int model) {
         if (terExist(idMain)) {
             modifyTerModel(idMain, model);
             return;
@@ -1026,7 +1037,7 @@ public class DatabaseManager {
     }
 
     //  增,T，locateType
-    public void addTerLocateType(String idMain, int locateType){
+    public void addTerLocateType(String idMain, int locateType) {
         if (terExist(idMain)) {
             modifyTerLocateType(idMain, locateType);
             return;
@@ -1130,7 +1141,7 @@ public class DatabaseManager {
         if (!terExist(idMain)) {
             return;
         }
-        if (this.getTerId(idMain) == tId){
+        if (this.getTerId(idMain) == tId) {
             return;
         }
         ContentValues contentValues = new ContentValues();
@@ -1149,6 +1160,7 @@ public class DatabaseManager {
             mSqLiteDatabase.endTransaction();
         }
     }
+
     //  改，T, 重载
     public void modifyTerLocateType(String idMain, int locateType) {
         if (!terExist(idMain)) {
@@ -1172,7 +1184,7 @@ public class DatabaseManager {
     }
 
     //  改，T，重载
-    public void modifyTerModel(String idMain, int model){
+    public void modifyTerModel(String idMain, int model) {
         if (!terExist(idMain)) {
             return;
         }

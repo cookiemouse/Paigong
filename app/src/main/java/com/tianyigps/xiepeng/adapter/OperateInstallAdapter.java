@@ -11,7 +11,6 @@ import com.squareup.picasso.Picasso;
 import com.tianyigps.xiepeng.R;
 import com.tianyigps.xiepeng.data.AdapterOperateInstallRecyclerData;
 
-import java.io.File;
 import java.util.List;
 
 /**
@@ -42,6 +41,7 @@ public class OperateInstallAdapter extends RecyclerView.Adapter<OperateInstallAd
         final int positionFinal = position;
 
         String path = mDataList.get(position).getPath();
+
         if (null == path) {
             holder.imageViewDelete.setVisibility(View.GONE);
             Picasso.with(context)
@@ -51,7 +51,7 @@ public class OperateInstallAdapter extends RecyclerView.Adapter<OperateInstallAd
                     .into(holder.imageViewPic);
         } else {
             Picasso.with(context)
-                    .load(new File(path))
+                    .load(path)
                     .fit()
                     .centerInside()
                     .error(R.drawable.ic_camera)
