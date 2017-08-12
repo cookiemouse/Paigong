@@ -30,6 +30,8 @@ import com.yanzhenjie.permission.RationaleListener;
 
 import java.util.List;
 
+import cn.jpush.android.api.JPushInterface;
+
 import static com.tianyigps.xiepeng.data.Data.DATA_LAUNCH_MODE_WORKER;
 import static com.tianyigps.xiepeng.data.Data.MSG_1;
 import static com.tianyigps.xiepeng.data.Data.MSG_ERO;
@@ -53,7 +55,11 @@ public class SplashActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         //在使用SDK各组件之前初始化context信息，传入ApplicationContext
         //注意该方法要再setContentView方法之前实现
+        //百度地图
         SDKInitializer.initialize(getApplicationContext());
+        //极光推送
+        JPushInterface.setDebugMode(true);
+        JPushInterface.init(this);
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
