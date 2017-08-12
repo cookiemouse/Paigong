@@ -578,6 +578,9 @@ public class OperateInstallActivity extends BaseActivity {
                 mCarNoPic = mBaseImg + carListBean.getCarNoPic();
                 mCarFramePic = mBaseImg + carListBean.getCarVinPic();
 
+                mDatabaseManager.addCarNoPic(idMainCar, mCarNoPic, carListBean.getCarNoPic());
+                mDatabaseManager.addCarFrameNoPic(idMainCar, mCarFramePic, carListBean.getCarVinPic());
+
                 String pic1 = carListBean.getPic1();
                 String pic2 = carListBean.getPic2();
                 String pic3 = carListBean.getPic3();
@@ -773,43 +776,17 @@ public class OperateInstallActivity extends BaseActivity {
         if (null != cursor && cursor.moveToFirst()) {
             Log.i(TAG, "loadCardata: idMain-->" + cursor.getInt(0));
             String carNo = cursor.getString(1);
-            String frameNo = cursor.getString(2);
             String carType = cursor.getString(3);
-            String carNoPic = cursor.getString(4);
-            String frameNoPic = cursor.getString(5);
-            urlCarNoPic = cursor.getString(6);
-            urlFrameNoPic = cursor.getString(7);
 
-            mEditTextCarNo.setText(carNo);
-//            mTextViewFrameNo.setText(frameNo);
-            mEditTextCarType.setText(carType);
-
-            Log.i(TAG, "loadCarData: carNoPic-->" + carNoPic);
-            Log.i(TAG, "loadCarData: urlCarNoPic-->" + urlCarNoPic);
-            Log.i(TAG, "loadCarData: frameNoPic-->" + frameNoPic);
-            Log.i(TAG, "loadCarData: urlFrameNoPic-->" + urlFrameNoPic);
-
-            if (null != carNoPic) {
-                Picasso.with(this)
-                        .load(new File(carNoPic))
-                        .fit()
-                        .centerInside()
-                        .error(R.drawable.ic_camera)
-                        .into(mImageViewCarNo);
+            if (null != carNo && !"".equals(carNo)) {
+                mCarNo = carNo;
+            }
+            if (null != carType && !"".equals(carType)) {
+                mCarBrand = carType;
             }
 
-            if (null != frameNoPic) {
-                Picasso.with(this)
-                        .load(new File(frameNoPic))
-                        .fit()
-                        .centerInside()
-                        .error(R.drawable.ic_camera)
-                        .into(mImageViewFrameNo);
-            }
             cursor.close();
         }
-        //  加载Recycler图片
-        myHandler.sendEmptyMessage(Data.MSG_3);
     }
 
     //  加载Recycler图片
@@ -886,8 +863,9 @@ public class OperateInstallActivity extends BaseActivity {
     private void saveData() {
         String carNo = mEditTextCarNo.getText().toString();
         String carType = mEditTextCarType.getText().toString();
+        String carFrameNo = mTextViewFrameNo.getText().toString();
 
-        mDatabaseManager.addCarInfo(idMainCar, carNo, carType);
+        mDatabaseManager.addCarInfo(idMainCar, carNo, carFrameNo, carType);
 
         int i = 0;
         for (AdapterOperateInstallListData data : mAdapterOperateInstallListDataList) {
@@ -895,18 +873,27 @@ public class OperateInstallActivity extends BaseActivity {
             String tNoNew = data.gettNoNew();
             EditText editText = mListView.getChildAt(i).findViewById(R.id.et_item_operate_install_position);
             String position = editText.getText().toString();
+            String positionPic = data.getPositionPic();
+            String installPic = data.getInstallPic();
+            String positionPicUrl = data.getPositionPicUrl();
+            String installPicUrl = data.getInstallPicUrl();
 
-            Log.i(TAG, "onClick: tNoOld-->" + tNoOld);
-            Log.i(TAG, "onClick: tNoNew-->" + tNoNew);
-            Log.i(TAG, "onClick: position-->" + position);
+            Log.i(TAG, "saveData: tNoOld-->" + tNoOld);
+            Log.i(TAG, "saveData: tNoNew-->" + tNoNew);
+            Log.i(TAG, "saveData: position-->" + position);
             data.setPosition(position);
 
             String id = ID_MAIN_TERMINAL + i;
-            Log.i(TAG, "onClick: idMainTerminal-->" + id);
+            Log.i(TAG, "saveData: idMainTerminal-->" + id);
+            Log.i(TAG, "saveData: positionPic-->" + positionPic);
+            Log.i(TAG, "saveData: installPic-->" + installPic);
+            Log.i(TAG, "saveData: positionPicUrl-->" + positionPicUrl);
+            Log.i(TAG, "saveData: installPicUrl-->" + installPicUrl);
 
 //            mDatabaseManager.addTerInfo(id, tNoOld, tNoNew, position);
-            mDatabaseManager.addTer(id, tNoOld, tNoNew, position, data.getPositionPic(), data.getInstallPic()
-                    , data.getPositionPicUrl(), data.getInstallPicUrl());
+            mDatabaseManager.addTer(id, tNoOld, tNoNew, position
+                    , positionPic, installPic
+                    , positionPicUrl, installPicUrl);
             i++;
             Log.i(TAG, "----------------------------------------");
         }
@@ -1023,8 +1010,12 @@ public class OperateInstallActivity extends BaseActivity {
     private boolean isComplete() {
         // TODO: 2017/8/4 检测数据完整性
 
-        boolean complete = false;
+        boolean complete;
         boolean completeAll = true;
+
+        if (!isCarComplete()) {
+            return false;
+        }
 
         for (int i = 0; i < mAdapterOperateInstallListDataList.size(); i++) {
             Cursor cursor = mDatabaseManager.getTer(ID_MAIN_TERMINAL + i);
@@ -1061,9 +1052,11 @@ public class OperateInstallActivity extends BaseActivity {
                         && null != positionPicUrl && !"".equals(positionPicUrl)
                         && null != installPicUrl && !"".equals(installPicUrl)) {
                     complete = true;
+                } else {
+                    complete = false;
                 }
 
-                Log.i(TAG, "isComplete: position-->" + idMainTerminal + i);
+                Log.i(TAG, "isComplete: position-->" + idMainTerminal + "-->" + i);
                 Log.i(TAG, "isComplete: complete-->" + complete);
                 Log.i(TAG, ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
 
@@ -1080,14 +1073,14 @@ public class OperateInstallActivity extends BaseActivity {
             mOperateInstallListAdapter.notifyDataSetChanged();
         }
 
-        // TODO: 2017/8/11 检测CarComplete
-        isCarComplete();
-
         return completeAll;
     }
 
     //checkCar数据
-    private void isCarComplete() {
+    private boolean isCarComplete() {
+
+        boolean carComplete = true;
+
         Cursor cursor = mDatabaseManager.getCar(idMainCar);
         if (null != cursor && cursor.moveToFirst()) {
             String carId = cursor.getString(0);
@@ -1108,7 +1101,29 @@ public class OperateInstallActivity extends BaseActivity {
             Log.i(TAG, "isCarComplete: frameNoPic-->" + frameNoPic);
             Log.i(TAG, "isCarComplete: carNoPicUrl-->" + carNoPicUrl);
             Log.i(TAG, "isCarComplete: frameNoPicUrl-->" + frameNoPicUrl);
+
+            if (null == carNo || "".equals(carNo)) {
+                carComplete = false;
+                mEditTextCarNo.setHintTextColor(getResources().getColor(R.color.colorOrange));
+            } else {
+                mEditTextCarNo.setHintTextColor(getResources().getColor(R.color.colorBlack));
+            }
+            if (null == carType || "".equals(carType)) {
+                carComplete = false;
+                mEditTextCarType.setHintTextColor(getResources().getColor(R.color.colorOrange));
+            } else {
+                mEditTextCarType.setHintTextColor(getResources().getColor(R.color.colorBlack));
+            }
+            if (null == carNoPicUrl || "".equals(carNoPicUrl)) {
+                carComplete = false;
+            }
+            if (null == frameNoPicUrl || "".equals(frameNoPicUrl)) {
+                carComplete = false;
+            }
         }
+
+        return carComplete;
+
     }
 
     private class MyHandler extends Handler {
@@ -1226,6 +1241,8 @@ public class OperateInstallActivity extends BaseActivity {
                     Log.i(TAG, "handleMessage: mCarNo-->" + mCarNo);
                     Log.i(TAG, "handleMessage: mCarBrand-->" + mCarBrand);
 
+                    //  将车辆信息置为本地最新
+                    loadCarData();
                     mTextViewFrameNo.setText(mCarFrameNo);
                     mEditTextCarNo.setText(mCarNo);
                     mEditTextCarType.setText(mCarBrand);

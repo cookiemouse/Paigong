@@ -185,7 +185,8 @@ public class CustomSignActivity extends BaseActivity {
                         , mSignature
                         , "" + latLng.latitude
                         , "" + latLng.longitude
-                        , Data.LOCATE_TYPE_BAIDU, userName);
+                        , Data.LOCATE_TYPE_BAIDU
+                        , userName);
             }
         });
 
@@ -214,17 +215,17 @@ public class CustomSignActivity extends BaseActivity {
     }
 
     private String getInstallJson() {
-        Cursor cursor = mDatabaseManager.getOrder(mOrderNo);
 
         List<CarInfoOut> carInfoOutList = new ArrayList<>();
 
+        Cursor cursor = mDatabaseManager.getOrder(mOrderNo);
         if (null != cursor && cursor.moveToFirst()) {
+            int carId = cursor.getInt(1);
+            List<TerminalInfo> terminalInfoList = new ArrayList<>();
             do {
                 String orderNo = cursor.getString(0);
-                int carId = cursor.getInt(1);
                 int tId = cursor.getInt(2);
 
-                List<TerminalInfo> terminalInfoList = new ArrayList<>();
 
                 Log.i(TAG, "getRepairJson: orderNo-->" + orderNo + " ,carId-->" + carId + " ,tId-->" + tId);
                 Cursor cursorTer = mDatabaseManager.getTer(tId);
@@ -258,31 +259,32 @@ public class CustomSignActivity extends BaseActivity {
                     if (locateType == 0) {
                         locateType = 3;
                     }
-                    TerminalInfo terminalInfo = new TerminalInfo(tid, tNoOld, tNoNew, model, locateType, position);
+                    TerminalInfo terminalInfo = new TerminalInfo(tid, tNoNew, tNoOld, model, locateType, position);
                     terminalInfoList.add(terminalInfo);
                 }
 
-                Cursor cursorCar = mDatabaseManager.getCar(carId);
-                Log.i(TAG, "getOrder: cursorCar-->" + cursorCar);
-                if (null != cursorCar && cursorCar.moveToFirst()) {
-
-                    String carNo = cursorCar.getString(1);
-                    String carVin = cursorCar.getString(2);
-                    String carType = cursorCar.getString(3);
-
-                    Log.i(TAG, "getOrder: carNo-->" + carNo);
-                    Log.i(TAG, "getOrder: carVin-->" + carVin);
-                    Log.i(TAG, "getOrder: carType-->" + carType);
-
-                    CarInfo carInfo = new CarInfo(carId, carNo, carVin, carType, terminalInfoList);
-
-                    CarInfoOut carInfoOut = new CarInfoOut(carInfo);
-
-                    carInfoOutList.add(carInfoOut);
-
-                    cursorCar.close();
-                }
             } while (cursor.moveToNext());
+
+            Cursor cursorCar = mDatabaseManager.getCar(carId);
+            Log.i(TAG, "getOrder: cursorCar-->" + cursorCar);
+            if (null != cursorCar && cursorCar.moveToFirst()) {
+
+                String carNo = cursorCar.getString(1);
+                String carVin = cursorCar.getString(2);
+                String carType = cursorCar.getString(3);
+
+                Log.i(TAG, "getOrder: carNo-->" + carNo);
+                Log.i(TAG, "getOrder: carVin-->" + carVin);
+                Log.i(TAG, "getOrder: carType-->" + carType);
+
+                CarInfo carInfo = new CarInfo(carId, carNo, carVin, carType, terminalInfoList);
+
+                CarInfoOut carInfoOut = new CarInfoOut(carInfo);
+
+                carInfoOutList.add(carInfoOut);
+
+                cursorCar.close();
+            }
 
             cursor.close();
         }
