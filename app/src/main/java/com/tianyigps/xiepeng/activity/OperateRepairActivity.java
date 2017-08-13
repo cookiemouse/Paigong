@@ -15,6 +15,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -47,9 +48,6 @@ public class OperateRepairActivity extends BaseActivity {
 
     private static final String TAG = "OperateRepairActivity";
 
-    private static final int PIC_WIDTH = 300;
-    private static final int PIC_HEIGHT = 150;
-
     private static final int INTENT_CHOICE_P = 1;
     private static final int INTENT_PHOTO_P = 2;
     private static final int INTENT_CHOICE_I = 3;
@@ -60,7 +58,7 @@ public class OperateRepairActivity extends BaseActivity {
     private TextView mTextViewCarNo, mTextViewFrameNo, mTextViewTypeAndName, mTextViewtNo, mTextViewPositionOld,
             mTextViewInstallName, mTextViewInstallPhone, mTextViewDescribe, mTextViewCount;
     private EditText mEditTextPosition, mEditTextExplain;
-    private TextView mTextViewSave;
+    private Button mButtonSave;
 
     private RelativeLayout mRelativeLayoutReplace;
     private TextView mTextViewState;
@@ -90,6 +88,8 @@ public class OperateRepairActivity extends BaseActivity {
 
     //  网络数据返回
     private String carNoG, frameNoG, typeAndNameG, positionG, positionPicG, installPicG, installNameG, installPhoneG;
+    private String mDescribe;
+    private String mPositionNew, mPositionPicNew, mInstallPicNew, mPositionPicUrlNew, mInstallPicUrlNew;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,10 +131,13 @@ public class OperateRepairActivity extends BaseActivity {
 
                 mDatabaseManager.addRepairPositionPic(tid, path);
                 String imgUrl = mDatabaseManager.getRepairPositionUrl(tid);
-                uploadPic(Data.DATA_UPLOAD_TYPE_3, imgUrl, path);
+                uploadPic(Data.DATA_UPLOAD_TYPE_3, mPositionPicUrlNew, path);
 
-                Picasso.with(this).load(selectedImage).resize(PIC_WIDTH, PIC_HEIGHT).error(R.drawable.ic_camera).into
-                        (mImageViewPositionNew);
+                Picasso.with(this)
+                        .load(selectedImage)
+                        .fit()
+                        .centerInside().error(R.drawable.ic_camera)
+                        .into(mImageViewPositionNew);
                 break;
             }
             case INTENT_PHOTO_P: {
@@ -153,9 +156,14 @@ public class OperateRepairActivity extends BaseActivity {
 
                 mDatabaseManager.addRepairPositionPic(tid, path);
                 String imgUrl = mDatabaseManager.getRepairPositionUrl(tid);
-                uploadPic(Data.DATA_UPLOAD_TYPE_3, imgUrl, path);
+                uploadPic(Data.DATA_UPLOAD_TYPE_3, mPositionPicUrlNew, path);
 
-                Picasso.with(this).load(uri).resize(PIC_WIDTH, PIC_HEIGHT).error(R.drawable.ic_camera).into(mImageViewPositionNew);
+                Picasso.with(this)
+                        .load(uri)
+                        .fit()
+                        .centerInside()
+                        .error(R.drawable.ic_camera)
+                        .into(mImageViewPositionNew);
                 break;
             }
             case INTENT_CHOICE_I: {
@@ -166,9 +174,13 @@ public class OperateRepairActivity extends BaseActivity {
 
                 mDatabaseManager.addRepairInstallPic(tid, path);
                 String imgUrl = mDatabaseManager.getRepairInstallUrl(tid);
-                uploadPic(Data.DATA_UPLOAD_TYPE_4, imgUrl, path);
+                uploadPic(Data.DATA_UPLOAD_TYPE_4, mInstallPicUrlNew, path);
 
-                Picasso.with(this).load(selectedImage).resize(PIC_WIDTH, PIC_HEIGHT).error(R.drawable.ic_camera).into(mImageViewInstallNew);
+                Picasso.with(this).load(selectedImage)
+                        .fit()
+                        .centerInside()
+                        .error(R.drawable.ic_camera)
+                        .into(mImageViewInstallNew);
                 break;
             }
             case INTENT_PHOTO_I: {
@@ -186,9 +198,13 @@ public class OperateRepairActivity extends BaseActivity {
                 Log.i(TAG, "onActivityResult: path-->" + path);
                 mDatabaseManager.addRepairInstallPic(tid, path);
                 String imgUrl = mDatabaseManager.getRepairInstallUrl(tid);
-                uploadPic(Data.DATA_UPLOAD_TYPE_4, imgUrl, path);
+                uploadPic(Data.DATA_UPLOAD_TYPE_4, mInstallPicUrlNew, path);
 
-                Picasso.with(this).load(uri).resize(PIC_WIDTH, PIC_HEIGHT).error(R.drawable.ic_camera).into(mImageViewInstallNew);
+                Picasso.with(this).load(uri)
+                        .fit()
+                        .centerInside()
+                        .error(R.drawable.ic_camera)
+                        .into(mImageViewInstallNew);
                 break;
             }
             default: {
@@ -235,7 +251,7 @@ public class OperateRepairActivity extends BaseActivity {
         mEditTextPosition = findViewById(R.id.et_activity_operate_default_position_new);
         mEditTextExplain = findViewById(R.id.et_activity_operate_default_install_explain);
 
-        mTextViewSave = findViewById(R.id.tv_activity_operate_default_install_save);
+        mButtonSave = findViewById(R.id.btn_activity_operate_repair_save);
 
         mTextViewState = findViewById(R.id.tv_activity_operate_remove_state);
         mRelativeLayoutReplace = findViewById(R.id.rl_activity_operate_replace);
@@ -245,7 +261,7 @@ public class OperateRepairActivity extends BaseActivity {
 
         mDatabaseManager = new DatabaseManager(OperateRepairActivity.this);
 
-        loadSavedData();
+//        loadSavedData();
 
         Log.i(TAG, "init: tNo-->" + tNo);
         mTextViewFrameNo.setText(tNo);
@@ -267,7 +283,7 @@ public class OperateRepairActivity extends BaseActivity {
             }
         });
 
-        mTextViewSave.setOnClickListener(new View.OnClickListener() {
+        mButtonSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // 2017/7/26 保存
@@ -399,16 +415,23 @@ public class OperateRepairActivity extends BaseActivity {
                                 }
                                 default: {
                                     terminalType = "";
-                                    Log.i(TAG, "onSuccess: default");
+                                    Log.i(TAG, "onSuccess: default.type-->" + type);
                                 }
                             }
                             typeAndNameG = terminalType + terminalName;
-                            positionG = carTerminalListBean.getNewInstallLocation();
-                            positionPicG = baseUrl + carTerminalListBean.getNewInstallLocationPic();
-                            installPicG = baseUrl + carTerminalListBean.getNewWiringDiagramPic();
+                            positionG = carTerminalListBean.getInstallLocation();
+                            positionPicG = baseUrl + carTerminalListBean.getInstallLocationPic();
+                            installPicG = baseUrl + carTerminalListBean.getWiringDiagramPic();
                             installNameG = objBean.getDispatchContactName();
                             installPhoneG = objBean.getDispatchContactPhone();
-                            tType = carTerminalListBean.getNewTerminalType();
+                            tType = carTerminalListBean.getTerminalType();
+                            mDescribe = carTerminalListBean.getMalDesc();
+
+                            mPositionNew = carTerminalListBean.getNewInstallLocation();
+                            mPositionPicNew = baseUrl + carTerminalListBean.getNewInstallLocationPic();
+                            mInstallPicNew = baseUrl + carTerminalListBean.getNewInstallLocationPic();
+                            mPositionPicUrlNew = carTerminalListBean.getNewInstallLocationPic();
+                            mInstallPicUrlNew = carTerminalListBean.getNewInstallLocationPic();
 
                             myHandler.sendEmptyMessage(Data.MSG_1);
                             return;
@@ -545,13 +568,21 @@ public class OperateRepairActivity extends BaseActivity {
             if (null != mStringPositionPath) {
                 File file = new File(mStringPositionPath);
                 if (file.exists()) {
-                    Picasso.with(this).load(file).resize(PIC_WIDTH, PIC_HEIGHT).error(R.drawable.ic_camera).into(mImageViewPositionNew);
+                    Picasso.with(this).load(file)
+                            .fit()
+                            .centerInside()
+                            .error(R.drawable.ic_camera)
+                            .into(mImageViewPositionNew);
                 }
             }
             if (null != mStringInstallPath) {
                 File file = new File(mStringInstallPath);
                 if (file.exists()) {
-                    Picasso.with(this).load(file).resize(PIC_WIDTH, PIC_HEIGHT).error(R.drawable.ic_camera).into(mImageViewInstallNew);
+                    Picasso.with(this).load(file)
+                            .fit()
+                            .centerInside()
+                            .error(R.drawable.ic_camera)
+                            .into(mImageViewInstallNew);
                 }
             }
             if (null != mStringNewtNo) {
@@ -570,6 +601,9 @@ public class OperateRepairActivity extends BaseActivity {
     private void uploadPic(int type, String imgUrl, String path) {
         //  压缩图片
         String pathT = TinyU.tinyPic(path);
+        if (null == imgUrl){
+            imgUrl = "";
+        }
         new UploadPicU(mNetworkManager).uploadPic(eid, token, orderNo, tid, type, tType, imgUrl, pathT, userName);
     }
 
@@ -589,6 +623,7 @@ public class OperateRepairActivity extends BaseActivity {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
+            Log.i(TAG, "handleMessage: msg.what-->" + msg.what);
             switch (msg.what) {
                 case Data.MSG_ERO: {
                     showFinishDialog(mStringMessage);
@@ -601,16 +636,31 @@ public class OperateRepairActivity extends BaseActivity {
                     mTextViewPositionOld.setText(positionG);
                     mTextViewInstallName.setText(installNameG);
                     mTextViewInstallPhone.setText(installPhoneG);
+                    mTextViewDescribe.setText(mDescribe);
                     Picasso.with(OperateRepairActivity.this)
                             .load(positionPicG)
                             .error(R.color.colorNull)
-                            .resize(PIC_WIDTH, PIC_HEIGHT)
+                            .fit()
+                            .centerInside()
                             .into(mImageViewPositionOld);
                     Picasso.with(OperateRepairActivity.this)
                             .load(installPicG)
                             .error(R.color.colorNull)
-                            .resize(PIC_WIDTH, PIC_HEIGHT)
+                            .fit()
+                            .centerInside()
                             .into(mImageViewInstallOld);
+                    Picasso.with(OperateRepairActivity.this)
+                            .load(mPositionPicNew)
+                            .error(R.color.colorNull)
+                            .fit()
+                            .centerInside()
+                            .into(mImageViewPositionNew);
+                    Picasso.with(OperateRepairActivity.this)
+                            .load(mInstallPicNew)
+                            .error(R.color.colorNull)
+                            .fit()
+                            .centerInside()
+                            .into(mImageViewPositionNew);
                     break;
                 }
                 case Data.MSG_2: {

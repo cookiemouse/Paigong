@@ -836,6 +836,10 @@ public class StartOrderInfoBean {
                 private int id;
                 private String newInstallLocation;
                 private String newInstallLocationPic;
+                private String installLocationPic;
+                private String wiringDiagramPic;
+                private String installLocation;
+                private String malDesc;
                 private String terminalName;
                 private String newSim;
                 private String newTNo;
@@ -867,6 +871,22 @@ public class StartOrderInfoBean {
                     this.terminalName = terminalName;
                 }
 
+                public String getInstallLocation() {
+                    return installLocation;
+                }
+
+                public void setInstallLocation(String installLocation) {
+                    this.installLocation = installLocation;
+                }
+
+                public String getMalDesc() {
+                    return malDesc;
+                }
+
+                public void setMalDesc(String malDesc) {
+                    this.malDesc = malDesc;
+                }
+
                 public int getId() {
                     return id;
                 }
@@ -885,6 +905,30 @@ public class StartOrderInfoBean {
 
                 public String getNewInstallLocationPic() {
                     return newInstallLocationPic;
+                }
+
+                public String getInstallLocationPic() {
+                    return installLocationPic;
+                }
+
+                public void setInstallLocationPic(String installLocationPic) {
+                    this.installLocationPic = installLocationPic;
+                }
+
+                public String getWiringDiagramPic() {
+                    return wiringDiagramPic;
+                }
+
+                public void setWiringDiagramPic(String wiringDiagramPic) {
+                    this.wiringDiagramPic = wiringDiagramPic;
+                }
+
+                public String gettNo() {
+                    return tNo;
+                }
+
+                public void settNo(String tNo) {
+                    this.tNo = tNo;
                 }
 
                 public void setNewInstallLocationPic(String newInstallLocationPic) {

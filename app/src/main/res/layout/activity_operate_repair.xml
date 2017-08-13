@@ -447,8 +447,8 @@
             android:layout_marginTop="@dimen/dp_4"
             android:text="0/200"/>
 
-        <TextView
-            android:id="@+id/tv_activity_operate_default_install_save"
+        <Button
+            android:id="@+id/btn_activity_operate_repair_save"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/tv_activity_operate_default_install_explain_count"
@@ -456,10 +456,8 @@
             android:layout_marginBottom="@dimen/dp_32"
             android:layout_marginTop="@dimen/dp_16"
             android:background="@drawable/bg_button_flush"
-            android:paddingBottom="@dimen/dp_8"
             android:paddingLeft="@dimen/dp_80"
             android:paddingRight="@dimen/dp_80"
-            android:paddingTop="@dimen/dp_8"
             android:text="@string/save"
             android:textColor="@color/colorWhite"/>
     </RelativeLayout>
