@@ -146,9 +146,11 @@ public class OperateInstallActivity extends BaseActivity {
         }
 
         if (requestCode == Data.DATA_INTENT_LOCATE_REQUEST && resultCode == Data.DATA_INTENT_LOCATE_RESULT) {
-            int locateType = data.getIntExtra(Data.DATA_LOCATE, 3);
+            int locateType = data.getIntExtra(Data.DATA_LOCATE_TYPE, 3);
+            int model = data.getIntExtra(Data.DATA_LOCATE_MODEL, 0);
             Log.i(TAG, "onActivityResult: locateType-->" + locateType);
             mDatabaseManager.addTerLocateType(idMainTerminal, locateType);
+            mDatabaseManager.addTerModel(idMainTerminal, model);
         }
 
         if (RESULT_OK != resultCode) {
@@ -517,13 +519,6 @@ public class OperateInstallActivity extends BaseActivity {
                 itemPosition = position;
 
                 idMainTerminal = ID_MAIN_TERMINAL + itemPosition;
-                boolean isWire = mAdapterOperateInstallListDataList.get(position).isWire();
-                if (isWire) {
-                    mDatabaseManager.addTerModel(idMainTerminal, 1);
-                } else {
-                    mDatabaseManager.addTerModel(idMainTerminal, 2);
-                }
-
 
                 picType = 1;
                 showChoiceDialog();
@@ -535,13 +530,6 @@ public class OperateInstallActivity extends BaseActivity {
                 itemPosition = position;
 
                 idMainTerminal = ID_MAIN_TERMINAL + itemPosition;
-
-                boolean isWire = mAdapterOperateInstallListDataList.get(position).isWire();
-                if (isWire) {
-                    mDatabaseManager.addTerModel(idMainTerminal, 1);
-                } else {
-                    mDatabaseManager.addTerModel(idMainTerminal, 2);
-                }
 
                 picType = 3;
                 showChoiceDialog();
@@ -716,8 +704,6 @@ public class OperateInstallActivity extends BaseActivity {
                     }
                     case INTENT_PHOTO_P: {
 
-                        mDatabaseManager.addOrder(orderNo, carId, id);
-
                         mDatabaseManager.addTerPositionPic(idMainTerminal, itemPath, imgUrl);
                         mDatabaseManager.addTerId(idMainTerminal, id);
                         AdapterOperateInstallListData data = mAdapterOperateInstallListDataList.get(itemPosition);
@@ -731,8 +717,6 @@ public class OperateInstallActivity extends BaseActivity {
                     case INTENT_CHOICE_I: {
                     }
                     case INTENT_PHOTO_I: {
-
-                        mDatabaseManager.addOrder(orderNo, carId, id);
 
                         mDatabaseManager.addTerInstallPic(idMainTerminal, itemPath, imgUrl);
                         mDatabaseManager.addTerId(idMainTerminal, id);
@@ -997,7 +981,7 @@ public class OperateInstallActivity extends BaseActivity {
         //  压缩图片
         String pathT = TinyU.tinyPic(path);
         //  上传
-        new UploadPicU(mNetworkManager).uploadPic(eid, token, orderNo, tId, type, 1, imgUrl, pathT, userName);
+        new UploadPicU(mNetworkManager).uploadPic(eid, token, orderNo, carId, tId, type, 1, imgUrl, pathT, userName);
     }
 
     //  获取完整imei

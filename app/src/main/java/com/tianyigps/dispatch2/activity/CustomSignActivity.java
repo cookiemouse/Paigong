@@ -298,43 +298,51 @@ public class CustomSignActivity extends BaseActivity {
 
 
     private String getRepairJson() {
+
+        List<TerminalInfoOut> terminalInfoOurList = new ArrayList<>();
+
+        Log.i(TAG, "getRepairJson: mOrderNo-->" + mOrderNo);
         Cursor cursor = mDatabaseManager.getOrder(mOrderNo);
         if (null != cursor && cursor.moveToFirst()) {
             do {
                 String orderNo = cursor.getString(0);
                 int carId = cursor.getInt(1);
                 int tId = cursor.getInt(2);
-
                 Log.i(TAG, "getRepairJson: orderNo-->" + orderNo + " ,carId-->" + carId + " ,tId-->" + tId);
 
                 Cursor cursorR = mDatabaseManager.getRepair(tId);
-
                 if (null != cursorR && cursorR.moveToFirst()) {
+                    String imeiOld = cursorR.getString(1);
+                    String positionNew = cursorR.getString(2);
+                    String explain = cursorR.getString(5);
+                    String imeiNew = cursorR.getString(6);
+                    int model = cursorR.getInt(9);
+                    int locateType = cursorR.getInt(10);
 
+                    if (0 == locateType) {
+                        locateType = 3;
+                    }
+
+                    if (null == imeiNew) {
+                        imeiNew = "";
+                    }
+                    Log.i(TAG, "getRepairJson: tid-->" + cursorR.getInt(0));
+                    Log.i(TAG, "getRepairJson: imeiOld-->" + imeiOld);
+                    Log.i(TAG, "getRepairJson: positionNew-->" + positionNew);
+                    Log.i(TAG, "getRepairJson: explain-->" + explain);
+                    Log.i(TAG, "getRepairJson: imeiNew-->" + imeiNew);
+                    Log.i(TAG, "getRepairJson: model-->" + model);
+                    Log.i(TAG, "getRepairJson: locateType-->" + locateType);
+
+                    TerminalInfo terminalInfo = new TerminalInfo(tId, imeiOld, imeiNew, model, locateType, positionNew, explain);
+                    TerminalInfoOut terminalInfoOut = new TerminalInfoOut(terminalInfo);
+                    terminalInfoOurList.add(terminalInfoOut);
                     cursorR.close();
                 }
             } while (cursor.moveToNext());
 
             cursor.close();
         }
-
-
-        TerminalInfo terminalInfo1 = new TerminalInfo(111, "222", "333", 1, 1, "444", "5555");
-        TerminalInfo terminalInfo2 = new TerminalInfo(111, "222", "333", 2, 2, "444", "5555");
-        TerminalInfo terminalInfo3 = new TerminalInfo(111, "222", "333", 3, 3, "444", "5555");
-        TerminalInfo terminalInfo4 = new TerminalInfo(111, "222", "333", 4, 4, "444", "5555");
-
-        TerminalInfoOut terminalInfoOut1 = new TerminalInfoOut(terminalInfo1);
-        TerminalInfoOut terminalInfoOut2 = new TerminalInfoOut(terminalInfo2);
-        TerminalInfoOut terminalInfoOut3 = new TerminalInfoOut(terminalInfo3);
-        TerminalInfoOut terminalInfoOut4 = new TerminalInfoOut(terminalInfo4);
-
-        List<TerminalInfoOut> terminalInfoOurList = new ArrayList<>();
-
-        terminalInfoOurList.add(terminalInfoOut1);
-        terminalInfoOurList.add(terminalInfoOut2);
-        terminalInfoOurList.add(terminalInfoOut3);
-        terminalInfoOurList.add(terminalInfoOut4);
 
         Gson gson = new Gson();
         String json = gson.toJson(terminalInfoOurList);
@@ -356,6 +364,21 @@ public class CustomSignActivity extends BaseActivity {
         dialog.show();
     }
 
+    //  显示完成Dialog
+    private void showCompleteDialog(String msg){
+        AlertDialog.Builder builder = new AlertDialog.Builder(CustomSignActivity.this);
+        builder.setMessage(msg);
+        builder.setCancelable(false);
+        builder.setPositiveButton(R.string.ensure, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                CustomSignActivity.this.finish();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
     private class MyHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
@@ -366,7 +389,7 @@ public class CustomSignActivity extends BaseActivity {
                     break;
                 }
                 case Data.MSG_1: {
-                    showMessageDialog(mStringMessage);
+                    showCompleteDialog(mStringMessage);
                     break;
                 }
                 default: {

@@ -124,7 +124,21 @@ public class DatabaseManager {
 
     //  增，维修
     private void addRepair(int idMain) {
-        addRepair(idMain, null, null, null, null, null, null, null, null, 0);
+        if (repairExist(idMain)) {
+            return;
+        }
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("idMain", idMain);
+
+        mSqLiteDatabase.beginTransaction();
+        try {
+            mSqLiteDatabase.insert(Data.DATA_TAB_REPAIR, null, contentValues);
+            mSqLiteDatabase.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.e(TAG, e + "SqliteDatabase insert error");
+        } finally {
+            mSqLiteDatabase.endTransaction();
+        }
     }
 
     //  增，维修
@@ -139,9 +153,9 @@ public class DatabaseManager {
 
     //  增，维修
     public void addRepair(int idMain, String tNo, String position, String positionPic, String installPic, String explain
-            , String newtNo, String positionUrl, String installUrl, int model) {
+            , String newImei, String positionUrl, String installUrl, int model) {
         if (repairExist(idMain)) {
-            modifyRepair(idMain, tNo, position, positionPic, installPic, explain, newtNo, positionUrl, installUrl);
+            modifyRepair(idMain, tNo, position, positionPic, installPic, explain, newImei, positionUrl, installUrl);
             return;
         }
         ContentValues contentValues = new ContentValues();
@@ -151,7 +165,7 @@ public class DatabaseManager {
         contentValues.put("positionPic", positionPic);
         contentValues.put("installPic", installPic);
         contentValues.put("explain", explain);
-        contentValues.put("newtNo", newtNo);
+        contentValues.put("newImei", newImei);
         contentValues.put("positionUrl", positionUrl);
         contentValues.put("installUrl", installUrl);
         contentValues.put("model", model);
@@ -173,7 +187,8 @@ public class DatabaseManager {
             modifyRepairModel(idMain, model);
             return;
         }
-        addRepair(idMain, null, null, null, null, null, null, null, null, model);
+        this.addRepair(idMain);
+        this.addRepair(idMain, model);
     }
 
     //  增，维修
@@ -183,10 +198,41 @@ public class DatabaseManager {
     }
 
     //  增，维修
-    public void addRepair(int idMain, String position, String explain, String newtNo) {
+    public void addRepair(int idMain, String position, String explain, String newImei) {
         addRepairPosition(idMain, position);
         addRepairExplain(idMain, explain);
-        addRepairNewtNo(idMain, newtNo);
+        addRepairNewImei(idMain, newImei);
+    }
+
+    //  增,T，locateType
+    public void addRepairLocateType(int idMain, int locateType) {
+        if (repairExist(idMain)) {
+            modifyRepairLocateType(idMain, locateType);
+            return;
+        }
+        this.addRepair(idMain);
+        this.addRepairLocateType(idMain, locateType);
+    }
+
+    public void modifyRepairLocateType(int idMain, int locateType) {
+        if (!repairExist(idMain)) {
+            return;
+        }
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("locateType", locateType);
+
+        mSqLiteDatabase.beginTransaction();
+        try {
+            mSqLiteDatabase.update(Data.DATA_TAB_REPAIR
+                    , contentValues
+                    , "idMain=?"
+                    , new String[]{"" + idMain});
+            mSqLiteDatabase.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.e(TAG, e + "SqLiteDatabase update error");
+        } finally {
+            mSqLiteDatabase.endTransaction();
+        }
     }
 
     //  增，维修，重载
@@ -200,23 +246,23 @@ public class DatabaseManager {
     }
 
     //  增，维修，重载
-    public void addRepairPositionPic(int idMain, String positionPic) {
+    public void addRepairPositionPic(int idMain, String positionPic, String positionUrl) {
         if (repairExist(idMain)) {
-            modifyRepairPositionPic(idMain, positionPic);
+            modifyRepairPositionPic(idMain, positionPic, positionUrl);
             return;
         }
         this.addRepair(idMain);
-        this.addRepairPositionPic(idMain, positionPic);
+        this.addRepairPositionPic(idMain, positionPic, positionUrl);
     }
 
     //  增，维修，重载
-    public void addRepairInstallPic(int idMain, String installPic) {
+    public void addRepairInstallPic(int idMain, String installPic, String installUrl) {
         if (repairExist(idMain)) {
-            modifyRepairInstallPic(idMain, installPic);
+            modifyRepairInstallPic(idMain, installPic, installUrl);
             return;
         }
         this.addRepair(idMain);
-        this.addRepairInstallPic(idMain, installPic);
+        this.addRepairInstallPic(idMain, installPic, installUrl);
     }
 
     //  增，维修，重载
@@ -230,13 +276,13 @@ public class DatabaseManager {
     }
 
     //  增，维修，重载
-    public void addRepairNewtNo(int idMain, String newtNo) {
+    public void addRepairNewImei(int idMain, String newImei) {
         if (repairExist(idMain)) {
-            modifyRepairNewtNo(idMain, newtNo);
+            modifyRepairNewImei(idMain, newImei);
             return;
         }
         this.addRepair(idMain);
-        this.addRepairNewtNo(idMain, newtNo);
+        this.addRepairNewImei(idMain, newImei);
     }
 
     //  增，维修，重载
@@ -301,7 +347,7 @@ public class DatabaseManager {
 
     //  改，维修
     public void modifyRepair(int idMain, String tNo, String position, String positionPic, String installPic, String explain,
-                             String newtNo, String positionUrl, String installUrl) {
+                             String newImei, String positionUrl, String installUrl) {
         if (!repairExist(idMain)) {
             return;
         }
@@ -311,7 +357,7 @@ public class DatabaseManager {
         contentValues.put("positionPic", positionPic);
         contentValues.put("installPic", installPic);
         contentValues.put("explain", explain);
-        contentValues.put("newtNo", newtNo);
+        contentValues.put("newImei", newImei);
         contentValues.put("positionUrl", positionUrl);
         contentValues.put("installUrl", installUrl);
 
@@ -374,12 +420,13 @@ public class DatabaseManager {
     }
 
     //  改，维修，重载
-    public void modifyRepairPositionPic(int idMain, String positionPic) {
+    public void modifyRepairPositionPic(int idMain, String positionPic, String positionUrl) {
         if (!repairExist(idMain)) {
             return;
         }
         ContentValues contentValues = new ContentValues();
         contentValues.put("positionPic", positionPic);
+        contentValues.put("positionUrl", positionUrl);
 
         mSqLiteDatabase.beginTransaction();
         try {
@@ -396,12 +443,13 @@ public class DatabaseManager {
     }
 
     //  改，维修，重载
-    public void modifyRepairInstallPic(int idMain, String installPic) {
+    public void modifyRepairInstallPic(int idMain, String installPic, String installUrl) {
         if (!repairExist(idMain)) {
             return;
         }
         ContentValues contentValues = new ContentValues();
         contentValues.put("installPic", installPic);
+        contentValues.put("installUrl", installUrl);
 
         mSqLiteDatabase.beginTransaction();
         try {
@@ -440,12 +488,12 @@ public class DatabaseManager {
     }
 
     //  改，维修，重载
-    public void modifyRepairNewtNo(int idMain, String newtNo) {
+    public void modifyRepairNewImei(int idMain, String newImei) {
         if (!repairExist(idMain)) {
             return;
         }
         ContentValues contentValues = new ContentValues();
-        contentValues.put("newtNo", newtNo);
+        contentValues.put("newImei", newImei);
 
         mSqLiteDatabase.beginTransaction();
         try {
@@ -510,7 +558,7 @@ public class DatabaseManager {
         mSqLiteDatabase.beginTransaction();
         try {
             Cursor cursor = mSqLiteDatabase.query(Data.DATA_TAB_REPAIR
-                    , new String[]{"idMain, tNo, position, positionPic, installPic, explain, newtNo" +
+                    , new String[]{"idMain, tNo, position, positionPic, installPic, explain, newImei" +
                             ", positionUrl, installUrl, model"}
                     , null
                     , null
@@ -531,8 +579,8 @@ public class DatabaseManager {
         mSqLiteDatabase.beginTransaction();
         try {
             Cursor cursor = mSqLiteDatabase.query(Data.DATA_TAB_REPAIR
-                    , new String[]{"idMain, tNo, position, positionPic, installPic, explain, newtNo" +
-                            ", positionUrl, installUrl, model"}
+                    , new String[]{"idMain, tNo, position, positionPic, installPic, explain, newImei" +
+                            ", positionUrl, installUrl, model, locateType"}
                     , "idMain=?"
                     , new String[]{"" + idMain}
                     , null, null, null);

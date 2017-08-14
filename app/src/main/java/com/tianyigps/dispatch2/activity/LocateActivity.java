@@ -229,6 +229,7 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
         mIntent = getIntent();
         boolean isShow = mIntent.getBooleanExtra(Data.DATA_INTENT_LOCATE_TYPE, true);
         wholeImei = mIntent.getStringExtra(Data.DATA_INTENT_LOCATE_IMEI);
+        Log.i(TAG, "init: wholeImei-->" + wholeImei);
         if (isShow) {
             mTextViewLook.setVisibility(View.VISIBLE);
             mLinearLayout.setVisibility(View.VISIBLE);
@@ -349,7 +350,9 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
                     }
                 }
 
-                mIntent.putExtra(Data.DATA_LOCATE, (redisObjBean.getLocate_type() + 1));
+                mIntent.putExtra(Data.DATA_LOCATE_TYPE, (redisObjBean.getLocate_type() + 1));
+                mIntent.putExtra(Data.DATA_LOCATE_MODEL, Integer.parseInt(objBean.getModel()));
+
                 setResult(Data.DATA_INTENT_LOCATE_RESULT, mIntent);
 
                 mStringContent = "设备编号：" + objBean.getImei()
@@ -436,6 +439,12 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
         mNetworkManager.getTerminalInfo(eid, token, imei, userName);
     }
 
+    //  计算定位类型
+    private int getLocateType(int locateType){
+        int type = 0;
+        return type;
+    }
+
     private void showToast(String message) {
         View viewToast = LayoutInflater.from(LocateActivity.this).inflate(R.layout.layout_top_toast, null);
         TextView textViewInfo = viewToast.findViewById(R.id.tv_layout_top_toast);
@@ -470,6 +479,7 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
                 }
                 case MSG_3: {
                     //  获取到WholeImei
+                    mEditTextImei.setText(wholeImei);
                     getImeiLocation(wholeImei);
                     break;
                 }

@@ -765,7 +765,7 @@ public class NetworkManager {
 
     //  上转图片    19
     public void uploadPic(int eid, String token, String orderNo
-            , @Nullable String tId, int type, int model
+            , String carId, String tId, int type, int model
             , @Nullable String imgUrl, String upfile, String userName) {
         MultipartBody.Builder builder = new MultipartBody.Builder();
         builder.setType(MultipartBody.FORM);
@@ -780,7 +780,8 @@ public class NetworkManager {
         builder.addFormDataPart("token", token);
         builder.addFormDataPart("userName", userName);
         builder.addFormDataPart("orderNo", orderNo);
-        builder.addFormDataPart("tId", ("" + tId));
+        builder.addFormDataPart("carId", "" + carId);
+        builder.addFormDataPart("tId", "" + tId);
         builder.addFormDataPart("type", ("" + type));
         builder.addFormDataPart("model", ("" + model));
         if (null != imgUrl) {
@@ -790,6 +791,7 @@ public class NetworkManager {
         Log.i(TAG, "uploadPic: eid-->" + eid);
         Log.i(TAG, "uploadPic: token-->" + token);
         Log.i(TAG, "uploadPic: orderNo-->" + orderNo);
+        Log.i(TAG, "uploadPic: carId-->" + carId);
         Log.i(TAG, "uploadPic: tId-->" + tId);
         Log.i(TAG, "uploadPic: type-->" + type);
         Log.i(TAG, "uploadPic: model-->" + model);
@@ -877,6 +879,7 @@ public class NetworkManager {
     }
 
     //  上转图片    19-2
+    /*
     public void uploadPic(int eid, String token, String orderNo
             , int carId, int tId, int type, int model, String userName
             , String... upfiles) {
@@ -908,23 +911,24 @@ public class NetworkManager {
 
         Call call = mOkHttpClient.newCall(mRequest);
         call.enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                if (null == mOnUploadPicListener) {
-                    throw new NullPointerException("OnUploadPicListener is null");
-                }
-                mOnUploadPicListener.onFailure();
+        @Override
+        public void onFailure(Call call, IOException e) {
+            if (null == mOnUploadPicListener) {
+                throw new NullPointerException("OnUploadPicListener is null");
             }
+            mOnUploadPicListener.onFailure();
+        }
 
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                if (null == mOnUploadPicListener) {
-                    throw new NullPointerException("OnUploadPicListener is null");
-                }
-                mOnUploadPicListener.onSuccess(response.body().string());
+        @Override
+        public void onResponse(Call call, Response response) throws IOException {
+            if (null == mOnUploadPicListener) {
+                throw new NullPointerException("OnUploadPicListener is null");
             }
-        });
-    }
+            mOnUploadPicListener.onSuccess(response.body().string());
+        }
+    });
+}
+    */
 
     public void setOnUploadPicListener(OnUploadPicListener listener) {
         this.mOnUploadPicListener = listener;

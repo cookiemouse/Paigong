@@ -17,13 +17,13 @@ public class UploadPicU {
 
     //  上传单张图片
     public void uploadPic(int eid, String token, String orderNo
-            , @Nullable int tId, int type, int model
+            , int carId, @Nullable int tId, int type, int model
             , @Nullable String imgUrl, String upfile, String userName) {
-        if (0 == tId) {
-            mNetworkManager.uploadPic(eid, token, orderNo, "", type, model, imgUrl, upfile, userName);
+        if (0 == tId || 0 == carId) {
+            mNetworkManager.uploadPic(eid, token, orderNo, "" + carId, "", type, model, imgUrl, upfile, userName);
             return;
         }
-        mNetworkManager.uploadPic(eid, token, orderNo, "" + tId, type, model, imgUrl, upfile, userName);
+        mNetworkManager.uploadPic(eid, token, orderNo, "" + carId, "" + tId, type, model, imgUrl, upfile, userName);
     }
 
     //  上传单张图片
@@ -34,9 +34,9 @@ public class UploadPicU {
     }
 
     //  上传多张图片
-    public void uploadPics(int eid, String token, String orderNo
-            , @Nullable int carId, @Nullable int tId, int type, int model, String userName
-            , String... upfiles) {
-        mNetworkManager.uploadPic(eid, token, orderNo, carId, tId, type, model, userName, upfiles);
-    }
+//    public void uploadPics(int eid, String token, String orderNo
+//            , @Nullable int carId, @Nullable int tId, int type, int model, String userName
+//            , String... upfiles) {
+//        mNetworkManager.uploadPic(eid, token, orderNo, carId, tId, type, model, userName, upfiles);
+//    }
 }

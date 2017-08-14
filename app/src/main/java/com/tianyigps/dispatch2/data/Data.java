@@ -27,7 +27,8 @@ public final class Data {
     public final static int DATA_INTENT_CHOICE_WORKER_REQUEST = 0x005;
     public final static int DATA_INTENT_CHOICE_WORKER_RESULT = 0x006;
 
-    public final static String DATA_LOCATE = "paigong_locate";
+    public final static String DATA_LOCATE_TYPE = "paigong_locate_type";
+    public final static String DATA_LOCATE_MODEL = "paigong_locate_model";
     public final static int DATA_INTENT_LOCATE_REQUEST = 0x007;
     public final static int DATA_INTENT_LOCATE_RESULT = 0x008;
 
@@ -45,6 +46,7 @@ public final class Data {
     public final static String DATA_INTENT_INSTALL_WIRED_NUM = "paigong_intent_install_wired_num";
     public final static String DATA_INTENT_INSTALL_WIRELESS_NUM = "paigong_intent_install_wireless_num";
     public final static String DATA_INTENT_INSTALL_CAR_ID = "paigong_intent_install_car_id";
+    public final static String DATA_INTENT_CAR_ID = "paigong_intent_car_id";
 
     public final static String DATA_INTENT_ORDER_DETAILS_RESULT_SIGNED = "paigong_intent_order_details_is_signed";
     public final static String DATA_INTENT_ORDER_DETAILS_IS_CHECKED = "paigong_intent_order_details_is_checked";

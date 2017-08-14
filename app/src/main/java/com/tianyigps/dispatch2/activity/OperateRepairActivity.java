@@ -42,8 +42,6 @@ import com.tianyigps.dispatch2.utils.UploadPicU;
 import com.tianyigps.dispatch2.utils.Uri2FileU;
 import com.yundian.bottomdialog.BottomDialog;
 
-import java.io.File;
-
 public class OperateRepairActivity extends BaseActivity {
 
     private static final String TAG = "OperateRepairActivity";
@@ -66,7 +64,7 @@ public class OperateRepairActivity extends BaseActivity {
     private EditText mEditTextNewImei;
 
     private DatabaseManager mDatabaseManager;
-    private String mStringPosition, mStringPositionPath, mStringInstallPath, mStringExplain, mStringNewtNo;
+//    private String mStringPosition, mStringPositionPath, mStringInstallPath, mStringExplain, mStringNewImei;
 
     private Uri mUriPhoto;
     private String fileTempName;
@@ -84,12 +82,13 @@ public class OperateRepairActivity extends BaseActivity {
     private String mStringMessage = "数据请求失败，请检查网络！";
     private String wholeImei;
     private int tid;
+    private int carId;
     private int tType;
 
     //  网络数据返回
     private String carNoG, frameNoG, typeAndNameG, positionG, positionPicG, installPicG, installNameG, installPhoneG;
     private String mDescribe;
-    private String mPositionNew, mPositionPicNew, mInstallPicNew, mPositionPicUrlNew, mInstallPicUrlNew;
+    private String mPositionNew, mPositionPicNew, mInstallPicNew, mPositionPicUrlNew, mInstallPicUrlNew, mExplainNew, mImeiNew;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,6 +115,15 @@ public class OperateRepairActivity extends BaseActivity {
             mEditTextNewImei.setText(imei);
         }
 
+        if (requestCode == Data.DATA_INTENT_LOCATE_REQUEST && resultCode == Data.DATA_INTENT_LOCATE_RESULT) {
+            int locateType = data.getIntExtra(Data.DATA_LOCATE_TYPE, 3);
+            int model = data.getIntExtra(Data.DATA_LOCATE_MODEL, 0);
+            Log.i(TAG, "onActivityResult: locateType-->" + locateType);
+            Log.i(TAG, "onActivityResult: model-->" + model);
+            mDatabaseManager.addRepairLocateType(tid, locateType);
+            mDatabaseManager.addRepair(tid, model);
+        }
+
         if (RESULT_OK != resultCode) {
             if (null != fileTempName) {
                 new FileManager(fileTempName).delete();
@@ -129,7 +137,6 @@ public class OperateRepairActivity extends BaseActivity {
                 String path = new Uri2FileU(OperateRepairActivity.this).getRealPathFromUri(selectedImage);
                 Log.i(TAG, "onActivityResult: path-->" + path);
 
-                mDatabaseManager.addRepairPositionPic(tid, path);
                 String imgUrl = mDatabaseManager.getRepairPositionUrl(tid);
                 uploadPic(Data.DATA_UPLOAD_TYPE_3, mPositionPicUrlNew, path);
 
@@ -154,7 +161,6 @@ public class OperateRepairActivity extends BaseActivity {
                 String path = new Uri2FileU(OperateRepairActivity.this).getRealPathFromUri(uri);
                 Log.i(TAG, "onActivityResult: path-->" + path);
 
-                mDatabaseManager.addRepairPositionPic(tid, path);
                 String imgUrl = mDatabaseManager.getRepairPositionUrl(tid);
                 uploadPic(Data.DATA_UPLOAD_TYPE_3, mPositionPicUrlNew, path);
 
@@ -172,7 +178,6 @@ public class OperateRepairActivity extends BaseActivity {
                 String path = new Uri2FileU(OperateRepairActivity.this).getRealPathFromUri(selectedImage);
                 Log.i(TAG, "onActivityResult: path-->" + path);
 
-                mDatabaseManager.addRepairInstallPic(tid, path);
                 String imgUrl = mDatabaseManager.getRepairInstallUrl(tid);
                 uploadPic(Data.DATA_UPLOAD_TYPE_4, mInstallPicUrlNew, path);
 
@@ -196,7 +201,6 @@ public class OperateRepairActivity extends BaseActivity {
                 }
                 String path = new Uri2FileU(OperateRepairActivity.this).getRealPathFromUri(uri);
                 Log.i(TAG, "onActivityResult: path-->" + path);
-                mDatabaseManager.addRepairInstallPic(tid, path);
                 String imgUrl = mDatabaseManager.getRepairInstallUrl(tid);
                 uploadPic(Data.DATA_UPLOAD_TYPE_4, mInstallPicUrlNew, path);
 
@@ -231,6 +235,8 @@ public class OperateRepairActivity extends BaseActivity {
         orderNo = intent.getStringExtra(Data.DATA_INTENT_ORDER_NO);
         tNo = intent.getStringExtra(Data.DATA_INTENT_T_NO);
         tid = intent.getIntExtra(Data.DATA_INTENT_T_ID, 0);
+        carId = intent.getIntExtra(Data.DATA_INTENT_CAR_ID, 0);
+        Log.i(TAG, "init: carId-->" + carId);
 
         mImageViewLocate = findViewById(R.id.iv_activity_operate_default_locate);
         mImageViewPositionOld = findViewById(R.id.iv_activity_operate_default_position_pic);
@@ -287,23 +293,25 @@ public class OperateRepairActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 // 2017/7/26 保存
-                mStringPosition = mEditTextPosition.getText().toString();
-                mStringExplain = mEditTextExplain.getText().toString();
-                mStringNewtNo = mEditTextNewImei.getText().toString();
-                Log.i(TAG, "onSignClick: mStringNewtNo-->" + mStringNewtNo);
-                if ("".equals(mStringPosition)) {
-                    mStringPosition = null;
+                mPositionNew = mEditTextPosition.getText().toString();
+                mExplainNew = mEditTextExplain.getText().toString();
+                mImeiNew = mEditTextNewImei.getText().toString();
+                Log.i(TAG, "onSignClick: mStringNewImei-->" + mImeiNew);
+                if ("".equals(mPositionNew)) {
+                    mPositionNew = null;
                 }
-                if ("".equals(mStringExplain)) {
-                    mStringExplain = null;
+                if ("".equals(mExplainNew)) {
+                    mExplainNew = null;
                 }
-                if ("".equals(mStringNewtNo) || mRelativeLayoutReplace.getVisibility() == View.GONE) {
-                    mDatabaseManager.addRepair(tid, mStringPosition, mStringExplain);
+                if (mRelativeLayoutReplace.getVisibility() == View.GONE) {
+                    mDatabaseManager.addRepair(tid, mPositionNew, mExplainNew);
                 } else {
-                    mDatabaseManager.addRepair(tid, mStringPosition, mStringExplain, mStringNewtNo);
+                    mDatabaseManager.addRepair(tid, mPositionNew, mExplainNew, mImeiNew);
                 }
 
                 showFinishDialog("数据已保存！");
+
+                isComplete();
             }
         });
 
@@ -401,7 +409,7 @@ public class OperateRepairActivity extends BaseActivity {
                             carNoG = carListBean.getCarNo();
                             frameNoG = carListBean.getCarVin();
 
-                            int type = carTerminalListBean.getTerminalType();
+                            int type = carTerminalListBean.getNewTerminalType();
                             String terminalType;
                             String terminalName = carTerminalListBean.getTerminalName();
                             if (null == terminalName) {
@@ -429,14 +437,18 @@ public class OperateRepairActivity extends BaseActivity {
                             installPicG = baseUrl + carTerminalListBean.getWiringDiagramPic();
                             installNameG = objBean.getDispatchContactName();
                             installPhoneG = objBean.getDispatchContactPhone();
-                            tType = carTerminalListBean.getTerminalType();
+                            tType = carTerminalListBean.getNewTerminalType();
                             mDescribe = carTerminalListBean.getMalDesc();
 
                             mPositionNew = carTerminalListBean.getNewInstallLocation();
+
                             mPositionPicNew = baseUrl + carTerminalListBean.getNewInstallLocationPic();
-                            mInstallPicNew = baseUrl + carTerminalListBean.getNewInstallLocationPic();
+                            mInstallPicNew = baseUrl + carTerminalListBean.getNewWiringDiagramPic();
                             mPositionPicUrlNew = carTerminalListBean.getNewInstallLocationPic();
-                            mInstallPicUrlNew = carTerminalListBean.getNewInstallLocationPic();
+                            mInstallPicUrlNew = carTerminalListBean.getNewWiringDiagramPic();
+
+                            mDatabaseManager.addRepairPositionPic(tid, mPositionPicNew, mPositionPicUrlNew);
+                            mDatabaseManager.addRepairInstallPic(tid, mInstallPicNew, mInstallPicUrlNew);
 
                             myHandler.sendEmptyMessage(Data.MSG_1);
                             return;
@@ -553,50 +565,32 @@ public class OperateRepairActivity extends BaseActivity {
         new MessageDialogU(this).show(msg);
     }
 
+    private void saveData() {
+        // TODO: 2017/8/14 保存数据
+    }
+
     private void loadSavedData() {
         Cursor cursor = mDatabaseManager.getRepair(tid);
         if (null != cursor && cursor.moveToFirst()) {
-            mStringPosition = cursor.getString(2);
-            mStringPositionPath = cursor.getString(3);
-            mStringInstallPath = cursor.getString(4);
-            mStringExplain = cursor.getString(5);
-            mStringNewtNo = cursor.getString(6);
-            Log.i(TAG, "loadSavedData: tid-->" + cursor.getInt(0));
-            Log.i(TAG, "loadSavedData: mStringPosition-->" + mStringPosition);
-            Log.i(TAG, "loadSavedData: mStringPositionPath-->" + mStringPositionPath);
-            Log.i(TAG, "loadSavedData: mStringInstallPath-->" + mStringInstallPath);
-            Log.i(TAG, "loadSavedData: mStringExplain-->" + mStringExplain);
-            Log.i(TAG, "loadSavedData: mStringNewtNo-->" + mStringNewtNo);
+            mPositionNew = cursor.getString(2);
+            mExplainNew = cursor.getString(5);
+            mImeiNew = cursor.getString(6);
 
-            mEditTextPosition.setText(mStringPosition);
-            mEditTextExplain.setText(mStringExplain);
-            if (null != mStringPositionPath) {
-                File file = new File(mStringPositionPath);
-                if (file.exists()) {
-                    Picasso.with(this).load(file)
-                            .fit()
-                            .centerInside()
-                            .error(R.drawable.ic_camera)
-                            .into(mImageViewPositionNew);
-                }
-            }
-            if (null != mStringInstallPath) {
-                File file = new File(mStringInstallPath);
-                if (file.exists()) {
-                    Picasso.with(this).load(file)
-                            .fit()
-                            .centerInside()
-                            .error(R.drawable.ic_camera)
-                            .into(mImageViewInstallNew);
-                }
-            }
-            if (null != mStringNewtNo) {
-                mRelativeLayoutReplace.setVisibility(View.VISIBLE);
-                mEditTextNewImei.setText(mStringNewtNo);
-                mTextViewCount.setText(R.string.not_replace);
-            } else {
+            Log.i(TAG, "loadSavedData: tid-->" + cursor.getInt(0));
+            Log.i(TAG, "loadSavedData: mStringPosition-->" + mPositionNew);
+            Log.i(TAG, "loadSavedData: mStringExplain-->" + mExplainNew);
+            Log.i(TAG, "loadSavedData: mStringNewImei-->" + mImeiNew);
+
+            mEditTextPosition.setText(mPositionNew);
+            mEditTextExplain.setText(mExplainNew);
+
+            if (null == mImeiNew || "".equals(mImeiNew)) {
                 mRelativeLayoutReplace.setVisibility(View.GONE);
                 mTextViewCount.setText(R.string.repair_replace);
+            } else {
+                mRelativeLayoutReplace.setVisibility(View.VISIBLE);
+                mEditTextNewImei.setText(mImeiNew);
+                mTextViewCount.setText(R.string.not_replace);
             }
             cursor.close();
         }
@@ -609,7 +603,7 @@ public class OperateRepairActivity extends BaseActivity {
         if (null == imgUrl) {
             imgUrl = "";
         }
-        new UploadPicU(mNetworkManager).uploadPic(eid, token, orderNo, tid, type, tType, imgUrl, pathT, userName);
+        new UploadPicU(mNetworkManager).uploadPic(eid, token, orderNo, carId, tid, type, tType, imgUrl, pathT, userName);
     }
 
     //  获取完整imei
@@ -621,7 +615,44 @@ public class OperateRepairActivity extends BaseActivity {
         Intent intent = new Intent(OperateRepairActivity.this, LocateActivity.class);
         intent.putExtra(Data.DATA_INTENT_LOCATE_TYPE, false);
         intent.putExtra(Data.DATA_INTENT_LOCATE_IMEI, imei);
-        startActivity(intent);
+        startActivityForResult(intent, Data.DATA_INTENT_LOCATE_REQUEST);
+    }
+
+    //  检测数据完整是否完整
+    private boolean isComplete() {
+        boolean complete = false;
+
+        Cursor cursor = mDatabaseManager.getRepair(tid);
+        if (null != cursor && cursor.moveToFirst()) {
+
+            int idMain = cursor.getInt(0);
+            String tNo = cursor.getString(1);
+            String position = cursor.getString(2);
+            String positionPic = cursor.getString(3);
+            String installPic = cursor.getString(4);
+            String explain = cursor.getString(5);
+            String newTNo = cursor.getString(6);
+            String positionUrl = cursor.getString(7);
+            String installUrl = cursor.getString(8);
+            int model = cursor.getInt(9);
+            int locateType = cursor.getInt(10);
+
+            Log.i(TAG, "isComplete: idMain-->" + idMain);
+            Log.i(TAG, "isComplete: tNo-->" + tNo);
+            Log.i(TAG, "isComplete: position-->" + position);
+            Log.i(TAG, "isComplete: positionPic-->" + positionPic);
+            Log.i(TAG, "isComplete: installPic-->" + installPic);
+            Log.i(TAG, "isComplete: explain-->" + explain);
+            Log.i(TAG, "isComplete: newTNo-->" + newTNo);
+            Log.i(TAG, "isComplete: positionUrl-->" + positionUrl);
+            Log.i(TAG, "isComplete: installUrl-->" + installUrl);
+            Log.i(TAG, "isComplete: model-->" + model);
+            Log.i(TAG, "isComplete: locateType-->" + locateType);
+
+            cursor.close();
+        }
+
+        return complete;
     }
 
     private class MyHandler extends Handler {
@@ -668,6 +699,9 @@ public class OperateRepairActivity extends BaseActivity {
                             .fit()
                             .centerInside()
                             .into(mImageViewInstallNew);
+
+                    loadSavedData();
+
                     break;
                 }
                 case Data.MSG_2: {

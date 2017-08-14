@@ -34,6 +34,8 @@ import com.tianyigps.dispatch2.manager.SharedpreferenceManager;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.R.attr.id;
+
 /**
  * 这里需要三个Adapter，因为页面结构一样
  * 所以复用title和listview
@@ -185,7 +187,7 @@ public class InstallingActivity extends BaseActivity {
                     }
                     case TYPE_REPAIR: {
                         AdapterRepairData data = mAdapterRepairDataList.get(position);
-                        toRepairActivity(data.gettId(), data.getId());
+                        toRepairActivity(data.gettId(), data.getId(), data.getCarId());
                         break;
                     }
                     default: {
@@ -232,14 +234,13 @@ public class InstallingActivity extends BaseActivity {
                 StartOrderInfoBean.ObjBean objBean = startOrderInfoBean.getObj();
                 mStringRemarks = objBean.getRemark();
 
-//                int sizeCar = objBean.getCarList().size();
-//                int sizeT = 0;
-//                for (StartOrderInfoBean.ObjBean.CarListBean carListBean : objBean.getCarList()) {
-//                    int temp = carListBean.getCarTerminalList().size();
-//                    if (temp > sizeT) {
-//                        sizeT = temp;
-//                    }
-//                }
+                for (StartOrderInfoBean.ObjBean.CarListBean carListBean : objBean.getCarList()) {
+                    for (StartOrderInfoBean.ObjBean.CarListBean.CarTerminalListBean carTerminalListBean : carListBean.getCarTerminalList()) {
+                        int cid = carListBean.getId();
+                        int tid = carTerminalListBean.getId();
+                        mDatabaseManager.addOrder(orderNo, cid, tid);
+                    }
+                }
 
                 switch (mAdapterType) {
                     case TYPE_INSTALL: {
@@ -284,6 +285,7 @@ public class InstallingActivity extends BaseActivity {
                         for (StartOrderInfoBean.ObjBean.CarListBean carListBean : objBean.getCarList()) {
                             String frameNo = carListBean.getCarVin();
                             String carNo = carListBean.getCarNo();
+                            int carId = carListBean.getId();
                             for (StartOrderInfoBean.ObjBean.CarListBean.CarTerminalListBean carTerminalListBean
                                     : carListBean.getCarTerminalList()) {
 
@@ -305,7 +307,8 @@ public class InstallingActivity extends BaseActivity {
                                         , tNo
                                         , terminalName
                                         , carNo
-                                        , frameNo));
+                                        , frameNo
+                                        , carId));
                             }
                         }
 
@@ -333,11 +336,12 @@ public class InstallingActivity extends BaseActivity {
         startActivity(intent);
     }
 
-    private void toRepairActivity(int tId, String tNo) {
+    private void toRepairActivity(int tId, String tNo, int carId) {
         Intent intent = new Intent(InstallingActivity.this, OperateRepairActivity.class);
         intent.putExtra(Data.DATA_INTENT_ORDER_NO, orderNo);
         intent.putExtra(Data.DATA_INTENT_T_NO, tNo);
         intent.putExtra(Data.DATA_INTENT_T_ID, tId);
+        intent.putExtra(Data.DATA_INTENT_CAR_ID, carId);
         startActivity(intent);
     }
 

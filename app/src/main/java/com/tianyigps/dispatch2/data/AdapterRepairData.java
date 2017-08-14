@@ -10,8 +10,9 @@ public class AdapterRepairData {
     private String id, name, carNo, frameNo;
     //  是否完成，即item背景
     private boolean complete;
+    private int carId;
 
-    public AdapterRepairData(int tId, int type, String id, String name, String carNo, String frameNo) {
+    public AdapterRepairData(int tId, int type, String id, String name, String carNo, String frameNo, int carId) {
         this.tId = tId;
         this.type = type;
         this.id = id;
@@ -19,6 +20,7 @@ public class AdapterRepairData {
         this.carNo = carNo;
         this.frameNo = frameNo;
         this.complete = true;
+        this.carId = carId;
     }
 
     public int getType() {
@@ -75,5 +77,13 @@ public class AdapterRepairData {
 
     public void settId(int tId) {
         this.tId = tId;
+    }
+
+    public int getCarId() {
+        return carId;
+    }
+
+    public void setCarId(int carId) {
+        this.carId = carId;
     }
 }
