@@ -437,6 +437,7 @@ public class TerminalInfoBean {
             private String locate_time;
             private int distance;
             private String gps_time;
+            private String lbs_time;
             private int speed;
             private int direction;
             private String imei;
@@ -472,6 +473,14 @@ public class TerminalInfoBean {
 
             public void setGps_time(String gps_time) {
                 this.gps_time = gps_time;
+            }
+
+            public String getLbs_time() {
+                return lbs_time;
+            }
+
+            public void setLbs_time(String lbs_time) {
+                this.lbs_time = lbs_time;
             }
 
             public int getSpeed() {

@@ -106,10 +106,6 @@ public final class Data {
     public final static int DATA_UPLOAD_MODEL_1 = 1;    //有线
     public final static int DATA_UPLOAD_MODEL_2 = 2;    //无线
 
-    //  图片大小
-    public final static int DATA_PIC_SIZE_WIDTH = 300;  //宽度
-    public final static int DATA_PIC_SIZE_HEIGHT = 150; //高度
-
     //  签字图片
     public final static String DATA_PIC_SIGN = "sign.png";
     public final static String DATA_PIC_SIGN_HEAD = "data:image/png;base64,";

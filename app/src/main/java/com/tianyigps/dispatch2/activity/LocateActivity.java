@@ -46,6 +46,7 @@ import com.tianyigps.dispatch2.interfaces.OnGetWholeIMEIListener;
 import com.tianyigps.dispatch2.manager.LocateManager;
 import com.tianyigps.dispatch2.manager.NetworkManager;
 import com.tianyigps.dispatch2.manager.SharedpreferenceManager;
+import com.tianyigps.dispatch2.utils.TimeFormatU;
 import com.tianyigps.dispatch2.utils.TimerU;
 
 import static com.tianyigps.dispatch2.data.Data.DATA_INTENT_SCANNER_REQUEST;
@@ -60,6 +61,8 @@ import static com.tianyigps.dispatch2.data.Data.MSG_ERO;
 public class LocateActivity extends BaseActivity implements View.OnClickListener {
 
     private static final String TAG = "LocateActivity";
+
+    private static final int MIN_10 = 600000;
 
     private MapView mMapView;
     private BaiduMap mBaiduMap;
@@ -350,7 +353,9 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
                     }
                 }
 
-                mIntent.putExtra(Data.DATA_LOCATE_TYPE, (redisObjBean.getLocate_type() + 1));
+                mIntent.putExtra(Data.DATA_LOCATE_TYPE, (getLocateType(redisObjBean.getLocate_type()
+                        , redisObjBean.getGps_time()
+                        , redisObjBean.getLbs_time())));
                 mIntent.putExtra(Data.DATA_LOCATE_MODEL, Integer.parseInt(objBean.getModel()));
 
                 setResult(Data.DATA_INTENT_LOCATE_RESULT, mIntent);
@@ -440,9 +445,39 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
     }
 
     //  计算定位类型
-    private int getLocateType(int locateType){
-        int type = 0;
-        return type;
+    private int getLocateType(int locateType, String gps, String lbs) {
+        TimeFormatU timeFormatU = new TimeFormatU();
+        if (null == lbs) {
+            lbs = "";
+        }
+        if (null == gps) {
+            gps = "";
+        }
+        long now = System.currentTimeMillis();
+        switch (locateType) {
+            case 0: {
+                long mm = timeFormatU.dateToMillis(lbs);
+                if (now - mm <= MIN_10) {
+                    locateType = 2;
+                } else {
+                    locateType = 3;
+                }
+                break;
+            }
+            case 1: {
+                long mm = timeFormatU.dateToMillis(gps);
+                if (now - mm <= MIN_10) {
+                    locateType = 1;
+                } else {
+                    locateType = 3;
+                }
+                break;
+            }
+            default: {
+                locateType = 3;
+            }
+        }
+        return locateType;
     }
 
     private void showToast(String message) {

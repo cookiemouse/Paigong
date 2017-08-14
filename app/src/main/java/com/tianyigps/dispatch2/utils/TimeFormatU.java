@@ -41,14 +41,12 @@ public class TimeFormatU {
     }
 
     //字符串转时间戳
-    public String dateToMillis(String date) {
-        String timeStamp = null;
+    public long dateToMillis(String time) {
+        long timeStamp = 0;
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date d;
         try {
-            d = sdf.parse(date);
-            long l = d.getTime();
-            timeStamp = String.valueOf(l);
+            Date date = sdf.parse(time);
+            timeStamp = date.getTime();
         } catch (ParseException e) {
             e.printStackTrace();
         }
