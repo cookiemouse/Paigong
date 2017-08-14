@@ -27,15 +27,17 @@
         android:layout_marginTop="@dimen/dp_4"
         android:text="0/200"/>
 
-    <TextView
-        android:id="@+id/tv_activity_edit_remarks_next"
+    <Button
+        android:id="@+id/btn_activity_edit_remarks_next"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="@dimen/dp_32"
         android:layout_marginTop="@dimen/dp_16"
-        android:background="@color/colorBlueTheme"
-        android:padding="@dimen/dp_16"
+        android:background="@drawable/bg_button_flush"
+        android:paddingLeft="@dimen/dp_48"
+        android:paddingRight="@dimen/dp_48"
+        android:textColor="@color/colorWhite"
         android:text="@string/next_step"/>
 
 </LinearLayout>

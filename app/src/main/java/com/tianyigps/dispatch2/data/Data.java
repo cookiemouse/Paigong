@@ -27,6 +27,9 @@ public final class Data {
     public final static int DATA_INTENT_CHOICE_WORKER_REQUEST = 0x005;
     public final static int DATA_INTENT_CHOICE_WORKER_RESULT = 0x006;
 
+    public final static int DATA_INTENT_REASON_REQUEST = 0x009;
+    public final static int DATA_INTENT_REASON_RESULT = 0x010;
+
     public final static String DATA_LOCATE_TYPE = "paigong_locate_type";
     public final static String DATA_LOCATE_MODEL = "paigong_locate_model";
     public final static int DATA_INTENT_LOCATE_REQUEST = 0x007;
@@ -55,6 +58,8 @@ public final class Data {
     public final static String DATA_INTENT_LOCATE_IMEI = "paigong_intent_locate_imei";
 
     public final static String DATA_INTENT_PEND_RESULT = "paigong_intent_pend_result";
+
+    public final static String DATA_INTENT_REASON = "paigong_intent_reason";
 
     //  数据请求所需数据
     private final static String DATA_JSON = "paigong_json_";

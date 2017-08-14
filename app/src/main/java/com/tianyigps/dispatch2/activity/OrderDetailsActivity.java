@@ -250,7 +250,7 @@ public class OrderDetailsActivity extends Activity {
                 mLongDoorTime = objBean.getDoorTime();
                 mStringProvince = objBean.getProvince();
                 mStringCity = objBean.getCity();
-                mStringDistrict = objBean.getDistrict();
+                mStringDistrict = objBean.getDistrict() + objBean.getDetail();
                 mStringDetail = objBean.getInstallDemand();
                 mIntOrderType = objBean.getOrderType();
                 mIntOrderStaus = objBean.getOrderStatus();

@@ -218,6 +218,14 @@ public class OperateRepairActivity extends BaseActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        saveData();
+        if (isComplete()) {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         mDatabaseManager.close();
@@ -281,6 +289,13 @@ public class OperateRepairActivity extends BaseActivity {
 
     private void setEventListener() {
 
+        this.setOnTitleBackClickListener(new OnTitleBackClickListener() {
+            @Override
+            public void onClick() {
+                OperateRepairActivity.this.onBackPressed();
+            }
+        });
+
         mImageViewLocate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -293,8 +308,7 @@ public class OperateRepairActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 // 2017/7/26 保存
-                saveData();
-                isComplete();
+                OperateRepairActivity.this.onBackPressed();
             }
         });
 
@@ -584,11 +598,11 @@ public class OperateRepairActivity extends BaseActivity {
 
             if (null == mImeiNew || "".equals(mImeiNew)) {
                 mRelativeLayoutReplace.setVisibility(View.GONE);
-                mTextViewCount.setText(R.string.repair_replace);
+                mTextViewState.setText(R.string.repair_replace);
             } else {
                 mRelativeLayoutReplace.setVisibility(View.VISIBLE);
                 mEditTextNewImei.setText(mImeiNew);
-                mTextViewCount.setText(R.string.not_replace);
+                mTextViewState.setText(R.string.not_replace);
             }
             cursor.close();
         }
@@ -658,6 +672,14 @@ public class OperateRepairActivity extends BaseActivity {
                 mEditTextExplain.setHintTextColor(getResources().getColor(R.color.colorOrange));
             } else {
                 mEditTextExplain.setHintTextColor(getResources().getColor(R.color.colorBlack));
+            }
+
+            if (null == positionUrl || "".equals(positionUrl)) {
+                complete = false;
+            }
+
+            if (null == installUrl || "".equals(installUrl)) {
+                complete = false;
             }
 
             cursor.close();
