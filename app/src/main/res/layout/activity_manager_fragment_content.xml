@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@drawable/bg_content"
-    tools:context="com.tianyigps.xiepeng.activity.ManagerFragmentContentActivity">
+    tools:context="com.tianyigps.dispatch2.activity.ManagerFragmentContentActivity">
 
     <FrameLayout
         android:id="@+id/fl_activity_manager_content"

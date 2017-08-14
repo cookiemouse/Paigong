@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/bg_content"
     android:orientation="vertical"
-    tools:context="com.tianyigps.xiepeng.activity.WorkerFragmentContentActivity">
+    tools:context="com.tianyigps.dispatch2.activity.WorkerFragmentContentActivity">
 
     <FrameLayout
         android:id="@+id/fl_activity_worker_content"

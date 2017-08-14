@@ -48,7 +48,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <com.tianyigps.xiepeng.customview.MyListView
+            <com.tianyigps.dispatch2.customview.MyListView
                 android:id="@+id/lv_layout_pend_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>

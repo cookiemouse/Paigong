@@ -4,7 +4,7 @@
     android:id="@+id/activity_scanner"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.tianyigps.xiepeng.activity.ScannerActivity">
+    tools:context="com.tianyigps.dispatch2.activity.ScannerActivity">
 
     <com.dlazaro66.qrcodereaderview.QRCodeReaderView
         android:id="@+id/qrv_activity"

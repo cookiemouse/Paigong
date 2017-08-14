@@ -189,10 +189,10 @@
             android:background="@color/colorBlueTheme"/>
     </RelativeLayout>
 
-    <com.tianyigps.xiepeng.customview.MyRecyclerView
+    <com.tianyigps.dispatch2.customview.MyRecyclerView
         android:id="@+id/rv_layout_activity_operate_install"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-    </com.tianyigps.xiepeng.customview.MyRecyclerView>
+    </com.tianyigps.dispatch2.customview.MyRecyclerView>
 
 </LinearLayout>

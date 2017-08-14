@@ -4,7 +4,7 @@
              android:layout_width="match_parent"
              android:layout_height="match_parent"
              android:background="@color/colorBlueTheme"
-             tools:context="com.tianyigps.xiepeng.activity.OrderDetailsActivity">
+             tools:context="com.tianyigps.dispatch2.activity.OrderDetailsActivity">
 
     <ImageView
         android:layout_width="match_parent"

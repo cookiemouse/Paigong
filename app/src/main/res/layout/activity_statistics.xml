@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/bg_statistics"
     android:orientation="vertical"
-    tools:context="com.tianyigps.xiepeng.activity.StatisticsActivity">
+    tools:context="com.tianyigps.dispatch2.activity.StatisticsActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"

@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="@dimen/dp_16"
-    tools:context="com.tianyigps.xiepeng.activity.EditRemarksActivity">
+    tools:context="com.tianyigps.dispatch2.activity.EditRemarksActivity">
 
     <EditText
         android:id="@+id/et_activity_edit_remarks"

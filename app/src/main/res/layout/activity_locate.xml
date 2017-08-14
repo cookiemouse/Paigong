@@ -6,7 +6,7 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical"
-              tools:context="com.tianyigps.xiepeng.activity.LocateActivity">
+              tools:context="com.tianyigps.dispatch2.activity.LocateActivity">
 
     <LinearLayout
         android:id="@+id/ll_activity_locate"

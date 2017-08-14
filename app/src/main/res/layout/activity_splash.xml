@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.tianyigps.xiepeng.SplashActivity">
+    tools:context="com.tianyigps.dispatch2.SplashActivity">
 
     <ImageView
         android:id="@+id/iv_activity_splash"

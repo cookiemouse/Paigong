@@ -6,9 +6,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.tianyigps.xiepeng.activity.OperateInstallActivity">
+    tools:context="com.tianyigps.dispatch2.activity.OperateInstallActivity">
 
-    <com.tianyigps.xiepeng.customview.MyScrollView
+    <com.tianyigps.dispatch2.customview.MyScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -27,7 +27,7 @@
                 android:layout_height="@dimen/dp_16"
                 android:background="@color/color_cut_line"/>
 
-            <com.tianyigps.xiepeng.customview.MyListView
+            <com.tianyigps.dispatch2.customview.MyListView
                 android:id="@+id/lv_activity_operate_install"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -36,5 +36,5 @@
                 android:scrollbars="none"/>
 
         </LinearLayout>
-    </com.tianyigps.xiepeng.customview.MyScrollView>
+    </com.tianyigps.dispatch2.customview.MyScrollView>
 </FrameLayout>
