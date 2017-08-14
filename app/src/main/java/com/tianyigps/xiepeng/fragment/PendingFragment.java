@@ -264,7 +264,7 @@ public class PendingFragment extends Fragment {
                 for (PendingBean.ObjBean objBean : pendingBean.getObj()) {
                     String custName = objBean.getCustName();
                     long time = objBean.getDoorTime();
-                    String address = objBean.getProvince() + objBean.getCity() + objBean.getDistrict();
+                    String address = objBean.getProvince() + objBean.getCity() + objBean.getDistrict() + objBean.getDetail();
                     int orderType = objBean.getOrderType();
                     int wire = objBean.getWiredNum();
                     int wireless = objBean.getWirelessNum();

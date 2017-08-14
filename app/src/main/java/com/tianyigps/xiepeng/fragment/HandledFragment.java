@@ -274,7 +274,7 @@ public class HandledFragment extends Fragment {
 
                     mAdapterHandledDataList.add(new AdapterHandledData(objBean.getCustName()
                             , new TimeFormatU().millisToDate(objBean.getDoorTime())
-                            , objBean.getProvince() + objBean.getCity() + objBean.getDistrict()
+                            , objBean.getProvince() + objBean.getCity() + objBean.getDistrict() + objBean.getDetail()
                             , objBean.getOrderNo()
                             , orderType, wire, wireless
                             , objBean.getOrderId()));

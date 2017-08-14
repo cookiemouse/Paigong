@@ -323,7 +323,7 @@ public class OrderFragment extends Fragment {
                     }
                     mAdapterOrderDataList.add(new AdapterOrderData(mStringCustName
                             , new TimeFormatU().millisToDate(mLongDoorTime)
-                            , mStringProvince + mStringCity + mStringDistrict
+                            , mStringProvince + mStringCity + mStringDistrict + mStringDetail
                             , mStringOrderNum
                             , mStringContactName
                             , mStringContactPhone, orderType, wire, wireless));

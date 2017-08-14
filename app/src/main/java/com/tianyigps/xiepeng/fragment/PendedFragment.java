@@ -266,7 +266,7 @@ public class PendedFragment extends Fragment {
                     mAdapterPendedDataList.clear();
                 }
                 for (PendedBean.ObjBean objBean : pendedBean.getObj()) {
-                    String address = objBean.getProvince() + objBean.getCity() + objBean.getDistrict();
+                    String address = objBean.getProvince() + objBean.getCity() + objBean.getDistrict() + objBean.getDetail();
                     mAdapterPendedDataList.add(new AdapterPendedData(objBean.getCustName()
                             , address
                             , objBean.getJobNo()

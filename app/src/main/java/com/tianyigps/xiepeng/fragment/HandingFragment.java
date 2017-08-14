@@ -245,7 +245,7 @@ public class HandingFragment extends Fragment implements View.OnClickListener {
 
                     mAdapterHandingDataList.add(new AdapterHandingData(objBean.getCustName()
                             , new TimeFormatU().millisToDate(objBean.getDoorTime())
-                            , objBean.getProvince() + objBean.getCity() + objBean.getDistrict()
+                            , objBean.getProvince() + objBean.getCity() + objBean.getDistrict() + objBean.getDetail()
                             , objBean.getOrderNo()
                             , objBean.getContactName()
                             , objBean.getContactPhone()
