@@ -21,8 +21,10 @@ import com.tianyigps.dispatch2.R;
 import com.tianyigps.dispatch2.adapter.ChoiceWorkerAdapter;
 import com.tianyigps.dispatch2.base.BaseActivity;
 import com.tianyigps.dispatch2.bean.ChoiceWorkerBean;
+import com.tianyigps.dispatch2.bean.PendBean;
 import com.tianyigps.dispatch2.data.AdapterChoiceWorkerData;
 import com.tianyigps.dispatch2.data.Data;
+import com.tianyigps.dispatch2.interfaces.OnPendListener;
 import com.tianyigps.dispatch2.interfaces.OnWorkersListener;
 import com.tianyigps.dispatch2.manager.NetworkManager;
 import com.tianyigps.dispatch2.manager.SharedpreferenceManager;
@@ -56,6 +58,8 @@ public class ChoiceWorkerActivity extends BaseActivity {
     private String mStringMessage;
 
     private Intent mIntent;
+    private String orderNo;
+    private int orderStatus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +76,8 @@ public class ChoiceWorkerActivity extends BaseActivity {
         this.setTitleRightButtonVisibilite(false);
 
         mIntent = getIntent();
+        orderNo = mIntent.getStringExtra(Data.DATA_INTENT_ORDER_NO);
+        orderStatus = mIntent.getIntExtra(Data.DATA_INTENT_ORDER_STATUS, 1);
 
         mSharedpreferenceManager = new SharedpreferenceManager(this);
         mNetworkManager = new NetworkManager();
@@ -144,11 +150,7 @@ public class ChoiceWorkerActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 // 2017/8/7 派单给自己
-                int isPay = 0;
-                if (mCheckBoxPay.isChecked()) {
-                    isPay = 1;
-                }
-                pendResult(eid, jobNo, isPay);
+                pendOrder(eid);
             }
         });
 
@@ -161,11 +163,7 @@ public class ChoiceWorkerActivity extends BaseActivity {
                     myHandler.sendEmptyMessage(Data.MSG_ERO);
                     return;
                 }
-                int isPay = 0;
-                if (mCheckBoxPay.isChecked()) {
-                    isPay = 1;
-                }
-                pendResult(eidChoice, jobNoChoice, isPay);
+                pendOrder(eidChoice);
             }
         });
 
@@ -200,6 +198,27 @@ public class ChoiceWorkerActivity extends BaseActivity {
                 myHandler.sendEmptyMessage(Data.MSG_1);
             }
         });
+
+        mNetworkManager.setOnPendListener(new OnPendListener() {
+            @Override
+            public void onFailure() {
+                mStringMessage = Data.DEFAULT_MESSAGE;
+                myHandler.sendEmptyMessage(Data.MSG_ERO);
+            }
+
+            @Override
+            public void onSuccess(String result) {
+                Log.i(TAG, "onSuccess: result-->" + result);
+                Gson gson = new Gson();
+                PendBean pendBean = gson.fromJson(result, PendBean.class);
+                if (!pendBean.isSuccess()) {
+                    mStringMessage = pendBean.getMsg();
+                    myHandler.sendEmptyMessage(Data.MSG_3);
+                    return;
+                }
+                myHandler.sendEmptyMessage(Data.MSG_2);
+            }
+        });
     }
 
     //  搜索
@@ -225,13 +244,13 @@ public class ChoiceWorkerActivity extends BaseActivity {
         mChoiceWorkerAdapter.notifyDataSetChanged();
     }
 
-    //  返回数据
-    private void pendResult(int eid, String jobNo, int isPay) {
-        mIntent.putExtra(Data.DATA_INTENT_CHOICE_WORKER_EID, eid);
-        mIntent.putExtra(Data.DATA_INTENT_CHOICE_WORKER_JOBNO, jobNo);
-        mIntent.putExtra(Data.DATA_INTENT_CHOICE_WORKER_ISPAY, isPay);
-        setResult(Data.DATA_INTENT_CHOICE_WORKER_RESULT, mIntent);
-        finish();
+    //  派工
+    private void pendOrder(int eidChoice) {
+        int isPay = 0;
+        if (mCheckBoxPay.isChecked()) {
+            isPay = 1;
+        }
+        mNetworkManager.pendOrder(jobNo, userName, token, orderNo, orderStatus, eidChoice, isPay);
     }
 
     private void showMessageDialog(String msg) {
@@ -258,6 +277,20 @@ public class ChoiceWorkerActivity extends BaseActivity {
                 }
                 case Data.MSG_1: {
                     search(null);
+                    break;
+                }
+                case Data.MSG_2: {
+                    //  派单成功
+                    mIntent.putExtra(Data.DATA_INTENT_PEND_RESULT, true);
+                    setResult(Data.DATA_INTENT_CHOICE_WORKER_RESULT, mIntent);
+                    ChoiceWorkerActivity.this.finish();
+                    break;
+                }
+                case Data.MSG_3: {
+                    mIntent.putExtra(Data.DATA_INTENT_PEND_RESULT, false);
+                    setResult(Data.DATA_INTENT_CHOICE_WORKER_RESULT, mIntent);
+                    ChoiceWorkerActivity.this.finish();
+                    //  派单失败
                     break;
                 }
                 default: {

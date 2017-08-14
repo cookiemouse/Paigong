@@ -31,13 +31,11 @@ import com.tianyigps.dispatch2.activity.WorkerFragmentContentActivity;
 import com.tianyigps.dispatch2.adapter.PendingAdapter;
 import com.tianyigps.dispatch2.adapter.PopupAdapter;
 import com.tianyigps.dispatch2.bean.NumberBean;
-import com.tianyigps.dispatch2.bean.PendBean;
 import com.tianyigps.dispatch2.bean.PendingBean;
 import com.tianyigps.dispatch2.data.AdapterPendingData;
 import com.tianyigps.dispatch2.data.AdapterPopupData;
 import com.tianyigps.dispatch2.data.Data;
 import com.tianyigps.dispatch2.dialog.ChoiceMapDialogFragment;
-import com.tianyigps.dispatch2.interfaces.OnPendListener;
 import com.tianyigps.dispatch2.interfaces.OnPendingNumListener;
 import com.tianyigps.dispatch2.interfaces.OnPendingOrderListener;
 import com.tianyigps.dispatch2.manager.NetworkManager;
@@ -75,9 +73,6 @@ public class PendingFragment extends Fragment {
     private String userName;
     private String mStringMessage;
 
-    private int eidChoice;
-    private String jobNoChoice;
-    private int isPay;
     private String orderNo;
     private int orderStatus;
 
@@ -103,13 +98,13 @@ public class PendingFragment extends Fragment {
         Log.i(TAG, "onActivityResult: requestCode-->" + requestCode);
         Log.i(TAG, "onActivityResult: requestCode-->" + requestCode);
         if (requestCode == Data.DATA_INTENT_CHOICE_WORKER_REQUEST && resultCode == Data.DATA_INTENT_CHOICE_WORKER_RESULT) {
-            eidChoice = data.getIntExtra(Data.DATA_INTENT_CHOICE_WORKER_EID, 0);
-            jobNoChoice = data.getStringExtra(Data.DATA_INTENT_CHOICE_WORKER_JOBNO);
-            isPay = data.getIntExtra(Data.DATA_INTENT_CHOICE_WORKER_ISPAY, 0);
-
-            Log.i(TAG, "onActivityResult: eidC-->" + eidChoice + ", jobNoC-->" + jobNoChoice + ", isPay-->" + isPay);
-            Log.i(TAG, "onActivityResult: orderNo-->" + orderNo + ", orderStatus-->" + orderStatus);
-            pendOrder(orderNo, orderStatus);
+            // TODO: 2017/8/14 派单是否成功，如果成功则刷新页面，如果没有则显示对话框并刷新
+            boolean success = data.getBooleanExtra(Data.DATA_INTENT_PEND_RESULT, false);
+            if (success) {
+                myHandler.sendEmptyMessage(Data.MSG_2);
+            } else {
+                myHandler.sendEmptyMessage(Data.MSG_3);
+            }
         }
     }
 
@@ -224,7 +219,10 @@ public class PendingFragment extends Fragment {
 
                 orderNo = mAdapterPendingDataList.get(position).getOrder();
                 orderStatus = mAdapterPendingDataList.get(position).getOrderStatus();
-                toChoiceWorker();
+                Intent intent = new Intent(getContext(), ChoiceWorkerActivity.class);
+                intent.putExtra(Data.DATA_INTENT_ORDER_NO, orderNo);
+                intent.putExtra(Data.DATA_INTENT_ORDER_STATUS, orderStatus);
+                startActivityForResult(intent, Data.DATA_INTENT_CHOICE_WORKER_REQUEST);
             }
 
             @Override
@@ -234,7 +232,7 @@ public class PendingFragment extends Fragment {
                 AdapterPendingData data = mAdapterPendingDataList.get(position);
                 intent.putExtra(Data.DATA_INTENT_ORDER_NO, data.getOrder());
                 intent.putExtra(Data.DATA_INTENT_ORDER_STATUS, data.getOrderStatus());
-                startActivity(intent);
+                startActivityForResult(intent, Data.DATA_INTENT_CHOICE_WORKER_REQUEST);
             }
         });
 
@@ -304,27 +302,6 @@ public class PendingFragment extends Fragment {
             }
         });
 
-        mNetworkManager.setOnPendListener(new OnPendListener() {
-            @Override
-            public void onFailure() {
-                mStringMessage = Data.DEFAULT_MESSAGE;
-                myHandler.sendEmptyMessage(Data.MSG_ERO);
-            }
-
-            @Override
-            public void onSuccess(String result) {
-                Log.i(TAG, "onSuccess: result-->" + result);
-                Gson gson = new Gson();
-                PendBean pendBean = gson.fromJson(result, PendBean.class);
-                if (!pendBean.isSuccess()) {
-                    mStringMessage = pendBean.getMsg();
-                    myHandler.sendEmptyMessage(Data.MSG_3);
-                    return;
-                }
-                myHandler.sendEmptyMessage(Data.MSG_2);
-            }
-        });
-
         mNetworkManager.setOnPendingNumListener(new OnPendingNumListener() {
             @Override
             public void onFailure() {
@@ -354,17 +331,6 @@ public class PendingFragment extends Fragment {
                 myHandler.sendEmptyMessage(Data.MSG_4);
             }
         });
-    }
-
-    //  选择安装工程师
-    private void toChoiceWorker() {
-        Intent intent = new Intent(getContext(), ChoiceWorkerActivity.class);
-        startActivityForResult(intent, Data.DATA_INTENT_CHOICE_WORKER_REQUEST);
-    }
-
-    //  派工
-    private void pendOrder(String orderNo, int orderStatus) {
-        mNetworkManager.pendOrder(jobNo, userName, token, orderNo, orderStatus, eidChoice, isPay);
     }
 
     //  显示信息Dialog

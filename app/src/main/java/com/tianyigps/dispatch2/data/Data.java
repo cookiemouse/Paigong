@@ -54,9 +54,7 @@ public final class Data {
     public final static String DATA_INTENT_LOCATE_TYPE = "paigong_intent_locate_type";
     public final static String DATA_INTENT_LOCATE_IMEI = "paigong_intent_locate_imei";
 
-    public final static String DATA_INTENT_CHOICE_WORKER_JOBNO = "paigong_intent_choice_worker_jobno";
-    public final static String DATA_INTENT_CHOICE_WORKER_EID = "paigong_intent_choice_worker_eid";
-    public final static String DATA_INTENT_CHOICE_WORKER_ISPAY = "paigong_intent_choice_worker_ispay";
+    public final static String DATA_INTENT_PEND_RESULT = "paigong_intent_pend_result";
 
     //  数据请求所需数据
     private final static String DATA_JSON = "paigong_json_";

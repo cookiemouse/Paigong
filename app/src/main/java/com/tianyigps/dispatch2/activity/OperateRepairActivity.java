@@ -293,24 +293,7 @@ public class OperateRepairActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 // 2017/7/26 保存
-                mPositionNew = mEditTextPosition.getText().toString();
-                mExplainNew = mEditTextExplain.getText().toString();
-                mImeiNew = mEditTextNewImei.getText().toString();
-                Log.i(TAG, "onSignClick: mStringNewImei-->" + mImeiNew);
-                if ("".equals(mPositionNew)) {
-                    mPositionNew = null;
-                }
-                if ("".equals(mExplainNew)) {
-                    mExplainNew = null;
-                }
-                if (mRelativeLayoutReplace.getVisibility() == View.GONE) {
-                    mDatabaseManager.addRepair(tid, mPositionNew, mExplainNew);
-                } else {
-                    mDatabaseManager.addRepair(tid, mPositionNew, mExplainNew, mImeiNew);
-                }
-
-                showFinishDialog("数据已保存！");
-
+                saveData();
                 isComplete();
             }
         });
@@ -566,7 +549,22 @@ public class OperateRepairActivity extends BaseActivity {
     }
 
     private void saveData() {
-        // TODO: 2017/8/14 保存数据
+        // 2017/8/14 保存数据
+        mPositionNew = mEditTextPosition.getText().toString();
+        mExplainNew = mEditTextExplain.getText().toString();
+        mImeiNew = mEditTextNewImei.getText().toString();
+        Log.i(TAG, "onSignClick: mStringNewImei-->" + mImeiNew);
+        if ("".equals(mPositionNew)) {
+            mPositionNew = null;
+        }
+        if ("".equals(mExplainNew)) {
+            mExplainNew = null;
+        }
+        if (mRelativeLayoutReplace.getVisibility() == View.GONE) {
+            mDatabaseManager.addRepair(tid, mPositionNew, mExplainNew);
+        } else {
+            mDatabaseManager.addRepair(tid, mPositionNew, mExplainNew, mImeiNew);
+        }
     }
 
     private void loadSavedData() {
@@ -620,7 +618,7 @@ public class OperateRepairActivity extends BaseActivity {
 
     //  检测数据完整是否完整
     private boolean isComplete() {
-        boolean complete = false;
+        boolean complete = true;
 
         Cursor cursor = mDatabaseManager.getRepair(tid);
         if (null != cursor && cursor.moveToFirst()) {
@@ -648,6 +646,19 @@ public class OperateRepairActivity extends BaseActivity {
             Log.i(TAG, "isComplete: installUrl-->" + installUrl);
             Log.i(TAG, "isComplete: model-->" + model);
             Log.i(TAG, "isComplete: locateType-->" + locateType);
+
+            if (null == position || "".equals(position)) {
+                complete = false;
+                mEditTextPosition.setHintTextColor(getResources().getColor(R.color.colorOrange));
+            } else {
+                mEditTextPosition.setHintTextColor(getResources().getColor(R.color.colorBlack));
+            }
+            if (null == explain || "".equals(explain)) {
+                complete = false;
+                mEditTextExplain.setHintTextColor(getResources().getColor(R.color.colorOrange));
+            } else {
+                mEditTextExplain.setHintTextColor(getResources().getColor(R.color.colorBlack));
+            }
 
             cursor.close();
         }

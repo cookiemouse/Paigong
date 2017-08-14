@@ -68,6 +68,8 @@ public class PendDetailsActivity extends Activity {
     private int orderStatus;
     private int orderId;
 
+    private Intent mIntent;
+
     private String mStringMessage;
 
     @Override
@@ -80,6 +82,19 @@ public class PendDetailsActivity extends Activity {
         init();
 
         setEventListener();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.i(TAG, "onActivityResult: requestCode-->" + requestCode);
+        Log.i(TAG, "onActivityResult: requestCode-->" + requestCode);
+        if (requestCode == Data.DATA_INTENT_CHOICE_WORKER_REQUEST && resultCode == Data.DATA_INTENT_CHOICE_WORKER_RESULT) {
+            // 2017/8/14 派单是否成功，如果成功则刷新页面，如果没有则显示对话框并刷新
+            boolean success = data.getBooleanExtra(Data.DATA_INTENT_PEND_RESULT, false);
+            mIntent.putExtra(Data.DATA_INTENT_PEND_RESULT, success);
+            setResult(Data.DATA_INTENT_CHOICE_WORKER_RESULT, mIntent);
+        }
     }
 
     private void init() {
@@ -95,9 +110,9 @@ public class PendDetailsActivity extends Activity {
         mNetworkManager = new NetworkManager();
         myHandler = new MyHandler();
 
-        Intent intent = getIntent();
-        orderNo = intent.getStringExtra(Data.DATA_INTENT_ORDER_NO);
-        orderStatus = intent.getIntExtra(Data.DATA_INTENT_ORDER_STATUS, 0);
+        mIntent = getIntent();
+        orderNo = mIntent.getStringExtra(Data.DATA_INTENT_ORDER_NO);
+        orderStatus = mIntent.getIntExtra(Data.DATA_INTENT_ORDER_STATUS, 0);
 
         jobNo = mSharedpreferenceManager.getJobNo();
         token = mSharedpreferenceManager.getToken();
@@ -147,7 +162,11 @@ public class PendDetailsActivity extends Activity {
         mButtonPend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: 2017/8/10 派单
+                // 2017/8/10 派单
+                Intent intent = new Intent(PendDetailsActivity.this, ChoiceWorkerActivity.class);
+                intent.putExtra(Data.DATA_INTENT_ORDER_NO, orderNo);
+                intent.putExtra(Data.DATA_INTENT_ORDER_STATUS, orderStatus);
+                startActivityForResult(intent, Data.DATA_INTENT_CHOICE_WORKER_REQUEST);
             }
         });
 
