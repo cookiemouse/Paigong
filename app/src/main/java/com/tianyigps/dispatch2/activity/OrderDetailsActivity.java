@@ -55,7 +55,9 @@ public class OrderDetailsActivity extends Activity {
     private ImageView mImageViewTitleLeft, mImageViewTitleRight;
 
     //  内容
-    private TextView mTextViewOrderName, mTextViewOrderNum, mTextViewCallName, mTextViewTime, mTextViewAddress, mTextViewRemarks, mTextViewInstallTitle, mTextViewInstallContent, mTextViewInfoTitle, mTextViewInfoContent, mTextViewReturnOrder, mTextViewTimeRemain;
+    private TextView mTextViewOrderName, mTextViewOrderNum, mTextViewCallName, mTextViewTime, mTextViewAddress
+            , mTextViewRemarks, mTextViewInstallTitle, mTextViewInstallContent, mTextViewInfoTitle, mTextViewInfoContent
+            , mTextViewReturnOrder, mTextViewTimeRemain;
 
     private ImageView mImageViewCall;
     private Button mButtonSign;

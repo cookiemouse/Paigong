@@ -180,7 +180,11 @@ public class PendDetailsActivity extends Activity {
 
         mRelativeLayoutRemove = findViewById(R.id.rl_layout_pend_details_content_remove);
 
-        mNetworkManager.getPendDetails(jobNo, token, orderNo, userName, orderStatus);
+        if (0 == orderStatus) {
+            mNetworkManager.getPendDetails(jobNo, token, orderNo, userName);
+        } else {
+            mNetworkManager.getPendDetails(jobNo, token, orderNo, userName, orderStatus);
+        }
     }
 
     private void setEventListener() {

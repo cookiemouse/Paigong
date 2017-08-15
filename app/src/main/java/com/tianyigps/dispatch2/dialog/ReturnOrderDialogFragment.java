@@ -136,7 +136,7 @@ public class ReturnOrderDialogFragment extends DialogFragment {
         textViewSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: 2017/7/19 提交
+                // 2017/7/19 提交
                 switch (radioGroup.getCheckedRadioButtonId()) {
                     case R.id.rb_layout_return_order_timeout: {
                         chooseReason = "0";

@@ -1313,6 +1313,35 @@ public class NetworkManager {
         });
     }
 
+    //  获取派单详情  29-2
+    public void getPendDetails(String jobNo, String token, String orderNo, String userName) {
+        Request.Builder builder = new Request.Builder();
+        builder.url(Urls.URL_MANAGER_PENDED_DETAILS_FOR_PUSH + "jobNo=" + jobNo
+                + "&token=" + token
+                + "&orderNo=" + orderNo
+                + "&userName=" + userName);
+        mRequest = builder.build();
+        Log.i(TAG, "getQualityCount: url-->" + mRequest.url());
+        Call call = mOkHttpClient.newCall(mRequest);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                if (null == mOnPendDetailsListener) {
+                    throw new NullPointerException("OnPendDetailsListener is null");
+                }
+                mOnPendDetailsListener.onFailure();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (null == mOnPendDetailsListener) {
+                    throw new NullPointerException("OnPendDetailsListener is null");
+                }
+                mOnPendDetailsListener.onSuccess(response.body().string());
+            }
+        });
+    }
+
     public void setOnPendDetailsListener(OnPendDetailsListener listener) {
         this.mOnPendDetailsListener = listener;
     }

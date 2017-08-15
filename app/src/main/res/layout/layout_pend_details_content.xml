@@ -58,6 +58,7 @@
             <com.tianyigps.dispatch2.customview.MyListView
                 android:id="@+id/lv_layout_pend_content"
                 android:layout_width="match_parent"
+                android:visibility="gone"
                 android:layout_height="wrap_content"/>
 
             <RelativeLayout
