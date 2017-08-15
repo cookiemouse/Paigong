@@ -48,6 +48,8 @@ public class OperateRemoveActivity extends BaseActivity {
     private String userName;
     private String orderNo;
 
+    private int mCarId;
+
     private String mStringMsg = "数据请求失败，请检查网络！";
     private MyHandler myHandler;
     private int positionNow;
@@ -73,6 +75,7 @@ public class OperateRemoveActivity extends BaseActivity {
         token = mSharedpreferenceManager.getToken();
         userName = mSharedpreferenceManager.getAccount();
         orderNo = intent.getStringExtra(Data.DATA_INTENT_ORDER_NO);
+        mCarId = intent.getIntExtra(Data.DATA_INTENT_CAR_ID, 0);
 
         mNetworkManager = NetworkManager.getInstance();
         myHandler = new MyHandler();
@@ -121,6 +124,9 @@ public class OperateRemoveActivity extends BaseActivity {
                 StartOrderInfoBean.ObjBean objBean = startOrderInfoBean.getObj();
 
                 for (StartOrderInfoBean.ObjBean.CarListBean carListBean : objBean.getCarList()) {
+                    if (carListBean.getId() != mCarId) {
+                        continue;
+                    }
                     String frameNo = carListBean.getCarVin();
                     String carNo = carListBean.getCarNo();
                     for (StartOrderInfoBean.ObjBean.CarListBean.CarTerminalListBean carTerminalListBean
@@ -165,7 +171,6 @@ public class OperateRemoveActivity extends BaseActivity {
                 }
 
                 myHandler.sendEmptyMessage(Data.MSG_1);
-
             }
         });
 

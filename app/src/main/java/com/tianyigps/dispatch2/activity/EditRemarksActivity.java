@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,7 +14,6 @@ import android.widget.TextView;
 
 import com.tianyigps.dispatch2.R;
 import com.tianyigps.dispatch2.base.BaseActivity;
-import com.tianyigps.dispatch2.data.Data;
 
 public class EditRemarksActivity extends BaseActivity {
 
@@ -50,10 +50,19 @@ public class EditRemarksActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 // 2017/7/20 下一步
-                String reason = mEditTextRemarks.getText().toString();
-                mIntent.putExtra(Data.DATA_INTENT_REASON, reason);
-                setResult(Data.DATA_INTENT_REASON_RESULT, mIntent);
-                finish();
+//                String reason = mEditTextRemarks.getText().toString();
+//                mIntent.putExtra(Data.DATA_INTENT_REASON, reason);
+//                setResult(Data.DATA_INTENT_REASON_RESULT, mIntent);
+//                finish();
+
+                String test = "工程师迟到,TY20170719102653670,天易根客户1";
+                String splits[] = test.split(",");
+                Log.i(TAG, "onClick: split.size-->" + test.split(",").length);
+                Log.i(TAG, "onClick: split.size-->" + splits.length);
+                Log.i(TAG, "----");
+                Log.i(TAG, "onClick: split.size-->" + test.split(",")[0]);
+                Log.i(TAG, "onClick: split.size-->" + splits[0]);
+                Log.i(TAG, "----");
             }
         });
 

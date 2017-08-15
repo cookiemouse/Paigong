@@ -44,21 +44,25 @@ public class OpenActivityReceiver extends BroadcastReceiver {
         PersonBean personBean = gson.fromJson(type, PersonBean.class);
         String person = personBean.getPerson();
 
+        if (null == content) {
+            return;
+        }
         String splits[] = content.split("，");
-        if (splits.length < 1){
+        if (splits.length <= 1) {
             splits = content.split(",");
         }
+
         if (splits.length > 1) {
             orderNo = splits[1];
         }
         Log.i(TAG, "onReceive: orderNo-->" + orderNo);
 
         switch (person) {
-            case "1": {
+            case "0": {
                 toOrderDetails();
                 break;
             }
-            case "2": {
+            case "1": {
                 toPendDetails();
                 break;
             }

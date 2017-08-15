@@ -1097,12 +1097,12 @@ public class OperateInstallActivity extends BaseActivity {
             } else {
                 mEditTextCarType.setHintTextColor(getResources().getColor(R.color.colorBlack));
             }
-            if (null == carNoPicUrl || "".equals(carNoPicUrl)) {
-                carComplete = false;
-            }
-            if (null == frameNoPicUrl || "".equals(frameNoPicUrl)) {
-                carComplete = false;
-            }
+//            if (null == carNoPicUrl || "".equals(carNoPicUrl)) {
+//                carComplete = false;
+//            }
+//            if (null == frameNoPicUrl || "".equals(frameNoPicUrl)) {
+//                carComplete = false;
+//            }
         }
 
         return carComplete;

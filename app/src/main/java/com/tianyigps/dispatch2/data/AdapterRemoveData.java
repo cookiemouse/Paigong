@@ -25,10 +25,9 @@ public class AdapterRemoveData {
         this.offline = offline;
     }
 
-    public AdapterRemoveData(int online, int offline, int onlineComplete, int offlineComplete) {
+    public AdapterRemoveData(int carId, int online, int offline, int onlineComplete, int offlineComplete) {
         this.type = 1;
-        this.typeName = "";
-        this.frameNo = "";
+        this.carId = carId;
         this.online = online;
         this.offline = offline;
         this.onlineComplete = onlineComplete;

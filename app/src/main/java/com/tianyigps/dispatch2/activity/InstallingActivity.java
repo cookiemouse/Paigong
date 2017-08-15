@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,8 +35,6 @@ import com.tianyigps.dispatch2.manager.SharedpreferenceManager;
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.R.attr.id;
-
 /**
  * 这里需要三个Adapter，因为页面结构一样
  * 所以复用title和listview
@@ -58,6 +57,8 @@ public class InstallingActivity extends BaseActivity {
     private TextView mTextViewRemarks;
     private ListView mListView;
     private Button mButtonNext;
+
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     private List<AdapterInstallingData> mAdapterInstallingDataList = new ArrayList<>();
     private InstallingAdapter mInstallingAdapter;
@@ -117,6 +118,9 @@ public class InstallingActivity extends BaseActivity {
         mTextViewRemarks = mViewRemarks.findViewById(R.id.tv_layout_activity_installing_remarks);
         mButtonNext = mViewNext.findViewById(R.id.btn_layout_activity_installing_next);
 
+        mSwipeRefreshLayout = findViewById(R.id.srl_activity_installing);
+        mSwipeRefreshLayout.setColorSchemeColors(0xff3cabfa);
+
         mSharedpreferenceManager = new SharedpreferenceManager(InstallingActivity.this);
         eid = mSharedpreferenceManager.getEid();
         token = mSharedpreferenceManager.getToken();
@@ -159,10 +163,19 @@ public class InstallingActivity extends BaseActivity {
         mListView.addHeaderView(mViewRemarks);
         mListView.addFooterView(mViewNext);
 
+        mSwipeRefreshLayout.setRefreshing(true);
         mNetworkManager.getWorkerOrderInfoStart(eid, token, orderNo, userName);
     }
 
     private void setEventListener() {
+
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mNetworkManager.getWorkerOrderInfoStart(eid, token, orderNo, userName);
+            }
+        });
+
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -178,8 +191,9 @@ public class InstallingActivity extends BaseActivity {
                         break;
                     }
                     case TYPE_REMOVE: {
-                        if (null == mAdapterRemoveDataList.get(position).getFrameNo()) {
-                            toRemoveActivity();
+                        AdapterRemoveData data = mAdapterRemoveDataList.get(position);
+                        if (null == data.getFrameNo()) {
+                            toRemoveActivity(data.getCarId());
                             return;
                         }
                         toInstallActivity(position);
@@ -260,8 +274,37 @@ public class InstallingActivity extends BaseActivity {
                         mAdapterRemoveDataList.add(new AdapterRemoveData("拆除"));
 
                         for (StartOrderInfoBean.ObjBean.CarListBean carListBean : objBean.getCarList()) {
+                            int wireNum = 0, wirelessNum = 0, wireComplete = 0, wirelessComplete = 0;
                             if (carListBean.getRemoveFlag() == 1) {
-                                mAdapterRemoveDataList.add(new AdapterRemoveData(carListBean.getWiredNum(), carListBean.getWirelessNum()));
+                                for (StartOrderInfoBean.ObjBean.CarListBean.CarTerminalListBean carTerminalListBean
+                                        : carListBean.getCarTerminalList()) {
+                                    wireNum = carListBean.getWiredNum();
+                                    wirelessNum = carListBean.getWirelessNum();
+                                    //  统计已完成的设备数
+                                    //  status == 1，表示该设备已被拆除
+                                    if (carTerminalListBean.getRemoveStatus() == 1) {
+                                        switch (carTerminalListBean.getTerminalType()) {
+                                            case 1: {
+                                                wireComplete++;
+                                                //  有线
+                                                break;
+                                            }
+                                            case 2: {
+                                                wirelessComplete++;
+                                                //  无线
+                                                break;
+                                            }
+                                            default: {
+                                                Log.i(TAG, "onSuccess: default.TerminalType-->" + carTerminalListBean.getTerminalType());
+                                            }
+                                        }
+                                    }
+                                }
+                                mAdapterRemoveDataList.add(new AdapterRemoveData(carListBean.getId()
+                                        , wireNum
+                                        , wirelessNum
+                                        , wireComplete
+                                        , wirelessComplete));
                             }
                         }
 
@@ -330,9 +373,10 @@ public class InstallingActivity extends BaseActivity {
         startActivity(intent);
     }
 
-    private void toRemoveActivity() {
+    private void toRemoveActivity(int carId) {
         Intent intent = new Intent(InstallingActivity.this, OperateRemoveActivity.class);
         intent.putExtra(Data.DATA_INTENT_ORDER_NO, orderNo);
+        intent.putExtra(Data.DATA_INTENT_CAR_ID, carId);
         startActivity(intent);
     }
 
@@ -445,10 +489,23 @@ public class InstallingActivity extends BaseActivity {
         return nextAble;
     }
 
+    //  检验安装列表是否完成
+    private boolean checkInstallList() {
+        return true;
+    }
+
+    //  检验拆除列表是否完成
+    private boolean checkRemoveList() {
+        return true;
+    }
+
     private class MyHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
+            if (mSwipeRefreshLayout.isRefreshing()) {
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
             mTextViewRemarks.setText(mStringRemarks);
             switch (msg.what) {
                 case Data.MSG_ERO: {
