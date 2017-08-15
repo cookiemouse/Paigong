@@ -252,7 +252,6 @@ public class PendingFragment extends Fragment {
                 if (!pendingBean.isSuccess()) {
                     mStringMessage = pendingBean.getMsg();
                     Log.i(TAG, "onSuccess: msg-->" + mStringMessage);
-                    // TODO: 2017/8/9 感觉这里有漏洞
                     myHandler.sendEmptyMessage(Data.MSG_ERO);
                     return;
                 }
@@ -260,6 +259,14 @@ public class PendingFragment extends Fragment {
                 mAdapterPendingDataList.clear();
 
                 for (PendingBean.ObjBean objBean : pendingBean.getObj()) {
+                    int orderStatus = objBean.getOrderStatus();
+                    if (Data.STATUS_2 == orderStatus
+                            || Data.STATUS_3 == orderStatus
+                            || Data.STATUS_4 == orderStatus
+                            || Data.STATUS_5 == orderStatus
+                            || Data.STATUS_7 == orderStatus) {
+                        continue;
+                    }
                     String custName = objBean.getCustName();
                     long time = objBean.getDoorTime();
                     String address = objBean.getProvince() + objBean.getCity() + objBean.getDistrict() + objBean.getDetail();

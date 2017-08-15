@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.tianyigps.dispatch2.R;
 import com.tianyigps.dispatch2.data.AdapterPendingData;
+import com.tianyigps.dispatch2.data.Data;
 
 import java.util.List;
 
@@ -73,8 +74,10 @@ public class PendingAdapter extends BaseAdapter {
             viewHolder.imageViewPend = view.findViewById(R.id.iv_item_pending_pend);
             viewHolder.tvWorkerName = view.findViewById(R.id.tv_item_pending_phone_name);
             viewHolder.llRemove = view.findViewById(R.id.ll_item_pending_remove);
+            viewHolder.llContact = view.findViewById(R.id.ll_item_pending_contact);
             viewHolder.tvWireRemove = view.findViewById(R.id.tv_item_pending_remove_content_wire);
             viewHolder.tvWirelessRemove = view.findViewById(R.id.tv_item_pending_remove_content_wireless);
+            viewHolder.tvStatus = view.findViewById(R.id.tv_item_pending_order_status);
 
             view.setTag(viewHolder);
         } else {
@@ -113,6 +116,13 @@ public class PendingAdapter extends BaseAdapter {
                 Log.i(TAG, "onSuccess: orderType.default-->" + data.getOrderType());
             }
         }
+
+        if (Data.STATUS_99 == data.getOrderStatus()) {
+            viewHolder.llContact.setVisibility(View.GONE);
+        } else {
+            viewHolder.llContact.setVisibility(View.VISIBLE);
+        }
+        viewHolder.tvStatus.setText(getOrderStatus(data.getOrderStatus()));
 
         viewHolder.tvOrderType.setText(orderType);
 
@@ -162,9 +172,9 @@ public class PendingAdapter extends BaseAdapter {
 
     private class ViewHolder {
         private ImageView imageViewCall, imageViewLocate, imageViewPend;
-        private TextView tvOrderNo, tvName, tvTime, tvAddress, tvOrderType, tvWire, tvWireless, tvWorkerName;
+        private TextView tvOrderNo, tvName, tvTime, tvAddress, tvOrderType, tvWire, tvWireless, tvWorkerName, tvStatus;
         private TextView tvWireRemove, tvWirelessRemove;
-        private LinearLayout llRemove;
+        private LinearLayout llRemove, llContact;
     }
 
     //  确认签到对话框
@@ -189,6 +199,53 @@ public class PendingAdapter extends BaseAdapter {
 //            }
 //        });
 //        dialog.show();
+    }
+
+    //  订单状态
+    private String getOrderStatus(int status) {
+        String orderStatus = "";
+        switch (status) {
+            case 1: {
+                orderStatus = "待派单";
+                break;
+            }
+            case 2: {
+                orderStatus = "空单";
+                break;
+            }
+            case 3: {
+                orderStatus = "已派单";
+                break;
+            }
+            case 4: {
+                orderStatus = "退回客户";
+                break;
+            }
+            case 5: {
+                orderStatus = "已取消";
+                break;
+            }
+            case 6: {
+                orderStatus = "安装退回";
+                break;
+            }
+            case 7: {
+                orderStatus = "已完成";
+                break;
+            }
+            case 98: {
+                orderStatus = "改约不通过";
+                break;
+            }
+            case 99: {
+                orderStatus = "待审核";
+                break;
+            }
+            default: {
+                Log.i(TAG, "getOrderStatus: default-->" + orderStatus);
+            }
+        }
+        return orderStatus;
     }
 
     public interface OnItemListener {

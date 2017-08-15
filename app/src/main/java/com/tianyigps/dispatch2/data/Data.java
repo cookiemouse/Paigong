@@ -116,4 +116,31 @@ public final class Data {
     //  定位类型
     public static final String LOCATE_TYPE_BAIDU = "bd";
     public static final String LOCATE_TYPE_GPS = "gps";
+
+    //  定单状态
+    public static final int STATUS_1 = 1;   //  待派单
+    public static final int STATUS_2 = 2;   //  空单
+    public static final int STATUS_3 = 3;   //  已派单
+    public static final int STATUS_4 = 4;   //  退回客户
+    public static final int STATUS_5 = 5;   //  已取消
+    public static final int STATUS_6 = 6;   //  安装退回
+    public static final int STATUS_7 = 7;   //  已完成
+    public static final int STATUS_98 = 98; //  改约不通过
+    public static final int STATUS_99 = 99; //  待审核
+
+    //  节点状态
+    public static final int NODE_1 = 1;   //  收到订单
+    public static final int NODE_2 = 2;   //  申请改约
+    public static final int NODE_3 = 3;   //  审核改约
+    public static final int NODE_4 = 4;   //  派单
+    public static final int NODE_5 = 5;   //  取消订单
+    public static final int NODE_6 = 6;   //  修改订单
+    public static final int NODE_7 = 7;   //  联系现场
+    public static final int NODE_8 = 8;   //  工程师已到达
+    public static final int NODE_9 = 9;   //  开始安装
+    public static final int NODE_10 = 10; //  继续安装
+    public static final int NODE_11 = 11; //  安装退回
+    public static final int NODE_12 = 12; //  部分完成
+    public static final int NODE_13 = 13; //  退回客户
+    public static final int NODE_14 = 14; //  完成订单
 }

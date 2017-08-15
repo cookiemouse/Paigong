@@ -3,6 +3,7 @@ package com.tianyigps.dispatch2.fragment;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -25,6 +26,7 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.tianyigps.dispatch2.R;
+import com.tianyigps.dispatch2.activity.PendDetailsActivity;
 import com.tianyigps.dispatch2.activity.WorkerFragmentContentActivity;
 import com.tianyigps.dispatch2.adapter.PendedAdapter;
 import com.tianyigps.dispatch2.adapter.PopupAdapter;
@@ -33,6 +35,7 @@ import com.tianyigps.dispatch2.bean.PendedBean;
 import com.tianyigps.dispatch2.data.AdapterPendedData;
 import com.tianyigps.dispatch2.data.AdapterPopupData;
 import com.tianyigps.dispatch2.data.Data;
+import com.tianyigps.dispatch2.dialog.ChoiceMapDialogFragment;
 import com.tianyigps.dispatch2.interfaces.OnPendedListener;
 import com.tianyigps.dispatch2.interfaces.OnPendedNumListener;
 import com.tianyigps.dispatch2.manager.NetworkManager;
@@ -191,10 +194,41 @@ public class PendedFragment extends Fragment {
             }
         });
 
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mPendedAdapter.setOnItemListener(new PendedAdapter.OnItemListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                // TODO: 2017/8/9 订单详情
+            public void onMap(int position) {
+                ChoiceMapDialogFragment mChoiceMapDialogFragment = new ChoiceMapDialogFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString(Data.DATA_INTENT_ADDRESS, mAdapterPendedDataList.get(position).getAddress());
+                mChoiceMapDialogFragment.setArguments(bundle);
+                mChoiceMapDialogFragment.show(getChildFragmentManager(), "ChoiceMapDialog");
+            }
+
+            @Override
+            public void onContact(int position) {
+                AdapterPendedData data = mAdapterPendedDataList.get(position);
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_DIAL);
+                intent.setData(Uri.parse("tel:" + data.getContactPhone()));
+                startActivity(intent);
+            }
+
+            @Override
+            public void onCall(int position) {
+                AdapterPendedData data = mAdapterPendedDataList.get(position);
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_DIAL);
+                intent.setData(Uri.parse("tel:" + data.getWorkerPhone()));
+                startActivity(intent);
+            }
+
+            @Override
+            public void onItem(int position) {
+                Intent intent = new Intent(getContext(), PendDetailsActivity.class);
+                AdapterPendedData data = mAdapterPendedDataList.get(position);
+                intent.putExtra(Data.DATA_INTENT_ORDER_NO, data.getOrderNo());
+                intent.putExtra(Data.DATA_INTENT_ORDER_STATUS, data.getOrderStatus());
+                startActivity(intent);
             }
         });
 
@@ -266,19 +300,29 @@ public class PendedFragment extends Fragment {
                     mAdapterPendedDataList.clear();
                 }
                 for (PendedBean.ObjBean objBean : pendedBean.getObj()) {
-                    String address = objBean.getProvince() + objBean.getCity() + objBean.getDistrict() + objBean.getDetail();
-                    mAdapterPendedDataList.add(new AdapterPendedData(objBean.getCustName()
-                            , address
-                            , objBean.getJobNo()
-                            , objBean.getEName()
-                            , objBean.getPhoneNo()
-                            , objBean.getContactName()
-                            , objBean.getContactPhone()
-                            , objBean.getDoorTime()
-                            , objBean.getOrderStatus()
-                            , objBean.getReviseFlag()
-                            , objBean.getOrderNo()
-                            , objBean.getOrderId()));
+
+                    int orderStatus = objBean.getOrderStatus();
+                    if (Data.STATUS_2 == orderStatus
+                            || Data.STATUS_3 == orderStatus
+                            || Data.STATUS_4 == orderStatus
+                            || Data.STATUS_5 == orderStatus
+                            || Data.STATUS_7 == orderStatus) {
+
+                        String address = objBean.getProvince() + objBean.getCity() + objBean.getDistrict() + objBean.getDetail();
+                        mAdapterPendedDataList.add(new AdapterPendedData(objBean.getCustName()
+                                , address
+                                , objBean.getJobNo()
+                                , objBean.getEName()
+                                , objBean.getPhoneNo()
+                                , objBean.getContactName()
+                                , objBean.getContactPhone()
+                                , objBean.getDoorTime()
+                                , objBean.getOrderStatus()
+                                , objBean.getReviseFlag()
+                                , objBean.getOrderNo()
+                                , objBean.getOrderId()));
+                    }
+
                 }
 
                 myHandler.sendEmptyMessage(Data.MSG_1);

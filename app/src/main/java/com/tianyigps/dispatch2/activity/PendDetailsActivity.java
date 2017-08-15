@@ -33,6 +33,7 @@ import com.tianyigps.dispatch2.interfaces.OnModifyDateListener;
 import com.tianyigps.dispatch2.interfaces.OnPendDetailsListener;
 import com.tianyigps.dispatch2.manager.NetworkManager;
 import com.tianyigps.dispatch2.manager.SharedpreferenceManager;
+import com.tianyigps.dispatch2.utils.NodeU;
 import com.tianyigps.dispatch2.utils.TimeFormatU;
 import com.tianyigps.dispatch2.utils.ToastU;
 import com.yundian.bottomdialog.BottomDialog;
@@ -70,6 +71,7 @@ public class PendDetailsActivity extends Activity {
     private String mContact, mContactPhone, mAddress, mRemarks, mInstallType, mInstallContent = "", mInfoTitle, mInfoContent = "", mRemoveContent = "";
     private long mDoorTime;
     private int mOrderStatusGet;
+    private int mNode;
     private boolean isModify;
 
     private SharedpreferenceManager mSharedpreferenceManager;
@@ -251,6 +253,7 @@ public class PendDetailsActivity extends Activity {
                 mContact = objBean.getContactName();
                 mContactPhone = objBean.getContactPhone();
                 mOrderStatusGet = objBean.getOrderStatus();
+                mNode = nodeBean.getNode();
 
                 for (PendDetailsBean.ObjBean.OrderCarListBean carListBean : objBean.getOrderCarList()) {
                     String carVin = carListBean.getCarVin();
@@ -468,7 +471,7 @@ public class PendDetailsActivity extends Activity {
                         mTextViewRemoveContent.setText(mRemoveContent);
                     }
 
-                    if (ORDER_STATUS_1 != mOrderStatusGet) {
+                    if (Data.STATUS_1 != mOrderStatusGet) {
                         mFrameLayoutCycle.setVisibility(View.GONE);
                         mViewRight.setVisibility(View.GONE);
                         mViewTop.setVisibility(View.GONE);
@@ -476,6 +479,19 @@ public class PendDetailsActivity extends Activity {
                         mFrameLayoutCycle.setVisibility(View.VISIBLE);
                         mViewRight.setVisibility(View.VISIBLE);
                         mViewTop.setVisibility(View.VISIBLE);
+                    }
+
+                    mTextViewNode.setText(NodeU.getNode(mNode));
+
+                    if (Data.NODE_14 == mNode
+                            || Data.NODE_13 == mNode
+                            || Data.NODE_10 == mNode
+                            || Data.NODE_9 == mNode
+                            || Data.NODE_8 == mNode
+                            || Data.NODE_5 == mNode) {
+                        mTextViewModify.setVisibility(View.GONE);
+                    } else {
+                        mTextViewModify.setVisibility(View.VISIBLE);
                     }
 
                     mPendDetailsAdapter.notifyDataSetChanged();

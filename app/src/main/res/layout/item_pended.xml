@@ -135,4 +135,18 @@
         android:textColor="@color/colorRed"
         android:visibility="gone"/>
 
+    <TextView
+        android:id="@+id/tv_item_pended_order_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginEnd="@dimen/dp_16"
+        android:layout_marginRight="@dimen/dp_16"
+        android:lines="1"
+        android:text="@string/pending"
+        android:textColor="@color/colorOrange"
+        android:textSize="@dimen/sp_16"/>
+
 </RelativeLayout>

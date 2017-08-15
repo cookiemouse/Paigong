@@ -7,7 +7,7 @@
 
     <TextView
         android:id="@+id/tv_item_pending_name"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp_8"
         android:layout_marginRight="@dimen/dp_8"
@@ -57,9 +57,9 @@
         android:id="@+id/tv_item_pending_content_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/ll_item_pending_remove"
         android:layout_marginLeft="@dimen/dp_8"
         android:layout_marginStart="@dimen/dp_8"
-        android:layout_below="@+id/ll_item_pending_remove"
         android:text="安装："/>
 
     <TextView
@@ -200,6 +200,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/ll_item_pending_contact"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -256,5 +257,19 @@
         android:text="@string/modify"
         android:textColor="@color/colorRed"
         android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/tv_item_pending_order_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginEnd="@dimen/dp_16"
+        android:layout_marginRight="@dimen/dp_16"
+        android:lines="1"
+        android:text="@string/pending"
+        android:textColor="@color/colorOrange"
+        android:textSize="@dimen/sp_16"/>
 
 </RelativeLayout>
