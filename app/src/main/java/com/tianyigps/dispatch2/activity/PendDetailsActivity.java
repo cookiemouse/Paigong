@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.NumberPicker;
 import android.widget.RelativeLayout;
@@ -44,9 +45,7 @@ public class PendDetailsActivity extends Activity {
 
     private static final String TAG = "PendDetailsActivity";
 
-    private static final long MIN = 60 * 1000;
-    private static final long HOUR = 60 * MIN;
-    private static final long DAY = 24 * HOUR;
+    private static final int ORDER_STATUS_1 = 1;
 
     //Title栏
     private TextView mTextViewTitle;
@@ -54,7 +53,9 @@ public class PendDetailsActivity extends Activity {
 
     private TextView mTextViewNode;
     private TextView mTextViewTime;
+    private View mViewRight, mViewTop;
     private CycleProgressView mCycleProgressView;
+    private FrameLayout mFrameLayoutCycle;
 
     private TextView mTextViewContact, mTextViewContactPhone, mTextViewDoorTime, mTextViewAddress, mTextViewModify, mTextViewRemarks, mTextViewInstallType, mTextViewInstallContent, mTextViewInfoTitle, mTextViewInfoContent, mTextViewRemoveContent;
 
@@ -68,6 +69,7 @@ public class PendDetailsActivity extends Activity {
 
     private String mContact, mContactPhone, mAddress, mRemarks, mInstallType, mInstallContent = "", mInfoTitle, mInfoContent = "", mRemoveContent = "";
     private long mDoorTime;
+    private int mOrderStatusGet;
     private boolean isModify;
 
     private SharedpreferenceManager mSharedpreferenceManager;
@@ -141,6 +143,9 @@ public class PendDetailsActivity extends Activity {
         token = mSharedpreferenceManager.getToken();
         userName = mSharedpreferenceManager.getAccount();
 
+        mViewRight = findViewById(R.id.view_layout_pend_details_content_node);
+        mViewTop = findViewById(R.id.view_layout_pend_details_content_node_top);
+        mFrameLayoutCycle = findViewById(R.id.fl_layout_cycle_time);
         mCycleProgressView = findViewById(R.id.cpv_layout_cycle_time);
         mCycleProgressView.setStrokWidth(10);
         mCycleProgressView.setDefaultColor(getResources().getColor(R.color.colorCycleGray));
@@ -245,6 +250,7 @@ public class PendDetailsActivity extends Activity {
                 mAddress = objBean.getAddress();
                 mContact = objBean.getContactName();
                 mContactPhone = objBean.getContactPhone();
+                mOrderStatusGet = objBean.getOrderStatus();
 
                 for (PendDetailsBean.ObjBean.OrderCarListBean carListBean : objBean.getOrderCarList()) {
                     String carVin = carListBean.getCarVin();
@@ -460,6 +466,16 @@ public class PendDetailsActivity extends Activity {
                     if (mInstallType.equals("拆改")) {
                         mRelativeLayoutRemove.setVisibility(View.VISIBLE);
                         mTextViewRemoveContent.setText(mRemoveContent);
+                    }
+
+                    if (ORDER_STATUS_1 != mOrderStatusGet) {
+                        mFrameLayoutCycle.setVisibility(View.GONE);
+                        mViewRight.setVisibility(View.GONE);
+                        mViewTop.setVisibility(View.GONE);
+                    } else {
+                        mFrameLayoutCycle.setVisibility(View.VISIBLE);
+                        mViewRight.setVisibility(View.VISIBLE);
+                        mViewTop.setVisibility(View.VISIBLE);
                     }
 
                     mPendDetailsAdapter.notifyDataSetChanged();
