@@ -19,6 +19,7 @@ import com.tianyigps.dispatch2.interfaces.OnGetWorkerOrderInfoStartListener;
 import com.tianyigps.dispatch2.interfaces.OnGetWorkerOrderListener;
 import com.tianyigps.dispatch2.interfaces.OnInstallBackListener;
 import com.tianyigps.dispatch2.interfaces.OnInstallCountListener;
+import com.tianyigps.dispatch2.interfaces.OnModifyDateListener;
 import com.tianyigps.dispatch2.interfaces.OnModifyPasswordListener;
 import com.tianyigps.dispatch2.interfaces.OnOrderTrackListener;
 import com.tianyigps.dispatch2.interfaces.OnPendDetailsListener;
@@ -96,6 +97,7 @@ public class NetworkManager {
     private OnPendingNumListener mOnPendingNumListener;
     private OnPendedNumListener mOnPendedNumListener;
     private OnPendDetailsListener mOnPendDetailsListener;
+    private OnModifyDateListener mModifyDateListener;
 
     public NetworkManager() {
         mOkHttpClient = new OkHttpClient();
@@ -1313,6 +1315,42 @@ public class NetworkManager {
 
     public void setOnPendDetailsListener(OnPendDetailsListener listener) {
         this.mOnPendDetailsListener = listener;
+    }
+
+    //  改约  30
+    public void modifyDate(String jobNo, String userName, String token, String orderNo, int orderStatus, float newDoorDate, String reason) {
+        Request.Builder builder = new Request.Builder();
+        builder.url(Urls.URL_MANAGER_MODIFY_DATE + "jobNo=" + jobNo
+                + "&token=" + token
+                + "&orderNo=" + orderNo
+                + "&orderStatus=" + orderStatus
+                + "&newDoorDate=" + newDoorDate
+                + "&reason=" + reason
+                + "&userName=" + userName);
+        mRequest = builder.build();
+        Log.i(TAG, "getQualityCount: url-->" + mRequest.url());
+        Call call = mOkHttpClient.newCall(mRequest);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                if (null == mModifyDateListener) {
+                    throw new NullPointerException("ModifyDateListener is null");
+                }
+                mModifyDateListener.onFailure();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (null == mModifyDateListener) {
+                    throw new NullPointerException("ModifyDateListener is null");
+                }
+                mModifyDateListener.onSuccess(response.body().string());
+            }
+        });
+    }
+
+    public void setOnModifyDateListener(OnModifyDateListener listener) {
+        this.mModifyDateListener = listener;
     }
 
 }

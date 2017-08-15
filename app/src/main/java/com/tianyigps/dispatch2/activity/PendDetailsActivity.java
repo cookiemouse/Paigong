@@ -8,10 +8,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.NumberPicker;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -19,22 +22,31 @@ import com.google.gson.Gson;
 import com.tianyigps.cycleprogressview.CycleProgressView;
 import com.tianyigps.dispatch2.R;
 import com.tianyigps.dispatch2.adapter.PendDetailsAdapter;
+import com.tianyigps.dispatch2.bean.ModifyDateBean;
 import com.tianyigps.dispatch2.bean.PendDetailsBean;
 import com.tianyigps.dispatch2.customview.MyListView;
 import com.tianyigps.dispatch2.data.AdapterPendDetailsData;
 import com.tianyigps.dispatch2.data.Data;
 import com.tianyigps.dispatch2.dialog.OrderTrackDialogFragment;
+import com.tianyigps.dispatch2.interfaces.OnModifyDateListener;
 import com.tianyigps.dispatch2.interfaces.OnPendDetailsListener;
 import com.tianyigps.dispatch2.manager.NetworkManager;
 import com.tianyigps.dispatch2.manager.SharedpreferenceManager;
 import com.tianyigps.dispatch2.utils.TimeFormatU;
+import com.tianyigps.dispatch2.utils.ToastU;
+import com.yundian.bottomdialog.BottomDialog;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class PendDetailsActivity extends Activity {
 
     private static final String TAG = "PendDetailsActivity";
+
+    private static final long MIN = 60 * 1000;
+    private static final long HOUR = 60 * MIN;
+    private static final long DAY = 24 * HOUR;
 
     //Title栏
     private TextView mTextViewTitle;
@@ -72,6 +84,13 @@ public class PendDetailsActivity extends Activity {
 
     private String mStringMessage;
 
+    //  改约
+    private String mDays[];
+    private String mHours[];
+    private String mMins[];
+    private int mDay, mHour, mMin;
+    private String mReason;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,6 +125,10 @@ public class PendDetailsActivity extends Activity {
         mImageViewTitleRight.setVisibility(View.GONE);
         mImageViewTitleLeft.setImageResource(R.drawable.ic_back);
 
+        mDays = getResources().getStringArray(R.array.picker_day);
+        mHours = getResources().getStringArray(R.array.picker_hour);
+        mMins = getResources().getStringArray(R.array.picker_min);
+
         mSharedpreferenceManager = new SharedpreferenceManager(this);
         mNetworkManager = new NetworkManager();
         myHandler = new MyHandler();
@@ -118,9 +141,12 @@ public class PendDetailsActivity extends Activity {
         token = mSharedpreferenceManager.getToken();
         userName = mSharedpreferenceManager.getAccount();
 
+        mCycleProgressView = findViewById(R.id.cpv_layout_cycle_time);
+        mCycleProgressView.setStrokWidth(10);
+        mCycleProgressView.setDefaultColor(getResources().getColor(R.color.colorCycleGray));
+
         mTextViewNode = findViewById(R.id.tv_layout_pend_details_content_node);
         mTextViewTime = findViewById(R.id.tv_layout_cycle_time);
-        mCycleProgressView = findViewById(R.id.cpv_layout_cycle_time);
         mButtonPend = findViewById(R.id.btn_layout_pend_details);
         mTextViewContact = findViewById(R.id.tv_layout_pend_details_content_contact_name);
         mTextViewContactPhone = findViewById(R.id.tv_layout_pend_details_content_contact_phone);
@@ -156,6 +182,13 @@ public class PendDetailsActivity extends Activity {
             @Override
             public void onClick(View view) {
                 PendDetailsActivity.this.finish();
+            }
+        });
+
+        mTextViewModify.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showModifyDateDialog();
             }
         });
 
@@ -258,6 +291,132 @@ public class PendDetailsActivity extends Activity {
                 myHandler.sendEmptyMessage(Data.MSG_1);
             }
         });
+
+        mNetworkManager.setOnModifyDateListener(new OnModifyDateListener() {
+            @Override
+            public void onFailure() {
+                Log.i(TAG, "onFailure: ");
+            }
+
+            @Override
+            public void onSuccess(String result) {
+                Log.i(TAG, "onSuccess: result-->" + result);
+                Gson gson = new Gson();
+                ModifyDateBean modifyDateBean = gson.fromJson(result, ModifyDateBean.class);
+                mStringMessage = modifyDateBean.getMsg();
+                if (!modifyDateBean.isSuccess()) {
+                    myHandler.sendEmptyMessage(Data.MSG_ERO);
+                    return;
+                }
+                myHandler.sendEmptyMessage(Data.MSG_2);
+            }
+        });
+    }
+
+    //  改约
+    private void modifyDate() {
+
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+
+        calendar.get(Calendar.DAY_OF_YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DATE);
+        day = day + mDay;
+        calendar.set(year, month, day, mHour, mMin);
+        long modify = calendar.getTimeInMillis();
+
+        mNetworkManager.modifyDate(jobNo, userName, token, orderNo, orderStatus, modify, mReason);
+    }
+
+    //  选择改约时间
+    private void showModifyDateDialog() {
+        final BottomDialog bottomDialog = new BottomDialog();
+        View viewDate = LayoutInflater.from(this).inflate(R.layout.dialog_modify_date, null);
+        bottomDialog.setContentView(viewDate);
+
+        final NumberPicker mpDay = viewDate.findViewById(R.id.np_dialog_modify_day);
+        final NumberPicker mpHour = viewDate.findViewById(R.id.np_dialog_modify_hour);
+        final NumberPicker mpMin = viewDate.findViewById(R.id.np_dialog_modify_min);
+
+        TextView tvCancel = viewDate.findViewById(R.id.tv_dialog_modify_cancel);
+        TextView tvEnsure = viewDate.findViewById(R.id.tv_dialog_modify_ensure);
+
+        tvCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                bottomDialog.dismiss();
+            }
+        });
+
+        tvEnsure.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                bottomDialog.dismiss();
+                mDay = mpDay.getValue();
+                mHour = mpHour.getValue();
+                mMin = mpMin.getValue();
+                Log.i(TAG, "onClick: day-->" + mDay);
+                Log.i(TAG, "onClick: hour-->" + mHour);
+                Log.i(TAG, "onClick: min-->" + mMin);
+
+                showModifyReason();
+            }
+        });
+
+        mpDay.setDisplayedValues(mDays);
+        mpDay.setMinValue(0);
+        mpDay.setMaxValue(mDays.length - 1);
+
+        mpHour.setDisplayedValues(mHours);
+        mpHour.setMinValue(0);
+        mpHour.setMaxValue(mHours.length - 1);
+
+        mpMin.setDisplayedValues(mMins);
+        mpMin.setMinValue(0);
+        mpMin.setMaxValue(mMins.length - 1);
+
+        bottomDialog.show(getFragmentManager(), "modify date");
+    }
+
+    //  填写改约原因
+    private void showModifyReason() {
+        final BottomDialog bottomDialog = new BottomDialog();
+        View viewReason = LayoutInflater.from(this).inflate(R.layout.dialog_modify_reason, null);
+        bottomDialog.setContentView(viewReason);
+
+        TextView tvTitle = viewReason.findViewById(R.id.tv_dialog_modify_title);
+        TextView tvCancel = viewReason.findViewById(R.id.tv_dialog_modify_reason_cancel);
+        Button btnSubmit = viewReason.findViewById(R.id.btn_dialog_modify_reason_submit);
+        final EditText etReason = viewReason.findViewById(R.id.et_dialog_modify_reason);
+        final TextView tvInfo = viewReason.findViewById(R.id.tv_dialog_modify_reason_info);
+
+        String title = mDays[mDay] + " " + mHour + ":" + mMins[mMin];
+        tvTitle.setText(title);
+
+        tvCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                bottomDialog.dismiss();
+            }
+        });
+
+        btnSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mReason = etReason.getText().toString();
+                if ("".equals(mReason)) {
+                    tvInfo.setText("原因不能为空");
+                    return;
+                }
+                tvInfo.setText(null);
+                // 2017/8/15 提交
+                modifyDate();
+                bottomDialog.dismiss();
+            }
+        });
+
+        bottomDialog.show(getFragmentManager(), "modify reason");
     }
 
     //  显示信息Dialog
@@ -272,6 +431,11 @@ public class PendDetailsActivity extends Activity {
         });
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    //  显示Toast
+    private void showMessageToast(String msg) {
+        new ToastU(this).showToast(msg);
     }
 
     private class MyHandler extends Handler {
@@ -300,6 +464,10 @@ public class PendDetailsActivity extends Activity {
 
                     mPendDetailsAdapter.notifyDataSetChanged();
                     break;
+                }
+                case Data.MSG_2: {
+                    //  改约成功
+                    showMessageToast(mStringMessage);
                 }
                 default: {
                     Log.i(TAG, "handleMessage: default-->" + msg.what);

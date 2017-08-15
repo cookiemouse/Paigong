@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/ll_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="@dimen/dp_16">
+
+        <TextView
+            android:id="@+id/tv_dialog_modify_cancel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/cancel"/>
+
+        <TextView
+            android:id="@+id/tv_dialog_modify_ensure"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/ensure"/>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_0_5"
+        android:background="@color/colorBlueTheme"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_16"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <NumberPicker
+            android:id="@+id/np_dialog_modify_day"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_16"
+            android:layout_marginRight="@dimen/dp_16"
+            android:descendantFocusability="blocksDescendants"/>
+
+        <NumberPicker
+            android:id="@+id/np_dialog_modify_hour"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_16"
+            android:layout_marginRight="@dimen/dp_16"
+            android:descendantFocusability="blocksDescendants"/>
+
+        <NumberPicker
+            android:id="@+id/np_dialog_modify_min"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:descendantFocusability="blocksDescendants"/>
+
+    </LinearLayout>
+
+</LinearLayout>

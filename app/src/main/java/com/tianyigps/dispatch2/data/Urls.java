@@ -40,4 +40,5 @@ public class Urls {
     public static final String URL_MANAGER_PENDING_NUM = IP + "/dispatch4AppController/getOrderCountForPending?";
     public static final String URL_MANAGER_PENDED_NUM = IP + "/dispatch4AppController/getOrderCountForProcessed?";
     public static final String URL_MANAGER_PENDED_DETAILS = IP + "/dispatch4AppController/getOrderInfoByOrderNo?";
+    public static final String URL_MANAGER_MODIFY_DATE = IP + "/dispatch4AppController/changeDoorDateByOrderNo?";
 }

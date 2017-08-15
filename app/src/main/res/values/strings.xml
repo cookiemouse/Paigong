@@ -97,4 +97,46 @@
         <item>11 月</item>
         <item>12 月</item>
     </array>
+
+    <array name="picker_day">
+        <item>今天</item>
+        <item>明天</item>
+        <item>后天</item>
+    </array>
+
+    <array name="picker_hour">
+        <item>00点</item>
+        <item>01点</item>
+        <item>02点</item>
+        <item>03点</item>
+        <item>04点</item>
+        <item>05点</item>
+        <item>06点</item>
+        <item>07点</item>
+        <item>08点</item>
+        <item>09点</item>
+        <item>10点</item>
+        <item>11点</item>
+        <item>12点</item>
+        <item>13点</item>
+        <item>14点</item>
+        <item>15点</item>
+        <item>16点</item>
+        <item>17点</item>
+        <item>18点</item>
+        <item>19点</item>
+        <item>20点</item>
+        <item>21点</item>
+        <item>22点</item>
+        <item>23点</item>
+    </array>
+
+    <array name="picker_min">
+        <item>00 分</item>
+        <item>10 分</item>
+        <item>20 分</item>
+        <item>30 分</item>
+        <item>40 分</item>
+        <item>50 分</item>
+    </array>
 </resources>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"
+            >
+
+            <ImageView
+                android:id="@+id/iv_dialog_modify_title"
+                android:layout_width="@dimen/dp_40"
+                android:layout_height="@dimen/dp_40"
+                android:layout_gravity="center_horizontal"
+                android:padding="@dimen/dp_8"
+                android:src="@drawable/ic_clock"/>
+
+            <TextView
+                android:id="@+id/tv_dialog_modify_title"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp_40"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="请选择改约时间"/>
+
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_dialog_modify_reason_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_40"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginEnd="@dimen/dp_8"
+            android:layout_marginRight="@dimen/dp_8"
+            android:gravity="center"
+            android:text="@string/cancel"
+            android:textColor="@color/colorBlueTheme"/>
+    </RelativeLayout>
+
+    <EditText
+        android:id="@+id/et_dialog_modify_reason"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dp_8"
+        android:background="@drawable/bg_edit"
+        android:hint="填写改约原因..."
+        android:textSize="@dimen/sp_14"
+        android:gravity="start"
+        android:minHeight="@dimen/dp_120"/>
+
+    <TextView
+        android:id="@+id/tv_dialog_modify_reason_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_8"
+        android:layout_marginStart="@dimen/dp_8"
+        android:textColor="@color/colorRed"/>
+
+    <Button
+        android:id="@+id/btn_dialog_modify_reason_submit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="@dimen/dp_32"
+        android:layout_marginRight="@dimen/dp_32"
+        android:layout_marginTop="@dimen/dp_8"
+        android:layout_marginBottom="@dimen/dp_16"
+        android:background="@drawable/bg_button_flush"
+        android:text="@string/submit"
+        android:textColor="@color/colorWhite"/>
+
+</LinearLayout>
