@@ -116,7 +116,7 @@ public class HandledFragment extends Fragment {
 
         mListViewHandled.addFooterView(mViewMore);
 
-        mNetworkManager = NetworkManager.getInstance();
+        mNetworkManager = new NetworkManager();
         myHandler = new MyHandler();
 
         mSharedpreferenceManager = new SharedpreferenceManager(getContext());

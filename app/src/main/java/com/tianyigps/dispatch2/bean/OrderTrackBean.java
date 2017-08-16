@@ -124,6 +124,7 @@ public class OrderTrackBean {
             private int orderId;
             private int orderStatus;
             private int payDoorFee;
+            private String reasonChoosed;
             private String reasonFilled;
             private String submitAddress;
             private String checkFalseReason;
@@ -160,6 +161,14 @@ public class OrderTrackBean {
 
             public void setReviseStatus(int reviseStatus) {
                 this.reviseStatus = reviseStatus;
+            }
+
+            public String getReasonChoosed() {
+                return reasonChoosed;
+            }
+
+            public void setReasonChoosed(String reasonChoosed) {
+                this.reasonChoosed = reasonChoosed;
             }
 
             public String getCheckFalseReason() {

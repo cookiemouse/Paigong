@@ -103,18 +103,6 @@ public class NetworkManager {
         mOkHttpClient = new OkHttpClient();
     }
 
-    public static NetworkManager getInstance() {
-        if (null == mNetworkManager) {
-            synchronized (NetworkManager.class) {
-                if (null == mNetworkManager) {
-                    mNetworkManager = new NetworkManager();
-                }
-            }
-        }
-
-        return mNetworkManager;
-    }
-
     @Deprecated
     public void setTimeOut() {
         mOkHttpClient = new OkHttpClient.Builder().connectTimeout(5, TimeUnit.SECONDS).build();

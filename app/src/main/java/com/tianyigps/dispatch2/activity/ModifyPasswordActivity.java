@@ -54,7 +54,7 @@ public class ModifyPasswordActivity extends BaseActivity {
         mEditTextEnsure = findViewById(R.id.et_activity_modify_password_new_ensure);
         mButtonEnsure = findViewById(R.id.btn_activity_modify_password_ensure);
 
-        mNetworkManager = NetworkManager.getInstance();
+        mNetworkManager = new NetworkManager();
         myHandler = new MyHandler();
         mSharedpreferenceManager = new SharedpreferenceManager(this);
     }

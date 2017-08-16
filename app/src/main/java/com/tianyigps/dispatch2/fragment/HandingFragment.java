@@ -122,7 +122,7 @@ public class HandingFragment extends Fragment implements View.OnClickListener {
         mHandingAdapter = new HandingAdapter(getContext(), mAdapterHandingDataList);
         mListViewHanding.setAdapter(mHandingAdapter);
 
-        mNetworkManager = NetworkManager.getInstance();
+        mNetworkManager = new NetworkManager();
         myHandler = new MyHandler();
 
         mSharedpreferenceManager = new SharedpreferenceManager(getContext());

@@ -77,7 +77,7 @@ public class OperateRemoveActivity extends BaseActivity {
         orderNo = intent.getStringExtra(Data.DATA_INTENT_ORDER_NO);
         mCarId = intent.getIntExtra(Data.DATA_INTENT_CAR_ID, 0);
 
-        mNetworkManager = NetworkManager.getInstance();
+        mNetworkManager = new NetworkManager();
         myHandler = new MyHandler();
 
         mNetworkManager.getWorkerOrderInfoStart(eid, token, orderNo, userName);

@@ -55,9 +55,7 @@ public class OrderDetailsActivity extends Activity {
     private ImageView mImageViewTitleLeft, mImageViewTitleRight;
 
     //  内容
-    private TextView mTextViewOrderName, mTextViewOrderNum, mTextViewCallName, mTextViewTime, mTextViewAddress
-            , mTextViewRemarks, mTextViewInstallTitle, mTextViewInstallContent, mTextViewInfoTitle, mTextViewInfoContent
-            , mTextViewReturnOrder, mTextViewTimeRemain;
+    private TextView mTextViewOrderName, mTextViewOrderNum, mTextViewCallName, mTextViewTime, mTextViewAddress, mTextViewRemarks, mTextViewInstallTitle, mTextViewInstallContent, mTextViewInfoTitle, mTextViewInfoContent, mTextViewReturnOrder, mTextViewTimeRemain;
 
     private ImageView mImageViewCall;
     private Button mButtonSign;
@@ -160,7 +158,7 @@ public class OrderDetailsActivity extends Activity {
         mCycleProgressView.setStrokWidth(10);
         mCycleProgressView.setDefaultColor(getResources().getColor(R.color.colorCycleGray));
 
-        mNetworkManager = NetworkManager.getInstance();
+        mNetworkManager = new NetworkManager();
         myHandler = new MyHandler();
         mSharedpreferenceManager = new SharedpreferenceManager(this);
         mLocateManager = new LocateManager(this);
@@ -256,6 +254,11 @@ public class OrderDetailsActivity extends Activity {
                 mStringDetail = objBean.getInstallDemand();
                 mIntOrderType = objBean.getOrderType();
                 mIntOrderStaus = objBean.getOrderStatus();
+
+                mIntWireNum = objBean.getWiredNum();
+                mIntWirelessNum = objBean.getWirelessNum();
+                mIntRemoveWireNum = objBean.getRemoveWiredNum();
+                mIntRemoveWirelessNum = objBean.getRemoveWirelessNum();
 
                 switch (mIntOrderType) {
                     case 1: {

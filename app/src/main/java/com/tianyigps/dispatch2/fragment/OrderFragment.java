@@ -149,7 +149,7 @@ public class OrderFragment extends Fragment {
 
         mListView.setAdapter(mOrderAdapter);
 
-        mNetworkManager = NetworkManager.getInstance();
+        mNetworkManager = new NetworkManager();
 
         myHandler = new MyHandler();
 

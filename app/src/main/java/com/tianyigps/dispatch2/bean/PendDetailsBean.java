@@ -326,12 +326,16 @@ public class PendDetailsBean {
             private int id;
             private int node;
             private String operator;
+            private String reasonChoosed;
+            private String reasonFilled;
+            private String checkFalseReason;
             private int operatorId;
             private int operatorType;
             private int orderId;
             private int orderStatus;
             private int type;
             private long updateTime;
+            private long reviseTime;
 
             public String getBeOperator() {
                 return beOperator;
@@ -389,6 +393,30 @@ public class PendDetailsBean {
                 this.operator = operator;
             }
 
+            public String getReasonChoosed() {
+                return reasonChoosed;
+            }
+
+            public void setReasonChoosed(String reasonChoosed) {
+                this.reasonChoosed = reasonChoosed;
+            }
+
+            public String getReasonFilled() {
+                return reasonFilled;
+            }
+
+            public void setReasonFilled(String reasonFilled) {
+                this.reasonFilled = reasonFilled;
+            }
+
+            public String getCheckFalseReason() {
+                return checkFalseReason;
+            }
+
+            public void setCheckFalseReason(String checkFalseReason) {
+                this.checkFalseReason = checkFalseReason;
+            }
+
             public int getOperatorId() {
                 return operatorId;
             }
@@ -435,6 +463,14 @@ public class PendDetailsBean {
 
             public void setUpdateTime(long updateTime) {
                 this.updateTime = updateTime;
+            }
+
+            public long getReviseTime() {
+                return reviseTime;
+            }
+
+            public void setReviseTime(long reviseTime) {
+                this.reviseTime = reviseTime;
             }
         }
 

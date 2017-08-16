@@ -65,7 +65,7 @@ public class LoginActivity extends Activity {
 
         mToast = Toast.makeText(LoginActivity.this, "", Toast.LENGTH_SHORT);
 
-        mNetworkManager = NetworkManager.getInstance();
+        mNetworkManager = new NetworkManager();
         myHandler = new MyHandler();
 
         mSharedpreferenceManager = new SharedpreferenceManager(getApplicationContext());

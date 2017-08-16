@@ -58,7 +58,7 @@ public class ReturnOrderDialogFragment extends DialogFragment {
 //        return super.onCreateView(inflater, container, savedInstanceState);
         //  返回null，让该Fragment来管理Dialog
 
-        mNetworkManager = NetworkManager.getInstance();
+        mNetworkManager = new NetworkManager();
         mSharedpreferenceManager = new SharedpreferenceManager(getActivity());
         myHandler = new MyHandler();
 

@@ -215,7 +215,7 @@ public class OrderTrackDialogFragment extends DialogFragment {
             }
             case 5: {
                 info += "取消订单\n";       //ok
-                info += orderNodeBean.getCheckFalseReason();
+                info += orderNodeBean.getReasonChoosed() + "\n" + orderNodeBean.getReasonFilled();
                 break;
             }
             case 6: {

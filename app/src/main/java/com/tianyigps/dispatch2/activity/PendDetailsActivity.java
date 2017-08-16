@@ -82,7 +82,7 @@ public class PendDetailsActivity extends Activity {
     private String userName;
     private String orderNo;
     private int orderStatus;
-    private int orderId;
+    private int mOrderId;
 
     private Intent mIntent;
 
@@ -170,10 +170,6 @@ public class PendDetailsActivity extends Activity {
         mListView = findViewById(R.id.lv_layout_pend_content);
         mAdapterPendDetailsDataList = new ArrayList<>();
 
-        for (int i = 0; i < 3; i++) {
-            mAdapterPendDetailsDataList.add(new AdapterPendDetailsData(R.drawable.ic_address, "改约不通过", "原因表述不清楚"));
-        }
-
         mPendDetailsAdapter = new PendDetailsAdapter(PendDetailsActivity.this, mAdapterPendDetailsDataList);
 
         mListView.setAdapter(mPendDetailsAdapter);
@@ -217,10 +213,9 @@ public class PendDetailsActivity extends Activity {
         mTextViewNode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                orderId = 895;
                 OrderTrackDialogFragment orderTrackDialogFragment = OrderTrackDialogFragment.getInstance();
                 Bundle bundle = new Bundle();
-                bundle.putInt(Data.DATA_INTENT_ORDER_ID, orderId);
+                bundle.putInt(Data.DATA_INTENT_ORDER_ID, mOrderId);
                 orderTrackDialogFragment.setArguments(bundle);
                 if (orderTrackDialogFragment.isAdded()) {
                     return;
@@ -251,6 +246,8 @@ public class PendDetailsActivity extends Activity {
                 PendDetailsBean.ObjBean.OrderNodeBean nodeBean = objBean.getOrderNode();
                 PendDetailsBean.ObjBean.EngineerBean engineerBean = objBean.getEngineer();
 
+                mOrderId = nodeBean.getOrderId();
+
                 mRemarks = objBean.getRemark();
                 mDoorTime = objBean.getDoorTime();
                 mAddress = objBean.getAddress();
@@ -258,6 +255,37 @@ public class PendDetailsActivity extends Activity {
                 mContactPhone = objBean.getContactPhone();
                 mOrderStatusGet = objBean.getOrderStatus();
                 mNode = nodeBean.getNode();
+
+                if (Data.NODE_3 == mNode) {
+                    if (Data.STATUS_98 == mOrderStatusGet) {
+                        mAdapterPendDetailsDataList.add(new AdapterPendDetailsData(R.drawable.ic_modify_date_uppass
+                                , "改约不通过"
+                                , nodeBean.getCheckFalseReason()
+                                , true));
+
+                        String reason = nodeBean.getReasonChoosed() + "，" + nodeBean.getReasonFilled();
+                        mAdapterPendDetailsDataList.add(new AdapterPendDetailsData(R.drawable.ic_modify_date_reason
+                                , "" + nodeBean.getReviseTime()
+                                , reason));
+                    } else {
+                        mAdapterPendDetailsDataList.add(new AdapterPendDetailsData(R.drawable.ic_modify_date_pass
+                                , "改约通过"
+                                , "" + nodeBean.getReviseTime()));
+                    }
+                }
+                if (Data.NODE_8 == mNode || Data.NODE_9 == mNode || Data.NODE_10 == mNode) {
+                    String engineer = engineerBean.getName();
+                    String phone = engineerBean.getPhoneNo();
+                    mAdapterPendDetailsDataList.add(new AdapterPendDetailsData(R.drawable.ic_modify_date_engineer, engineer, phone));
+                }
+                if (Data.NODE_5 == mNode) {
+                    String reason = nodeBean.getReasonChoosed() + "，" + nodeBean.getReasonFilled();
+                    mAdapterPendDetailsDataList.add(new AdapterPendDetailsData(R.drawable.ic_modify_date_reason, "取消原因", reason));
+                }
+                if (Data.NODE_13 == mNode) {
+                    String reason = nodeBean.getReasonChoosed() + "，" + nodeBean.getReasonFilled();
+                    mAdapterPendDetailsDataList.add(new AdapterPendDetailsData(R.drawable.ic_modify_date_return, "退回客户", reason));
+                }
 
                 for (PendDetailsBean.ObjBean.OrderCarListBean carListBean : objBean.getOrderCarList()) {
                     String carVin = carListBean.getCarVin();
@@ -496,6 +524,14 @@ public class PendDetailsActivity extends Activity {
                         mTextViewModify.setVisibility(View.GONE);
                     } else {
                         mTextViewModify.setVisibility(View.VISIBLE);
+                    }
+
+                    if (Data.NODE_1 == mNode
+                            || Data.NODE_6 == mNode
+                            || Data.NODE_11 == mNode) {
+                        mButtonPend.setVisibility(View.VISIBLE);
+                    } else {
+                        mButtonPend.setVisibility(View.GONE);
                     }
 
                     mPendDetailsAdapter.notifyDataSetChanged();

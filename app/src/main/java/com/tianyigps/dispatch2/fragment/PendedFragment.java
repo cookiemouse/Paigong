@@ -383,6 +383,7 @@ public class PendedFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                mEditTextSearch.setText(null);
                 int status = mAdapterPopupDataList.get(i).getOrderStatus();
                 mSwipeRefreshLayout.setRefreshing(true);
                 mNetworkManager.getPended(jobNo, token, "" + status, "", "", userName);

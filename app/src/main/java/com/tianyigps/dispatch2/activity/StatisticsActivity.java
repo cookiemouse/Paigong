@@ -109,7 +109,7 @@ public class StatisticsActivity extends BaseActivity {
         mDatePickerDialogFragment = new DatePickerDialogFragment();
         mDatePickerDialogFragment.setCancelable(false);
 
-        mNetworkManager = NetworkManager.getInstance();
+        mNetworkManager = new NetworkManager();
 
         myHandler = new MyHandler();
 
