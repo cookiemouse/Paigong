@@ -20,6 +20,7 @@ import com.tianyigps.dispatch2.activity.LoginActivity;
 import com.tianyigps.dispatch2.activity.ManagerFragmentContentActivity;
 import com.tianyigps.dispatch2.activity.WorkerFragmentContentActivity;
 import com.tianyigps.dispatch2.bean.CheckUserBean;
+import com.tianyigps.dispatch2.data.Data;
 import com.tianyigps.dispatch2.interfaces.OnCheckUserListener;
 import com.tianyigps.dispatch2.manager.NetworkManager;
 import com.tianyigps.dispatch2.manager.SharedpreferenceManager;
@@ -131,8 +132,7 @@ public class SplashActivity extends Activity {
                     return;
                 }
 
-//                launchMode = checkUserBean.getObj().getDuties();
-                launchMode = 1;
+                launchMode = checkUserBean.getObj().getDuties();
 
                 myHandler.sendEmptyMessage(MSG_1);
             }
@@ -215,7 +215,7 @@ public class SplashActivity extends Activity {
                 }
                 case MSG_1: {
                     JPushInterface.setAlias(SplashActivity.this, 0, userName);
-                    if (DATA_LAUNCH_MODE_WORKER == launchMode) {
+                    if (Data.DATA_LAUNCH_MODE_WORKER == launchMode) {
                         toWorker();
                         break;
                     }

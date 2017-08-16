@@ -705,7 +705,7 @@ public class OperateInstallActivity extends BaseActivity {
                     case INTENT_PHOTO_P: {
 
                         mDatabaseManager.addTerPositionPic(idMainTerminal, itemPath, imgUrl);
-                        mDatabaseManager.addTerId(idMainTerminal, id);
+                        mDatabaseManager.addTerId(idMainTerminal, id, carId);
                         AdapterOperateInstallListData data = mAdapterOperateInstallListDataList.get(itemPosition);
                         data.setPositionPic(itemPath);
                         data.setPositionPicUrl(imgUrl);
@@ -719,7 +719,7 @@ public class OperateInstallActivity extends BaseActivity {
                     case INTENT_PHOTO_I: {
 
                         mDatabaseManager.addTerInstallPic(idMainTerminal, itemPath, imgUrl);
-                        mDatabaseManager.addTerId(idMainTerminal, id);
+                        mDatabaseManager.addTerId(idMainTerminal, id, carId);
                         AdapterOperateInstallListData data = mAdapterOperateInstallListDataList.get(itemPosition);
                         data.setInstallPic(itemPath);
                         data.setInstallPicUrl(imgUrl);
@@ -873,10 +873,9 @@ public class OperateInstallActivity extends BaseActivity {
             Log.i(TAG, "saveData: positionPicUrl-->" + positionPicUrl);
             Log.i(TAG, "saveData: installPicUrl-->" + installPicUrl);
 
-//            mDatabaseManager.addTerInfo(id, tNoOld, tNoNew, position);
             mDatabaseManager.addTer(id, tNoOld, tNoNew, position
                     , positionPic, installPic
-                    , positionPicUrl, installPicUrl);
+                    , positionPicUrl, installPicUrl, carId);
             i++;
             Log.i(TAG, "----------------------------------------");
         }
@@ -957,7 +956,7 @@ public class OperateInstallActivity extends BaseActivity {
 
     //  显示信息Dialog
     private void showMessageDialog(String msg) {
-        if (isFinishing()){
+        if (isFinishing()) {
             return;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -1088,24 +1087,24 @@ public class OperateInstallActivity extends BaseActivity {
             Log.i(TAG, "isCarComplete: carNoPicUrl-->" + carNoPicUrl);
             Log.i(TAG, "isCarComplete: frameNoPicUrl-->" + frameNoPicUrl);
 
-            if (null == carNo || "".equals(carNo)) {
-                carComplete = false;
-                mEditTextCarNo.setHintTextColor(getResources().getColor(R.color.colorOrange));
-            } else {
-                mEditTextCarNo.setHintTextColor(getResources().getColor(R.color.colorBlack));
-            }
-            if (null == carType || "".equals(carType)) {
-                carComplete = false;
-                mEditTextCarType.setHintTextColor(getResources().getColor(R.color.colorOrange));
-            } else {
-                mEditTextCarType.setHintTextColor(getResources().getColor(R.color.colorBlack));
-            }
-//            if (null == carNoPicUrl || "".equals(carNoPicUrl)) {
+//            if (null == carNo || "".equals(carNo)) {
 //                carComplete = false;
+//                mEditTextCarNo.setHintTextColor(getResources().getColor(R.color.colorOrange));
+//            } else {
+//                mEditTextCarNo.setHintTextColor(getResources().getColor(R.color.colorBlack));
 //            }
-//            if (null == frameNoPicUrl || "".equals(frameNoPicUrl)) {
+//            if (null == carType || "".equals(carType)) {
 //                carComplete = false;
+//                mEditTextCarType.setHintTextColor(getResources().getColor(R.color.colorOrange));
+//            } else {
+//                mEditTextCarType.setHintTextColor(getResources().getColor(R.color.colorBlack));
 //            }
+            if (null == carNoPicUrl || "".equals(carNoPicUrl)) {
+                carComplete = false;
+            }
+            if (null == frameNoPicUrl || "".equals(frameNoPicUrl)) {
+                carComplete = false;
+            }
         }
 
         return carComplete;
@@ -1118,7 +1117,6 @@ public class OperateInstallActivity extends BaseActivity {
             super.handleMessage(msg);
 
             Log.i(TAG, "handleMessage: msg.what-->" + msg.what);
-
             switch (msg.what) {
                 case Data.MSG_ERO: {
                     showMessageDialog(mStringMessage);

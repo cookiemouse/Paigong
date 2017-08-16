@@ -241,8 +241,12 @@ public class OrderTrackDialogFragment extends DialogFragment {
             }
             case 11: {
                 info += "安装退回：";        //ok
-                info += orderNodeBean.getCheckFalseReason();
-                info += orderNodeBean.getReasonFilled();
+                if (null != orderNodeBean.getCheckFalseReason()) {
+                    info += orderNodeBean.getCheckFalseReason();
+                }
+                if (null != orderNodeBean.getReasonFilled()) {
+                    info += orderNodeBean.getReasonFilled();
+                }
                 break;
             }
             case 12: {

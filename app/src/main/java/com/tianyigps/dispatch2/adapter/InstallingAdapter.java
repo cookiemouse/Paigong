@@ -90,6 +90,13 @@ public class InstallingAdapter extends BaseAdapter {
         viewHolder.textViewPendingOffline.setText("" + data.getOrderOffline());
         viewHolder.textViewCompleteOnline.setText("" + data.getCompleteLine());
         viewHolder.textViewCompleteOffline.setText("" + data.getCompleteOffline());
+
+        if (data.isComplete()) {
+            viewHolder.frameLayout.setBackgroundResource(R.drawable.bg_item_installing_blue);
+        } else {
+            viewHolder.frameLayout.setBackgroundResource(R.drawable.bg_item_installing_orange);
+        }
+
         return contentView;
     }
 

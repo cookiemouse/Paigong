@@ -37,7 +37,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String TABLE_INSTALL_TERMINAL = "create table " + Data.DATA_TAB_INSTALL_TERMINAL
             + "(idMain TEXT,tNoOld TEXT,tNoNew TEXT,position TEXT,positionPic TEXT,installPic TEXT" +
-            ",positionPicUri TEXT,installPicUri TEXT,model INTEGER, tId INTEGER, locateType INTEGER)";
+            ",positionPicUri TEXT,installPicUri TEXT,model INTEGER,tId INTEGER,locateType INTEGER,carId INTEGER)";
 
     /*
     * 需要保存的信息

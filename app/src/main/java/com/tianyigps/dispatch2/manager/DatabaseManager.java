@@ -1035,13 +1035,23 @@ public class DatabaseManager {
 
     //  增，T
     public void addTer(String idMain, String tNoOld, String tNoNew, String position, String positionPic
-            , String installPic, String positionPicUri, String installPicUri) {
+            , String installPic, String positionPicUri, String installPicUri, int carId) {
         if (terExist(idMain)) {
-            modifyTer(idMain, tNoOld, tNoNew, position, positionPic, installPic, positionPicUri, installPicUri);
+            modifyTer(idMain, tNoOld, tNoNew, position, positionPic, installPic, positionPicUri, installPicUri, carId);
             return;
         }
         this.addTer(idMain);
-        this.addTer(idMain, tNoOld, tNoNew, position, positionPic, installPic, positionPicUri, installPicUri);
+        this.addTer(idMain, tNoOld, tNoNew, position, positionPic, installPic, positionPicUri, installPicUri, carId);
+    }
+
+    //  增，T
+    public void addTer(String idMain, int carId) {
+        if (terExist(idMain)) {
+            modifyTer(idMain, carId);
+            return;
+        }
+        this.addTer(idMain);
+        this.addTer(idMain, carId);
     }
 
     //  增, T, info
@@ -1065,13 +1075,13 @@ public class DatabaseManager {
     }
 
     //  增，T, tId
-    public void addTerId(String idMain, int tId) {
+    public void addTerId(String idMain, int tId, int carId) {
         if (terExist(idMain)) {
-            modifyTerId(idMain, tId);
+            modifyTerId(idMain, tId, carId);
             return;
         }
         this.addTer(idMain);
-        this.addTerId(idMain, tId);
+        this.addTerId(idMain, tId, carId);
     }
 
     //  增,T，model
@@ -1133,8 +1143,30 @@ public class DatabaseManager {
     }
 
     //  改，T
+    public void modifyTer(String idMain, int carId) {
+        if (!terExist(idMain)) {
+            return;
+        }
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("carId", carId);
+
+        mSqLiteDatabase.beginTransaction();
+        try {
+            mSqLiteDatabase.update(Data.DATA_TAB_INSTALL_TERMINAL
+                    , contentValues
+                    , "idMain=?"
+                    , new String[]{(idMain)});
+            mSqLiteDatabase.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.e(TAG, e + "SqLiteDatabase update error");
+        } finally {
+            mSqLiteDatabase.endTransaction();
+        }
+    }
+
+    //  改，T
     public void modifyTer(String idMain, String tNoOld, String tNoNew, String position
-            , String positionPic, String installPic, String positionPicUri, String installPicUri) {
+            , String positionPic, String installPic, String positionPicUri, String installPicUri, int carId) {
         if (!terExist(idMain)) {
             return;
         }
@@ -1146,6 +1178,7 @@ public class DatabaseManager {
         contentValues.put("installPic", installPic);
         contentValues.put("positionPicUri", positionPicUri);
         contentValues.put("installPicUri", installPicUri);
+        contentValues.put("carId", carId);
 
         mSqLiteDatabase.beginTransaction();
         try {
@@ -1185,7 +1218,7 @@ public class DatabaseManager {
     }
 
     //  改，T, 重载
-    public void modifyTerId(String idMain, int tId) {
+    public void modifyTerId(String idMain, int tId, int carId) {
         if (!terExist(idMain)) {
             return;
         }
@@ -1194,6 +1227,7 @@ public class DatabaseManager {
         }
         ContentValues contentValues = new ContentValues();
         contentValues.put("tId", tId);
+        contentValues.put("carId", carId);
 
         mSqLiteDatabase.beginTransaction();
         try {
@@ -1331,7 +1365,7 @@ public class DatabaseManager {
                     , new String[]{"idMain, tNoOld, tNoNew, position"
                             + ", positionPic, installPic"
                             + ", positionPicUri, installPicUri"
-                            + ", model, tId, locateType"}
+                            + ", model, tId, locateType, carId"}
                     , "idMain=?"
                     , new String[]{(idMain)}
                     , null, null, null);
@@ -1354,9 +1388,32 @@ public class DatabaseManager {
                     , new String[]{"idMain, tNoOld, tNoNew, position"
                             + ", positionPic, installPic"
                             + ", positionPicUri, installPicUri"
-                            + ", model, tId, locateType"}
+                            + ", model, tId, locateType, carId"}
                     , "tId=?"
                     , new String[]{("" + tId)}
+                    , null, null, null);
+            mSqLiteDatabase.setTransactionSuccessful();
+
+            return cursor;
+        } catch (Exception e) {
+            Log.e(TAG, e + "SqliteDatabase query error");
+        } finally {
+            mSqLiteDatabase.endTransaction();
+        }
+        return null;
+    }
+
+    //  查，T
+    public Cursor getTerByCarId(int carId) {
+        mSqLiteDatabase.beginTransaction();
+        try {
+            Cursor cursor = mSqLiteDatabase.query(Data.DATA_TAB_INSTALL_TERMINAL
+                    , new String[]{"idMain, tNoOld, tNoNew, position"
+                            + ", positionPic, installPic"
+                            + ", positionPicUri, installPicUri"
+                            + ", model, tId, locateType, carId"}
+                    , "carId=?"
+                    , new String[]{("" + carId)}
                     , null, null, null);
             mSqLiteDatabase.setTransactionSuccessful();
 

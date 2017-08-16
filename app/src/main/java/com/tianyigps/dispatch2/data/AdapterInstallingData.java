@@ -10,6 +10,8 @@ public class AdapterInstallingData {
     private int orderLine, orderOffline;
     private int completeLine, completeOffline;
 
+    private boolean isComplete = true;
+
     public AdapterInstallingData(int carId, String frameNo, int orderLine, int orderOffline) {
         this.carId = carId;
         this.frameNo = frameNo;
@@ -75,5 +77,13 @@ public class AdapterInstallingData {
 
     public void setCarId(int carId) {
         this.carId = carId;
+    }
+
+    public boolean isComplete() {
+        return isComplete;
+    }
+
+    public void setComplete(boolean complete) {
+        isComplete = complete;
     }
 }
