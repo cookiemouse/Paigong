@@ -1,22 +1,21 @@
 package com.tianyigps.dispatch2.activity;
 
 import android.content.Intent;
-import android.graphics.PointF;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.dlazaro66.qrcodereaderview.QRCodeReaderView;
 import com.tianyigps.dispatch2.R;
 import com.tianyigps.dispatch2.base.BaseActivity;
+import com.tianyigps.dispatch2.data.Data;
 
-import static com.tianyigps.dispatch2.data.Data.DATA_SCANNER;
-import static com.tianyigps.dispatch2.data.Data.DATA_INTENT_SCANNER_RESULT;
+import me.dm7.barcodescanner.zbar.Result;
+import me.dm7.barcodescanner.zbar.ZBarScannerView;
 
 public class ScannerActivity extends BaseActivity {
 
     private static final String TAG = "ScannerActivity";
 
-    private QRCodeReaderView mQrCodeReaderView;
+    private ZBarScannerView mZBarScannerView;
 
     private Intent mIntent;
 
@@ -33,27 +32,28 @@ public class ScannerActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        mQrCodeReaderView.startCamera();
+        mZBarScannerView.startCamera();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        mQrCodeReaderView.stopCamera();
+        mZBarScannerView.stopCamera();
     }
 
     private void init() {
         mIntent = getIntent();
-        mQrCodeReaderView = findViewById(R.id.qrv_activity);
+        mZBarScannerView = findViewById(R.id.zbsv_activity_scanner);
     }
 
     private void setEventListener() {
-        mQrCodeReaderView.setOnQRCodeReadListener(new QRCodeReaderView.OnQRCodeReadListener() {
+        mZBarScannerView.setResultHandler(new ZBarScannerView.ResultHandler() {
             @Override
-            public void onQRCodeRead(String text, PointF[] points) {
-                Log.i(TAG, "onQRCodeRead: -->" + text);
-                mIntent.putExtra(DATA_SCANNER, text);
-                setResult(DATA_INTENT_SCANNER_RESULT, mIntent);
+            public void handleResult(Result result) {
+                Log.i(TAG, "handleResult: result-->" + result.getContents());
+                String code = result.getContents();
+                mIntent.putExtra(Data.DATA_SCANNER, code);
+                setResult(Data.DATA_INTENT_SCANNER_RESULT, mIntent);
                 finish();
             }
         });

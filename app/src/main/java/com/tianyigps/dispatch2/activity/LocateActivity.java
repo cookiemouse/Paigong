@@ -133,6 +133,7 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
         if (requestCode == DATA_INTENT_SCANNER_REQUEST && resultCode == DATA_INTENT_SCANNER_RESULT) {
             Log.i(TAG, "onActivityResult: qrcode-->" + data.getStringExtra(DATA_SCANNER));
             String imei = data.getStringExtra(DATA_SCANNER);
+            mEditTextImei.setText(imei);
             getImeiLocation(imei);
         }
         super.onActivityResult(requestCode, resultCode, data);
