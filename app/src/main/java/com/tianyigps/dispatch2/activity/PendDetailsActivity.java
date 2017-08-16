@@ -462,6 +462,9 @@ public class PendDetailsActivity extends Activity {
 
     //  显示信息Dialog
     private void showMessageDialog(String msg) {
+        if (isFinishing()){
+            return;
+        }
         AlertDialog.Builder builder = new AlertDialog.Builder(PendDetailsActivity.this);
         builder.setMessage(msg);
         builder.setPositiveButton(R.string.ensure, new DialogInterface.OnClickListener() {
@@ -501,6 +504,8 @@ public class PendDetailsActivity extends Activity {
                     if (mInstallType.equals("拆改")) {
                         mRelativeLayoutRemove.setVisibility(View.VISIBLE);
                         mTextViewRemoveContent.setText(mRemoveContent);
+                    }else {
+                        mRelativeLayoutRemove.setVisibility(View.GONE);
                     }
 
                     if (Data.STATUS_1 != mOrderStatusGet) {

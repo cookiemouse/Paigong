@@ -204,6 +204,9 @@ public class OperateRemoveActivity extends BaseActivity {
     }
 
     private void showRemoveDialog() {
+        if (isFinishing()) {
+            return;
+        }
         AlertDialog.Builder builder = new AlertDialog.Builder(OperateRemoveActivity.this);
         View viewDialog = LayoutInflater.from(OperateRemoveActivity.this).inflate(R.layout.dialog_remove, null);
         builder.setView(viewDialog);
@@ -227,6 +230,9 @@ public class OperateRemoveActivity extends BaseActivity {
     }
 
     private void showMessageDialog(String msg) {
+        if (isFinishing()){
+            return;
+        }
         AlertDialog.Builder builder = new AlertDialog.Builder(OperateRemoveActivity.this);
         builder.setMessage(msg);
         builder.setPositiveButton(R.string.ensure, new DialogInterface.OnClickListener() {

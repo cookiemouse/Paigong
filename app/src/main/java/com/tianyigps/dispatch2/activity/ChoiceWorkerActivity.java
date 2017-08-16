@@ -254,6 +254,9 @@ public class ChoiceWorkerActivity extends BaseActivity {
     }
 
     private void showMessageDialog(String msg) {
+        if (isFinishing()){
+            return;
+        }
         AlertDialog.Builder builder = new AlertDialog.Builder(ChoiceWorkerActivity.this);
         builder.setMessage(msg);
         builder.setPositiveButton(R.string.ensure, new DialogInterface.OnClickListener() {

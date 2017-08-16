@@ -7,6 +7,7 @@ package com.tianyigps.dispatch2.data;
 public class AdapterHandingData {
     private String name, time, address, id, callName, callNumber;
     private int online, lineless, orderType, checkStatus;
+    private int removeWireNum, removeWirelessNum;
     private boolean modify;
 
     public AdapterHandingData(String name, String time, String address
@@ -49,6 +50,23 @@ public class AdapterHandingData {
         this.orderType = orderType;
         this.online = online;
         this.lineless = lineless;
+        this.modify = modify;
+    }
+
+    public AdapterHandingData(String name, String time, String address, String id, String callName, String callNumber
+            , int orderType, int checkStatus, int online, int lineless, int removeWireNum, int removeWirelessNum, boolean modify) {
+        this.name = name;
+        this.time = time;
+        this.address = address;
+        this.id = id;
+        this.callName = callName;
+        this.callNumber = callNumber;
+        this.online = online;
+        this.lineless = lineless;
+        this.orderType = orderType;
+        this.checkStatus = checkStatus;
+        this.removeWireNum = removeWireNum;
+        this.removeWirelessNum = removeWirelessNum;
         this.modify = modify;
     }
 
@@ -130,6 +148,22 @@ public class AdapterHandingData {
 
     public void setOrderType(int orderType) {
         this.orderType = orderType;
+    }
+
+    public int getRemoveWireNum() {
+        return removeWireNum;
+    }
+
+    public void setRemoveWireNum(int removeWireNum) {
+        this.removeWireNum = removeWireNum;
+    }
+
+    public int getRemoveWirelessNum() {
+        return removeWirelessNum;
+    }
+
+    public void setRemoveWirelessNum(int removeWirelessNum) {
+        this.removeWirelessNum = removeWirelessNum;
     }
 
     public boolean isModify() {

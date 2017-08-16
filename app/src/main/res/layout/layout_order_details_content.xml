@@ -192,7 +192,6 @@
                     android:layout_height="@dimen/dp_40"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
-                    android:layout_centerVertical="true"
                     android:layout_margin="@dimen/dp_4"
                     android:padding="@dimen/dp_4"
                     android:src="@drawable/ic_order_details_install"/>
@@ -211,9 +210,45 @@
                     android:id="@+id/tv_layout_order_details_content_order_install_content"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignBottom="@+id/iv_layout_order_details_install"
-                    android:layout_toEndOf="@+id/iv_layout_order_details_install"
-                    android:layout_toRightOf="@+id/iv_layout_order_details_install"
+                    android:layout_alignLeft="@+id/tv_layout_order_details_content_order_install_title"
+                    android:layout_alignStart="@+id/tv_layout_order_details_content_order_install_title"
+                    android:layout_below="@+id/tv_layout_order_details_content_order_install_title"
+                    android:text=""/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_layout_order_details_content_remove"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="visible">
+
+                <ImageView
+                    android:id="@+id/iv_layout_order_details_remove"
+                    android:layout_width="@dimen/dp_40"
+                    android:layout_height="@dimen/dp_40"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_margin="@dimen/dp_4"
+                    android:padding="@dimen/dp_4"
+                    android:src="@drawable/ic_order_details_info_remove"/>
+
+                <TextView
+                    android:id="@+id/tv_layout_order_details_content_remove_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/iv_layout_order_details_remove"
+                    android:layout_toEndOf="@+id/iv_layout_order_details_remove"
+                    android:layout_toRightOf="@+id/iv_layout_order_details_remove"
+                    android:text="拆除车辆信息"
+                    android:textColor="@color/colorBlueTheme"/>
+
+                <TextView
+                    android:id="@+id/tv_layout_order_details_content_remove_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/tv_layout_order_details_content_remove_title"
+                    android:layout_alignStart="@+id/tv_layout_order_details_content_remove_title"
+                    android:layout_below="@+id/tv_layout_order_details_content_remove_title"
                     android:text=""/>
             </RelativeLayout>
 
@@ -239,7 +274,7 @@
                     android:layout_alignTop="@+id/iv_layout_order_details_info"
                     android:layout_toEndOf="@+id/iv_layout_order_details_info"
                     android:layout_toRightOf="@+id/iv_layout_order_details_info"
-                    android:text=""
+                    android:text="安装车辆信息"
                     android:textColor="@color/colorBlueTheme"/>
 
                 <TextView

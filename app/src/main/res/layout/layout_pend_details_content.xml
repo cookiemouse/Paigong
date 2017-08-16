@@ -218,7 +218,7 @@
                 android:id="@+id/rl_layout_pend_details_content_remove"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone">
+                android:visibility="visible">
 
                 <ImageView
                     android:id="@+id/iv_layout_pend_details_remove"

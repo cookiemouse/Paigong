@@ -127,6 +127,9 @@ public class ModifyPasswordActivity extends BaseActivity {
 
     //  显示信息对话框
     private void showMessageDialog(String msg) {
+        if (isFinishing()){
+            return;
+        }
         AlertDialog.Builder builder = new AlertDialog.Builder(ModifyPasswordActivity.this);
         builder.setMessage(msg);
         builder.setPositiveButton(R.string.ensure, new DialogInterface.OnClickListener() {

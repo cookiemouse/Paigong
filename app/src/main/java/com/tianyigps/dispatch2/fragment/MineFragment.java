@@ -17,7 +17,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.tianyigps.dispatch2.R;
-import com.tianyigps.dispatch2.activity.EditRemarksActivity;
 import com.tianyigps.dispatch2.activity.ManagerFragmentContentActivity;
 import com.tianyigps.dispatch2.activity.ModifyPasswordActivity;
 import com.tianyigps.dispatch2.activity.StatisticsActivity;
@@ -79,8 +78,6 @@ public class MineFragment extends Fragment {
         mAdapterMineDataList.add(new AdapterMineData(R.drawable.ic_statistics, "质量统计"));
         mAdapterMineDataList.add(new AdapterMineData(R.drawable.ic_modify_password, "修改密码"));
 
-        mAdapterMineDataList.add(new AdapterMineData(R.drawable.ic_modify_password, "填写原因"));
-
         mMineAdapter = new MineAdapter(getActivity(), mAdapterMineDataList);
 
         mListViewMine.setAdapter(mMineAdapter);
@@ -127,12 +124,6 @@ public class MineFragment extends Fragment {
                     case 1: {
                         // 2017/7/13 修改密码
                         Intent intent = new Intent(getActivity(), ModifyPasswordActivity.class);
-                        startActivity(intent);
-                        break;
-                    }
-                    case 2: {
-                        // 2017/7/13 修改密码
-                        Intent intent = new Intent(getActivity(), EditRemarksActivity.class);
                         startActivity(intent);
                         break;
                     }

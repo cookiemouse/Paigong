@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.tianyigps.dispatch2.R;
@@ -71,11 +72,14 @@ public class HandingAdapter extends BaseAdapter {
             viewHolder.textViewModify = contentView.findViewById(R.id.tv_item_handing_modify);
             viewHolder.textViewTitle = contentView.findViewById(R.id.tv_item_handing_content_title);
             viewHolder.textViewWire = contentView.findViewById(R.id.tv_item_handing_content_wire);
+            viewHolder.tvRemoveWire = contentView.findViewById(R.id.tv_item_handing_remove_content_wire);
             viewHolder.textViewWireless = contentView.findViewById(R.id.tv_item_handing_content_wireless);
+            viewHolder.tvRemoveWireless = contentView.findViewById(R.id.tv_item_handing_remove_content_wireless);
             viewHolder.textViewStatue = contentView.findViewById(R.id.tv_item_handing_status);
 
             viewHolder.imageViewCall = contentView.findViewById(R.id.iv_item_handing_phone);
             viewHolder.imageViewStart = contentView.findViewById(R.id.iv_item_handing_start);
+            viewHolder.llRemove = contentView.findViewById(R.id.ll_item_handing_remove);
 
             contentView.setTag(viewHolder);
         } else {
@@ -92,14 +96,17 @@ public class HandingAdapter extends BaseAdapter {
         switch (data.getOrderType()) {
             case 1: {
                 orderType = "安装：";
+                viewHolder.llRemove.setVisibility(View.GONE);
                 break;
             }
             case 2: {
                 orderType = "维修：";
+                viewHolder.llRemove.setVisibility(View.GONE);
                 break;
             }
             case 3: {
-                orderType = "拆改：";
+                orderType = "安装：";
+                viewHolder.llRemove.setVisibility(View.VISIBLE);
                 break;
             }
             default: {
@@ -140,6 +147,8 @@ public class HandingAdapter extends BaseAdapter {
         viewHolder.textViewTitle.setText(orderType);
         viewHolder.textViewWire.setText("" + data.getOnline());
         viewHolder.textViewWireless.setText("" + data.getLineless());
+        viewHolder.tvRemoveWire.setText("" + data.getRemoveWireNum());
+        viewHolder.tvRemoveWireless.setText("" + data.getRemoveWirelessNum());
 
         if (data.isModify()) {
             viewHolder.textViewModify.setVisibility(View.VISIBLE);
@@ -172,7 +181,7 @@ public class HandingAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 // 2017/7/11 Item点击事件
-                if (1 == data.getCheckStatus()){
+                if (1 == data.getCheckStatus()) {
                     return;
                 }
                 Intent intent = new Intent(context, OrderDetailsActivity.class);
@@ -187,7 +196,9 @@ public class HandingAdapter extends BaseAdapter {
 
     private class ViewHolder {
         private TextView textViewName, textViewTime, textViewAddress, textViewId, textViewTitle, textViewPhoneName, textViewModify, textViewWire, textViewWireless, textViewStatue;
+        private TextView tvRemoveWire, tvRemoveWireless;
         private ImageView imageViewCall, imageViewStart;
+        private LinearLayout llRemove;
     }
 
     public interface OnStartClickListener {

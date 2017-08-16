@@ -545,6 +545,9 @@ public class OperateRepairActivity extends BaseActivity {
     }
 
     private void showFinishDialog(String msg) {
+        if (isFinishing()){
+            return;
+        }
         AlertDialog.Builder builder = new AlertDialog.Builder(OperateRepairActivity.this);
         builder.setMessage(msg);
         builder.setCancelable(false);
@@ -559,6 +562,9 @@ public class OperateRepairActivity extends BaseActivity {
     }
 
     private void showMessageDialog(String msg) {
+        if (isFinishing()){
+            return;
+        }
         new MessageDialogU(this).show(msg);
     }
 

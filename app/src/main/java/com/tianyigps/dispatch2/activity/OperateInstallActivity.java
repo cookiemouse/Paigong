@@ -957,6 +957,9 @@ public class OperateInstallActivity extends BaseActivity {
 
     //  显示信息Dialog
     private void showMessageDialog(String msg) {
+        if (isFinishing()){
+            return;
+        }
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(msg);
         builder.setPositiveButton(R.string.ensure, new DialogInterface.OnClickListener() {

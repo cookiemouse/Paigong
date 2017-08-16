@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.baidu.mapapi.model.LatLng;
@@ -55,7 +56,12 @@ public class OrderDetailsActivity extends Activity {
     private ImageView mImageViewTitleLeft, mImageViewTitleRight;
 
     //  内容
-    private TextView mTextViewOrderName, mTextViewOrderNum, mTextViewCallName, mTextViewTime, mTextViewAddress, mTextViewRemarks, mTextViewInstallTitle, mTextViewInstallContent, mTextViewInfoTitle, mTextViewInfoContent, mTextViewReturnOrder, mTextViewTimeRemain;
+    private TextView mTextViewOrderName, mTextViewOrderNum, mTextViewCallName, mTextViewTime;
+    private TextView mTextViewAddress, mTextViewRemarks, mTextViewInstallTitle, mTextViewInstallContent;
+    private TextView mTextViewInfoTitle, mTextViewInfoContent, mTextViewReturnOrder, mTextViewTimeRemain;
+    private TextView mTextViewRemove;
+
+    private RelativeLayout mRelativeLayoutRemove;
 
     private ImageView mImageViewCall;
     private Button mButtonSign;
@@ -83,6 +89,7 @@ public class OrderDetailsActivity extends Activity {
     private String mStringContactPhone, mStringDetail, mStringCity, mStringOrderNum,
             mStringContactName, mStringProvince, mStringCustName, mStringDistrict, mStringTypeTitle,
             mStringTypeContent, mStringInfoTitle, mStringInstallInfo = "", mStringTno;
+    private String mStringRemoveContent = "";
     private int mIntOrderType, mIntWirelessNum, mIntRemoveWireNum, mIntWireNum, mIntOrderStaus, mIntRemoveWirelessNum, mIntReviseFlag, mIntOrderId;
     private long mLongDoorTime;
 
@@ -143,6 +150,8 @@ public class OrderDetailsActivity extends Activity {
         mTextViewInfoContent = findViewById(R.id.tv_layout_order_details_content_order_info_content);
         mTextViewReturnOrder = findViewById(R.id.tv_layout_order_details_return_order);
         mTextViewTimeRemain = findViewById(R.id.tv_activity_order_details_time);
+        mRelativeLayoutRemove = findViewById(R.id.rl_layout_order_details_content_remove);
+        mTextViewRemove = findViewById(R.id.tv_layout_order_details_content_remove_content);
 
         mButtonSign = findViewById(R.id.btn_layout_order_details_sign);
 
@@ -265,7 +274,7 @@ public class OrderDetailsActivity extends Activity {
                         //  新安装
                         mStringTypeTitle = "安装";
                         mStringInfoTitle = mStringTypeTitle + "车辆信息";
-                        mStringTypeContent = "有线" + mIntWireNum + "个" +
+                        mStringTypeContent = "安装：有线" + mIntWireNum + "个" +
                                 "，无线" + mIntWirelessNum + "个";
                         break;
                     }
@@ -273,16 +282,17 @@ public class OrderDetailsActivity extends Activity {
                         //  维修
                         mStringTypeTitle = "维修";
                         mStringInfoTitle = mStringTypeTitle + "车辆信息";
-                        mStringTypeContent = "有线" + mIntWireNum + "个" +
+                        mStringTypeContent = "维修：有线" + mIntWireNum + "个" +
                                 "，无线" + mIntWirelessNum + "个";
                         break;
                     }
                     case 3: {
                         //  拆改
-                        mStringTypeTitle = "拆改";
+                        mStringTypeTitle = "安装";
                         mStringInfoTitle = mStringTypeTitle + "车辆信息";
-                        mStringTypeContent = "有线" + mIntRemoveWireNum + "个" +
-                                "，无线" + mIntRemoveWirelessNum + "个";
+                        mStringTypeContent = "拆除：有线" + mIntRemoveWireNum + "个" +
+                                "，无线" + mIntRemoveWirelessNum + "个\n";
+                        mStringTypeContent += "安装：有线" + mIntWireNum + "个" + "， 无线" + mIntWirelessNum + "个";
                         break;
                     }
                     default: {
@@ -291,13 +301,22 @@ public class OrderDetailsActivity extends Activity {
                 }
 
                 for (OrderDetailsBean.ObjBean.CarInfoBean carInfoBean : objBean.getCarInfo()) {
-                    mStringTno = carInfoBean.getCarVin();
-                    mStringInstallInfo += carInfoBean.getCarVin();
-                    String carBrand = carInfoBean.getCarBrand();
-                    if (null != carBrand && !"".equals(carBrand)) {
-                        mStringInstallInfo += ("，" + carInfoBean.getCarBrand());
+                    if (carInfoBean.getRemoveFlag() == 0) {
+                        mStringTno = carInfoBean.getCarVin();
+                        mStringInstallInfo += carInfoBean.getCarVin();
+                        String carBrand = carInfoBean.getCarBrand();
+                        if (null != carBrand && !"".equals(carBrand)) {
+                            mStringInstallInfo += ("，" + carInfoBean.getCarBrand());
+                        }
+                        mStringInstallInfo += "\n";
+                    } else {
+                        mStringRemoveContent += carInfoBean.getCarVin();
+                        String carBrand = carInfoBean.getCarBrand();
+                        if (null != carBrand && !"".equals(carBrand)) {
+                            mStringRemoveContent += ("，" + carInfoBean.getCarBrand());
+                        }
+                        mStringRemoveContent += "\n";
                     }
-                    mStringInstallInfo += "\n";
                 }
 
                 myHandler.sendEmptyMessage(MSG_1);
@@ -358,6 +377,9 @@ public class OrderDetailsActivity extends Activity {
 
     //  显示信息Dialog
     private void showMessageDialog(String msg) {
+        if (isFinishing()){
+            return;
+        }
         AlertDialog.Builder builder = new AlertDialog.Builder(OrderDetailsActivity.this);
         builder.setMessage(msg);
         builder.setPositiveButton(R.string.ensure, new DialogInterface.OnClickListener() {
@@ -433,6 +455,13 @@ public class OrderDetailsActivity extends Activity {
                     mTextViewInstallContent.setText(mStringTypeContent);
                     mTextViewInfoTitle.setText(mStringInfoTitle);
                     mTextViewInfoContent.setText(mStringInstallInfo);
+                    mTextViewRemove.setText(mStringRemoveContent);
+
+                    if (mIntOrderType == 3) {
+                        mRelativeLayoutRemove.setVisibility(View.VISIBLE);
+                    } else {
+                        mRelativeLayoutRemove.setVisibility(View.GONE);
+                    }
 
                     updateTime();
                     break;

@@ -51,17 +51,60 @@
         android:layout_alignStart="@+id/tv_item_handing_address"
         android:layout_below="@+id/tv_item_handing_address"
         android:layout_marginTop="@dimen/dp_8"
-        android:text="TextView"/>
+        android:text="orderNo"/>
 
-    <!--<TextView-->
-    <!--android:id="@+id/tv_item_handing_number"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_alignLeft="@+id/tv_item_handing_id"-->
-    <!--android:layout_alignStart="@+id/tv_item_handing_id"-->
-    <!--android:layout_below="@+id/tv_item_handing_id"-->
-    <!--android:textColor="@color/colorAccent"-->
-    <!--android:text="TextView" />-->
+    <LinearLayout
+        android:id="@+id/ll_item_handing_remove"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_item_handing_id"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_item_pending_remove_content_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_8"
+            android:layout_marginStart="@dimen/dp_8"
+            android:text="拆除："/>
+
+        <TextView
+            android:id="@+id/tv_item_pending_remove_content_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/wire"/>
+
+        <TextView
+            android:id="@+id/tv_item_handing_remove_content_wire"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_4"
+            android:layout_marginRight="@dimen/dp_4"
+            android:text="0"
+            android:textColor="@color/colorBlueTheme"/>
+
+        <TextView
+            android:id="@+id/tv_item_handing_remove_content_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/ge_middle"/>
+
+        <TextView
+            android:id="@+id/tv_item_handing_remove_content_wireless"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_4"
+            android:layout_marginRight="@dimen/dp_4"
+            android:text="0"
+            android:textColor="@color/colorBlueTheme"/>
+
+        <TextView
+            android:id="@+id/tv_item_handing_remove_content_3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/ge"/>
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/tv_item_handing_content_title"
@@ -69,7 +112,7 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/tv_item_handing_id"
         android:layout_alignStart="@+id/tv_item_handing_id"
-        android:layout_below="@+id/tv_item_handing_id"
+        android:layout_below="@+id/ll_item_handing_remove"
         android:text="安装："/>
 
     <TextView

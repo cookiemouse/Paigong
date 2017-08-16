@@ -352,6 +352,9 @@ public class CustomSignActivity extends BaseActivity {
 
     //  显示信息Dialog
     private void showMessageDialog(String msg) {
+        if (isFinishing()){
+            return;
+        }
         AlertDialog.Builder builder = new AlertDialog.Builder(CustomSignActivity.this);
         builder.setMessage(msg);
         builder.setPositiveButton(R.string.ensure, new DialogInterface.OnClickListener() {

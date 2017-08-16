@@ -203,29 +203,11 @@ public class HandingFragment extends Fragment implements View.OnClickListener {
 
                 for (WorkerHandingBean.ObjBean objBean : workerHandingBean.getObj()) {
 
-                    int wire, wireless;
-                    switch (objBean.getOrderType()) {
-                        case 1: {
-                            wire = objBean.getWiredNum();
-                            wireless = objBean.getWirelessNum();
-                            break;
-                        }
-                        case 2: {
-                            wire = objBean.getWiredNum();
-                            wireless = objBean.getWirelessNum();
-                            break;
-                        }
-                        case 3: {
-                            wire = objBean.getRemoveWiredNum();
-                            wireless = objBean.getRemoveWirelessNum();
-                            break;
-                        }
-                        default: {
-                            wire = 0;
-                            wireless = 0;
-                            Log.i(TAG, "onResponse: default");
-                        }
-                    }
+                    int wire, wireless, removeWire, removeWireless;
+                    wire = objBean.getWiredNum();
+                    wireless = objBean.getWirelessNum();
+                    removeWire = objBean.getRemoveWiredNum();
+                    removeWireless = objBean.getRemoveWirelessNum();
 
                     boolean modify;
                     switch (objBean.getReviseFlag()) {
@@ -249,7 +231,9 @@ public class HandingFragment extends Fragment implements View.OnClickListener {
                             , objBean.getOrderNo()
                             , objBean.getContactName()
                             , objBean.getContactPhone()
-                            , objBean.getCheckStatus(), objBean.getOrderType(), wire, wireless, modify));
+                            , objBean.getOrderType()
+                            , objBean.getCheckStatus()
+                            , wire, wireless, removeWire, removeWireless, modify));
                 }
 
                 myHandler.sendEmptyMessage(MSG_1);
