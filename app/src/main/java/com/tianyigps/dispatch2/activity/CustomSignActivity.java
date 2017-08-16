@@ -6,17 +6,19 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.baidu.mapapi.model.LatLng;
 import com.google.gson.Gson;
-import com.tianyigps.signviewlibrary.SignView;
 import com.tianyigps.dispatch2.R;
 import com.tianyigps.dispatch2.base.BaseActivity;
 import com.tianyigps.dispatch2.bean.CarInfo;
@@ -31,6 +33,7 @@ import com.tianyigps.dispatch2.manager.LocateManager;
 import com.tianyigps.dispatch2.manager.NetworkManager;
 import com.tianyigps.dispatch2.manager.SharedpreferenceManager;
 import com.tianyigps.dispatch2.utils.Base64U;
+import com.tianyigps.signviewlibrary.SignView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -156,18 +159,6 @@ public class CustomSignActivity extends BaseActivity {
                 mJson = json;
 
                 mLocateManager.startLocate();
-                //保存图片，可以不要
-
-                /*
-                Thread thread = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        FileManager f = new FileManager(Data.DATA_PIC_SIGN);
-                        f.saveBitmapPng(bitmap2);
-                    }
-                });
-                thread.start();
-                */
             }
         });
 
@@ -208,7 +199,10 @@ public class CustomSignActivity extends BaseActivity {
                     myHandler.sendEmptyMessage(Data.MSG_ERO);
                     return;
                 }
-
+                if ("部分完成".equals(mStringMessage)) {
+                    myHandler.sendEmptyMessage(Data.MSG_2);
+                    return;
+                }
                 myHandler.sendEmptyMessage(Data.MSG_1);
             }
         });
@@ -352,7 +346,7 @@ public class CustomSignActivity extends BaseActivity {
 
     //  显示信息Dialog
     private void showMessageDialog(String msg) {
-        if (isFinishing()){
+        if (isFinishing()) {
             return;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(CustomSignActivity.this);
@@ -368,7 +362,10 @@ public class CustomSignActivity extends BaseActivity {
     }
 
     //  显示完成Dialog
-    private void showCompleteDialog(String msg){
+    private void showCompleteDialog(String msg) {
+        if (isFinishing()) {
+            return;
+        }
         AlertDialog.Builder builder = new AlertDialog.Builder(CustomSignActivity.this);
         builder.setMessage(msg);
         builder.setCancelable(false);
@@ -382,6 +379,33 @@ public class CustomSignActivity extends BaseActivity {
         dialog.show();
     }
 
+    //  显示部分完成Dialog
+    private void showPartCompleteDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(CustomSignActivity.this);
+        View viewDialog = LayoutInflater.from(this).inflate(R.layout.dialog_message_editable, null);
+        builder.setView(viewDialog);
+        AlertDialog alertDialog = builder.create();
+
+        TextView tvMessage = viewDialog.findViewById(R.id.tv_dialog_message_message);
+        Button btnCall = viewDialog.findViewById(R.id.btn_dialog_message_cancel);
+
+        tvMessage.setText("信息已上传，请联系后台完成订单！");
+        btnCall.setText("拨打后台电话");
+
+        btnCall.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // 2017/8/16 拨打后台电话，即总部电话
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_DIAL);
+                intent.setData(Uri.parse("tel:" + "18017325972"));
+                startActivity(intent);
+            }
+        });
+
+        alertDialog.show();
+    }
+
     private class MyHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
@@ -393,6 +417,11 @@ public class CustomSignActivity extends BaseActivity {
                 }
                 case Data.MSG_1: {
                     showCompleteDialog(mStringMessage);
+                    break;
+                }
+                case Data.MSG_2: {
+                    //  部分完成
+                    showPartCompleteDialog();
                     break;
                 }
                 default: {

@@ -14,6 +14,8 @@ public class AdapterRemoveData {
     private int online, offline;
     private int onlineComplete, offlineComplete;
 
+    private boolean isComplete = true;
+
     public AdapterRemoveData(String typeName) {
         this.type = 0;
         this.typeName = typeName;
@@ -117,5 +119,13 @@ public class AdapterRemoveData {
 
     public void setCarId(int carId) {
         this.carId = carId;
+    }
+
+    public boolean isComplete() {
+        return isComplete;
+    }
+
+    public void setComplete(boolean complete) {
+        isComplete = complete;
     }
 }

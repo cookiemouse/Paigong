@@ -271,7 +271,7 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
                 MyLocationConfiguration config = new MyLocationConfiguration(mCurrentMode, true, mCurrentMarker);
                 mBaiduMap.setMyLocationConfiguration(config);
                 */
-                moveToCenter(latLng);
+//                moveToCenter(latLng);
             }
         });
 

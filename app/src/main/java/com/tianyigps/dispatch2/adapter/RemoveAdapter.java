@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.tianyigps.dispatch2.R;
@@ -121,6 +122,7 @@ public class RemoveAdapter extends BaseAdapter {
                     viewHolderInstall.textViewOfflineP = contentView.findViewById(R.id.tv_item_installing_pending_offline);
                     viewHolderInstall.textViewOnlinePC = contentView.findViewById(R.id.tv_item_installing_complete_online);
                     viewHolderInstall.textViewOfflinePC = contentView.findViewById(R.id.tv_item_installing_complete_offline);
+                    viewHolderInstall.frameLayout = contentView.findViewById(R.id.fl_item_installing);
 
                     contentView.setTag(viewHolderInstall);
                 } else {
@@ -132,6 +134,12 @@ public class RemoveAdapter extends BaseAdapter {
                 viewHolderInstall.textViewOfflineP.setText("" + data.getOffline());
                 viewHolderInstall.textViewOnlinePC.setText("" + data.getOnlineComplete());
                 viewHolderInstall.textViewOfflinePC.setText("" + data.getOfflineComplete());
+
+                if (data.isComplete()) {
+                    viewHolderInstall.frameLayout.setBackgroundResource(R.drawable.bg_item_installing_blue);
+                } else {
+                    viewHolderInstall.frameLayout.setBackgroundResource(R.drawable.bg_item_installing_orange);
+                }
 
                 break;
             }
@@ -152,6 +160,7 @@ public class RemoveAdapter extends BaseAdapter {
     }
 
     private class ViewHolderInstall {
+        private FrameLayout frameLayout;
         private TextView textViewFrameNo, textViewOnlineP, textViewOfflineP, textViewOnlinePC, textViewOfflinePC;
     }
 }

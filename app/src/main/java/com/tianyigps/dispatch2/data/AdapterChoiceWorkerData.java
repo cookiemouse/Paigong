@@ -9,12 +9,16 @@ public class AdapterChoiceWorkerData {
     private String jobNo, name, area;
     private boolean select;
 
-    public AdapterChoiceWorkerData(int id, String jobNo, String name, String area) {
+    //  1=自有，2=外包
+    private int type;
+
+    public AdapterChoiceWorkerData(int id, String jobNo, String name, String area, int type) {
         this.id = id;
         this.jobNo = jobNo;
         this.name = name;
         this.area = area;
         this.select = false;
+        this.type = type;
     }
 
     public int getId() {
@@ -55,5 +59,13 @@ public class AdapterChoiceWorkerData {
 
     public void setJobNo(String jobNo) {
         this.jobNo = jobNo;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 }

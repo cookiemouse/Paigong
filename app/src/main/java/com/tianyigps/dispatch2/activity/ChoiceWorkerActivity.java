@@ -127,6 +127,7 @@ public class ChoiceWorkerActivity extends BaseActivity {
                     mTextViewId.setText(null);
                     mTextViewName.setText(null);
                     mTextViewArea.setText(null);
+                    mCheckBoxPay.setVisibility(View.GONE);
 
                     eidChoice = 0;
                     jobNoChoice = null;
@@ -134,14 +135,18 @@ public class ChoiceWorkerActivity extends BaseActivity {
                 }
                 for (AdapterChoiceWorkerData dataF : mAdapterChoiceWorkerDataList) {
                     dataF.setSelect(false);
-                    mTextViewId.setText(data.getJobNo());
-                    mTextViewName.setText(dataF.getName());
-                    mTextViewArea.setText(dataF.getArea());
-
-                    eidChoice = data.getId();
-                    jobNoChoice = data.getJobNo();
                 }
-                mAdapterChoiceWorkerDataList.get(i).setSelect(true);
+                mTextViewId.setText(data.getJobNo());
+                mTextViewName.setText(data.getName());
+                mTextViewArea.setText(data.getArea());
+                eidChoice = data.getId();
+                jobNoChoice = data.getJobNo();
+                if (1 == data.getType()) {
+                    mCheckBoxPay.setVisibility(View.GONE);
+                } else {
+                    mCheckBoxPay.setVisibility(View.VISIBLE);
+                }
+                data.setSelect(true);
                 mChoiceWorkerAdapter.notifyDataSetChanged();
             }
         });
@@ -192,7 +197,8 @@ public class ChoiceWorkerActivity extends BaseActivity {
                     mAdapterChoiceWorkerDataList.add(new AdapterChoiceWorkerData(objBean.getId()
                             , objBean.getJobNo()
                             , objBean.getName()
-                            , objBean.getChargeArea()));
+                            , objBean.getChargeArea()
+                            , objBean.getType()));
                 }
 
                 myHandler.sendEmptyMessage(Data.MSG_1);
@@ -254,7 +260,7 @@ public class ChoiceWorkerActivity extends BaseActivity {
     }
 
     private void showMessageDialog(String msg) {
-        if (isFinishing()){
+        if (isFinishing()) {
             return;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(ChoiceWorkerActivity.this);

@@ -366,12 +366,12 @@ public class OperateRepairActivity extends BaseActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                String count = i1 + "/200";
-                mTextViewCount.setText(count);
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
+                String count = editable.length() + "/200";
+                mTextViewCount.setText(count);
             }
         });
 

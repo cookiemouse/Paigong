@@ -215,11 +215,11 @@ public class InstallingActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 // TODO: 2017/8/2 check
-                if (checkRepairList() && checkInstallList()) {
+                if (checkRepairList() && checkInstallList() && checkRemoveList()) {
                     toCustomSign();
                     return;
                 }
-//                toActivity(EditRemarksActivity.class);
+//                toEditRemarksActivity();
             }
         });
 
@@ -428,6 +428,11 @@ public class InstallingActivity extends BaseActivity {
         startActivity(intent);
     }
 
+    private void toEditRemarksActivity() {
+        Intent intent = new Intent(InstallingActivity.this, EditRemarksActivity.class);
+        startActivity(intent);
+    }
+
     private void showFailureDialog(String msg) {
         AlertDialog.Builder builder = new AlertDialog.Builder(InstallingActivity.this);
         builder.setMessage(msg);
@@ -460,7 +465,7 @@ public class InstallingActivity extends BaseActivity {
             for (AdapterRepairData data : mAdapterRepairDataList) {
                 boolean isComplete = false;
                 Cursor cursor = mDatabaseManager.getRepair(data.gettId());
-                if (cursor.moveToFirst()) {
+                if (null != cursor && cursor.moveToFirst()) {
                     String position = cursor.getString(2);
                     String explain = cursor.getString(5);
                     String positionUrl = cursor.getString(7);
@@ -497,7 +502,7 @@ public class InstallingActivity extends BaseActivity {
         if (mAdapterInstallingDataList.size() > 0) {
             for (AdapterInstallingData data : mAdapterInstallingDataList) {
 
-                boolean carComplete = false, terComplete = false;
+                boolean carComplete = false, terComplete = true;
                 int carId = data.getCarId();
 
                 //  check车辆信息是否完整
@@ -520,22 +525,26 @@ public class InstallingActivity extends BaseActivity {
                 //  check设备信息是否完整
                 Cursor cursorTer = mDatabaseManager.getTerByCarId(carId);
                 if (null != cursorTer && cursorTer.moveToFirst()) {
-                    int idMainTer = cursorTer.getInt(0);
-                    String tNoNew = cursorTer.getString(2);
-                    String position = cursorTer.getString(3);
-                    String positionUrl = cursorTer.getString(6);
-                    String installUrl = cursorTer.getString(7);
+                    do {
+                        int idMainTer = cursorTer.getInt(0);
+                        String tNoNew = cursorTer.getString(2);
+                        String position = cursorTer.getString(3);
+                        String positionUrl = cursorTer.getString(6);
+                        String installUrl = cursorTer.getString(7);
 
-                    Log.i(TAG, "checkInstallListTer: idMainTer-->" + idMainTer);
-                    Log.i(TAG, "checkInstallListTer: tNoOld-->" + tNoNew);
-                    Log.i(TAG, "checkInstallListTer: position-->" + position);
-                    Log.i(TAG, "checkInstallListTer: positionUrl-->" + positionUrl);
-                    Log.i(TAG, "checkInstallListTer: installUrl-->" + installUrl);
+                        Log.i(TAG, "checkInstallListTer: idMainTer-->" + idMainTer);
+                        Log.i(TAG, "checkInstallListTer: tNoOld-->" + tNoNew);
+                        Log.i(TAG, "checkInstallListTer: position-->" + position);
+                        Log.i(TAG, "checkInstallListTer: positionUrl-->" + positionUrl);
+                        Log.i(TAG, "checkInstallListTer: installUrl-->" + installUrl);
 
-                    terComplete = ((null != tNoNew)
-                            && (null != position)
-                            && (null != positionUrl)
-                            && (null != installUrl));
+                        if (terComplete) {
+                            terComplete = ((null != tNoNew)
+                                    && (null != position)
+                                    && (null != positionUrl)
+                                    && (null != installUrl));
+                        }
+                    } while (cursorTer.moveToNext());
 
                     cursorTer.close();
                 } else {
@@ -555,9 +564,56 @@ public class InstallingActivity extends BaseActivity {
     }
 
     //  检验拆除列表是否完成
-
     private boolean checkRemoveList() {
-        return true;
+        boolean nextAble = true;
+        if (mAdapterRemoveDataList.size() > 0) {
+            for (AdapterRemoveData data : mAdapterRemoveDataList) {
+                String frameNo = data.getFrameNo();
+                if (null == frameNo) {
+                    continue;
+                }
+
+                int carId = data.getCarId();
+                boolean terComplete = true;
+                Cursor cursorTer = mDatabaseManager.getTerByCarId(carId);
+                if (null != cursorTer && cursorTer.moveToFirst()) {
+                    do {
+                        int idMainTer = cursorTer.getInt(0);
+                        String tNoNew = cursorTer.getString(2);
+                        String position = cursorTer.getString(3);
+                        String positionUrl = cursorTer.getString(6);
+                        String installUrl = cursorTer.getString(7);
+
+                        Log.i(TAG, "checkRemoveList: idMainTer-->" + idMainTer);
+                        Log.i(TAG, "checkRemoveList: tNoOld-->" + tNoNew);
+                        Log.i(TAG, "checkRemoveList: position-->" + position);
+                        Log.i(TAG, "checkRemoveList: positionUrl-->" + positionUrl);
+                        Log.i(TAG, "checkRemoveList: installUrl-->" + installUrl);
+
+
+                        if (terComplete) {
+                            terComplete = ((null != tNoNew)
+                                    && (null != position)
+                                    && (null != positionUrl)
+                                    && (null != installUrl));
+                        }
+                    } while (cursorTer.moveToNext());
+
+                    cursorTer.close();
+                } else {
+                    Log.i(TAG, "checkRemoveList: cursorTer is null");
+                }
+
+                data.setComplete(terComplete);
+
+                if (nextAble) {
+                    nextAble = terComplete;
+                }
+            }
+        }
+        myHandler.sendEmptyMessage(Data.MSG_2);
+
+        return nextAble;
     }
 
     private class MyHandler extends Handler {
