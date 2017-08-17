@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -24,6 +25,7 @@ import com.tianyigps.dispatch2.data.Data;
 import com.tianyigps.dispatch2.interfaces.OnCheckUserListener;
 import com.tianyigps.dispatch2.manager.NetworkManager;
 import com.tianyigps.dispatch2.manager.SharedpreferenceManager;
+import com.tianyigps.dispatch2.utils.BitmapU;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.PermissionListener;
 import com.yanzhenjie.permission.Rationale;
@@ -54,6 +56,8 @@ public class SplashActivity extends Activity {
 
     private String userName;
     private String token;
+
+    private Bitmap mBitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +93,14 @@ public class SplashActivity extends Activity {
     }
 
     @Override
+    protected void onStop() {
+        if (null != mBitmap) {
+            mBitmap.recycle();
+        }
+        super.onStop();
+    }
+
+    @Override
     public void onBackPressed() {
         //  注销掉返回键功能
 //        super.onBackPressed();
@@ -97,6 +109,9 @@ public class SplashActivity extends Activity {
     //  初始化
     private void init() {
         mImageViewSplash = (ImageView) findViewById(R.id.iv_activity_splash);
+
+        mBitmap = BitmapU.getBitmap(this, R.drawable.bg_splash);
+        mImageViewSplash.setImageBitmap(mBitmap);
 
         mSharedpreferenceManager = new SharedpreferenceManager(this);
         userName = mSharedpreferenceManager.getAccount();
@@ -161,7 +176,6 @@ public class SplashActivity extends Activity {
     }
 
     //  运行时权限
-
     private void applyPermiss() {
         AndPermission
                 .with(SplashActivity.this)

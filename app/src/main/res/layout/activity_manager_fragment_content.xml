@@ -1,22 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_manager_fragment_content"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@drawable/bg_content"
-    tools:context="com.tianyigps.dispatch2.activity.ManagerFragmentContentActivity">
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:id="@+id/activity_manager_fragment_content"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             tools:context="com.tianyigps.dispatch2.activity.ManagerFragmentContentActivity">
 
-    <FrameLayout
-        android:id="@+id/fl_activity_manager_content"
+    <ImageView
+        android:id="@+id/iv_activity_manager_fragment_content"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"/>
 
-    <include
-        layout="@layout/layout_manager_fragment_content_bottom"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-</LinearLayout>
+        <FrameLayout
+            android:id="@+id/fl_activity_manager_content"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <include
+            layout="@layout/layout_manager_fragment_content_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+</FrameLayout>

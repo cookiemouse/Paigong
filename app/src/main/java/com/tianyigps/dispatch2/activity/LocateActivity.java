@@ -96,6 +96,7 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
     private Toast mToast;
 
     private Intent mIntent;
+    private boolean mIsShow = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -231,10 +232,10 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
         mGeoCoderSearch = GeoCoder.newInstance();
 
         mIntent = getIntent();
-        boolean isShow = mIntent.getBooleanExtra(Data.DATA_INTENT_LOCATE_TYPE, true);
+        mIsShow = mIntent.getBooleanExtra(Data.DATA_INTENT_LOCATE_TYPE, true);
         wholeImei = mIntent.getStringExtra(Data.DATA_INTENT_LOCATE_IMEI);
         Log.i(TAG, "init: wholeImei-->" + wholeImei);
-        if (isShow) {
+        if (mIsShow) {
             mTextViewLook.setVisibility(View.VISIBLE);
             mLinearLayout.setVisibility(View.VISIBLE);
         } else {
@@ -271,7 +272,9 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
                 MyLocationConfiguration config = new MyLocationConfiguration(mCurrentMode, true, mCurrentMarker);
                 mBaiduMap.setMyLocationConfiguration(config);
                 */
-//                moveToCenter(latLng);
+                if (mIsShow) {
+                    moveToCenter(latLng);
+                }
             }
         });
 

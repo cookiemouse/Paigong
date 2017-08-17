@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -33,6 +34,7 @@ import com.tianyigps.dispatch2.interfaces.OnModifyDateListener;
 import com.tianyigps.dispatch2.interfaces.OnPendDetailsListener;
 import com.tianyigps.dispatch2.manager.NetworkManager;
 import com.tianyigps.dispatch2.manager.SharedpreferenceManager;
+import com.tianyigps.dispatch2.utils.BitmapU;
 import com.tianyigps.dispatch2.utils.NodeU;
 import com.tianyigps.dispatch2.utils.TimeFormatU;
 import com.tianyigps.dispatch2.utils.ToastU;
@@ -51,6 +53,9 @@ public class PendDetailsActivity extends Activity {
     //Title栏
     private TextView mTextViewTitle;
     private ImageView mImageViewTitleLeft, mImageViewTitleRight;
+
+    private ImageView mImageViewTitle;
+    private Bitmap mBitmap;
 
     private TextView mTextViewNode;
     private TextView mTextViewTime;
@@ -108,6 +113,14 @@ public class PendDetailsActivity extends Activity {
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+        if (null != mBitmap) {
+            mBitmap.recycle();
+        }
+    }
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Log.i(TAG, "onActivityResult: requestCode-->" + requestCode);
@@ -124,6 +137,10 @@ public class PendDetailsActivity extends Activity {
         mTextViewTitle = findViewById(R.id.tv_layout_title_base_middle);
         mImageViewTitleLeft = findViewById(R.id.iv_layout_title_base_left);
         mImageViewTitleRight = findViewById(R.id.iv_layout_title_base_right);
+
+        mImageViewTitle = findViewById(R.id.iv_activity_pend_details);
+        mBitmap = BitmapU.getBitmap(this, R.drawable.bg_order_details_top, 320, 160);
+        mImageViewTitle.setImageBitmap(mBitmap);
 
         mTextViewTitle.setVisibility(View.GONE);
         mImageViewTitleRight.setVisibility(View.GONE);
@@ -462,7 +479,7 @@ public class PendDetailsActivity extends Activity {
 
     //  显示信息Dialog
     private void showMessageDialog(String msg) {
-        if (isFinishing()){
+        if (isFinishing()) {
             return;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(PendDetailsActivity.this);
@@ -504,7 +521,7 @@ public class PendDetailsActivity extends Activity {
                     if (mInstallType.equals("拆改")) {
                         mRelativeLayoutRemove.setVisibility(View.VISIBLE);
                         mTextViewRemoveContent.setText(mRemoveContent);
-                    }else {
+                    } else {
                         mRelativeLayoutRemove.setVisibility(View.GONE);
                     }
 

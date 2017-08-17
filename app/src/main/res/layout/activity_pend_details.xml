@@ -7,10 +7,10 @@
              tools:context="com.tianyigps.dispatch2.activity.OrderDetailsActivity">
 
     <ImageView
+        android:id="@+id/iv_activity_pend_details"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_160"
-        android:scaleType="fitXY"
-        android:src="@drawable/bg_order_details_top"/>
+        android:scaleType="fitXY"/>
 
     <include layout="@layout/layout_title_base"/>
 

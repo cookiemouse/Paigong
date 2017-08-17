@@ -2,6 +2,7 @@ package com.tianyigps.dispatch2.activity;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -22,12 +23,16 @@ import com.tianyigps.dispatch2.fragment.HandledFragment;
 import com.tianyigps.dispatch2.fragment.MineFragment;
 import com.tianyigps.dispatch2.fragment.OrderFragment;
 import com.tianyigps.dispatch2.manager.SharedpreferenceManager;
+import com.tianyigps.dispatch2.utils.BitmapU;
 
 public class WorkerFragmentContentActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "WorkerContentActivity";
 
     private FrameLayout mFrameLayoutContent;
+
+    private ImageView mImageViewBackground;
+    private Bitmap mBitmap;
 
     //  底部控件
     private LinearLayout mLinearLayoutOrder, mLinearLayoutHandling, mLinearLayoutHistory, mLinearLayoutMine;
@@ -63,6 +68,21 @@ public class WorkerFragmentContentActivity extends AppCompatActivity implements 
     protected void onResume() {
         super.onResume();
         mSharedpreferenceManager.saveUiMode(Data.DATA_LAUNCH_MODE_WORKER);
+    }
+
+    @Override
+    protected void onStop() {
+        Log.i(TAG, "onStop: ");
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        Log.i(TAG, "onDestroy: ");
+        if (null != mBitmap) {
+            mBitmap.recycle();
+        }
+        super.onDestroy();
     }
 
     @Override
@@ -134,6 +154,10 @@ public class WorkerFragmentContentActivity extends AppCompatActivity implements 
         mLinearLayoutHandling = (LinearLayout) findViewById(R.id.ll_fragment_content_bottom_handling);
         mLinearLayoutHistory = (LinearLayout) findViewById(R.id.ll_fragment_content_bottom_history);
         mLinearLayoutMine = (LinearLayout) findViewById(R.id.ll_fragment_content_bottom_mine);
+
+        mImageViewBackground = (ImageView) findViewById(R.id.iv_activity_worker_fragment_content);
+        mBitmap = BitmapU.getBitmap(this, R.drawable.bg_content);
+        mImageViewBackground.setImageBitmap(mBitmap);
 
         mImageViewOrder = (ImageView) findViewById(R.id.iv_fragment_content_bottom_order);
         mImageViewHandling = (ImageView) findViewById(R.id.iv_fragment_content_bottom_handling);
