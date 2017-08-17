@@ -249,9 +249,9 @@
             android:id="@+id/rl_activity_operate_replace"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
             android:layout_below="@id/tv_activity_operate_remove_state"
-            android:layout_marginTop="@dimen/dp_16">
+            android:layout_marginTop="@dimen/dp_16"
+            android:visibility="gone">
 
             <ImageView
                 android:id="@+id/iv_activity_operate_replace"
@@ -357,6 +357,19 @@
             android:layout_alignTop="@+id/tv_activity_operate_default_position_title_new"
             android:src="@drawable/ic_camera"/>
 
+        <ImageView
+            android:id="@+id/iv_activity_operate_default_position_pic_new_delete"
+            android:layout_width="@dimen/dp_24"
+            android:layout_height="@dimen/dp_24"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/tv_activity_operate_default_position_title_new"
+            android:layout_marginTop="@dimen/dp_14_n"
+            android:background="@drawable/bg_cycle_delete"
+            android:padding="@dimen/dp_4"
+            android:src="@drawable/ic_delete"
+            android:visibility="gone"/>
+
         <View
             android:id="@+id/view_activity_operate_default_line_3"
             android:layout_width="match_parent"
@@ -371,7 +384,6 @@
             android:id="@+id/rl_activity_operate_default_install_new"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/view_activity_operate_default_line_3"
@@ -404,7 +416,21 @@
                 android:layout_alignParentRight="true"
                 android:layout_alignTop="@+id/iv_activity_operate_default_install_new"
                 android:src="@drawable/ic_camera"/>
+
         </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/iv_activity_operate_default_install_pic_new_delete"
+            android:layout_width="@dimen/dp_24"
+            android:layout_height="@dimen/dp_24"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/rl_activity_operate_default_install_new"
+            android:layout_marginTop="@dimen/dp_14_n"
+            android:background="@drawable/bg_cycle_delete"
+            android:padding="@dimen/dp_4"
+            android:src="@drawable/ic_delete"
+            android:visibility="gone"/>
 
         <View
             android:id="@+id/view_activity_operate_default_line_4"

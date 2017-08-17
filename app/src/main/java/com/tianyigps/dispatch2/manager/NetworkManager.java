@@ -958,6 +958,42 @@ public class NetworkManager {
         });
     }
 
+    //  删除图片    20-1
+
+    public void deletePic(int eid, String token, String orderNo
+            , int carId, int tId, int type
+            , String imgUrl, String userName) {
+        Request.Builder builder = new Request.Builder();
+        builder.url(Urls.URL_WORKER_DELETE_PIC + "eid=" + eid
+                + "&token=" + token
+                + "&userName=" + userName
+                + "&orderNo=" + orderNo
+                + "&carId=" + carId
+                + "&tId=" + tId
+                + "&type=" + type
+                + "&imgUrl=" + imgUrl);
+        mRequest = builder.build();
+        Log.i(TAG, "uploadPic: url-->" + mRequest.url());
+        Call call = mOkHttpClient.newCall(mRequest);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                if (null == mOnDeletePicListener) {
+                    throw new NullPointerException("OnDeletePicListener is null");
+                }
+                mOnDeletePicListener.onFailure();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (null == mOnDeletePicListener) {
+                    throw new NullPointerException("OnDeletePicListener is null");
+                }
+                mOnDeletePicListener.onSuccess(response.body().string());
+            }
+        });
+    }
+
     public void setOnDeletePicListener(OnDeletePicListener listener) {
         this.mOnDeletePicListener = listener;
     }

@@ -11,14 +11,14 @@
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/srl_activity_installing"
         android:layout_width="match_parent"
+        android:layout_marginLeft="@dimen/dp_8"
+        android:layout_marginRight="@dimen/dp_8"
         android:layout_height="wrap_content">
 
         <ListView
             android:id="@+id/lv_activity_installing"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginLeft="@dimen/dp_8"
-            android:layout_marginRight="@dimen/dp_8"
             android:layout_weight="1"
             android:divider="@color/colorNull"
             android:dividerHeight="@dimen/dp_16"
