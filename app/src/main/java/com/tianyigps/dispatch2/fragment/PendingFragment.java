@@ -54,7 +54,7 @@ public class PendingFragment extends Fragment {
     private static final String TAG = "PendingFragment";
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    private ImageView mImageViewSearch;
+    private ImageView mImageViewSearch, mImageViewDelete;
     private EditText mEditTextSearch;
     private ListView mListView;
 
@@ -116,6 +116,7 @@ public class PendingFragment extends Fragment {
 
         mSwipeRefreshLayout = view.findViewById(R.id.srl_fragment_pending);
         mImageViewSearch = view.findViewById(R.id.iv_layout_search);
+        mImageViewDelete = view.findViewById(R.id.iv_layout_search_delete);
         mEditTextSearch = view.findViewById(R.id.et_layout_search);
         mListView = view.findViewById(R.id.lv_fragment_pending);
 
@@ -174,12 +175,28 @@ public class PendingFragment extends Fragment {
                 String key = mEditTextSearch.getText().toString();
                 mSwipeRefreshLayout.setRefreshing(true);
                 mNetworkManager.getPendingOrder(jobNo, token, "", key, userName);
+                if (!"".equals(key)) {
+                    mImageViewDelete.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+        mImageViewDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mEditTextSearch.setText(null);
+                mSwipeRefreshLayout.setRefreshing(true);
+                mNetworkManager.getPendingOrder(jobNo, token, "", "", userName);
+
+                mImageViewDelete.setVisibility(View.GONE);
             }
         });
 
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                mEditTextSearch.setText(null);
+                mImageViewDelete.setVisibility(View.GONE);
                 mNetworkManager.getPendingOrder(jobNo, token, "", "", userName);
             }
         });

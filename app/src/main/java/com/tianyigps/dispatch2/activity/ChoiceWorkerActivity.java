@@ -46,7 +46,6 @@ public class ChoiceWorkerActivity extends BaseActivity {
     private ListView mListView;
     private ChoiceWorkerAdapter mChoiceWorkerAdapter;
     private List<AdapterChoiceWorkerData> mAdapterChoiceWorkerDataList;
-    private List<AdapterChoiceWorkerData> mAdapterChoiceWorkerDataListSearch;
 
     private SharedpreferenceManager mSharedpreferenceManager;
     private NetworkManager mNetworkManager;
@@ -104,9 +103,8 @@ public class ChoiceWorkerActivity extends BaseActivity {
         mListView = findViewById(R.id.lv_activity_choice_worker);
 
         mAdapterChoiceWorkerDataList = new ArrayList<>();
-        mAdapterChoiceWorkerDataListSearch = new ArrayList<>();
 
-        mChoiceWorkerAdapter = new ChoiceWorkerAdapter(this, mAdapterChoiceWorkerDataListSearch);
+        mChoiceWorkerAdapter = new ChoiceWorkerAdapter(this, mAdapterChoiceWorkerDataList);
         mListView.setAdapter(mChoiceWorkerAdapter);
 
         showLoading();
@@ -235,25 +233,8 @@ public class ChoiceWorkerActivity extends BaseActivity {
 
     //  搜索
     private void search(String key) {
-        mAdapterChoiceWorkerDataListSearch.clear();
-
-        if (null == key || "".equals(key)) {
-            mAdapterChoiceWorkerDataListSearch.addAll(mAdapterChoiceWorkerDataList);
-            mChoiceWorkerAdapter.notifyDataSetChanged();
-            return;
-        }
-
-        for (AdapterChoiceWorkerData data : mAdapterChoiceWorkerDataList) {
-            String id = "" + data.getId();
-            if (id.contains(key)
-                    || data.getName().contains(key)
-                    || data.getArea().contains(key)) {
-
-                mAdapterChoiceWorkerDataListSearch.add(data);
-            }
-        }
-
-        mChoiceWorkerAdapter.notifyDataSetChanged();
+        showLoading();
+        mNetworkManager.getWorkers(jobNo, token, key, userName);
     }
 
     //  派工
@@ -300,7 +281,7 @@ public class ChoiceWorkerActivity extends BaseActivity {
                     Log.i(TAG, "handleMessage: mes_ero");
                 }
                 case Data.MSG_1: {
-                    search(null);
+                    mChoiceWorkerAdapter.notifyDataSetChanged();
                     break;
                 }
                 case Data.MSG_2: {

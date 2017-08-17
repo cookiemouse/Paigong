@@ -59,7 +59,7 @@ public class PendedFragment extends Fragment {
     private static final int DELAY_ERROR = 3000;
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    private ImageView mImageViewSearch;
+    private ImageView mImageViewSearch, mImageViewDelete;
     private EditText mEditTextSearch;
     private ListView mListView;
 
@@ -117,6 +117,7 @@ public class PendedFragment extends Fragment {
 
         mSwipeRefreshLayout = view.findViewById(R.id.srl_fragment_pended);
         mImageViewSearch = view.findViewById(R.id.iv_layout_search);
+        mImageViewDelete = view.findViewById(R.id.iv_layout_search_delete);
         mEditTextSearch = view.findViewById(R.id.et_layout_search);
         mListView = view.findViewById(R.id.lv_fragment_pended);
 
@@ -171,6 +172,7 @@ public class PendedFragment extends Fragment {
             public void onRefresh() {
                 mKey = "";
                 mEditTextSearch.setText(null);
+                mImageViewDelete.setVisibility(View.GONE);
                 mNetworkManager.getPended(jobNo, token, "", "", "", userName);
             }
         });
@@ -192,6 +194,21 @@ public class PendedFragment extends Fragment {
                 mKey = mEditTextSearch.getText().toString();
                 mSwipeRefreshLayout.setRefreshing(true);
                 mNetworkManager.getPended(jobNo, token, "", mKey, "", userName);
+
+                if (!"".equals(mKey)) {
+                    mImageViewDelete.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+        mImageViewDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mEditTextSearch.setText(null);
+                mSwipeRefreshLayout.setRefreshing(true);
+                mNetworkManager.getPended(jobNo, token, "", "", "", userName);
+
+                mImageViewDelete.setVisibility(View.GONE);
             }
         });
 

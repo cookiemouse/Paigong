@@ -14,9 +14,9 @@
         android:color="@color/colorBlueTheme"/>
 
     <padding
-        android:bottom="@dimen/dp_2"
+        android:bottom="@dimen/dp_4"
         android:left="@dimen/dp_8"
         android:right="@dimen/dp_8"
-        android:top="@dimen/dp_2"/>
+        android:top="@dimen/dp_4"/>
 
 </shape>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/bg_search">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_search">
 
     <EditText
         android:id="@+id/et_layout_search"
@@ -10,21 +10,35 @@
         android:layout_height="match_parent"
         android:layout_marginLeft="@dimen/dp_48"
         android:layout_marginRight="@dimen/dp_48"
-        android:lines="1"
-        android:textSize="@dimen/sp_16"
-        android:hint="请输入客户名称/订单号"
         android:background="@null"
-        android:gravity="center"/>
+        android:gravity="center"
+        android:hint="请输入客户名称/订单号"
+        android:lines="1"
+        android:textSize="@dimen/sp_16"/>
+
+    <ImageView
+        android:id="@+id/iv_layout_search_delete"
+        android:layout_width="@dimen/dp_24"
+        android:layout_height="@dimen/dp_24"
+        android:padding="@dimen/dp_2"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="@dimen/dp_4"
+        android:layout_marginRight="@dimen/dp_4"
+        android:layout_toLeftOf="@+id/iv_layout_search"
+        android:layout_toStartOf="@+id/iv_layout_search"
+        android:background="@drawable/bg_cycle_delete"
+        android:src="@drawable/ic_delete"
+        android:visibility="gone"/>
 
     <ImageView
         android:id="@+id/iv_layout_search"
         android:layout_width="@dimen/dp_32"
         android:layout_height="@dimen/dp_32"
-        android:layout_marginRight="@dimen/dp_8"
-        android:layout_marginEnd="@dimen/dp_8"
-        android:src="@drawable/ic_search_gray"
-        android:layout_centerVertical="true"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="@dimen/dp_8"
+        android:layout_marginRight="@dimen/dp_8"
+        android:src="@drawable/ic_search_gray"/>
 
 </RelativeLayout>

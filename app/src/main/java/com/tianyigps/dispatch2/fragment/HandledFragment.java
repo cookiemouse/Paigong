@@ -52,7 +52,7 @@ public class HandledFragment extends Fragment {
     private static final int DELAY_ERROR = 3000;
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    private ImageView mImageViewSearch;
+    private ImageView mImageViewSearch, mImageViewDelete;
     private EditText mEditTextSearch;
     private ListView mListViewHandled;
 
@@ -98,6 +98,7 @@ public class HandledFragment extends Fragment {
 
         mSwipeRefreshLayout = view.findViewById(R.id.srl_fragment_worker_handled);
         mImageViewSearch = view.findViewById(R.id.iv_layout_search);
+        mImageViewDelete = view.findViewById(R.id.iv_layout_search_delete);
         mEditTextSearch = view.findViewById(R.id.et_layout_search);
         mListViewHandled = view.findViewById(R.id.lv_fragment_worker_handled);
 
@@ -153,6 +154,8 @@ public class HandledFragment extends Fragment {
                 mKey = "";
                 mEditTextSearch.setText(null);
                 mNetworkManager.getWorkerOrderHanded(eid, token, "", "", userName);
+
+                mImageViewDelete.setVisibility(View.GONE);
             }
         });
 
@@ -212,6 +215,21 @@ public class HandledFragment extends Fragment {
                 mKey = mEditTextSearch.getText().toString();
                 mSwipeRefreshLayout.setRefreshing(true);
                 mNetworkManager.getWorkerOrderHanded(eid, token, mKey, "", userName);
+
+                if (!"".equals(mKey)) {
+                    mImageViewDelete.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+        mImageViewDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mEditTextSearch.setText(null);
+                mSwipeRefreshLayout.setRefreshing(true);
+                mNetworkManager.getWorkerOrderHanded(eid, token, "", "", userName);
+
+                mImageViewDelete.setVisibility(View.GONE);
             }
         });
 

@@ -58,7 +58,7 @@ public class OrderFragment extends Fragment {
     private static final String TAG = "OrderFragment";
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    private ImageView mImageViewSearch;
+    private ImageView mImageViewSearch, mImageViewDelete;
     private EditText mEditTextSearch;
     private ListView mListView;
 
@@ -126,6 +126,7 @@ public class OrderFragment extends Fragment {
 
         mSwipeRefreshLayout = view.findViewById(R.id.srl_fragment_worker_order);
         mImageViewSearch = view.findViewById(R.id.iv_layout_search);
+        mImageViewDelete = view.findViewById(R.id.iv_layout_search_delete);
         mEditTextSearch = view.findViewById(R.id.et_layout_search);
         mListView = view.findViewById(R.id.lv_fragment_worker_order);
 
@@ -177,6 +178,7 @@ public class OrderFragment extends Fragment {
             @Override
             public void onRefresh() {
                 mEditTextSearch.setText(null);
+                mImageViewDelete.setVisibility(View.GONE);
                 mNetworkManager.getWorkerOrder(eid, token, "", userName);
             }
         });
@@ -217,6 +219,21 @@ public class OrderFragment extends Fragment {
                 String key = mEditTextSearch.getText().toString();
                 mSwipeRefreshLayout.setRefreshing(true);
                 mNetworkManager.getWorkerOrder(eid, token, key, userName);
+
+                if (!"".equals(key)) {
+                    mImageViewDelete.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+        mImageViewDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mEditTextSearch.setText(null);
+                mSwipeRefreshLayout.setRefreshing(true);
+                mNetworkManager.getWorkerOrder(eid, token, "", userName);
+
+                mImageViewDelete.setVisibility(View.GONE);
             }
         });
 
