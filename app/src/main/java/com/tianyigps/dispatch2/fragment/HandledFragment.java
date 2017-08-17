@@ -120,10 +120,16 @@ public class HandledFragment extends Fragment {
         mNetworkManager = new NetworkManager();
         myHandler = new MyHandler();
 
-        mSharedpreferenceManager = new SharedpreferenceManager(getContext());
+        mSharedpreferenceManager = new SharedpreferenceManager(getActivity());
         eid = mSharedpreferenceManager.getEid();
         token = mSharedpreferenceManager.getToken();
         userName = mSharedpreferenceManager.getAccount();
+        int launchMode = mSharedpreferenceManager.getLaunchMode();
+        if (Data.DATA_LAUNCH_MODE_WORKER == launchMode) {
+            mImageViewTitleLeft.setVisibility(View.GONE);
+        } else {
+            mImageViewTitleLeft.setVisibility(View.VISIBLE);
+        }
 
         mSwipeRefreshLayout.setRefreshing(true);
         mNetworkManager.getWorkerOrderHanded(eid, token, "", "", userName);

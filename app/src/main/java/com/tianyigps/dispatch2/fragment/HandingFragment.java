@@ -109,15 +109,6 @@ public class HandingFragment extends Fragment implements View.OnClickListener {
         mListViewHanding = view.findViewById(R.id.lv_fragment_handling);
 
         mAdapterHandingDataList = new ArrayList<>();
-//        for (int i = 0; i < 10; i++) {
-//            mAdapterHandingDataList.add(new AdapterHandingData("万惠南宁"
-//                    , "2017-01-02 17:30"
-//                    , "上海市浦东区东方路985号一百杉杉大厦"
-//                    , "TY2017010215542001"
-//                    , "南柱赫"
-//                    , "1234567890"
-//                    , 5, 5));
-//        }
 
         mHandingAdapter = new HandingAdapter(getContext(), mAdapterHandingDataList);
         mListViewHanding.setAdapter(mHandingAdapter);
@@ -125,10 +116,16 @@ public class HandingFragment extends Fragment implements View.OnClickListener {
         mNetworkManager = new NetworkManager();
         myHandler = new MyHandler();
 
-        mSharedpreferenceManager = new SharedpreferenceManager(getContext());
+        mSharedpreferenceManager = new SharedpreferenceManager(getActivity());
         eid = mSharedpreferenceManager.getEid();
         token = mSharedpreferenceManager.getToken();
         userName = mSharedpreferenceManager.getAccount();
+        int launchMode = mSharedpreferenceManager.getLaunchMode();
+        if (Data.DATA_LAUNCH_MODE_WORKER == launchMode) {
+            mImageViewTitleLeft.setVisibility(View.GONE);
+        } else {
+            mImageViewTitleLeft.setVisibility(View.VISIBLE);
+        }
 
         mSwipeRefreshLayout.setRefreshing(true);
         mNetworkManager.getWorkerOrderHanding(eid, token, userName);

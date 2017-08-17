@@ -84,6 +84,13 @@ public class MineFragment extends Fragment {
 
         mSharedpreferenceManager = new SharedpreferenceManager(getActivity());
         uiMode = mSharedpreferenceManager.getUiMode();
+        int launchMode = mSharedpreferenceManager.getLaunchMode();
+        if (Data.DATA_LAUNCH_MODE_WORKER == launchMode) {
+            mImageViewTitleLeft.setVisibility(View.GONE);
+        } else {
+            mImageViewTitleLeft.setVisibility(View.VISIBLE);
+        }
+
     }
 
     private void initTitle() {

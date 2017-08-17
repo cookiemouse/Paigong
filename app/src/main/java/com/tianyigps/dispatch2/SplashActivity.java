@@ -108,7 +108,7 @@ public class SplashActivity extends Activity {
 
     //  初始化
     private void init() {
-        mImageViewSplash = (ImageView) findViewById(R.id.iv_activity_splash);
+        mImageViewSplash = findViewById(R.id.iv_activity_splash);
 
         mBitmap = BitmapU.getBitmap(this, R.drawable.bg_splash);
         mImageViewSplash.setImageBitmap(mBitmap);
@@ -147,7 +147,17 @@ public class SplashActivity extends Activity {
                     return;
                 }
 
-                launchMode = checkUserBean.getObj().getDuties();
+                CheckUserBean.ObjBean objBean = checkUserBean.getObj();
+
+                launchMode = objBean.getDuties();
+
+                mSharedpreferenceManager.saveUserData(objBean.getEid()
+                        , objBean.getToken()
+                        , objBean.getName()
+                        , objBean.getHeadPhone()
+                        , objBean.getJobNo()
+                        , objBean.getImgBaseUrl()
+                        , launchMode);
 
                 myHandler.sendEmptyMessage(MSG_1);
             }

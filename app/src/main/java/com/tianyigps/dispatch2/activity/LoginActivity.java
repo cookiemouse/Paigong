@@ -118,8 +118,7 @@ public class LoginActivity extends Activity {
 
                 CheckUserBean.ObjBean objBean = checkUserBean.getObj();
 
-                // TODO: 2017/8/7 先进入worker页面
-                launchMode = 1;
+                launchMode = objBean.getDuties();
 
                 mSharedpreferenceManager.saveUserData(objBean.getEid()
                         , objBean.getToken()

@@ -162,6 +162,12 @@ public class OrderFragment extends Fragment {
         token = mSharedpreferenceManager.getToken();
         userName = mSharedpreferenceManager.getAccount();
         name = mSharedpreferenceManager.getName();
+        int launchMode = mSharedpreferenceManager.getLaunchMode();
+        if (Data.DATA_LAUNCH_MODE_WORKER == launchMode) {
+            mImageViewTitleLeft.setVisibility(View.GONE);
+        } else {
+            mImageViewTitleLeft.setVisibility(View.VISIBLE);
+        }
 
         mSwipeRefreshLayout.setRefreshing(true);
         mNetworkManager.getWorkerOrder(eid, token, "", userName);
