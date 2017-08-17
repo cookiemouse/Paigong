@@ -77,6 +77,7 @@ public class MineFragment extends Fragment {
         mAdapterMineDataList = new ArrayList<>();
         mAdapterMineDataList.add(new AdapterMineData(R.drawable.ic_statistics, "质量统计"));
         mAdapterMineDataList.add(new AdapterMineData(R.drawable.ic_modify_password, "修改密码"));
+//        mAdapterMineDataList.add(new AdapterMineData(R.drawable.ic_modify_password, "测试"));
 
         mMineAdapter = new MineAdapter(getActivity(), mAdapterMineDataList);
 
@@ -134,6 +135,11 @@ public class MineFragment extends Fragment {
                         startActivity(intent);
                         break;
                     }
+//                    case 2: {
+//                        //  测试
+//                        Intent intent = new Intent(getActivity(), TestActivity.class);
+//                        startActivity(intent);
+//                    }
                     default: {
                         Log.i(TAG, "onItemClick: default");
                     }

@@ -122,7 +122,7 @@ public class CustomSignActivity extends BaseActivity {
         mButtonSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: 2017/7/20 提交
+                // 2017/7/20 提交
 
                 Bitmap bitmap = mSignView.getPic();
 

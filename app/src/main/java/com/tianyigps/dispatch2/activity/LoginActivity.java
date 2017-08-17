@@ -80,7 +80,7 @@ public class LoginActivity extends Activity {
         mButtonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: 2017/7/14 登录
+                // 2017/7/14 登录
                 launchAccount = mEditTextAccount.getText().toString();
                 String password = mEditTextPassword.getText().toString();
 

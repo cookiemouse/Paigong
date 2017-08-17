@@ -37,6 +37,7 @@ dependencies {
     compile(name: 'signviewlibrary', ext: 'aar')
     compile(name: 'cycleprogressview', ext: 'aar')
     compile(name: 'bottomdialog', ext: 'aar')
+    compile files('libs/jcore-android-1.1.6.jar')
     compile 'q.rorbin:badgeview:1.1.2'
     compile 'com.android.support:appcompat-v7:26.0.0-alpha1'
     compile 'me.dm7.barcodescanner:zbar:1.9.7'
@@ -48,5 +49,4 @@ dependencies {
     compile 'com.yanzhenjie:permission:1.0.8'
     compile 'com.zxy.android:tiny:0.0.6'
     testCompile 'junit:junit:4.12'
-    compile files('libs/jcore-android-1.1.6.jar')
 }

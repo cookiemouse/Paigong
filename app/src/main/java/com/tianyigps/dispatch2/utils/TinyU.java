@@ -40,6 +40,13 @@ public class TinyU {
         return tempPath;
     }
 
+    public static void tinyPic(String path, FileCallback fileCallback) {
+        FileManager fileManager = new FileManager();
+        tempPath = fileManager.getPath();
+        Tiny.FileCompressOptions options = new Tiny.FileCompressOptions();
+        Tiny.getInstance().source(path).asFile().withOptions(options).compress(fileCallback);
+    }
+
     public static void tinyPic(Bitmap bitmap, BitmapCallback bitmapCallback) {
         Tiny.BitmapCompressOptions options = new Tiny.BatchFileCompressOptions();
         Tiny.getInstance().source(bitmap).asBitmap().withOptions(options).compress(bitmapCallback);

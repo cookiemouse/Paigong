@@ -179,7 +179,6 @@ public class InstallingActivity extends BaseActivity {
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                // TODO: 2017/7/24 测试RecyclerView
                 if (0 == i) {
                     return;
                 }

@@ -48,6 +48,7 @@ import com.tianyigps.dispatch2.utils.TinyU;
 import com.tianyigps.dispatch2.utils.UploadPicU;
 import com.tianyigps.dispatch2.utils.Uri2FileU;
 import com.yundian.bottomdialog.BottomDialog;
+import com.zxy.tiny.callback.FileCallback;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -125,6 +126,10 @@ public class OperateInstallActivity extends BaseActivity {
 
     //  LoadingFragment
     private LoadingDialogFragment mLoadingDialogFragment;
+
+    //  压缩图片temp
+    private int mTempType, mTempId;
+    private String mTempImgUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -981,18 +986,38 @@ public class OperateInstallActivity extends BaseActivity {
     //  上传图片
     private void uploadCarPic(int type, String imgUrl, String path) {
         //  压缩图片
-        String pathT = TinyU.tinyPic(path);
+        if (null == imgUrl) {
+            imgUrl = "";
+        }
+        mTempType = type;
+        mTempImgUrl = imgUrl;
         showLoading();
-        new UploadPicU(mNetworkManager).uploadCarPic(eid, token, orderNo, carId, type, imgUrl, pathT, userName);
+        TinyU.tinyPic(path, new FileCallback() {
+            @Override
+            public void callback(boolean isSuccess, String outfile) {
+                //  上传
+                new UploadPicU(mNetworkManager).uploadCarPic(eid, token, orderNo, carId, mTempType, mTempImgUrl, outfile, userName);
+            }
+        });
     }
 
     //  上传图片
     private void uploadTerminalPic(int tId, int type, String imgUrl, String path) {
         //  压缩图片
-        String pathT = TinyU.tinyPic(path);
-        //  上传
+        if (null == imgUrl) {
+            imgUrl = "";
+        }
+        mTempType = type;
+        mTempImgUrl = imgUrl;
+        mTempId = tId;
         showLoading();
-        new UploadPicU(mNetworkManager).uploadPic(eid, token, orderNo, carId, tId, type, 1, imgUrl, pathT, userName);
+        TinyU.tinyPic(path, new FileCallback() {
+            @Override
+            public void callback(boolean isSuccess, String outfile) {
+                //  上传
+                new UploadPicU(mNetworkManager).uploadPic(eid, token, orderNo, carId, mTempId, mTempType, 1, mTempImgUrl, outfile, userName);
+            }
+        });
     }
 
     //  获取完整imei
@@ -1003,8 +1028,6 @@ public class OperateInstallActivity extends BaseActivity {
 
     //  checkTerminal数据
     private boolean isComplete() {
-        // TODO: 2017/8/4 检测数据完整性
-
         boolean complete;
         boolean completeAll = true;
 

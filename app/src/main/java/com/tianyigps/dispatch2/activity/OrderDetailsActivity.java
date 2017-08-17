@@ -420,7 +420,6 @@ public class OrderDetailsActivity extends Activity {
         buttonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: 2017/7/20 dismiss
                 dialog.dismiss();
             }
         });

@@ -208,9 +208,13 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="cn.jpush.android.intent.NOTIFICATION_OPENED"/>
+
                 <category android:name="com.tianyigps.dispatch2"/>
             </intent-filter>
         </receiver>
+
+        <activity android:name=".activity.TestActivity">
+        </activity>
     </application>
 
 </manifest>

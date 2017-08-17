@@ -44,6 +44,7 @@ import com.tianyigps.dispatch2.utils.TinyU;
 import com.tianyigps.dispatch2.utils.UploadPicU;
 import com.tianyigps.dispatch2.utils.Uri2FileU;
 import com.yundian.bottomdialog.BottomDialog;
+import com.zxy.tiny.callback.FileCallback;
 
 public class OperateRepairActivity extends BaseActivity {
 
@@ -97,6 +98,10 @@ public class OperateRepairActivity extends BaseActivity {
 
     //  LoadingFragment
     private LoadingDialogFragment mLoadingDialogFragment;
+
+    //  压缩图片temp
+    private int mTempType;
+    private String mTempImgUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -651,12 +656,19 @@ public class OperateRepairActivity extends BaseActivity {
     //  上传图片
     private void uploadPic(int type, String imgUrl, String path) {
         //  压缩图片
-        String pathT = TinyU.tinyPic(path);
         if (null == imgUrl) {
             imgUrl = "";
         }
+        mTempType = type;
+        mTempImgUrl = imgUrl;
         showLoading();
-        new UploadPicU(mNetworkManager).uploadPic(eid, token, orderNo, carId, tid, type, tType, imgUrl, pathT, userName);
+        TinyU.tinyPic(path, new FileCallback() {
+            @Override
+            public void callback(boolean isSuccess, String outfile) {
+                //  上传
+                new UploadPicU(mNetworkManager).uploadPic(eid, token, orderNo, carId, tid, mTempType, tType, mTempImgUrl, outfile, userName);
+            }
+        });
     }
 
     //  获取完整imei
