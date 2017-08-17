@@ -23,8 +23,6 @@ public class BitmapU {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = false;
         options.inPreferredConfig = Bitmap.Config.RGB_565;
-        options.outWidth = 320;
-        options.outHeight = 480;
         return BitmapFactory.decodeStream(is, null, options);
     }
 

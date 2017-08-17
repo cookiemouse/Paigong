@@ -1,11 +1,13 @@
 package com.tianyigps.dispatch2.activity;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -243,9 +245,6 @@ public class StatisticsActivity extends BaseActivity {
                             , objBean.getFinishWiredNum()
                             , objBean.getFinishWirelessNum()));
                 }
-                for (int i = 0; i < 20; i++) {
-                    mStatisticsManagerDataList.add(new AdapterStatisticsManagerData("1001南柱赫", 21, 25, 21, 25));
-                }
                 myHandler.sendEmptyMessage(Data.MSG_2);
             }
         });
@@ -288,19 +287,46 @@ public class StatisticsActivity extends BaseActivity {
         mDatePickerDialogFragment.show(getFragmentManager(), "");
     }
 
+    //  信息对话框
+    private void showMessageDialog(String message) {
+        if (isFinishing()) {
+            return;
+        }
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View viewDialog = LayoutInflater.from(this).inflate(R.layout.dialog_message_editable, null);
+        TextView textViewMessage = viewDialog.findViewById(R.id.tv_dialog_message_message);
+        Button buttonKnow = viewDialog.findViewById(R.id.btn_dialog_message_cancel);
+        textViewMessage.setText(message);
+        builder.setView(viewDialog);
+        builder.setCancelable(false);
+        final AlertDialog dialog = builder.create();
+
+        buttonKnow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+    }
+
     private class MyHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what) {
                 case Data.MSG_ERO: {
+                    showMessageDialog(mStringMessage);
                     break;
                 }
                 case Data.MSG_1: {
+                    //  安装工程师
                     mStatisticsWorkerAdapter.notifyDataSetChanged();
                     break;
                 }
                 case Data.MSG_2: {
+                    //  服务主任
                     mStatisticsManagerAdapter.notifyDataSetChanged();
                     break;
                 }

@@ -385,6 +385,9 @@ public class OrderFragment extends Fragment {
     }
 
     private void showMessageDialog(String message) {
+        if (getActivity().isFinishing()){
+            return;
+        }
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         View viewDialog = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_message_editable, null);
         TextView textViewMessage = viewDialog.findViewById(R.id.tv_dialog_message_message);
