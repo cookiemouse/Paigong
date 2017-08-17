@@ -41,6 +41,7 @@ import com.tianyigps.dispatch2.base.BaseActivity;
 import com.tianyigps.dispatch2.bean.TerminalInfoBean;
 import com.tianyigps.dispatch2.bean.WholeImeiBean;
 import com.tianyigps.dispatch2.data.Data;
+import com.tianyigps.dispatch2.dialog.LoadingDialogFragment;
 import com.tianyigps.dispatch2.interfaces.OnGetTerminalInfoListener;
 import com.tianyigps.dispatch2.interfaces.OnGetWholeIMEIListener;
 import com.tianyigps.dispatch2.manager.LocateManager;
@@ -97,6 +98,9 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
 
     private Intent mIntent;
     private boolean mIsShow = false;
+
+    //  LoadingFragment
+    private LoadingDialogFragment mLoadingDialogFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -203,6 +207,8 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
 
         mMapView = findViewById(R.id.mv_layout_map);
         mBaiduMap = mMapView.getMap();
+
+        mLoadingDialogFragment = new LoadingDialogFragment();
 
         mTimerU = new TimerU(10);
 
@@ -440,11 +446,13 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
 
     //  获取完整imei
     private void getWholeImei(String imei) {
+        showLoading();
         mNetworkManager.getWholeImei(eid, token, imei, userName);
     }
 
     //  获取目标位置
     private void getImeiLocation(String imei) {
+        showLoading();
         mNetworkManager.getTerminalInfo(eid, token, imei, userName);
     }
 
@@ -493,10 +501,19 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
         mToast.show();
     }
 
+    //  显示LoadingFragment
+    private void showLoading() {
+        mLoadingDialogFragment.show(getFragmentManager(), "LoadingFragment");
+    }
+
     private class MyHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
+            if (mLoadingDialogFragment.isAdded()) {
+                mLoadingDialogFragment.dismiss();
+            }
+
             switch (msg.what) {
                 case MSG_ERO: {
                     break;

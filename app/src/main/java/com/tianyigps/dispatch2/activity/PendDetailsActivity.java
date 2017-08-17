@@ -29,6 +29,7 @@ import com.tianyigps.dispatch2.bean.PendDetailsBean;
 import com.tianyigps.dispatch2.customview.MyListView;
 import com.tianyigps.dispatch2.data.AdapterPendDetailsData;
 import com.tianyigps.dispatch2.data.Data;
+import com.tianyigps.dispatch2.dialog.LoadingDialogFragment;
 import com.tianyigps.dispatch2.dialog.OrderTrackDialogFragment;
 import com.tianyigps.dispatch2.interfaces.OnModifyDateListener;
 import com.tianyigps.dispatch2.interfaces.OnPendDetailsListener;
@@ -100,6 +101,9 @@ public class PendDetailsActivity extends Activity {
     private int mDay, mHour, mMin;
     private String mReason;
 
+    //  LoadingFragment
+    private LoadingDialogFragment mLoadingDialogFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -150,6 +154,7 @@ public class PendDetailsActivity extends Activity {
         mHours = getResources().getStringArray(R.array.picker_hour);
         mMins = getResources().getStringArray(R.array.picker_min);
 
+        mLoadingDialogFragment = new LoadingDialogFragment();
         mSharedpreferenceManager = new SharedpreferenceManager(this);
         mNetworkManager = new NetworkManager();
         myHandler = new MyHandler();
@@ -193,6 +198,7 @@ public class PendDetailsActivity extends Activity {
 
         mRelativeLayoutRemove = findViewById(R.id.rl_layout_pend_details_content_remove);
 
+        showLoading();
         if (0 == orderStatus) {
             mNetworkManager.getPendDetails(jobNo, token, orderNo, userName);
         } else {
@@ -373,7 +379,6 @@ public class PendDetailsActivity extends Activity {
 
     //  改约
     private void modifyDate() {
-
         Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
 
@@ -384,6 +389,7 @@ public class PendDetailsActivity extends Activity {
         calendar.set(year, month, day, mHour, mMin);
         long modify = calendar.getTimeInMillis();
 
+        showLoading();
         mNetworkManager.modifyDate(jobNo, userName, token, orderNo, orderStatus, modify, mReason);
     }
 
@@ -499,10 +505,18 @@ public class PendDetailsActivity extends Activity {
         new ToastU(this).showToast(msg);
     }
 
+    //  显示LoadingFragment
+    private void showLoading() {
+        mLoadingDialogFragment.show(getFragmentManager(), "LoadingFragment");
+    }
+
     private class MyHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
+            if (mLoadingDialogFragment.isAdded()) {
+                mLoadingDialogFragment.dismiss();
+            }
             switch (msg.what) {
                 case Data.MSG_ERO: {
                     showMessageDialog(mStringMessage);

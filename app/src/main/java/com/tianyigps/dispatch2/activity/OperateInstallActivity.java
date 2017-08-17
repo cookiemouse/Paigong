@@ -35,6 +35,7 @@ import com.tianyigps.dispatch2.customview.MyRecyclerView;
 import com.tianyigps.dispatch2.data.AdapterOperateInstallListData;
 import com.tianyigps.dispatch2.data.AdapterOperateInstallRecyclerData;
 import com.tianyigps.dispatch2.data.Data;
+import com.tianyigps.dispatch2.dialog.LoadingDialogFragment;
 import com.tianyigps.dispatch2.interfaces.OnDeletePicListener;
 import com.tianyigps.dispatch2.interfaces.OnGetWholeIMEIListener;
 import com.tianyigps.dispatch2.interfaces.OnGetWorkerOrderInfoStartListener;
@@ -93,7 +94,6 @@ public class OperateInstallActivity extends BaseActivity {
     private int wirelessNum;
 
     // id，主键
-    // TODO: 2017/8/1 测试车辆数据库
     private int idMainCar;
     private String ID_MAIN_TERMINAL;
     private String idMainTerminal;
@@ -122,6 +122,9 @@ public class OperateInstallActivity extends BaseActivity {
     private String mCarNo;
     private String mCarFrameNo;
     private String mCarBrand;
+
+    //  LoadingFragment
+    private LoadingDialogFragment mLoadingDialogFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -359,6 +362,8 @@ public class OperateInstallActivity extends BaseActivity {
         mTextViewFrameNo = findViewById(R.id.tv_layout_operate_install_frame_no);
         mEditTextCarType = findViewById(R.id.et_layout_operate_install_car_type);
 
+        mLoadingDialogFragment = new LoadingDialogFragment();
+
         mViewSave = LayoutInflater.from(this).inflate(R.layout.layout_activity_installing_next, null);
         mButtonSave = mViewSave.findViewById(R.id.btn_layout_activity_installing_next);
         mButtonSave.setText(R.string.save);
@@ -403,6 +408,7 @@ public class OperateInstallActivity extends BaseActivity {
         userName = mSharedpreferenceManager.getAccount();
         mBaseImg = mSharedpreferenceManager.getImageBaseUrl();
 
+        showLoading();
         mNetworkManager.getWorkerOrderInfoStart(eid, token, orderNo, userName);
 
 //        loadCarData();
@@ -889,6 +895,7 @@ public class OperateInstallActivity extends BaseActivity {
         if (null == url || "".equals(url)) {
             return;
         }
+        showLoading();
         mNetworkManager.deletePic(eid, token, orderNo, carId, Data.DATA_UPLOAD_TYPE_5, url, userName);
     }
 
@@ -975,6 +982,7 @@ public class OperateInstallActivity extends BaseActivity {
     private void uploadCarPic(int type, String imgUrl, String path) {
         //  压缩图片
         String pathT = TinyU.tinyPic(path);
+        showLoading();
         new UploadPicU(mNetworkManager).uploadCarPic(eid, token, orderNo, carId, type, imgUrl, pathT, userName);
     }
 
@@ -983,11 +991,13 @@ public class OperateInstallActivity extends BaseActivity {
         //  压缩图片
         String pathT = TinyU.tinyPic(path);
         //  上传
+        showLoading();
         new UploadPicU(mNetworkManager).uploadPic(eid, token, orderNo, carId, tId, type, 1, imgUrl, pathT, userName);
     }
 
     //  获取完整imei
     private void getWholeImei(String imei) {
+        showLoading();
         mNetworkManager.getWholeImei(eid, token, imei, userName);
     }
 
@@ -1111,10 +1121,18 @@ public class OperateInstallActivity extends BaseActivity {
 
     }
 
+    //  显示LoadingFragment
+    private void showLoading() {
+        mLoadingDialogFragment.show(getFragmentManager(), "LoadingFragment");
+    }
+
     private class MyHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
+            if (mLoadingDialogFragment.isAdded()) {
+                mLoadingDialogFragment.dismiss();
+            }
 
             Log.i(TAG, "handleMessage: msg.what-->" + msg.what);
             switch (msg.what) {

@@ -24,6 +24,7 @@ import com.tianyigps.dispatch2.data.AdapterStatisticsManagerData;
 import com.tianyigps.dispatch2.data.AdapterStatisticsWorkderData;
 import com.tianyigps.dispatch2.data.Data;
 import com.tianyigps.dispatch2.dialog.DatePickerDialogFragment;
+import com.tianyigps.dispatch2.dialog.LoadingDialogFragment;
 import com.tianyigps.dispatch2.interfaces.OnGetQualityCountListener;
 import com.tianyigps.dispatch2.interfaces.OnInstallCountListener;
 import com.tianyigps.dispatch2.manager.NetworkManager;
@@ -68,6 +69,9 @@ public class StatisticsActivity extends BaseActivity {
 
     private String mStringMessage;
 
+    //  LoadingFragment
+    LoadingDialogFragment mLoadingDialogFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -111,11 +115,13 @@ public class StatisticsActivity extends BaseActivity {
         mDatePickerDialogFragment = new DatePickerDialogFragment();
         mDatePickerDialogFragment.setCancelable(false);
 
+        mLoadingDialogFragment = new LoadingDialogFragment();
+
         mNetworkManager = new NetworkManager();
 
         myHandler = new MyHandler();
 
-        // TODO: 2017/7/14 由帐户类型决定添加什么Title，以及加载什么Adapter
+        showLoading();
         if (Data.DATA_LAUNCH_MODE_WORKER == uiMode) {
             showWorkerList();
         } else {
@@ -150,10 +156,11 @@ public class StatisticsActivity extends BaseActivity {
 
                 monthP = "" + year + monthP;
 
+                showLoading();
                 if (DATA_LAUNCH_MODE_WORKER == uiMode) {
                     mNetworkManager.getQualityCount(eid, token, monthP, userName);
                 } else {
-                    // TODO: 2017/7/18 Manager质量统计
+                    mNetworkManager.getInstallCount(jobNo, token, monthP, userName);
                 }
             }
         });
@@ -311,10 +318,19 @@ public class StatisticsActivity extends BaseActivity {
         dialog.show();
     }
 
+    //  显示LoadingFragment
+    private void showLoading() {
+        mLoadingDialogFragment.show(getFragmentManager(), "LoadingFragment");
+    }
+
     private class MyHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
+            if (mLoadingDialogFragment.isAdded()) {
+                mLoadingDialogFragment.dismiss();
+            }
+
             switch (msg.what) {
                 case Data.MSG_ERO: {
                     showMessageDialog(mStringMessage);

@@ -27,6 +27,7 @@ import com.tianyigps.dispatch2.bean.SaveOrderInfoBean;
 import com.tianyigps.dispatch2.bean.TerminalInfo;
 import com.tianyigps.dispatch2.bean.TerminalInfoOut;
 import com.tianyigps.dispatch2.data.Data;
+import com.tianyigps.dispatch2.dialog.LoadingDialogFragment;
 import com.tianyigps.dispatch2.interfaces.OnSaveOrderInfoListener;
 import com.tianyigps.dispatch2.manager.DatabaseManager;
 import com.tianyigps.dispatch2.manager.LocateManager;
@@ -68,6 +69,9 @@ public class CustomSignActivity extends BaseActivity {
 
     private String mStringMessage;
 
+    //  LoadingFragment
+    private LoadingDialogFragment mLoadingDialogFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,6 +104,7 @@ public class CustomSignActivity extends BaseActivity {
         mDatabaseManager = new DatabaseManager(this);
         mLocateManager = new LocateManager(this);
         myHandler = new MyHandler();
+        mLoadingDialogFragment = new LoadingDialogFragment();
 
         Intent intent = getIntent();
         installType = intent.getIntExtra(Data.DATA_INTENT_INSTALL_TYPE, TYPE_INSTALL);
@@ -158,6 +163,7 @@ public class CustomSignActivity extends BaseActivity {
 
                 mJson = json;
 
+                showLoading();
                 mLocateManager.startLocate();
             }
         });
@@ -167,7 +173,6 @@ public class CustomSignActivity extends BaseActivity {
             public void onReceive(LatLng latLng) {
 
                 mLocateManager.stopLocate();
-
                 mNetworkManager.saveOrderInfo(eid
                         , token
                         , mOrderNo
@@ -406,10 +411,19 @@ public class CustomSignActivity extends BaseActivity {
         alertDialog.show();
     }
 
+    //  显示LoadingFragment
+    private void showLoading() {
+        mLoadingDialogFragment.show(getFragmentManager(), "LoadingFragment");
+    }
+
     private class MyHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
+            if (mLoadingDialogFragment.isAdded()) {
+                mLoadingDialogFragment.dismiss();
+            }
+
             switch (msg.what) {
                 case Data.MSG_ERO: {
                     showMessageDialog(mStringMessage);

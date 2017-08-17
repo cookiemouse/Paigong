@@ -18,12 +18,12 @@ import android.widget.TextView;
 
 import com.tianyigps.dispatch2.R;
 import com.tianyigps.dispatch2.activity.ManagerFragmentContentActivity;
+import com.tianyigps.dispatch2.activity.ModifyPasswordActivity;
 import com.tianyigps.dispatch2.activity.StatisticsActivity;
 import com.tianyigps.dispatch2.activity.WorkerFragmentContentActivity;
 import com.tianyigps.dispatch2.adapter.MineAdapter;
 import com.tianyigps.dispatch2.data.AdapterMineData;
 import com.tianyigps.dispatch2.data.Data;
-import com.tianyigps.dispatch2.dialog.LoadingDialogFragmentV4;
 import com.tianyigps.dispatch2.manager.SharedpreferenceManager;
 
 import java.util.ArrayList;
@@ -123,11 +123,8 @@ public class MineFragment extends Fragment {
                     }
                     case 1: {
                         // 2017/7/13 修改密码
-//                        Intent intent = new Intent(getActivity(), ModifyPasswordActivity.class);
-//                        startActivity(intent);
-
-                        LoadingDialogFragmentV4 loadingDialogFragmentV4 = new LoadingDialogFragmentV4();
-                        loadingDialogFragmentV4.show(getChildFragmentManager(), "test");
+                        Intent intent = new Intent(getActivity(), ModifyPasswordActivity.class);
+                        startActivity(intent);
                         break;
                     }
                     default: {

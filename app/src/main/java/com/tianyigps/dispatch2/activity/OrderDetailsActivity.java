@@ -25,6 +25,7 @@ import com.tianyigps.dispatch2.R;
 import com.tianyigps.dispatch2.bean.OrderDetailsBean;
 import com.tianyigps.dispatch2.bean.SignWorkerBean;
 import com.tianyigps.dispatch2.data.Data;
+import com.tianyigps.dispatch2.dialog.LoadingDialogFragment;
 import com.tianyigps.dispatch2.dialog.ReturnOrderDialogFragment;
 import com.tianyigps.dispatch2.interfaces.OnGetWorkerOrderInfoHandingListener;
 import com.tianyigps.dispatch2.interfaces.OnSignedWorkerListener;
@@ -96,6 +97,9 @@ public class OrderDetailsActivity extends Activity {
     //  退单对话框
     private ReturnOrderDialogFragment mReturnOrderDialogFragment;
 
+    //  LoadingFragment
+    private LoadingDialogFragment mLoadingDialogFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -132,6 +136,7 @@ public class OrderDetailsActivity extends Activity {
         mImageViewTitleLeft.setImageResource(R.drawable.ic_back);
 
         mReturnOrderDialogFragment = new ReturnOrderDialogFragment();
+        mLoadingDialogFragment = new LoadingDialogFragment();
 
         Intent intent = getIntent();
         orderNo = intent.getStringExtra(DATA_INTENT_ORDER_NO);
@@ -177,6 +182,7 @@ public class OrderDetailsActivity extends Activity {
         userName = mSharedpreferenceManager.getAccount();
         eName = mSharedpreferenceManager.getName();
 
+        showLoading();
         mNetworkManager.getWorkerOrderInfoHanding(eid, token, orderNo, userName);
     }
 
@@ -377,7 +383,7 @@ public class OrderDetailsActivity extends Activity {
 
     //  显示信息Dialog
     private void showMessageDialog(String msg) {
-        if (isFinishing()){
+        if (isFinishing()) {
             return;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(OrderDetailsActivity.this);
@@ -431,11 +437,20 @@ public class OrderDetailsActivity extends Activity {
         dialog.show();
     }
 
+    //  显示LoadingFragment
+    private void showLoading() {
+        mLoadingDialogFragment.show(getFragmentManager(), "LoadingFragment");
+    }
+
     //  Handler
     private class MyHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
             Log.i(TAG, "handleMessage: ");
+            if (mLoadingDialogFragment.isAdded()) {
+                mLoadingDialogFragment.dismiss();
+            }
+
             super.handleMessage(msg);
             switch (msg.what) {
                 case MSG_ERO: {
@@ -472,6 +487,7 @@ public class OrderDetailsActivity extends Activity {
                 }
                 case MSG_3: {
                     //  获取到当前位置，并签到
+                    showLoading();
                     mNetworkManager.signedWorker(eid, token, eName, orderNo
                             , mLatLngLocate.latitude, mLatLngLocate.longitude
                             , MAP_TYPE

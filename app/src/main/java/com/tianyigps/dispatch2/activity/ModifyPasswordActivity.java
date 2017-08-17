@@ -16,6 +16,7 @@ import com.tianyigps.dispatch2.R;
 import com.tianyigps.dispatch2.base.BaseActivity;
 import com.tianyigps.dispatch2.bean.ModifyPasswordBean;
 import com.tianyigps.dispatch2.data.Data;
+import com.tianyigps.dispatch2.dialog.LoadingDialogFragment;
 import com.tianyigps.dispatch2.interfaces.OnModifyPasswordListener;
 import com.tianyigps.dispatch2.manager.NetworkManager;
 import com.tianyigps.dispatch2.manager.SharedpreferenceManager;
@@ -38,6 +39,9 @@ public class ModifyPasswordActivity extends BaseActivity {
 
     private String mStringMessage;
 
+    //  LoadingFragment
+    private LoadingDialogFragment mLoadingDialogFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +61,8 @@ public class ModifyPasswordActivity extends BaseActivity {
         mNetworkManager = new NetworkManager();
         myHandler = new MyHandler();
         mSharedpreferenceManager = new SharedpreferenceManager(this);
+
+        mLoadingDialogFragment = new LoadingDialogFragment();
     }
 
     private void setEventListener() {
@@ -77,6 +83,7 @@ public class ModifyPasswordActivity extends BaseActivity {
                     showMessageDialog(mStringMessage);
                     return;
                 }
+                showLoading();
                 mNetworkManager.modifyPassword(userName, token, oldPsd, newPsd);
             }
         });
@@ -142,10 +149,19 @@ public class ModifyPasswordActivity extends BaseActivity {
         dialog.show();
     }
 
+    //  显示LoadingFragment
+    private void showLoading() {
+        mLoadingDialogFragment.show(getFragmentManager(), "LoadingFragment");
+    }
+
     private class MyHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
+            if (mLoadingDialogFragment.isAdded()) {
+                mLoadingDialogFragment.dismiss();
+            }
+
             switch (msg.what) {
                 case MSG_ERO: {
                     showMessageDialog(mStringMessage);

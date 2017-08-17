@@ -70,12 +70,6 @@ public class ManagerFragmentContentActivity extends AppCompatActivity implements
     }
 
     @Override
-    protected void onStop() {
-        Log.i(TAG, "onStop: ");
-        super.onStop();
-    }
-
-    @Override
     protected void onDestroy() {
         Log.i(TAG, "onDestroy: ");
         if (null != mBitmap) {

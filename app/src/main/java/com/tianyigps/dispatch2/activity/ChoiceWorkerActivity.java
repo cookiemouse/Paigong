@@ -24,6 +24,7 @@ import com.tianyigps.dispatch2.bean.ChoiceWorkerBean;
 import com.tianyigps.dispatch2.bean.PendBean;
 import com.tianyigps.dispatch2.data.AdapterChoiceWorkerData;
 import com.tianyigps.dispatch2.data.Data;
+import com.tianyigps.dispatch2.dialog.LoadingDialogFragment;
 import com.tianyigps.dispatch2.interfaces.OnPendListener;
 import com.tianyigps.dispatch2.interfaces.OnWorkersListener;
 import com.tianyigps.dispatch2.manager.NetworkManager;
@@ -61,6 +62,9 @@ public class ChoiceWorkerActivity extends BaseActivity {
     private String orderNo;
     private int orderStatus;
 
+    //  LoadingFragment
+    private LoadingDialogFragment mLoadingDialogFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,6 +86,7 @@ public class ChoiceWorkerActivity extends BaseActivity {
         mSharedpreferenceManager = new SharedpreferenceManager(this);
         mNetworkManager = new NetworkManager();
         myHandler = new MyHandler();
+        mLoadingDialogFragment = new LoadingDialogFragment();
 
         eid = mSharedpreferenceManager.getEid();
         jobNo = mSharedpreferenceManager.getJobNo();
@@ -104,6 +109,7 @@ public class ChoiceWorkerActivity extends BaseActivity {
         mChoiceWorkerAdapter = new ChoiceWorkerAdapter(this, mAdapterChoiceWorkerDataListSearch);
         mListView.setAdapter(mChoiceWorkerAdapter);
 
+        showLoading();
         mNetworkManager.getWorkers(jobNo, token, "", userName);
     }
 
@@ -256,6 +262,7 @@ public class ChoiceWorkerActivity extends BaseActivity {
         if (mCheckBoxPay.isChecked()) {
             isPay = 1;
         }
+        showLoading();
         mNetworkManager.pendOrder(jobNo, userName, token, orderNo, orderStatus, eidChoice, isPay);
     }
 
@@ -275,10 +282,18 @@ public class ChoiceWorkerActivity extends BaseActivity {
         dialog.show();
     }
 
+    //  显示LoadingFragment
+    private void showLoading() {
+        mLoadingDialogFragment.show(getFragmentManager(), "LoadingFragment");
+    }
+
     private class MyHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
+            if (mLoadingDialogFragment.isAdded()) {
+                mLoadingDialogFragment.dismiss();
+            }
             switch (msg.what) {
                 case Data.MSG_ERO: {
                     showMessageDialog(mStringMessage);

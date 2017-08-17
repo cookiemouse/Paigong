@@ -20,6 +20,7 @@ import com.tianyigps.dispatch2.bean.RemoveTerminalBean;
 import com.tianyigps.dispatch2.bean.StartOrderInfoBean;
 import com.tianyigps.dispatch2.data.AdapterOperateRemoveData;
 import com.tianyigps.dispatch2.data.Data;
+import com.tianyigps.dispatch2.dialog.LoadingDialogFragment;
 import com.tianyigps.dispatch2.interfaces.OnGetWorkerOrderInfoStartListener;
 import com.tianyigps.dispatch2.interfaces.OnRemoveTerminalListener;
 import com.tianyigps.dispatch2.manager.NetworkManager;
@@ -55,6 +56,9 @@ public class OperateRemoveActivity extends BaseActivity {
     private int positionNow;
     private AlertDialog dialogRemove;
 
+    //  LoadingFragment
+    private LoadingDialogFragment mLoadingDialogFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,23 +83,10 @@ public class OperateRemoveActivity extends BaseActivity {
 
         mNetworkManager = new NetworkManager();
         myHandler = new MyHandler();
+        mLoadingDialogFragment = new LoadingDialogFragment();
 
+        showLoading();
         mNetworkManager.getWorkerOrderInfoStart(eid, token, orderNo, userName);
-
-//        for (int i = 0; i < 10; i++) {
-//            mAdapterOperateRemoveDataList.add(new AdapterOperateRemoveData("carNo"
-//                    , "frameNo"
-//                    , "有线"
-//                    , "（微贷网2165467987）"
-//                    , "tNo"
-//                    , "驾驶舱仪表内"
-//                    , "TY20170717143432075/2de3a21e0bda4f06acf8bffe62065a48.png"
-//                    , "TY20170717143432075/dd5a838856314802be6a43d9139ecc51.png"
-//                    , "2018-08-08"
-//                    , "杨某某"
-//                    , "17900000001"
-//                    , 0));
-//        }
 
         mOperateRemoveAdapter = new OperateRemoveAdapter(OperateRemoveActivity.this, mAdapterOperateRemoveDataList);
 
@@ -217,6 +208,7 @@ public class OperateRemoveActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 String imei = mAdapterOperateRemoveDataList.get(positionNow).gettNo();
+                showLoading();
                 mNetworkManager.removeTerminal(eid, token, orderNo, imei, userName);
             }
         });
@@ -245,10 +237,19 @@ public class OperateRemoveActivity extends BaseActivity {
         dialog.show();
     }
 
+    //  显示LoadingFragment
+    private void showLoading() {
+        mLoadingDialogFragment.show(getFragmentManager(), "LoadingFragment");
+    }
+
     private class MyHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
+            if (mLoadingDialogFragment.isAdded()) {
+                mLoadingDialogFragment.dismiss();
+            }
+
             switch (msg.what) {
                 case Data.MSG_ERO: {
                     showMessageDialog(mStringMsg);

@@ -30,6 +30,7 @@ import com.tianyigps.dispatch2.bean.StartOrderInfoBean;
 import com.tianyigps.dispatch2.bean.UploadPicBean;
 import com.tianyigps.dispatch2.bean.WholeImeiBean;
 import com.tianyigps.dispatch2.data.Data;
+import com.tianyigps.dispatch2.dialog.LoadingDialogFragment;
 import com.tianyigps.dispatch2.interfaces.OnGetLastInstallerListener;
 import com.tianyigps.dispatch2.interfaces.OnGetWholeIMEIListener;
 import com.tianyigps.dispatch2.interfaces.OnGetWorkerOrderInfoStartListener;
@@ -93,6 +94,9 @@ public class OperateRepairActivity extends BaseActivity {
     private String mPositionNew, mPositionPicNew, mInstallPicNew, mPositionPicUrlNew, mInstallPicUrlNew, mExplainNew, mImeiNew;
 
     private String mLastInstaller, mLastPhoneNo;
+
+    //  LoadingFragment
+    private LoadingDialogFragment mLoadingDialogFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -239,6 +243,7 @@ public class OperateRepairActivity extends BaseActivity {
         this.setTitleText("维修");
 
         mSharedpreferenceManager = new SharedpreferenceManager(this);
+        mLoadingDialogFragment = new LoadingDialogFragment();
 
         Intent intent = getIntent();
         eid = mSharedpreferenceManager.getEid();
@@ -288,6 +293,7 @@ public class OperateRepairActivity extends BaseActivity {
         myHandler = new MyHandler();
         baseUrl = mSharedpreferenceManager.getImageBaseUrl();
 
+        showLoading();
         mNetworkManager.getWorkerOrderInfoStart(eid, token, orderNo, userName);
 
         mNetworkManager.getLastInstaller(eid, token, tNo, userName);
@@ -649,11 +655,13 @@ public class OperateRepairActivity extends BaseActivity {
         if (null == imgUrl) {
             imgUrl = "";
         }
+        showLoading();
         new UploadPicU(mNetworkManager).uploadPic(eid, token, orderNo, carId, tid, type, tType, imgUrl, pathT, userName);
     }
 
     //  获取完整imei
     private void getWholeImei(String imei) {
+        showLoading();
         mNetworkManager.getWholeImei(eid, token, imei, userName);
     }
 
@@ -722,11 +730,20 @@ public class OperateRepairActivity extends BaseActivity {
         return complete;
     }
 
+    //  显示LoadingFragment
+    private void showLoading() {
+        mLoadingDialogFragment.show(getFragmentManager(), "LoadingFragment");
+    }
+
     private class MyHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             Log.i(TAG, "handleMessage: msg.what-->" + msg.what);
+            if (mLoadingDialogFragment.isAdded()) {
+                mLoadingDialogFragment.dismiss();
+            }
+
             switch (msg.what) {
                 case Data.MSG_ERO: {
                     showFinishDialog(mStringMessage);

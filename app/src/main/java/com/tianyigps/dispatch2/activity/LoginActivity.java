@@ -19,6 +19,7 @@ import com.google.gson.Gson;
 import com.tianyigps.dispatch2.R;
 import com.tianyigps.dispatch2.bean.CheckUserBean;
 import com.tianyigps.dispatch2.data.Data;
+import com.tianyigps.dispatch2.dialog.LoadingDialogFragment;
 import com.tianyigps.dispatch2.interfaces.OnCheckUserListener;
 import com.tianyigps.dispatch2.manager.NetworkManager;
 import com.tianyigps.dispatch2.manager.SharedpreferenceManager;
@@ -46,6 +47,9 @@ public class LoginActivity extends Activity {
 
     private String mStringMessage = "数据请求失败";
 
+    //  LoadingFragment
+    private LoadingDialogFragment mLoadingDialogFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +73,7 @@ public class LoginActivity extends Activity {
         myHandler = new MyHandler();
 
         mSharedpreferenceManager = new SharedpreferenceManager(getApplicationContext());
+        mLoadingDialogFragment = new LoadingDialogFragment();
     }
 
     private void setEventListener() {
@@ -87,6 +92,7 @@ public class LoginActivity extends Activity {
                     showToast("请输入密码");
                 }
 
+                showLoading();
                 mNetworkManager.checkUser(launchAccount, password, "");
             }
         });
@@ -153,10 +159,19 @@ public class LoginActivity extends Activity {
         mToast.show();
     }
 
+    //  显示LoadingFragment
+    private void showLoading() {
+        mLoadingDialogFragment.show(getFragmentManager(), "LoadingFragment");
+    }
+
     private class MyHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
+
+            if (mLoadingDialogFragment.isAdded()) {
+                mLoadingDialogFragment.dismiss();
+            }
             switch (msg.what) {
                 case MSG_ERO: {
                     showToast(mStringMessage);
