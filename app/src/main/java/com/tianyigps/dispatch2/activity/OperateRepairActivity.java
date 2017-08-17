@@ -25,10 +25,12 @@ import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 import com.tianyigps.dispatch2.R;
 import com.tianyigps.dispatch2.base.BaseActivity;
+import com.tianyigps.dispatch2.bean.LastInstallerBean;
 import com.tianyigps.dispatch2.bean.StartOrderInfoBean;
 import com.tianyigps.dispatch2.bean.UploadPicBean;
 import com.tianyigps.dispatch2.bean.WholeImeiBean;
 import com.tianyigps.dispatch2.data.Data;
+import com.tianyigps.dispatch2.interfaces.OnGetLastInstallerListener;
 import com.tianyigps.dispatch2.interfaces.OnGetWholeIMEIListener;
 import com.tianyigps.dispatch2.interfaces.OnGetWorkerOrderInfoStartListener;
 import com.tianyigps.dispatch2.interfaces.OnUploadPicListener;
@@ -89,6 +91,8 @@ public class OperateRepairActivity extends BaseActivity {
     private String carNoG, frameNoG, typeAndNameG, positionG, positionPicG, installPicG, installNameG, installPhoneG;
     private String mDescribe;
     private String mPositionNew, mPositionPicNew, mInstallPicNew, mPositionPicUrlNew, mInstallPicUrlNew, mExplainNew, mImeiNew;
+
+    private String mLastInstaller, mLastPhoneNo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -285,6 +289,8 @@ public class OperateRepairActivity extends BaseActivity {
         baseUrl = mSharedpreferenceManager.getImageBaseUrl();
 
         mNetworkManager.getWorkerOrderInfoStart(eid, token, orderNo, userName);
+
+        mNetworkManager.getLastInstaller(eid, token, tNo, userName);
     }
 
     private void setEventListener() {
@@ -432,8 +438,8 @@ public class OperateRepairActivity extends BaseActivity {
                             positionG = carTerminalListBean.getInstallLocation();
                             positionPicG = baseUrl + carTerminalListBean.getInstallLocationPic();
                             installPicG = baseUrl + carTerminalListBean.getWiringDiagramPic();
-                            installNameG = objBean.getDispatchContactName();
-                            installPhoneG = objBean.getDispatchContactPhone();
+//                            installNameG = objBean.getDispatchContactName();
+//                            installPhoneG = objBean.getDispatchContactPhone();
                             tType = carTerminalListBean.getNewTerminalType();
                             mDescribe = carTerminalListBean.getMalDesc();
 
@@ -453,6 +459,28 @@ public class OperateRepairActivity extends BaseActivity {
                     }
                 }
 
+            }
+        });
+
+        mNetworkManager.setOnGetLastInstallerListener(new OnGetLastInstallerListener() {
+            @Override
+            public void onFailure() {
+                Log.i(TAG, "onFailure: ");
+            }
+
+            @Override
+            public void onSuccess(String result) {
+                Log.i(TAG, "onSuccess: result-->" + result);
+                Gson gson = new Gson();
+                LastInstallerBean lastInstallerBean = gson.fromJson(result, LastInstallerBean.class);
+                if (!lastInstallerBean.isSuccess()) {
+                    return;
+                }
+                LastInstallerBean.ObjBean objBean = lastInstallerBean.getObj();
+                mLastInstaller = objBean.getName();
+                mLastPhoneNo = objBean.getPhoneNo();
+
+                myHandler.sendEmptyMessage(Data.MSG_4);
             }
         });
 
@@ -545,7 +573,7 @@ public class OperateRepairActivity extends BaseActivity {
     }
 
     private void showFinishDialog(String msg) {
-        if (isFinishing()){
+        if (isFinishing()) {
             return;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(OperateRepairActivity.this);
@@ -562,7 +590,7 @@ public class OperateRepairActivity extends BaseActivity {
     }
 
     private void showMessageDialog(String msg) {
-        if (isFinishing()){
+        if (isFinishing()) {
             return;
         }
         new MessageDialogU(this).show(msg);
@@ -709,8 +737,8 @@ public class OperateRepairActivity extends BaseActivity {
                     mTextViewFrameNo.setText(frameNoG);
                     mTextViewTypeAndName.setText(typeAndNameG);
                     mTextViewPositionOld.setText(positionG);
-                    mTextViewInstallName.setText(installNameG);
-                    mTextViewInstallPhone.setText(installPhoneG);
+//                    mTextViewInstallName.setText(installNameG);
+//                    mTextViewInstallPhone.setText(installPhoneG);
                     mTextViewDescribe.setText(mDescribe);
                     Picasso.with(OperateRepairActivity.this)
                             .load(positionPicG)
@@ -750,6 +778,12 @@ public class OperateRepairActivity extends BaseActivity {
                 }
                 case Data.MSG_3: {
                     showMessageDialog(mStringMessage);
+                    break;
+                }
+                case Data.MSG_4: {
+                    //  历史安装人
+                    mTextViewInstallName.setText(mLastInstaller);
+                    mTextViewInstallPhone.setText(mLastPhoneNo);
                     break;
                 }
                 default: {
