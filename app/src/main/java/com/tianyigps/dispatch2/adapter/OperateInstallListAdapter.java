@@ -77,6 +77,9 @@ public class OperateInstallListAdapter extends BaseAdapter {
             viewHolder.ivPositionPic = contentView.findViewById(R.id.iv_item_operate_install_position_pic);
             viewHolder.ivInstallPic = contentView.findViewById(R.id.iv_item_operate_install_install_pic);
 
+            viewHolder.ivPositionDelete = contentView.findViewById(R.id.iv_item_operate_install_position_pic_delete);
+            viewHolder.ivInstallDelete = contentView.findViewById(R.id.iv_item_operate_install_install_pic_delete);
+
             viewHolder.rlOld = contentView.findViewById(R.id.rl_item_operate_install_old);
             viewHolder.rlItem = contentView.findViewById(R.id.rl_item_operate_install_list);
 
@@ -145,6 +148,10 @@ public class OperateInstallListAdapter extends BaseAdapter {
                     .centerInside()
                     .error(R.drawable.ic_camera)
                     .into(viewHolder.ivPositionPic);
+
+            viewHolder.ivPositionDelete.setVisibility(View.VISIBLE);
+        } else {
+            viewHolder.ivPositionDelete.setVisibility(View.GONE);
         }
 
         if (data.getInstallPic() != null) {
@@ -154,14 +161,17 @@ public class OperateInstallListAdapter extends BaseAdapter {
                     .centerInside()
                     .error(R.drawable.ic_camera)
                     .into(viewHolder.ivInstallPic);
+
+            viewHolder.ivInstallDelete.setVisibility(View.VISIBLE);
+        } else {
+            viewHolder.ivInstallDelete.setVisibility(View.GONE);
         }
 
         if (data.isComplete()) {
             viewHolder.rlItem.setBackgroundResource(R.drawable.bg_item);
-        }else {
+        } else {
             viewHolder.rlItem.setBackgroundResource(R.drawable.bg_item_orange);
         }
-
 
         viewHolder.tvStatus.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -216,6 +226,26 @@ public class OperateInstallListAdapter extends BaseAdapter {
             }
         });
 
+        viewHolder.ivPositionDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (null == mOnItemOperateListener) {
+                    throw new NullPointerException("OnItemOperateListener is null");
+                }
+                mOnItemOperateListener.onPositionPicDelete(positionFinal);
+            }
+        });
+
+        viewHolder.ivInstallDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (null == mOnItemOperateListener) {
+                    throw new NullPointerException("OnItemOperateListener is null");
+                }
+                mOnItemOperateListener.onInstallPicDelete(positionFinal);
+            }
+        });
+
         return contentView;
     }
 
@@ -224,6 +254,7 @@ public class OperateInstallListAdapter extends BaseAdapter {
         private EditText etTNoNew, etPosition;
         private ImageView ivScanner, ivLocate, ivPositionPic, ivInstallPic;
         private RelativeLayout rlOld, rlItem;
+        private ImageView ivPositionDelete, ivInstallDelete;
     }
 
     public interface OnItemOperateListener {
@@ -238,6 +269,10 @@ public class OperateInstallListAdapter extends BaseAdapter {
         void onPositionPicClick(int position);
 
         void onInstallPicClick(int position);
+
+        void onPositionPicDelete(int position);
+
+        void onInstallPicDelete(int position);
     }
 
     public void setOnItemOperateListener(OnItemOperateListener listener) {

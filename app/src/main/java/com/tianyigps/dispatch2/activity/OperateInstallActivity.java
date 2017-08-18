@@ -60,6 +60,7 @@ public class OperateInstallActivity extends BaseActivity {
     private static final int PIC_MAX = 5;
 
     private ImageView mImageViewCarNo, mImageViewFrameNo;
+    private ImageView mImageViewCarNoDelete, mImageViewFrameNoDelete;
     private EditText mEditTextCarNo, mEditTextCarType;
     private TextView mTextViewFrameNo;
 
@@ -118,8 +119,8 @@ public class OperateInstallActivity extends BaseActivity {
     private String fileTempName;
 
     private String mBaseImg;
-    private String mCarNoPic;
-    private String mCarFramePic;
+    private String mCarNoPic, mCarNoPicUrl;
+    private String mCarFramePic, mCarFramePicUrl;
     private String mCarNo;
     private String mCarFrameNo;
     private String mCarBrand;
@@ -130,6 +131,9 @@ public class OperateInstallActivity extends BaseActivity {
     //  压缩图片temp
     private int mTempType, mTempId;
     private String mTempImgUrl;
+
+    //  删除图片
+    private int mDeleteType = Data.DATA_UPLOAD_TYPE_1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -363,6 +367,8 @@ public class OperateInstallActivity extends BaseActivity {
 
         mImageViewCarNo = findViewById(R.id.iv_layout_operate_install_car_pic);
         mImageViewFrameNo = findViewById(R.id.iv_layout_operate_install_frame_pic);
+        mImageViewCarNoDelete = findViewById(R.id.iv_layout_operate_install_car_pic_delete);
+        mImageViewFrameNoDelete = findViewById(R.id.iv_layout_operate_install_frame_pic_delete);
         mEditTextCarNo = findViewById(R.id.et_layout_operate_install_car_no);
         mTextViewFrameNo = findViewById(R.id.tv_layout_operate_install_frame_no);
         mEditTextCarType = findViewById(R.id.et_layout_operate_install_car_type);
@@ -445,6 +451,26 @@ public class OperateInstallActivity extends BaseActivity {
             }
         });
 
+        mImageViewCarNoDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO: 2017/8/18 删除车牌号图片
+                mDeleteType = Data.DATA_UPLOAD_TYPE_1;
+                showLoading();
+                mNetworkManager.deletePic(eid, token, orderNo, carId, Data.DATA_UPLOAD_TYPE_1, mCarFramePicUrl, userName);
+            }
+        });
+
+        mImageViewFrameNoDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO: 2017/8/18 删除车架号图片
+                mDeleteType = Data.DATA_UPLOAD_TYPE_2;
+                showLoading();
+                mNetworkManager.deletePic(eid, token, orderNo, carId, Data.DATA_UPLOAD_TYPE_2, mCarFramePicUrl, userName);
+            }
+        });
+
         mButtonSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -457,6 +483,7 @@ public class OperateInstallActivity extends BaseActivity {
             @Override
             public void onDeleteClick(int position) {
                 //  2017/8/1 删除图片
+                mDeleteType = Data.DATA_UPLOAD_TYPE_5;
                 itemRecycler = position;
                 removePicFromRecycler(position);
             }
@@ -545,6 +572,20 @@ public class OperateInstallActivity extends BaseActivity {
                 picType = 3;
                 showChoiceDialog();
             }
+
+            @Override
+            public void onPositionPicDelete(int position) {
+                // TODO: 2017/8/18 删除位置图片
+                itemPosition = position;
+                mDeleteType = Data.DATA_UPLOAD_TYPE_3;
+            }
+
+            @Override
+            public void onInstallPicDelete(int position) {
+                // TODO: 2017/8/18 删除安装图片
+                itemPosition = position;
+                mDeleteType = Data.DATA_UPLOAD_TYPE_4;
+            }
         });
 
         mNetworkManager.setGetWorkerOrderInfoStartListener(new OnGetWorkerOrderInfoStartListener() {
@@ -573,8 +614,10 @@ public class OperateInstallActivity extends BaseActivity {
                 mCarNo = carListBean.getCarNo();
                 mCarFrameNo = carListBean.getCarVin();
                 mCarBrand = carListBean.getCarBrand();
-                mCarNoPic = mBaseImg + carListBean.getCarNoPic();
-                mCarFramePic = mBaseImg + carListBean.getCarVinPic();
+                mCarNoPicUrl = carListBean.getCarNoPic();
+                mCarFramePicUrl = carListBean.getCarVinPic();
+                mCarNoPic = mBaseImg + mCarNoPicUrl;
+                mCarFramePic = mBaseImg + mCarFramePicUrl;
 
                 mDatabaseManager.addCarNoPic(idMainCar, mCarNoPic, carListBean.getCarNoPic());
                 mDatabaseManager.addCarFrameNoPic(idMainCar, mCarFramePic, carListBean.getCarVinPic());
@@ -697,6 +740,9 @@ public class OperateInstallActivity extends BaseActivity {
                     case INTENT_CHOICE_C: {
                     }
                     case INTENT_PHOTO_C: {
+                        mCarNoPicUrl = imgUrl;
+                        mCarNoPic = mBaseImg + mCarNoPicUrl;
+
                         mDatabaseManager.addCarNoPic(idMainCar, itemPath, imgUrl);
                         myHandler.sendEmptyMessage(Data.MSG_4);
                         break;
@@ -705,6 +751,9 @@ public class OperateInstallActivity extends BaseActivity {
                     case INTENT_CHOICE_F: {
                     }
                     case INTENT_PHOTO_F: {
+                        mCarFramePicUrl = imgUrl;
+                        mCarFramePic = mBaseImg + mCarFramePicUrl;
+
                         mDatabaseManager.addCarFrameNoPic(idMainCar, itemPath, imgUrl);
                         myHandler.sendEmptyMessage(Data.MSG_5);
                         break;
@@ -996,7 +1045,12 @@ public class OperateInstallActivity extends BaseActivity {
             @Override
             public void callback(boolean isSuccess, String outfile) {
                 //  上传
-                new UploadPicU(mNetworkManager).uploadCarPic(eid, token, orderNo, carId, mTempType, mTempImgUrl, outfile, userName);
+                if (isSuccess) {
+                    new UploadPicU(mNetworkManager).uploadCarPic(eid, token, orderNo, carId, mTempType, mTempImgUrl, outfile, userName);
+                } else {
+                    mStringMessage = "选择图片出错，请重新上传！";
+                    myHandler.sendEmptyMessage(Data.MSG_ERO);
+                }
             }
         });
     }
@@ -1184,21 +1238,25 @@ public class OperateInstallActivity extends BaseActivity {
                 case Data.MSG_4: {
                     //  加载carNo图片
                     Picasso.with(OperateInstallActivity.this)
-                            .load(itemPath)
+                            .load(mCarNoPic)
                             .fit()
                             .centerInside()
                             .error(R.drawable.ic_camera)
                             .into(mImageViewCarNo);
+
+                    mImageViewCarNoDelete.setVisibility(View.VISIBLE);
                     break;
                 }
                 case Data.MSG_5: {
                     //  加载frameNo图片
                     Picasso.with(OperateInstallActivity.this)
-                            .load(itemPath)
+                            .load(mCarFramePic)
                             .fit()
                             .centerInside()
                             .error(R.drawable.ic_camera)
                             .into(mImageViewFrameNo);
+
+                    mImageViewFrameNoDelete.setVisibility(View.VISIBLE);
                     break;
                 }
                 case Data.MSG_6: {
@@ -1224,20 +1282,66 @@ public class OperateInstallActivity extends BaseActivity {
                     break;
                 }
                 case Data.MSG_8: {
-                    showMessageDialog(mStringMessage);
                     //  删除图片
-                    mAdapterOperateInstallRecyclerDataList.remove(itemRecycler);
-                    int last = mAdapterOperateInstallRecyclerDataList.size() - 1;
-                    if (null != mAdapterOperateInstallRecyclerDataList.get(last).getPath()) {
-                        mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData());
-                    }
-                    mOperateInstallAdapter.notifyDataSetChanged();
+                    showMessageDialog(mStringMessage);
 
-                    mDatabaseManager.modifyCarPics(idMainCar, itemRecycler, null, null);
+                    //  删除车牌号图片
+                    if (Data.DATA_UPLOAD_TYPE_1 == mDeleteType) {
+                        mCarNoPicUrl = null;
+                        mCarNoPic = null;
+
+                        Picasso.with(OperateInstallActivity.this)
+                                .load(R.drawable.ic_camera)
+                                .fit()
+                                .centerInside()
+                                .into(mImageViewCarNo);
+
+                        mImageViewCarNoDelete.setVisibility(View.GONE);
+                        break;
+                    }
+
+                    //  删除车架号图片
+                    if (Data.DATA_UPLOAD_TYPE_2 == mDeleteType) {
+                        mCarFramePicUrl = null;
+                        mCarFramePic = null;
+
+                        Picasso.with(OperateInstallActivity.this)
+                                .load(R.drawable.ic_camera)
+                                .fit()
+                                .centerInside()
+                                .into(mImageViewFrameNo);
+
+                        mImageViewFrameNoDelete.setVisibility(View.GONE);
+                        break;
+                    }
+
+                    //  删除列表中安装位置图片
+                    if (Data.DATA_UPLOAD_TYPE_3 == mDeleteType) {
+//                        itemPosition 正在操作中的item位置
+                        break;
+                    }
+
+                    //  删除列表中接线图片
+                    if (Data.DATA_UPLOAD_TYPE_4 == mDeleteType) {
+                        break;
+                    }
+
+                    //  删除RecyclerView图片
+                    if (Data.DATA_UPLOAD_TYPE_5 == mDeleteType) {
+                        mAdapterOperateInstallRecyclerDataList.remove(itemRecycler);
+                        int last = mAdapterOperateInstallRecyclerDataList.size() - 1;
+                        if (null != mAdapterOperateInstallRecyclerDataList.get(last).getPath()) {
+                            mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData());
+                        }
+                        mOperateInstallAdapter.notifyDataSetChanged();
+
+                        mDatabaseManager.modifyCarPics(idMainCar, itemRecycler, null, null);
+                        break;
+                    }
                     break;
                 }
                 case Data.MSG_9: {
-
+                    //  获取订单信息
                     if (null != mCarNoPic) {
                         Picasso.with(OperateInstallActivity.this)
                                 .load(mCarNoPic)

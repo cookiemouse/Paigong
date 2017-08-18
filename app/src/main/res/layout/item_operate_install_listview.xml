@@ -36,9 +36,9 @@
             android:id="@+id/rl_item_operate_install_old"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@id/tv_item_operate_install_state"
             android:layout_marginTop="@dimen/dp_16"
-            android:visibility="gone"
-            android:layout_below="@id/tv_item_operate_install_state">
+            android:visibility="gone">
 
             <ImageView
                 android:id="@+id/iv_item_operate_install_old"
@@ -183,6 +183,19 @@
             android:layout_alignTop="@+id/tv_item_operate_install_position_title"
             android:src="@drawable/ic_camera"/>
 
+        <ImageView
+            android:id="@+id/iv_item_operate_install_position_pic_delete"
+            android:layout_width="@dimen/dp_24"
+            android:layout_height="@dimen/dp_24"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/iv_item_operate_install_position_pic"
+            android:layout_marginTop="@dimen/dp_14_n"
+            android:background="@drawable/bg_cycle_delete"
+            android:padding="@dimen/dp_4"
+            android:src="@drawable/ic_delete"
+            android:visibility="visible"/>
+
         <View
             android:id="@+id/view_item_operate_install_line_3"
             android:layout_width="match_parent"
@@ -229,7 +242,21 @@
                 android:layout_alignParentRight="true"
                 android:layout_alignTop="@+id/iv_item_operate_install_install"
                 android:src="@drawable/ic_camera"/>
+
         </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/iv_item_operate_install_install_pic_delete"
+            android:layout_width="@dimen/dp_24"
+            android:layout_height="@dimen/dp_24"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/rl_item_operate_install_install"
+            android:layout_marginTop="@dimen/dp_14_n"
+            android:background="@drawable/bg_cycle_delete"
+            android:padding="@dimen/dp_4"
+            android:src="@drawable/ic_delete"
+            android:visibility="visible"/>
     </RelativeLayout>
 
 </FrameLayout>

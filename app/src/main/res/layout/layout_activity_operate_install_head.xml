@@ -6,7 +6,8 @@
               android:focusable="true"
               android:focusableInTouchMode="true"
               android:orientation="vertical"
-              android:padding="@dimen/dp_8">
+              android:paddingLeft="@dimen/dp_8"
+              android:paddingRight="@dimen/dp_8">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -14,6 +15,7 @@
         android:layout_margin="@dimen/dp_4">
 
         <RelativeLayout
+            android:id="@+id/rl_layout_operate_install_car"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
@@ -53,7 +55,6 @@
                 android:lines="1"
                 android:maxWidth="@dimen/dp_240"
                 android:textSize="@dimen/sp_14"/>
-
         </RelativeLayout>
 
 
@@ -66,11 +67,24 @@
             android:layout_centerVertical="true"
             android:src="@drawable/ic_camera"/>
 
+        <ImageView
+            android:id="@+id/iv_layout_operate_install_car_pic_delete"
+            android:layout_width="@dimen/dp_24"
+            android:layout_height="@dimen/dp_24"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:background="@drawable/bg_cycle_delete"
+            android:padding="@dimen/dp_4"
+            android:src="@drawable/ic_delete"
+            android:visibility="visible"/>
+
         <View
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_0_5"
             android:layout_below="@id/iv_layout_operate_install_car_pic"
             android:layout_marginLeft="@dimen/dp_40"
+            android:layout_marginStart="@dimen/dp_40"
             android:layout_marginTop="@dimen/dp_4"
             android:background="@color/colorBlueTheme"/>
 
@@ -81,6 +95,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:clipChildren="false"
         android:layout_margin="@dimen/dp_4">
 
         <RelativeLayout
@@ -132,6 +147,18 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:src="@drawable/ic_camera"/>
+
+        <ImageView
+            android:id="@+id/iv_layout_operate_install_frame_pic_delete"
+            android:layout_width="@dimen/dp_24"
+            android:layout_height="@dimen/dp_24"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:background="@drawable/bg_cycle_delete"
+            android:padding="@dimen/dp_4"
+            android:src="@drawable/ic_delete"
+            android:visibility="visible"/>
 
         <View
             android:layout_width="match_parent"
