@@ -44,6 +44,7 @@ import com.tianyigps.dispatch2.manager.DatabaseManager;
 import com.tianyigps.dispatch2.manager.FileManager;
 import com.tianyigps.dispatch2.manager.NetworkManager;
 import com.tianyigps.dispatch2.manager.SharedpreferenceManager;
+import com.tianyigps.dispatch2.utils.RegularU;
 import com.tianyigps.dispatch2.utils.TinyU;
 import com.tianyigps.dispatch2.utils.UploadPicU;
 import com.tianyigps.dispatch2.utils.Uri2FileU;
@@ -454,7 +455,7 @@ public class OperateInstallActivity extends BaseActivity {
         mImageViewCarNoDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: 2017/8/18 删除车牌号图片
+                // 2017/8/18 删除车牌号图片
                 mDeleteType = Data.DATA_UPLOAD_TYPE_1;
                 showLoading();
                 mNetworkManager.deletePic(eid, token, orderNo, carId, Data.DATA_UPLOAD_TYPE_1, mCarFramePicUrl, userName);
@@ -464,7 +465,7 @@ public class OperateInstallActivity extends BaseActivity {
         mImageViewFrameNoDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: 2017/8/18 删除车架号图片
+                // 2017/8/18 删除车架号图片
                 mDeleteType = Data.DATA_UPLOAD_TYPE_2;
                 showLoading();
                 mNetworkManager.deletePic(eid, token, orderNo, carId, Data.DATA_UPLOAD_TYPE_2, mCarFramePicUrl, userName);
@@ -631,27 +632,27 @@ public class OperateInstallActivity extends BaseActivity {
 
                 if (null != pic1) {
                     mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData(mBaseImg + pic1, pic1));
-                    mDatabaseManager.addCarPics(idMainCar, 0, mBaseImg + pic1, pic1);
+//                    mDatabaseManager.addCarPics(idMainCar, 0, mBaseImg + pic1, pic1);
                 }
                 if (null != pic2) {
                     mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData(mBaseImg + pic2, pic2));
-                    mDatabaseManager.addCarPics(idMainCar, 1, mBaseImg + pic1, pic1);
+//                    mDatabaseManager.addCarPics(idMainCar, 1, mBaseImg + pic1, pic1);
                 }
                 if (null != pic3) {
                     mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData(mBaseImg + pic3, pic3));
-                    mDatabaseManager.addCarPics(idMainCar, 2, mBaseImg + pic1, pic1);
+//                    mDatabaseManager.addCarPics(idMainCar, 2, mBaseImg + pic1, pic1);
                 }
                 if (null != pic4) {
                     mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData(mBaseImg + pic4, pic4));
-                    mDatabaseManager.addCarPics(idMainCar, 3, mBaseImg + pic1, pic1);
+//                    mDatabaseManager.addCarPics(idMainCar, 3, mBaseImg + pic1, pic1);
                 }
                 if (null != pic5) {
                     mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData(mBaseImg + pic5, pic5));
-                    mDatabaseManager.addCarPics(idMainCar, 4, mBaseImg + pic1, pic1);
+//                    mDatabaseManager.addCarPics(idMainCar, 4, mBaseImg + pic1, pic1);
                 }
                 if (null != pic6) {
                     mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData(mBaseImg + pic6, pic6));
-                    mDatabaseManager.addCarPics(idMainCar, 5, mBaseImg + pic1, pic1);
+//                    mDatabaseManager.addCarPics(idMainCar, 5, mBaseImg + pic1, pic1);
                 }
                 List<StartOrderInfoBean.ObjBean.CarListBean.CarTerminalListBean> carTerminalListBeanList = carListBean.getCarTerminalList();
                 for (int i = 0; i < carTerminalListBeanList.size(); i++) {
@@ -732,7 +733,14 @@ public class OperateInstallActivity extends BaseActivity {
                     case INTENT_CHOICE_R: {
                     }
                     case INTENT_PHOTO_R: {
-                        mDatabaseManager.addCarPics(idMainCar, itemRecycler, itemPath, imgUrl);
+//                        mDatabaseManager.addCarPics(idMainCar, itemRecycler, itemPath, imgUrl);
+                        AdapterOperateInstallRecyclerData data = mAdapterOperateInstallRecyclerDataList.get(itemRecycler);
+                        if (null == data || null == data.getImgUrl()) {
+                            mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData(itemPath, imgUrl));
+                        } else {
+                            data.setPath(itemPath);
+                            data.setImgUrl(imgUrl);
+                        }
                         myHandler.sendEmptyMessage(Data.MSG_3);
                         break;
                     }
@@ -905,6 +913,11 @@ public class OperateInstallActivity extends BaseActivity {
     //  保存数据
     private void saveData() {
         String carNo = mEditTextCarNo.getText().toString();
+        if (!RegularU.checkCarNo(carNo)) {
+            mStringMessage = "请输入正确的车牌号！";
+            myHandler.sendEmptyMessage(Data.MSG_ERO);
+            return;
+        }
         String carType = mEditTextCarType.getText().toString();
         String carFrameNo = mTextViewFrameNo.getText().toString();
 
@@ -943,7 +956,6 @@ public class OperateInstallActivity extends BaseActivity {
 
     //  RecycleView删除图片
     private void removePicFromRecycler(int position) {
-
         AdapterOperateInstallRecyclerData data = mAdapterOperateInstallRecyclerDataList.get(position);
         String url = data.getImgUrl();
         if (null == url || "".equals(url)) {
@@ -1232,7 +1244,8 @@ public class OperateInstallActivity extends BaseActivity {
                 }
                 case Data.MSG_3: {
                     //  loadCarPics, 加载Recycler图片
-                    loadCarPics();
+                    mOperateInstallAdapter.notifyDataSetChanged();
+//                    loadCarPics();
                     break;
                 }
                 case Data.MSG_4: {
@@ -1342,22 +1355,28 @@ public class OperateInstallActivity extends BaseActivity {
                 }
                 case Data.MSG_9: {
                     //  获取订单信息
-                    if (null != mCarNoPic) {
+                    if (null != mCarNoPicUrl) {
                         Picasso.with(OperateInstallActivity.this)
                                 .load(mCarNoPic)
                                 .fit()
                                 .centerInside()
                                 .error(R.drawable.ic_camera)
                                 .into(mImageViewCarNo);
+                        mImageViewCarNoDelete.setVisibility(View.VISIBLE);
+                    } else {
+                        mImageViewCarNoDelete.setVisibility(View.GONE);
                     }
 
-                    if (null != mCarFramePic) {
+                    if (null != mCarFramePicUrl) {
                         Picasso.with(OperateInstallActivity.this)
                                 .load(mCarFramePic)
                                 .fit()
                                 .centerInside()
                                 .error(R.drawable.ic_camera)
                                 .into(mImageViewFrameNo);
+                        mImageViewFrameNoDelete.setVisibility(View.VISIBLE);
+                    } else {
+                        mImageViewFrameNoDelete.setVisibility(View.GONE);
                     }
 
                     if (mAdapterOperateInstallRecyclerDataList.size() <= PIC_MAX) {

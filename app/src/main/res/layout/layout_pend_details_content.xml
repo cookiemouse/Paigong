@@ -94,7 +94,7 @@
                     android:layout_alignBottom="@+id/iv_layout_pend_details_content_contact"
                     android:layout_toEndOf="@+id/iv_layout_pend_details_content_contact"
                     android:layout_toRightOf="@+id/iv_layout_pend_details_content_contact"
-                    android:text="333"/>
+                    android:text=""/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -119,7 +119,7 @@
                     android:layout_alignTop="@+id/iv_layout_pend_details_content_time"
                     android:layout_toEndOf="@+id/iv_layout_pend_details_content_time"
                     android:layout_toRightOf="@+id/iv_layout_pend_details_content_time"
-                    android:text="44444444"
+                    android:text=""
                     android:textColor="@color/colorBlueTheme"/>
 
                 <TextView
@@ -141,7 +141,7 @@
                     android:layout_alignLeft="@+id/tv_layout_pend_details_content_time"
                     android:layout_alignStart="@+id/tv_layout_pend_details_content_time"
                     android:layout_below="@+id/tv_layout_pend_details_content_time"
-                    android:text="555"/>
+                    android:text=""/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -176,7 +176,7 @@
                     android:layout_alignLeft="@+id/tv_layout_pend_details_content_order_remarks_title"
                     android:layout_alignStart="@+id/tv_layout_pend_details_content_order_remarks_title"
                     android:layout_below="@+id/tv_layout_pend_details_content_order_remarks_title"
-                    android:text="666"/>
+                    android:text=""/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -211,7 +211,7 @@
                     android:layout_alignLeft="@+id/tv_layout_pend_details_content_order_install_title"
                     android:layout_alignStart="@+id/tv_layout_pend_details_content_order_install_title"
                     android:layout_below="@+id/tv_layout_pend_details_content_order_install_title"
-                    android:text="888"/>
+                    android:text=""/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -247,7 +247,7 @@
                     android:layout_alignLeft="@+id/tv_layout_pend_details_content_remove_title"
                     android:layout_alignStart="@+id/tv_layout_pend_details_content_remove_title"
                     android:layout_below="@+id/tv_layout_pend_details_content_remove_title"
-                    android:text="000"/>
+                    android:text=""/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -282,7 +282,7 @@
                     android:layout_alignLeft="@+id/tv_layout_pend_details_content_info_title"
                     android:layout_alignStart="@+id/tv_layout_pend_details_content_info_title"
                     android:layout_below="@+id/tv_layout_pend_details_content_info_title"
-                    android:text="000"/>
+                    android:text=""/>
             </RelativeLayout>
 
             <Button
