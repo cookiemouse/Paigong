@@ -111,6 +111,9 @@ public class OperateRepairActivity extends BaseActivity {
     //  删除图片，判定是删除的哪张图片，0=DATA_UPLOAD_TYPE_3, 1 = DATA_UPLOAD_TYPE_4
     private int mPicPosition = Data.DATA_UPLOAD_TYPE_3;
 
+    //  输入提示文字
+    private TextView mTextViewTip1, mTextViewTip2, mTextViewTip3;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -256,6 +259,9 @@ public class OperateRepairActivity extends BaseActivity {
 
         mEditTextPosition = findViewById(R.id.et_activity_operate_default_position_new);
         mEditTextExplain = findViewById(R.id.et_activity_operate_default_install_explain);
+        mTextViewTip1 = findViewById(R.id.tv_activity_operate_repair_tip_1);
+        mTextViewTip2 = findViewById(R.id.tv_activity_operate_repair_tip_2);
+        mTextViewTip3 = findViewById(R.id.tv_activity_operate_repair_tip_3);
 
         mButtonSave = findViewById(R.id.btn_activity_operate_repair_save);
 
@@ -704,7 +710,7 @@ public class OperateRepairActivity extends BaseActivity {
                 //  上传
                 if (isSuccess) {
                     new UploadPicU(mNetworkManager).uploadPic(eid, token, orderNo, carId, tId, mTempType, tType, mTempImgUrl, outfile, userName);
-                }else {
+                } else {
                     mStringMessage = "选择图片出错，请重新上传！";
                     myHandler.sendEmptyMessage(Data.MSG_3);
                 }
@@ -758,23 +764,33 @@ public class OperateRepairActivity extends BaseActivity {
 
             if (null == position || "".equals(position)) {
                 complete = false;
-                mEditTextPosition.setHintTextColor(getResources().getColor(R.color.colorOrange));
+                mTextViewTip1.setText(getString(R.string.tip_position));
+                mTextViewTip1.setVisibility(View.VISIBLE);
             } else {
-                mEditTextPosition.setHintTextColor(getResources().getColor(R.color.colorBlack));
+                mTextViewTip1.setVisibility(View.INVISIBLE);
             }
             if (null == explain || "".equals(explain)) {
                 complete = false;
-                mEditTextExplain.setHintTextColor(getResources().getColor(R.color.colorOrange));
+                mTextViewTip3.setVisibility(View.VISIBLE);
             } else {
-                mEditTextExplain.setHintTextColor(getResources().getColor(R.color.colorBlack));
+                mTextViewTip3.setVisibility(View.INVISIBLE);
             }
 
             if (null == positionUrl || "".equals(positionUrl)) {
                 complete = false;
+                if (mTextViewTip1.getVisibility() != View.VISIBLE) {
+                    mTextViewTip1.setText(getString(R.string.tip_pic));
+                    mTextViewTip1.setVisibility(View.VISIBLE);
+                }
+            } else {
+                mTextViewTip1.setVisibility(View.INVISIBLE);
             }
 
             if (null == installUrl || "".equals(installUrl)) {
                 complete = false;
+                mTextViewTip2.setVisibility(View.VISIBLE);
+            } else {
+                mTextViewTip2.setVisibility(View.INVISIBLE);
             }
 
             cursor.close();
@@ -877,6 +893,7 @@ public class OperateRepairActivity extends BaseActivity {
                     if (Data.DATA_UPLOAD_TYPE_3 == mPicPosition) {
                         mImageViewPositionNewDelete.setVisibility(View.GONE);
                         mPositionPicUrlNew = null;
+                        mDatabaseManager.addRepairPositionUrl(tId, null);
                         Picasso.with(OperateRepairActivity.this)
                                 .load(R.drawable.ic_camera)
                                 .fit()
@@ -885,6 +902,7 @@ public class OperateRepairActivity extends BaseActivity {
                     } else {
                         mImageViewInstallNewDelete.setVisibility(View.GONE);
                         mInstallPicUrlNew = null;
+                        mDatabaseManager.addRepairInstallUrl(tId, null);
                         Picasso.with(OperateRepairActivity.this)
                                 .load(R.drawable.ic_camera)
                                 .fit()

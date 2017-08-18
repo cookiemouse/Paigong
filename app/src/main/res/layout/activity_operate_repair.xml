@@ -380,6 +380,18 @@
             android:layout_marginTop="@dimen/dp_4"
             android:background="@color/colorBlueTheme"/>
 
+        <TextView
+            android:id="@+id/tv_activity_operate_repair_tip_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/view_activity_operate_default_line_3"
+            android:layout_marginLeft="@dimen/dp_40"
+            android:layout_marginStart="@dimen/dp_40"
+            android:text="@string/tip_imei"
+            android:textColor="@color/colorOrange"
+            android:visibility="invisible">
+        </TextView>
+
         <RelativeLayout
             android:id="@+id/rl_activity_operate_default_install_new"
             android:layout_width="match_parent"
@@ -416,6 +428,18 @@
                 android:layout_alignParentRight="true"
                 android:layout_alignTop="@+id/iv_activity_operate_default_install_new"
                 android:src="@drawable/ic_camera"/>
+
+            <TextView
+                android:id="@+id/tv_activity_operate_repair_tip_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_activity_operate_default_install_new"
+                android:layout_marginLeft="@dimen/dp_40"
+                android:layout_marginStart="@dimen/dp_40"
+                android:text="@string/tip_pic"
+                android:textColor="@color/colorOrange"
+                android:visibility="invisible">
+            </TextView>
 
         </RelativeLayout>
 
@@ -462,6 +486,16 @@
             android:maxLength="200"
             android:minHeight="@dimen/dp_96"
             android:textSize="@dimen/sp_14"/>
+
+        <TextView
+            android:id="@+id/tv_activity_operate_repair_tip_3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/et_activity_operate_default_install_explain"
+            android:text="@string/tip_explain"
+            android:textColor="@color/colorOrange"
+            android:visibility="invisible">
+        </TextView>
 
         <TextView
             android:id="@+id/tv_activity_operate_default_install_explain_count"
