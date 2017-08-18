@@ -2,9 +2,11 @@ package com.tianyigps.dispatch2.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -14,7 +16,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptor;
@@ -47,6 +48,7 @@ import com.tianyigps.dispatch2.interfaces.OnGetWholeIMEIListener;
 import com.tianyigps.dispatch2.manager.LocateManager;
 import com.tianyigps.dispatch2.manager.NetworkManager;
 import com.tianyigps.dispatch2.manager.SharedpreferenceManager;
+import com.tianyigps.dispatch2.utils.SnackbarU;
 import com.tianyigps.dispatch2.utils.TimeFormatU;
 import com.tianyigps.dispatch2.utils.TimerU;
 
@@ -93,8 +95,6 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
     //  地理编码
     private GeoCoder mGeoCoderSearch;
     private String mStringAddress;
-
-    private Toast mToast;
 
     private Intent mIntent;
     private boolean mIsShow = false;
@@ -202,8 +202,6 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
 
     private void init() {
         this.setTitleText(R.string.look_location);
-
-        mToast = Toast.makeText(LocateActivity.this, "", Toast.LENGTH_SHORT);
 
         mMapView = findViewById(R.id.mv_layout_map);
         mBaiduMap = mMapView.getMap();
@@ -493,12 +491,15 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
     }
 
     private void showToast(String message) {
+        LinearLayout linearLayout = findViewById(R.id.activity_locate);
         View viewToast = LayoutInflater.from(LocateActivity.this).inflate(R.layout.layout_top_toast, null);
         TextView textViewInfo = viewToast.findViewById(R.id.tv_layout_top_toast);
         textViewInfo.setText(message);
-        mToast.setView(viewToast);
-        mToast.setGravity(Gravity.TOP, 0, 0);
-        mToast.show();
+        new SnackbarU()
+                .make(linearLayout, viewToast, Snackbar.LENGTH_SHORT)
+                .setBackground(Color.WHITE)
+                .setGravity(Gravity.TOP)
+                .show();
     }
 
     //  显示LoadingFragment

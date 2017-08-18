@@ -49,4 +49,5 @@ dependencies {
     compile 'com.yanzhenjie:permission:1.0.8'
     compile 'com.zxy.android:tiny:0.0.6'
     testCompile 'junit:junit:4.12'
+    compile 'com.android.support:design:26.0.0-alpha1'
 }

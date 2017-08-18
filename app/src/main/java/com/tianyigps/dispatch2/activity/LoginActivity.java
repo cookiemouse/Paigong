@@ -2,9 +2,11 @@ package com.tianyigps.dispatch2.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -12,8 +14,8 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.tianyigps.dispatch2.R;
@@ -23,11 +25,9 @@ import com.tianyigps.dispatch2.dialog.LoadingDialogFragment;
 import com.tianyigps.dispatch2.interfaces.OnCheckUserListener;
 import com.tianyigps.dispatch2.manager.NetworkManager;
 import com.tianyigps.dispatch2.manager.SharedpreferenceManager;
+import com.tianyigps.dispatch2.utils.SnackbarU;
 
 import cn.jpush.android.api.JPushInterface;
-
-import static com.tianyigps.dispatch2.data.Data.MSG_1;
-import static com.tianyigps.dispatch2.data.Data.MSG_ERO;
 
 public class LoginActivity extends Activity {
 
@@ -35,8 +35,6 @@ public class LoginActivity extends Activity {
 
     private EditText mEditTextAccount, mEditTextPassword;
     private Button mButtonLogin;
-
-    private Toast mToast;
 
     private NetworkManager mNetworkManager;
     private MyHandler myHandler;
@@ -67,8 +65,6 @@ public class LoginActivity extends Activity {
         mEditTextPassword = findViewById(R.id.et_activity_login_password);
         mButtonLogin = findViewById(R.id.btn_activity_login);
 
-        mToast = Toast.makeText(LoginActivity.this, "", Toast.LENGTH_SHORT);
-
         mNetworkManager = new NetworkManager();
         myHandler = new MyHandler();
 
@@ -90,6 +86,7 @@ public class LoginActivity extends Activity {
                 }
                 if ("".equals(password)) {
                     showToast("请输入密码");
+                    return;
                 }
 
                 showLoading();
@@ -101,7 +98,7 @@ public class LoginActivity extends Activity {
             @Override
             public void onFailure() {
                 Log.i(TAG, "onFailure: ");
-                myHandler.sendEmptyMessage(MSG_ERO);
+                myHandler.sendEmptyMessage(Data.MSG_ERO);
             }
 
             @Override
@@ -130,7 +127,7 @@ public class LoginActivity extends Activity {
 
                 mSharedpreferenceManager.saveAccount(launchAccount);
 
-                myHandler.sendEmptyMessage(MSG_1);
+                myHandler.sendEmptyMessage(Data.MSG_1);
             }
         });
     }
@@ -150,12 +147,15 @@ public class LoginActivity extends Activity {
     }
 
     private void showToast(String message) {
+        LinearLayout linearLayout = findViewById(R.id.activity_login);
         View viewToast = LayoutInflater.from(LoginActivity.this).inflate(R.layout.layout_top_toast, null);
         TextView textViewInfo = viewToast.findViewById(R.id.tv_layout_top_toast);
         textViewInfo.setText(message);
-        mToast.setView(viewToast);
-        mToast.setGravity(Gravity.TOP, 0, 0);
-        mToast.show();
+        new SnackbarU()
+                .make(linearLayout, viewToast, Snackbar.LENGTH_SHORT)
+                .setBackground(Color.WHITE)
+                .setGravity(Gravity.TOP)
+                .show();
     }
 
     //  显示LoadingFragment
@@ -172,11 +172,11 @@ public class LoginActivity extends Activity {
                 mLoadingDialogFragment.dismiss();
             }
             switch (msg.what) {
-                case MSG_ERO: {
+                case Data.MSG_ERO: {
                     showToast(mStringMessage);
                     break;
                 }
-                case MSG_1: {
+                case Data.MSG_1: {
                     Log.i(TAG, "handleMessage: launchMode-->" + launchMode);
                     JPushInterface.setAlias(LoginActivity.this, 0, launchAccount);
                     if (Data.DATA_LAUNCH_MODE_WORKER == launchMode) {
