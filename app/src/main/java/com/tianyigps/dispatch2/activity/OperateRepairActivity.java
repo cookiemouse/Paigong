@@ -493,6 +493,9 @@ public class OperateRepairActivity extends BaseActivity {
                     return;
                 }
                 LastInstallerBean.ObjBean objBean = lastInstallerBean.getObj();
+                if (null == objBean){
+                    return;
+                }
                 mLastInstaller = objBean.getName();
                 mLastPhoneNo = objBean.getPhoneNo();
 

@@ -734,13 +734,16 @@ public class OperateInstallActivity extends BaseActivity {
                     }
                     case INTENT_PHOTO_R: {
 //                        mDatabaseManager.addCarPics(idMainCar, itemRecycler, itemPath, imgUrl);
+                        Log.i(TAG, "onSuccess: itemRecycle-->" + itemRecycler);
                         AdapterOperateInstallRecyclerData data = mAdapterOperateInstallRecyclerDataList.get(itemRecycler);
                         if (null == data || null == data.getImgUrl()) {
-                            mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData(itemPath, imgUrl));
-                        } else {
-                            data.setPath(itemPath);
-                            data.setImgUrl(imgUrl);
+                            int size = mAdapterOperateInstallRecyclerDataList.size();
+                            if (size < 6) {
+                                mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData());
+                            }
                         }
+                        data.setPath(itemPath);
+                        data.setImgUrl(imgUrl);
                         myHandler.sendEmptyMessage(Data.MSG_3);
                         break;
                     }
@@ -913,11 +916,12 @@ public class OperateInstallActivity extends BaseActivity {
     //  保存数据
     private void saveData() {
         String carNo = mEditTextCarNo.getText().toString();
-        if (!RegularU.checkCarNo(carNo)) {
-            mStringMessage = "请输入正确的车牌号！";
-            myHandler.sendEmptyMessage(Data.MSG_ERO);
-            return;
-        }
+        // TODO: 17-8-20 较验车牌
+//        if (!RegularU.checkCarNo(carNo)) {
+//            mStringMessage = "请输入正确的车牌号！";
+//            myHandler.sendEmptyMessage(Data.MSG_ERO);
+//            return;
+//        }
         String carType = mEditTextCarType.getText().toString();
         String carFrameNo = mTextViewFrameNo.getText().toString();
 
