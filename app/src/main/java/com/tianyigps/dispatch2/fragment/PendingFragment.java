@@ -19,6 +19,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -52,6 +53,9 @@ import java.util.List;
 public class PendingFragment extends Fragment {
 
     private static final String TAG = "PendingFragment";
+
+    //  无数据时显示UI
+    private LinearLayout mLinearLayoutDefault;
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private ImageView mImageViewSearch, mImageViewDelete;
@@ -113,6 +117,8 @@ public class PendingFragment extends Fragment {
         mImageViewTitleRight = view.findViewById(R.id.iv_layout_title_base_right);
         mTextViewTitle = view.findViewById(R.id.tv_layout_title_base_middle);
         initTitle();
+
+        mLinearLayoutDefault = view.findViewById(R.id.ll_fragment_pending_default);
 
         mSwipeRefreshLayout = view.findViewById(R.id.srl_fragment_pending);
         mImageViewSearch = view.findViewById(R.id.iv_layout_search);
@@ -360,7 +366,7 @@ public class PendingFragment extends Fragment {
 
     //  显示信息Dialog
     private void showMessageDialog(String msg) {
-        if (getActivity().isFinishing()){
+        if (getActivity().isFinishing()) {
             return;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -377,7 +383,7 @@ public class PendingFragment extends Fragment {
 
     //  显示刷新Dialog
     private void showFlushDialog() {
-        if (getActivity().isFinishing()){
+        if (getActivity().isFinishing()) {
             return;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -468,6 +474,12 @@ public class PendingFragment extends Fragment {
                     break;
                 }
                 case Data.MSG_1: {
+                    //  获取列表信息
+                    if (mAdapterPendingDataList.size() == 0) {
+                        mLinearLayoutDefault.setVisibility(View.VISIBLE);
+                    } else {
+                        mLinearLayoutDefault.setVisibility(View.GONE);
+                    }
                     mPendingAdapter.notifyDataSetChanged();
                     break;
                 }

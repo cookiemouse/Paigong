@@ -303,7 +303,9 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
         mNetworkManager.setOnGetWholeIMEIListener(new OnGetWholeIMEIListener() {
             @Override
             public void onFailure() {
-                // TODO: 2017/7/24 请求数据失败
+                // 2017/7/24 请求数据失败
+                errMsg = Data.DEFAULT_MESSAGE;
+                myHandler.sendEmptyMessage(Data.MSG_ERO);
             }
 
             @Override
@@ -317,7 +319,7 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
                     return;
                 }
                 wholeImei = wholeImeiBean.getObj().getImei();
-                myHandler.sendEmptyMessage(MSG_3);
+                myHandler.sendEmptyMessage(Data.MSG_3);
             }
         });
 
