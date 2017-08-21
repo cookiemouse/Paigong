@@ -44,7 +44,6 @@ import com.tianyigps.dispatch2.manager.DatabaseManager;
 import com.tianyigps.dispatch2.manager.FileManager;
 import com.tianyigps.dispatch2.manager.NetworkManager;
 import com.tianyigps.dispatch2.manager.SharedpreferenceManager;
-import com.tianyigps.dispatch2.utils.RegularU;
 import com.tianyigps.dispatch2.utils.TinyU;
 import com.tianyigps.dispatch2.utils.UploadPicU;
 import com.tianyigps.dispatch2.utils.Uri2FileU;
@@ -579,6 +578,10 @@ public class OperateInstallActivity extends BaseActivity {
                 // TODO: 2017/8/18 删除位置图片
                 itemPosition = position;
                 mDeleteType = Data.DATA_UPLOAD_TYPE_3;
+                AdapterOperateInstallListData data = mAdapterOperateInstallListDataList.get(itemPosition);
+                int tid = data.gettId();
+                String url = data.getInstallPicUrl();
+                mNetworkManager.deletePic(eid, token, orderNo, carId, tid, mDeleteType, url, userName);
             }
 
             @Override
@@ -586,6 +589,10 @@ public class OperateInstallActivity extends BaseActivity {
                 // TODO: 2017/8/18 删除安装图片
                 itemPosition = position;
                 mDeleteType = Data.DATA_UPLOAD_TYPE_4;
+                AdapterOperateInstallListData data = mAdapterOperateInstallListDataList.get(itemPosition);
+                int tid = data.gettId();
+                String url = data.getInstallPicUrl();
+                mNetworkManager.deletePic(eid, token, orderNo, carId, tid, mDeleteType, url, userName);
             }
         });
 
@@ -1335,11 +1342,19 @@ public class OperateInstallActivity extends BaseActivity {
                     //  删除列表中安装位置图片
                     if (Data.DATA_UPLOAD_TYPE_3 == mDeleteType) {
 //                        itemPosition 正在操作中的item位置
+                        AdapterOperateInstallListData data = mAdapterOperateInstallListDataList.get(itemPosition);
+                        data.setPositionPic(null);
+                        data.setPositionPicUrl(null);
+                        mOperateInstallListAdapter.notifyDataSetChanged();
                         break;
                     }
 
                     //  删除列表中接线图片
                     if (Data.DATA_UPLOAD_TYPE_4 == mDeleteType) {
+                        AdapterOperateInstallListData data = mAdapterOperateInstallListDataList.get(itemPosition);
+                        data.setInstallPic(null);
+                        data.setInstallPicUrl(null);
+                        mOperateInstallListAdapter.notifyDataSetChanged();
                         break;
                     }
 

@@ -110,7 +110,7 @@ public class ChoiceMapDialogFragment extends DialogFragment {
         tableRowBaidu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: 2017/7/19 百度地图
+                // 2017/7/19 百度地图
                 toBaiduMap(address);
                 dismiss();
             }
@@ -119,7 +119,7 @@ public class ChoiceMapDialogFragment extends DialogFragment {
         tableRowGaode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: 2017/7/19 高德地图
+                // 2017/7/19 高德地图
 //                toGaodeMap("36.547901", "104.258354", address);
                 toGaodeMap(mLat, mLng, address);
                 dismiss();
