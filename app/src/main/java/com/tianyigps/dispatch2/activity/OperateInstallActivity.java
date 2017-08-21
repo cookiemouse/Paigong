@@ -503,6 +503,7 @@ public class OperateInstallActivity extends BaseActivity {
             public void onScannerClick(int position) {
                 //  2017/7/31 扫描
                 itemPosition = position;
+                idMainTerminal = ID_MAIN_TERMINAL + itemPosition;
                 toScanner();
             }
 
@@ -685,6 +686,9 @@ public class OperateInstallActivity extends BaseActivity {
                     data.setPositionPicUrl(positionPic);
                     data.setInstallPic(mBaseImg + installPic);
                     data.setInstallPicUrl(installPic);
+
+                    String idTemp = ID_MAIN_TERMINAL + i;
+                    mDatabaseManager.addTerId(idTemp, tId, carId);
                 }
                 myHandler.sendEmptyMessage(Data.MSG_9);
             }
