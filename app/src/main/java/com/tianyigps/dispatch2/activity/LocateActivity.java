@@ -55,10 +55,7 @@ import com.tianyigps.dispatch2.utils.TimerU;
 import static com.tianyigps.dispatch2.data.Data.DATA_INTENT_SCANNER_REQUEST;
 import static com.tianyigps.dispatch2.data.Data.DATA_INTENT_SCANNER_RESULT;
 import static com.tianyigps.dispatch2.data.Data.DATA_SCANNER;
-import static com.tianyigps.dispatch2.data.Data.MSG_1;
 import static com.tianyigps.dispatch2.data.Data.MSG_2;
-import static com.tianyigps.dispatch2.data.Data.MSG_3;
-import static com.tianyigps.dispatch2.data.Data.MSG_4;
 import static com.tianyigps.dispatch2.data.Data.MSG_ERO;
 
 public class LocateActivity extends BaseActivity implements View.OnClickListener {
@@ -294,7 +291,7 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
                     //无结果
                 } else {
                     //获取反向地理编码结果
-                    mStringAddress = reverseGeoCodeResult.getAddress();
+                    mStringAddress = reverseGeoCodeResult.getAddress() + reverseGeoCodeResult.getSematicDescription();
                     myHandler.sendEmptyMessage(MSG_2);
                 }
             }
@@ -376,10 +373,10 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
                         + "\n信号时间：" + redisObjBean.getCurrent_time()
                         + "\n定位时间：" + redisObjBean.getLocate_time() + "\n\n";
 
-                lat = redisObjBean.getLatitude();
-                lng = redisObjBean.getLongitude();
+                lat = redisObjBean.getLatitudeF();
+                lng = redisObjBean.getLongitudeF();
 
-                myHandler.sendEmptyMessage(MSG_1);
+                myHandler.sendEmptyMessage(Data.MSG_1);
             }
         });
 
@@ -518,10 +515,10 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
             }
 
             switch (msg.what) {
-                case MSG_ERO: {
+                case Data.MSG_ERO: {
                     break;
                 }
-                case MSG_1: {
+                case Data.MSG_1: {
                     LatLng latLng = new LatLng(lat, lng);
 
                     //  查询地址
@@ -532,17 +529,18 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
                     moveToCenter(latLng);
                     break;
                 }
-                case MSG_2: {
+                case Data.MSG_2: {
+                    //  获取物理地址
                     mTextViewAddress.setText(mStringAddress);
                     break;
                 }
-                case MSG_3: {
+                case Data.MSG_3: {
                     //  获取到WholeImei
                     mEditTextImei.setText(wholeImei);
                     getImeiLocation(wholeImei);
                     break;
                 }
-                case MSG_4: {
+                case Data.MSG_4: {
                     //  获取WholeImei失败
                     showToast(errMsg);
                 }

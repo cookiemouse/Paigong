@@ -15,7 +15,6 @@
         android:layout_height="wrap_content"
         android:background="@color/colorAlphaBlue"
         android:gravity="center"
-        android:lines="1"
         android:padding="@dimen/dp_4"
         android:text=""
         android:textSize="@dimen/sp_16" />
