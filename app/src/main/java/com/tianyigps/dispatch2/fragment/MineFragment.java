@@ -1,7 +1,6 @@
 package com.tianyigps.dispatch2.fragment;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -159,10 +159,20 @@ public class MineFragment extends Fragment {
 
     private void showExitDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setMessage("是否要退出登陆！");
-        builder.setPositiveButton(R.string.ensure, new DialogInterface.OnClickListener() {
+        View viewDialog = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_exit, null);
+        builder.setView(viewDialog);
+        final AlertDialog dialog = builder.create();
+        Button buttonCancle = viewDialog.findViewById(R.id.btn_dialog_exit_cancel);
+        Button buttonEnsure = viewDialog.findViewById(R.id.btn_dialog_exit_ensure);
+        buttonCancle.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        buttonEnsure.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 exitLogin();
                 Intent intent = new Intent(getActivity(), LoginActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -170,13 +180,6 @@ public class MineFragment extends Fragment {
                 getActivity().finish();
             }
         });
-        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                //  do nothing
-            }
-        });
-        AlertDialog dialog = builder.create();
         dialog.show();
     }
 
