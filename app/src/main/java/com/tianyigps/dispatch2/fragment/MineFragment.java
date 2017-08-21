@@ -17,6 +17,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.tianyigps.dispatch2.R;
+import com.tianyigps.dispatch2.activity.LoginActivity;
 import com.tianyigps.dispatch2.activity.ManagerFragmentContentActivity;
 import com.tianyigps.dispatch2.activity.ModifyPasswordActivity;
 import com.tianyigps.dispatch2.activity.StatisticsActivity;
@@ -163,6 +164,9 @@ public class MineFragment extends Fragment {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 exitLogin();
+                Intent intent = new Intent(getActivity(), LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
                 getActivity().finish();
             }
         });
