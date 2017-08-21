@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -50,21 +51,22 @@ import static com.tianyigps.dispatch2.data.Data.MSG_4;
 import static com.tianyigps.dispatch2.data.Data.MSG_ERO;
 
 /**
- * Created by djc on 2017/7/11.
+ * Created by cookiemouse on 2017/7/11.
  */
 
 public class OrderFragment extends Fragment {
 
     private static final String TAG = "OrderFragment";
 
-    private SwipeRefreshLayout mSwipeRefreshLayout;
-    private ImageView mImageViewSearch, mImageViewDelete;
-    private EditText mEditTextSearch;
-    private ListView mListView;
-
     //  标题栏
     private ImageView mImageViewTitleLeft, mImageViewTitleRight;
     private TextView mTextViewTitle;
+
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+    private LinearLayout mLinearLayoutDefault;
+    private ImageView mImageViewSearch, mImageViewDelete;
+    private EditText mEditTextSearch;
+    private ListView mListView;
 
     private List<AdapterOrderData> mAdapterOrderDataList;
     private OrderAdapter mOrderAdapter;
@@ -125,6 +127,7 @@ public class OrderFragment extends Fragment {
         mChoiceMapDialogFragment = new ChoiceMapDialogFragment();
 
         mSwipeRefreshLayout = view.findViewById(R.id.srl_fragment_worker_order);
+        mLinearLayoutDefault = view.findViewById(R.id.ll_fragment_order_default);
         mImageViewSearch = view.findViewById(R.id.iv_layout_search);
         mImageViewDelete = view.findViewById(R.id.iv_layout_search_delete);
         mEditTextSearch = view.findViewById(R.id.et_layout_search);
@@ -408,7 +411,7 @@ public class OrderFragment extends Fragment {
     }
 
     private void showMessageDialog(String message) {
-        if (getActivity().isFinishing()){
+        if (getActivity().isFinishing()) {
             return;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -445,6 +448,11 @@ public class OrderFragment extends Fragment {
                     break;
                 }
                 case MSG_1: {
+                    if (mAdapterOrderDataList.size() == 0) {
+                        mLinearLayoutDefault.setVisibility(View.VISIBLE);
+                    } else {
+                        mLinearLayoutDefault.setVisibility(View.GONE);
+                    }
                     mOrderAdapter.notifyDataSetChanged();
                     break;
                 }
