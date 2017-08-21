@@ -161,6 +161,7 @@ public class OperateInstallActivity extends BaseActivity {
             int locateType = data.getIntExtra(Data.DATA_LOCATE_TYPE, 3);
             int model = data.getIntExtra(Data.DATA_LOCATE_MODEL, 0);
             Log.i(TAG, "onActivityResult: locateType-->" + locateType);
+            Log.i(TAG, "onActivityResult: model-->" + model);
             mDatabaseManager.addTerLocateType(idMainTerminal, locateType);
             mDatabaseManager.addTerModel(idMainTerminal, model);
         }
@@ -547,6 +548,7 @@ public class OperateInstallActivity extends BaseActivity {
             public void onLocateClick(int position) {
                 //  2017/7/31 快速定位
                 itemPosition = position;
+                idMainTerminal = ID_MAIN_TERMINAL + itemPosition;
                 String tNo = mAdapterOperateInstallListDataList.get(position).gettNoNew();
                 toLocate(tNo);
             }

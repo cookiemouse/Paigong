@@ -31,7 +31,7 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/btn_dialog_exit_ensure"
+            android:id="@+id/btn_dialog_exit_cancel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -40,11 +40,11 @@
             android:layout_weight="1"
             android:background="@drawable/bg_button"
             android:gravity="center"
-            android:textColor="@color/colorWhite"
-            android:text="@string/cancel"/>
+            android:text="@string/cancel"
+            android:textColor="@color/colorWhite"/>
 
         <Button
-            android:id="@+id/btn_dialog_exit_cancel"
+            android:id="@+id/btn_dialog_exit_ensure"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -53,9 +53,8 @@
             android:layout_weight="1"
             android:background="@drawable/bg_button"
             android:gravity="center"
-            android:textColor="@color/colorWhite"
-            android:text="@string/ensure"/>
-
+            android:text="@string/ensure"
+            android:textColor="@color/colorWhite"/>
     </LinearLayout>
 
 </LinearLayout>
