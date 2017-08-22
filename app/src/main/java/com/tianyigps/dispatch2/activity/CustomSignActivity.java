@@ -377,6 +377,7 @@ public class CustomSignActivity extends BaseActivity {
         builder.setPositiveButton(R.string.ensure, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+                // TODO: 2017/8/22 跳转到已处理Fragment
                 CustomSignActivity.this.finish();
             }
         });

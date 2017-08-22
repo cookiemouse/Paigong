@@ -117,6 +117,13 @@ public class PendDetailsActivity extends Activity {
     }
 
     @Override
+    protected void onResume() {
+        mBitmap = BitmapU.getBitmap(this, R.drawable.bg_order_details_top, 320, 160);
+        mImageViewTitle.setImageBitmap(mBitmap);
+        super.onResume();
+    }
+
+    @Override
     protected void onStop() {
         super.onStop();
         if (null != mBitmap) {
@@ -143,8 +150,6 @@ public class PendDetailsActivity extends Activity {
         mImageViewTitleRight = findViewById(R.id.iv_layout_title_base_right);
 
         mImageViewTitle = findViewById(R.id.iv_activity_pend_details);
-        mBitmap = BitmapU.getBitmap(this, R.drawable.bg_order_details_top, 320, 160);
-        mImageViewTitle.setImageBitmap(mBitmap);
 
         mTextViewTitle.setVisibility(View.GONE);
         mImageViewTitleRight.setVisibility(View.GONE);

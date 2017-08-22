@@ -202,7 +202,6 @@ public class HandingFragment extends Fragment implements View.OnClickListener {
                 }
                 Intent intent = new Intent(getActivity(), OrderDetailsActivity.class);
                 intent.putExtra(Data.DATA_INTENT_ORDER_NO, data.getId());
-                intent.putExtra(Data.DATA_INTENT_ORDER_DETAILS_IS_CHECKED, true);
                 startActivity(intent);
             }
         });

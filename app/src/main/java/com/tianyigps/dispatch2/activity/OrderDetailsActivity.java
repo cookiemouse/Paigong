@@ -140,7 +140,6 @@ public class OrderDetailsActivity extends Activity {
 
         Intent intent = getIntent();
         orderNo = intent.getStringExtra(DATA_INTENT_ORDER_NO);
-        isChecked = intent.getBooleanExtra(Data.DATA_INTENT_ORDER_DETAILS_IS_CHECKED, false);
 
         //  内容
         mTextViewOrderName = findViewById(R.id.tv_layout_order_details_content_order_title);
@@ -159,11 +158,6 @@ public class OrderDetailsActivity extends Activity {
         mTextViewRemove = findViewById(R.id.tv_layout_order_details_content_remove_content);
 
         mButtonSign = findViewById(R.id.btn_layout_order_details_sign);
-
-        if (isChecked) {
-            mButtonSign.setText("开始");
-            mTextViewReturnOrder.setVisibility(View.GONE);
-        }
 
         mImageViewCall = findViewById(R.id.iv_layout_order_details_content_call);
 
@@ -475,6 +469,16 @@ public class OrderDetailsActivity extends Activity {
                         mRelativeLayoutRemove.setVisibility(View.VISIBLE);
                     } else {
                         mRelativeLayoutRemove.setVisibility(View.GONE);
+                    }
+
+                    if (mIntOrderStaus == 3) {
+                        isChecked = false;
+                        mButtonSign.setText("签到");
+                        mTextViewReturnOrder.setVisibility(View.VISIBLE);
+                    } else {
+                        isChecked = true;
+                        mButtonSign.setText("开始");
+                        mTextViewReturnOrder.setVisibility(View.GONE);
                     }
 
                     updateTime();

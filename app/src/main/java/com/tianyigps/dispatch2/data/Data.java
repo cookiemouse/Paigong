@@ -52,7 +52,6 @@ public final class Data {
     public final static String DATA_INTENT_CAR_ID = "paigong_intent_car_id";
 
     public final static String DATA_INTENT_ORDER_DETAILS_RESULT_SIGNED = "paigong_intent_order_details_is_signed";
-    public final static String DATA_INTENT_ORDER_DETAILS_IS_CHECKED = "paigong_intent_order_details_is_checked";
 
     public final static String DATA_INTENT_LOCATE_TYPE = "paigong_intent_locate_type";
     public final static String DATA_INTENT_LOCATE_IMEI = "paigong_intent_locate_imei";
