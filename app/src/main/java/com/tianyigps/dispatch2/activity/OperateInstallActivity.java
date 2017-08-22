@@ -26,6 +26,7 @@ import com.tianyigps.dispatch2.R;
 import com.tianyigps.dispatch2.adapter.OperateInstallAdapter;
 import com.tianyigps.dispatch2.adapter.OperateInstallListAdapter;
 import com.tianyigps.dispatch2.base.BaseActivity;
+import com.tianyigps.dispatch2.bean.CheckImeiBean;
 import com.tianyigps.dispatch2.bean.DeletePicBean;
 import com.tianyigps.dispatch2.bean.StartOrderInfoBean;
 import com.tianyigps.dispatch2.bean.UploadPicBean;
@@ -36,6 +37,7 @@ import com.tianyigps.dispatch2.data.AdapterOperateInstallListData;
 import com.tianyigps.dispatch2.data.AdapterOperateInstallRecyclerData;
 import com.tianyigps.dispatch2.data.Data;
 import com.tianyigps.dispatch2.dialog.LoadingDialogFragment;
+import com.tianyigps.dispatch2.interfaces.OnCheckIMEIListener;
 import com.tianyigps.dispatch2.interfaces.OnDeletePicListener;
 import com.tianyigps.dispatch2.interfaces.OnGetWholeIMEIListener;
 import com.tianyigps.dispatch2.interfaces.OnGetWorkerOrderInfoStartListener;
@@ -697,6 +699,7 @@ public class OperateInstallActivity extends BaseActivity {
         mNetworkManager.setOnGetWholeIMEIListener(new OnGetWholeIMEIListener() {
             @Override
             public void onFailure() {
+                mStringMessage = Data.DEFAULT_MESSAGE;
                 myHandler.sendEmptyMessage(Data.MSG_ERO);
             }
 
@@ -706,12 +709,49 @@ public class OperateInstallActivity extends BaseActivity {
                 WholeImeiBean wholeImeiBean = gson.fromJson(result, WholeImeiBean.class);
                 if (!wholeImeiBean.isSuccess()) {
                     mStringMessage = wholeImeiBean.getMsg();
-                    onFailure();
+                    myHandler.sendEmptyMessage(Data.MSG_11);
+                    return;
+                }
+                WholeImeiBean.ObjBean objBean = wholeImeiBean.getObj();
+                String imei = objBean.getImei();
+                //验证imei
+                AdapterOperateInstallListData data = mAdapterOperateInstallListDataList.get(itemPosition);
+                int model;
+                if (data.isWire()) {
+                    model = 1;
+                } else {
+                    model = 2;
+                }
+                mNetworkManager.checkIMEI(eid, token, imei, model, orderNo, userName);
+            }
+        });
+
+        mNetworkManager.setCheckIMEIListener(new OnCheckIMEIListener() {
+            @Override
+            public void onFailure() {
+                Log.i(TAG, "onFailure: ");
+                mStringMessage = Data.DEFAULT_MESSAGE;
+                myHandler.sendEmptyMessage(Data.MSG_ERO);
+            }
+
+            @Override
+            public void onSuccess(String result) {
+                Log.i(TAG, "onSuccess: result-->" + result);
+                Gson gson = new Gson();
+                CheckImeiBean checkImeiBean = gson.fromJson(result, CheckImeiBean.class);
+                mStringMessage = checkImeiBean.getMsg();
+                if (!checkImeiBean.isSuccess()) {
+                    myHandler.sendEmptyMessage(Data.MSG_11);
+                    return;
+                }
+                CheckImeiBean.ObjBean objBean = checkImeiBean.getObj();
+                if (null == objBean) {
+                    myHandler.sendEmptyMessage(Data.MSG_ERO);
                     return;
                 }
                 Message message = new Message();
-                WholeImeiBean.ObjBean objBean = wholeImeiBean.getObj();
-                message.obj = objBean.getImei();
+                String imei = objBean.getImei();
+                message.obj = imei;
                 message.what = Data.MSG_2;
                 myHandler.sendMessage(message);
             }
@@ -897,19 +937,11 @@ public class OperateInstallActivity extends BaseActivity {
                 String tNoOld = cursor.getString(1);
                 String tNoNew = cursor.getString(2);
                 String position = cursor.getString(3);
-                String positionPic = cursor.getString(4);
-                String installPic = cursor.getString(5);
-                String positionPicUrl = cursor.getString(6);
-                String installPicUrl = cursor.getString(7);
 
                 Log.i(TAG, "loadTerminalData: id-->" + id);
                 Log.i(TAG, "loadTerminalData: tNoOld-->" + tNoOld);
                 Log.i(TAG, "loadTerminalData: tNoNew-->" + tNoNew);
                 Log.i(TAG, "loadTerminalData: position-->" + position);
-                Log.i(TAG, "loadTerminalData: positionPic-->" + positionPic);
-                Log.i(TAG, "loadTerminalData: installPic-->" + installPic);
-                Log.i(TAG, "loadTerminalData: positionPicUrl-->" + positionPicUrl);
-                Log.i(TAG, "loadTerminalData: installPicUrl-->" + installPicUrl);
                 Log.i(TAG, "........................................");
 
                 cursor.close();
@@ -917,10 +949,6 @@ public class OperateInstallActivity extends BaseActivity {
                 AdapterOperateInstallListData data = mAdapterOperateInstallListDataList.get(i);
                 data.settNoNew(tNoNew);
                 data.setPosition(position);
-                data.setPositionPic(positionPic);
-                data.setInstallPic(installPic);
-                data.setPositionPicUrl(positionPicUrl);
-                data.setInstallPicUrl(installPicUrl);
             }
         }
         mOperateInstallListAdapter.notifyDataSetChanged();
@@ -1229,6 +1257,9 @@ public class OperateInstallActivity extends BaseActivity {
 
     //  显示LoadingFragment
     private void showLoading() {
+        if (mLoadingDialogFragment.isAdded()){
+            mLoadingDialogFragment.dismiss();
+        }
         mLoadingDialogFragment.show(getFragmentManager(), "LoadingFragment");
     }
 
@@ -1252,11 +1283,19 @@ public class OperateInstallActivity extends BaseActivity {
                     break;
                 }
                 case Data.MSG_2: {
-                    //  whole imei
+                    //  check imei success
                     String imei = (String) msg.obj;
                     AdapterOperateInstallListData data = mAdapterOperateInstallListDataList.get(itemPosition);
                     data.settNoNew(imei);
                     mOperateInstallListAdapter.notifyDataSetChanged();
+                    break;
+                }
+                case Data.MSG_11:{
+                    //  check imei failure或者获取 whole imei失败
+                    AdapterOperateInstallListData data = mAdapterOperateInstallListDataList.get(itemPosition);
+                    data.settNoNew(null);
+                    mOperateInstallListAdapter.notifyDataSetChanged();
+                    myHandler.sendEmptyMessage(Data.MSG_ERO);
                     break;
                 }
                 case Data.MSG_3: {

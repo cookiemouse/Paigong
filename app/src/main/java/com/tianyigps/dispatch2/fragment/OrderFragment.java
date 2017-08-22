@@ -3,6 +3,7 @@ package com.tianyigps.dispatch2.fragment;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -33,6 +34,7 @@ import com.tianyigps.dispatch2.bean.WorkerOrderBean;
 import com.tianyigps.dispatch2.data.AdapterOrderData;
 import com.tianyigps.dispatch2.data.Data;
 import com.tianyigps.dispatch2.dialog.ChoiceMapDialogFragment;
+import com.tianyigps.dispatch2.interfaces.OnContactSiteListener;
 import com.tianyigps.dispatch2.interfaces.OnGetWorkerOrderListener;
 import com.tianyigps.dispatch2.interfaces.OnSignedWorkerListener;
 import com.tianyigps.dispatch2.manager.LocateManager;
@@ -103,6 +105,16 @@ public class OrderFragment extends Fragment {
         setEventListener();
 
         return viewRoot;
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (hidden) {
+            Log.i(TAG, "onHiddenChanged: hidden");
+        } else {
+            Log.i(TAG, "onHiddenChanged: show");
+        }
     }
 
     @Override
@@ -246,17 +258,16 @@ public class OrderFragment extends Fragment {
             }
         });
 
-        mOrderAdapter.setOnMapClickListener(new OrderAdapter.OnMapClickListener() {
+        mOrderAdapter.setOnItemListener(new OrderAdapter.OnItemListener() {
+
             @Override
-            public void onClick(int position) {
+            public void onMapClick(int position) {
                 Bundle bundle = new Bundle();
                 bundle.putString(DATA_INTENT_ADDRESS, mAdapterOrderDataList.get(position).getAddress());
                 mChoiceMapDialogFragment.setArguments(bundle);
                 mChoiceMapDialogFragment.show(getChildFragmentManager(), "ChoiceMapDialog");
             }
-        });
 
-        mOrderAdapter.setOnSignClickListener(new OrderAdapter.OnSignClickListener() {
             @Override
             public void onSignClick(int position) {
                 orderNoPosition = mAdapterOrderDataList.get(position).getId();
@@ -269,6 +280,19 @@ public class OrderFragment extends Fragment {
                 Intent intent = new Intent(getActivity(), OrderDetailsActivity.class);
                 intent.putExtra(Data.DATA_INTENT_ORDER_NO, mAdapterOrderDataList.get(position).getId());
                 startActivityForResult(intent, Data.DATA_INTENT_ORDER_DETAILS_REQUEST);
+            }
+
+            @Override
+            public void onCallClick(int position) {
+                AdapterOrderData data = mAdapterOrderDataList.get(position);
+
+                //  联系现场
+                mNetworkManager.contactSite(eid, token, data.getId(), data.getPhoneName(), userName);
+
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_DIAL);
+                intent.setData(Uri.parse("tel:" + data.getPhoneNumber()));
+                startActivity(intent);
             }
         });
 
@@ -375,6 +399,18 @@ public class OrderFragment extends Fragment {
                 } else {
                     myHandler.sendEmptyMessage(MSG_4);
                 }
+            }
+        });
+
+        mNetworkManager.setContactSiteListener(new OnContactSiteListener() {
+            @Override
+            public void onFailure() {
+                Log.i(TAG, "onFailure: 联系现场失败");
+            }
+
+            @Override
+            public void onSuccess(String result) {
+                Log.i(TAG, "onFailure: 联系现场成功");
             }
         });
     }

@@ -1,8 +1,6 @@
 package com.tianyigps.dispatch2.adapter;
 
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,8 +24,7 @@ public class OrderAdapter extends BaseAdapter {
     private Context context;
     private List<AdapterOrderData> mAdapterOrderDataList;
 
-    private OnMapClickListener mOnMapClickListener;
-    private OnSignClickListener mOnSignClickListener;
+    private OnItemListener mOnItemListener;
 
     public OrderAdapter(Context context, List<AdapterOrderData> mAdapterOrderDataList) {
         this.context = context;
@@ -91,20 +88,20 @@ public class OrderAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 // 2017/7/13 地图页
-                if (null == mOnMapClickListener) {
-                    throw new NullPointerException("OnMapClickListener is null");
+                if (null == mOnItemListener) {
+                    throw new NullPointerException("OnItemListener is null");
                 }
-                mOnMapClickListener.onClick(position);
+                mOnItemListener.onMapClick(position);
             }
         });
 
         viewHolder.imageViewCall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent();
-                intent.setAction(Intent.ACTION_DIAL);
-                intent.setData(Uri.parse("tel:" + data.getPhoneNumber()));
-                context.startActivity(intent);
+                if (null == mOnItemListener) {
+                    throw new NullPointerException("OnItemListener is null");
+                }
+                mOnItemListener.onCallClick(position);
             }
         });
 
@@ -112,10 +109,10 @@ public class OrderAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 //  2017/7/13 签到
-                if (null == mOnSignClickListener) {
-                    throw new NullPointerException("OnSignClickListener is null");
+                if (null == mOnItemListener) {
+                    throw new NullPointerException("OnItemListener is null");
                 }
-                mOnSignClickListener.onSignClick(position);
+                mOnItemListener.onSignClick(position);
             }
         });
 
@@ -123,10 +120,10 @@ public class OrderAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 // 2017/7/11 Item点击事件
-                if (null == mOnSignClickListener) {
-                    throw new NullPointerException("OnSignClickListener is null");
+                if (null == mOnItemListener) {
+                    throw new NullPointerException("OnItemListener is null");
                 }
-                mOnSignClickListener.onItemClick(position);
+                mOnItemListener.onItemClick(position);
             }
         });
 
@@ -139,21 +136,17 @@ public class OrderAdapter extends BaseAdapter {
         private ImageView imageViewMap, imageViewCall, imageViewSign;
     }
 
-    public interface OnMapClickListener {
-        void onClick(int position);
-    }
-
-    public void setOnMapClickListener(OnMapClickListener listener) {
-        this.mOnMapClickListener = listener;
-    }
-
-    public interface OnSignClickListener {
+    public interface OnItemListener {
         void onSignClick(int position);
 
         void onItemClick(int position);
+
+        void onCallClick(int position);
+
+        void onMapClick(int position);
     }
 
-    public void setOnSignClickListener(OnSignClickListener listener) {
-        this.mOnSignClickListener = listener;
+    public void setOnItemListener(OnItemListener listener) {
+        this.mOnItemListener = listener;
     }
 }

@@ -1,5 +1,7 @@
 package com.tianyigps.dispatch2.fragment;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -20,20 +22,21 @@ import com.google.gson.Gson;
 import com.tianyigps.dispatch2.R;
 import com.tianyigps.dispatch2.activity.InstallingActivity;
 import com.tianyigps.dispatch2.activity.ManagerFragmentContentActivity;
+import com.tianyigps.dispatch2.activity.OrderDetailsActivity;
 import com.tianyigps.dispatch2.adapter.HandingAdapter;
+import com.tianyigps.dispatch2.bean.StartHandingBean;
 import com.tianyigps.dispatch2.bean.WorkerHandingBean;
 import com.tianyigps.dispatch2.data.AdapterHandingData;
 import com.tianyigps.dispatch2.data.Data;
+import com.tianyigps.dispatch2.interfaces.OnContactSiteListener;
 import com.tianyigps.dispatch2.interfaces.OnGetWorkerOrderHandingListener;
+import com.tianyigps.dispatch2.interfaces.OnStartHandingListener;
 import com.tianyigps.dispatch2.manager.NetworkManager;
 import com.tianyigps.dispatch2.manager.SharedpreferenceManager;
 import com.tianyigps.dispatch2.utils.TimeFormatU;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.tianyigps.dispatch2.data.Data.MSG_1;
-import static com.tianyigps.dispatch2.data.Data.MSG_ERO;
 
 /**
  * Created by djc on 2017/7/13.
@@ -56,11 +59,15 @@ public class HandingFragment extends Fragment implements View.OnClickListener {
 
     private NetworkManager mNetworkManager;
     private MyHandler myHandler;
+    private String mStringMessage;
 
     private SharedpreferenceManager mSharedpreferenceManager;
     private int eid;
     private String token;
     private String userName;
+
+    //  正在操作的item
+    private int mPosition = 0;
 
     @Nullable
     @Override
@@ -171,13 +178,31 @@ public class HandingFragment extends Fragment implements View.OnClickListener {
             }
         });
 
-        mHandingAdapter.setStartClickListener(new HandingAdapter.OnStartClickListener() {
+        mHandingAdapter.setItemListener(new HandingAdapter.OnItemListener() {
             @Override
-            public void onClick(int position) {
+            public void onStart(int position) {
+                mPosition = position;
                 AdapterHandingData data = mAdapterHandingDataList.get(position);
-                Intent intent = new Intent(getActivity(), InstallingActivity.class);
+                mNetworkManager.startHanding(eid, token, data.getId(), data.getCallName(), userName);
+            }
+
+            @Override
+            public void onCall(int position) {
+                AdapterHandingData data = mAdapterHandingDataList.get(position);
+                //  联系现场
+                mNetworkManager.contactSite(eid, token, data.getId(), data.getCallName(), userName);
+                toCall(data.getCallNumber());
+            }
+
+            @Override
+            public void onItem(int position) {
+                AdapterHandingData data = mAdapterHandingDataList.get(position);
+                if (1 == data.getCheckStatus()) {
+                    return;
+                }
+                Intent intent = new Intent(getActivity(), OrderDetailsActivity.class);
                 intent.putExtra(Data.DATA_INTENT_ORDER_NO, data.getId());
-                intent.putExtra(Data.DATA_INTENT_INSTALL_TYPE, (data.getOrderType() - 1));
+                intent.putExtra(Data.DATA_INTENT_ORDER_DETAILS_IS_CHECKED, true);
                 startActivity(intent);
             }
         });
@@ -185,7 +210,8 @@ public class HandingFragment extends Fragment implements View.OnClickListener {
         mNetworkManager.setGetWorkerOrderHandingListener(new OnGetWorkerOrderHandingListener() {
             @Override
             public void onFailure() {
-                myHandler.sendEmptyMessage(MSG_ERO);
+                mStringMessage = Data.DEFAULT_MESSAGE;
+                myHandler.sendEmptyMessage(Data.MSG_ERO);
             }
 
             @Override
@@ -234,7 +260,40 @@ public class HandingFragment extends Fragment implements View.OnClickListener {
                             , wire, wireless, removeWire, removeWireless, modify));
                 }
 
-                myHandler.sendEmptyMessage(MSG_1);
+                myHandler.sendEmptyMessage(Data.MSG_1);
+            }
+        });
+
+        mNetworkManager.setStartHandingListener(new OnStartHandingListener() {
+            @Override
+            public void onFailure() {
+                mStringMessage = Data.DEFAULT_MESSAGE;
+                myHandler.sendEmptyMessage(Data.MSG_ERO);
+            }
+
+            @Override
+            public void onSuccess(String result) {
+                Log.i(TAG, "onSuccess: result-->" + result);
+                Gson gson = new Gson();
+                StartHandingBean startHandingBean = gson.fromJson(result, StartHandingBean.class);
+                if (!startHandingBean.isSuccess()) {
+                    mStringMessage = startHandingBean.getMsg();
+                    myHandler.sendEmptyMessage(Data.MSG_ERO);
+                    return;
+                }
+                myHandler.sendEmptyMessage(Data.MSG_2);
+            }
+        });
+
+        mNetworkManager.setContactSiteListener(new OnContactSiteListener() {
+            @Override
+            public void onFailure() {
+                Log.i(TAG, "onFailure: 联系现场请求失败");
+            }
+
+            @Override
+            public void onSuccess(String result) {
+                Log.i(TAG, "onSuccess: 联系现场请求成功");
             }
         });
     }
@@ -247,17 +306,49 @@ public class HandingFragment extends Fragment implements View.OnClickListener {
         startActivity(intent);
     }
 
+    //  显示信息Dialog
+    private void showMessageDialog(String msg) {
+        if (getActivity().isFinishing()) {
+            return;
+        }
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage(msg);
+        builder.setPositiveButton(R.string.ensure, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                //  do nothing
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
     private class MyHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             mSwipeRefreshLayout.setRefreshing(false);
             switch (msg.what) {
-                case MSG_ERO: {
+                case Data.MSG_ERO: {
                     Log.i(TAG, "handleMessage: ERO");
+                    showMessageDialog(mStringMessage);
                 }
-                case MSG_1: {
+                case Data.MSG_1: {
+                    //  获取信息
                     mHandingAdapter.notifyDataSetChanged();
+                    break;
+                }
+                case Data.MSG_2: {
+                    //  开始安装
+                    AdapterHandingData data = mAdapterHandingDataList.get(mPosition);
+                    Intent intent = new Intent(getActivity(), InstallingActivity.class);
+                    intent.putExtra(Data.DATA_INTENT_ORDER_NO, data.getId());
+                    intent.putExtra(Data.DATA_INTENT_INSTALL_TYPE, (data.getOrderType() - 1));
+                    startActivity(intent);
+                    break;
+                }
+                case Data.MSG_3: {
+                    //  联系现场
                     break;
                 }
                 default: {

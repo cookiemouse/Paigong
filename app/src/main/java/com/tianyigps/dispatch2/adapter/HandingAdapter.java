@@ -1,8 +1,6 @@
 package com.tianyigps.dispatch2.adapter;
 
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,9 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.tianyigps.dispatch2.R;
-import com.tianyigps.dispatch2.activity.OrderDetailsActivity;
 import com.tianyigps.dispatch2.data.AdapterHandingData;
-import com.tianyigps.dispatch2.data.Data;
 
 import java.util.List;
 
@@ -30,7 +26,7 @@ public class HandingAdapter extends BaseAdapter {
     private Context context;
     private List<AdapterHandingData> mHandingDataList;
 
-    private OnStartClickListener mOnStartClickListener;
+    private OnItemListener mOnItemListener;
 
     public HandingAdapter(Context context, List<AdapterHandingData> mHandingDataList) {
         this.context = context;
@@ -57,7 +53,6 @@ public class HandingAdapter extends BaseAdapter {
 
         final AdapterHandingData data = mHandingDataList.get(i);
 
-        final String orderNo = data.getId();
         final int position = i;
 
         ViewHolder viewHolder = null;
@@ -159,10 +154,10 @@ public class HandingAdapter extends BaseAdapter {
         viewHolder.imageViewCall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent();
-                intent.setAction(Intent.ACTION_DIAL);
-                intent.setData(Uri.parse("tel:" + data.getCallNumber()));
-                context.startActivity(intent);
+                if (null == mOnItemListener) {
+                    throw new NullPointerException("OnStartClickListener is null");
+                }
+                mOnItemListener.onCall(position);
             }
         });
 
@@ -170,10 +165,10 @@ public class HandingAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 // TODO: 2017/7/13 开始
-                if (null == mOnStartClickListener) {
+                if (null == mOnItemListener) {
                     throw new NullPointerException("OnStartClickListener is null");
                 }
-                mOnStartClickListener.onClick(position);
+                mOnItemListener.onStart(position);
             }
         });
 
@@ -181,13 +176,10 @@ public class HandingAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 // 2017/7/11 Item点击事件
-                if (1 == data.getCheckStatus()) {
-                    return;
+                if (null == mOnItemListener) {
+                    throw new NullPointerException("OnStartClickListener is null");
                 }
-                Intent intent = new Intent(context, OrderDetailsActivity.class);
-                intent.putExtra(Data.DATA_INTENT_ORDER_NO, orderNo);
-                intent.putExtra(Data.DATA_INTENT_ORDER_DETAILS_IS_CHECKED, true);
-                context.startActivity(intent);
+                mOnItemListener.onItem(position);
             }
         });
 
@@ -201,11 +193,15 @@ public class HandingAdapter extends BaseAdapter {
         private LinearLayout llRemove;
     }
 
-    public interface OnStartClickListener {
-        void onClick(int position);
+    public interface OnItemListener {
+        void onStart(int position);
+
+        void onCall(int position);
+
+        void onItem(int position);
     }
 
-    public void setStartClickListener(OnStartClickListener listener) {
-        this.mOnStartClickListener = listener;
+    public void setItemListener(OnItemListener listener) {
+        this.mOnItemListener = listener;
     }
 }
