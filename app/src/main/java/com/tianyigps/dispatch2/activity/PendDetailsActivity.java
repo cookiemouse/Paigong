@@ -389,8 +389,10 @@ public class PendDetailsActivity extends Activity {
         calendar.set(year, month, day, mHour, mMin);
         long modify = calendar.getTimeInMillis();
 
+        String newTime = new TimeFormatU().millisToDate(modify);
+
         showLoading();
-        mNetworkManager.modifyDate(jobNo, userName, token, orderNo, orderStatus, modify, mReason);
+        mNetworkManager.modifyDate(jobNo, userName, token, orderNo, orderStatus, newTime, mReason);
     }
 
     //  选择改约时间
@@ -576,6 +578,13 @@ public class PendDetailsActivity extends Activity {
                 case Data.MSG_2: {
                     //  改约成功
                     showMessageToast(mStringMessage);
+                    //  刷新页面
+                    showLoading();
+                    if (0 == orderStatus) {
+                        mNetworkManager.getPendDetails(jobNo, token, orderNo, userName);
+                    } else {
+                        mNetworkManager.getPendDetails(jobNo, token, orderNo, userName, orderStatus);
+                    }
                 }
                 default: {
                     Log.i(TAG, "handleMessage: default-->" + msg.what);

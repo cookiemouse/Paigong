@@ -1371,7 +1371,7 @@ public class NetworkManager {
     }
 
     //  改约  30
-    public void modifyDate(String jobNo, String userName, String token, String orderNo, int orderStatus, float newDoorDate, String reason) {
+    public void modifyDate(String jobNo, String userName, String token, String orderNo, int orderStatus, String newDoorDate, String reason) {
         Request.Builder builder = new Request.Builder();
         builder.url(Urls.URL_MANAGER_MODIFY_DATE + "jobNo=" + jobNo
                 + "&token=" + token
