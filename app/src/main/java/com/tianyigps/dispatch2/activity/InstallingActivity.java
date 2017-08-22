@@ -104,6 +104,8 @@ public class InstallingActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         //将背景色复原
+        mSwipeRefreshLayout.setRefreshing(true);
+        mNetworkManager.getWorkerOrderInfoStart(eid, token, orderNo, userName);
         resetRepairList();
     }
 
@@ -162,13 +164,9 @@ public class InstallingActivity extends BaseActivity {
 
         mListView.addHeaderView(mViewRemarks);
         mListView.addFooterView(mViewNext);
-
-        mSwipeRefreshLayout.setRefreshing(true);
-        mNetworkManager.getWorkerOrderInfoStart(eid, token, orderNo, userName);
     }
 
     private void setEventListener() {
-
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
