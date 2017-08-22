@@ -2,6 +2,7 @@ package com.tianyigps.dispatch2.activity;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -165,15 +166,21 @@ public class WorkerFragmentContentActivity extends AppCompatActivity implements 
 
         mSharedpreferenceManager = new SharedpreferenceManager(this);
 
-        //  底部按钮标记第一个
-        mImageViewOrder.setImageResource(R.drawable.ic_tab_task_selected);
-        mTextViewOrder.setTextColor(getResources().getColor(R.color.colorTextSelect));
-
         mOrderFragment = new OrderFragment();
         mHandingFragment = new HandingFragment();
         mHandledFragment = new HandledFragment();
         mMineFragment = new MineFragment();
 
+        Intent intent = getIntent();
+        boolean showHanded  = intent.getBooleanExtra(Data.DATA_INTENT_HANDED_FRAGMENT, false);
+        if (showHanded){
+            showHandFragment();
+            return;
+        }
+
+        //  底部按钮标记第一个
+        mImageViewOrder.setImageResource(R.drawable.ic_tab_task_selected);
+        mTextViewOrder.setTextColor(getResources().getColor(R.color.colorTextSelect));
         showFragment(mOrderFragment);
     }
 
@@ -220,5 +227,14 @@ public class WorkerFragmentContentActivity extends AppCompatActivity implements 
         mTextViewHandling.setTextColor(getResources().getColor(R.color.colorTextSelect));
 
         showFragment(mHandingFragment);
+    }
+
+    //  显示完成订单Fragment
+    public void showHandFragment(){
+        resetBottomView();
+        mImageViewHistory.setImageResource(R.drawable.ic_tab_history_selected);
+        mTextViewHistory.setTextColor(getResources().getColor(R.color.colorTextSelect));
+
+        showFragment(mHandledFragment);
     }
 }

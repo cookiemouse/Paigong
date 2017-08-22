@@ -378,7 +378,10 @@ public class CustomSignActivity extends BaseActivity {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 // TODO: 2017/8/22 跳转到已处理Fragment
-                CustomSignActivity.this.finish();
+                Intent intent = new Intent(CustomSignActivity.this, WorkerFragmentContentActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra(Data.DATA_INTENT_HANDED_FRAGMENT, true);
+                startActivity(intent);
             }
         });
         AlertDialog dialog = builder.create();
