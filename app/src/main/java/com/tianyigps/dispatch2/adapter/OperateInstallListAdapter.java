@@ -69,6 +69,8 @@ public class OperateInstallListAdapter extends BaseAdapter {
             viewHolder.tvStatus = contentView.findViewById(R.id.tv_item_operate_install_state);
             viewHolder.tvTNoOld = contentView.findViewById(R.id.tv_item_operate_install_old_device_no);
             viewHolder.etTNoNew = contentView.findViewById(R.id.et_item_operate_new_device_no);
+            viewHolder.tvTip1 = contentView.findViewById(R.id.tv_item_operate_install_tip_1);
+            viewHolder.tvTip2 = contentView.findViewById(R.id.tv_item_operate_install_tip_2);
 
             viewHolder.etPosition = contentView.findViewById(R.id.et_item_operate_install_position);
 
@@ -141,7 +143,7 @@ public class OperateInstallListAdapter extends BaseAdapter {
         viewHolder.etPosition.setText(data.getPosition());
         isChange = false;
 
-        if (data.getPositionPic() != null) {
+        if (data.getPositionPicUrl() != null) {
             Picasso.with(context)
                     .load(data.getPositionPic())
                     .fit()
@@ -151,10 +153,15 @@ public class OperateInstallListAdapter extends BaseAdapter {
 
             viewHolder.ivPositionDelete.setVisibility(View.VISIBLE);
         } else {
+            Picasso.with(context)
+                    .load(R.drawable.ic_camera)
+                    .fit()
+                    .centerInside()
+                    .into(viewHolder.ivPositionPic);
             viewHolder.ivPositionDelete.setVisibility(View.GONE);
         }
 
-        if (data.getInstallPic() != null) {
+        if (data.getInstallPicUrl() != null) {
             Picasso.with(context)
                     .load(data.getInstallPic())
                     .fit()
@@ -164,13 +171,40 @@ public class OperateInstallListAdapter extends BaseAdapter {
 
             viewHolder.ivInstallDelete.setVisibility(View.VISIBLE);
         } else {
+            Picasso.with(context)
+                    .load(R.drawable.ic_camera)
+                    .fit()
+                    .centerInside()
+                    .into(viewHolder.ivInstallPic);
             viewHolder.ivInstallDelete.setVisibility(View.GONE);
         }
 
         if (data.isComplete()) {
             viewHolder.rlItem.setBackgroundResource(R.drawable.bg_item);
+            viewHolder.ivLocate.setBackgroundResource(R.color.colorNull);
+            viewHolder.ivInstallPic.setBackgroundResource(R.color.colorNull);
+            viewHolder.ivPositionPic.setBackgroundResource(R.color.colorNull);
         } else {
             viewHolder.rlItem.setBackgroundResource(R.drawable.bg_item_orange);
+            if (0 == data.getModel()) {
+                viewHolder.ivLocate.setBackgroundResource(R.drawable.bg_edit_orange);
+            }
+            if (null == tNoNew || "".equals(tNoNew)) {
+                viewHolder.tvTip1.setVisibility(View.VISIBLE);
+            } else {
+                viewHolder.tvTip1.setVisibility(View.GONE);
+            }
+            if (null == data.getPosition() || "".equals(data.getPosition())) {
+                viewHolder.tvTip2.setVisibility(View.VISIBLE);
+            } else {
+                viewHolder.tvTip2.setVisibility(View.GONE);
+            }
+            if (null == data.getPositionPicUrl()) {
+                viewHolder.ivPositionPic.setBackgroundResource(R.drawable.bg_edit_orange);
+            }
+            if (null == data.getInstallPicUrl()) {
+                viewHolder.ivInstallPic.setBackgroundResource(R.drawable.bg_edit_orange);
+            }
         }
 
         viewHolder.tvStatus.setOnClickListener(new View.OnClickListener() {
@@ -251,6 +285,7 @@ public class OperateInstallListAdapter extends BaseAdapter {
 
     private class ViewHolder {
         private TextView tvTitle, tvStatus, tvTNoOld;
+        private TextView tvTip1, tvTip2;
         private EditText etTNoNew, etPosition;
         private ImageView ivScanner, ivLocate, ivPositionPic, ivInstallPic;
         private RelativeLayout rlOld, rlItem;

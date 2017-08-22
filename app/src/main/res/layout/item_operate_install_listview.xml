@@ -139,6 +139,17 @@
                 android:background="@color/colorBlueTheme"/>
         </RelativeLayout>
 
+        <TextView
+            android:id="@+id/tv_item_operate_install_tip_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/rl_item_operate_install_new"
+            android:layout_marginLeft="@dimen/dp_40"
+            android:layout_marginStart="@dimen/dp_40"
+            android:text="@string/tip_imei"
+            android:textColor="@color/colorOrange"
+            android:visibility="gone"/>
+
         <ImageView
             android:id="@+id/iv_item_operate_install_position"
             android:layout_width="@dimen/dp_40"
@@ -205,6 +216,17 @@
             android:layout_marginStart="@dimen/dp_40"
             android:layout_marginTop="@dimen/dp_4"
             android:background="@color/colorBlueTheme"/>
+
+        <TextView
+            android:id="@+id/tv_item_operate_install_tip_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/view_item_operate_install_line_3"
+            android:layout_marginLeft="@dimen/dp_40"
+            android:layout_marginStart="@dimen/dp_40"
+            android:text="@string/tip_position"
+            android:textColor="@color/colorOrange"
+            android:visibility="gone"/>
 
         <RelativeLayout
             android:id="@+id/rl_item_operate_install_install"

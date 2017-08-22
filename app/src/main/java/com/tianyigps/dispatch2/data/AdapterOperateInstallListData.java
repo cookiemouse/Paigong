@@ -13,6 +13,7 @@ public class AdapterOperateInstallListData {
     private String tNoOld;
     private int tId;
 
+    private int model = 0;
     private boolean complete = true;
 
     public AdapterOperateInstallListData(boolean wire) {
@@ -113,6 +114,14 @@ public class AdapterOperateInstallListData {
 
     public void settNoOld(String tNoOld) {
         this.tNoOld = tNoOld;
+    }
+
+    public int getModel() {
+        return model;
+    }
+
+    public void setModel(int model) {
+        this.model = model;
     }
 
     public boolean isComplete() {
