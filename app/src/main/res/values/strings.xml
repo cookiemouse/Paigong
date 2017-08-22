@@ -89,6 +89,9 @@
     <string name="tip_locate">提示:未查看定位未成功！</string>
     <string name="tip_explain">提示:请输入故障说明</string>
     <string name="tip_position">提示:请输入安装位置</string>
+    <string name="tip_carno">提示:请输入车牌号</string>
+    <string name="tip_car_type">提示:请输入车型</string>
+    <string name="tip_carno_fault">提示:请输入正确的车牌号</string>
 
     <array name="picker_month">
         <item>01 月</item>

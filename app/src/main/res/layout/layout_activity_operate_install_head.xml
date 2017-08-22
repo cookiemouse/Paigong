@@ -88,15 +88,26 @@
             android:layout_marginTop="@dimen/dp_4"
             android:background="@color/colorBlueTheme"/>
 
+
     </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_activity_operate_install_tip_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_44"
+        android:layout_marginStart="@dimen/dp_44"
+        android:visibility="gone"
+        android:text="@string/tip_carno"
+        android:textColor="@color/colorOrange"/>
 
     <!--=====================================================-->
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:clipChildren="false"
-        android:layout_margin="@dimen/dp_4">
+        android:layout_margin="@dimen/dp_4"
+        android:clipChildren="false">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -183,7 +194,6 @@
             android:layout_height="@dimen/dp_40"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
             android:padding="@dimen/dp_8"
             android:src="@drawable/ic_car_type"/>
 
@@ -208,11 +218,23 @@
             android:lines="1"
             android:textSize="@dimen/sp_14"/>
 
+        <TextView
+            android:id="@+id/tv_activity_operate_install_tip_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_40"
+            android:layout_marginStart="@dimen/dp_40"
+            android:layout_below="@id/et_layout_operate_install_car_type"
+            android:visibility="gone"
+            android:text="@string/tip_car_type"
+            android:textColor="@color/colorOrange"/>
+
         <View
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_0_5"
-            android:layout_below="@id/iv_layout_operate_install_car_type"
+            android:layout_below="@id/tv_activity_operate_install_tip_2"
             android:layout_marginTop="@dimen/dp_4"
+            android:visibility="gone"
             android:background="@color/colorBlueTheme"/>
     </RelativeLayout>
 

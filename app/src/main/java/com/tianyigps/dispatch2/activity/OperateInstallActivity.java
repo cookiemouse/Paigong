@@ -46,6 +46,7 @@ import com.tianyigps.dispatch2.manager.DatabaseManager;
 import com.tianyigps.dispatch2.manager.FileManager;
 import com.tianyigps.dispatch2.manager.NetworkManager;
 import com.tianyigps.dispatch2.manager.SharedpreferenceManager;
+import com.tianyigps.dispatch2.utils.RegularU;
 import com.tianyigps.dispatch2.utils.TinyU;
 import com.tianyigps.dispatch2.utils.UploadPicU;
 import com.tianyigps.dispatch2.utils.Uri2FileU;
@@ -65,6 +66,9 @@ public class OperateInstallActivity extends BaseActivity {
     private ImageView mImageViewCarNoDelete, mImageViewFrameNoDelete;
     private EditText mEditTextCarNo, mEditTextCarType;
     private TextView mTextViewFrameNo;
+
+    //  提示
+    private TextView mTextViewTip1, mTextViewTip2;
 
     private Button mButtonSave;
     private View mViewSave;
@@ -375,6 +379,9 @@ public class OperateInstallActivity extends BaseActivity {
         mEditTextCarNo = findViewById(R.id.et_layout_operate_install_car_no);
         mTextViewFrameNo = findViewById(R.id.tv_layout_operate_install_frame_no);
         mEditTextCarType = findViewById(R.id.et_layout_operate_install_car_type);
+
+        mTextViewTip1 = findViewById(R.id.tv_activity_operate_install_tip_1);
+        mTextViewTip2 = findViewById(R.id.tv_activity_operate_install_tip_2);
 
         mLoadingDialogFragment = new LoadingDialogFragment();
 
@@ -957,12 +964,7 @@ public class OperateInstallActivity extends BaseActivity {
     //  保存数据
     private void saveData() {
         String carNo = mEditTextCarNo.getText().toString();
-        // TODO: 17-8-20 较验车牌
-//        if (!RegularU.checkCarNo(carNo)) {
-//            mStringMessage = "请输入正确的车牌号！";
-//            myHandler.sendEmptyMessage(Data.MSG_ERO);
-//            return;
-//        }
+
         String carType = mEditTextCarType.getText().toString();
         String carFrameNo = mTextViewFrameNo.getText().toString();
 
@@ -1231,18 +1233,25 @@ public class OperateInstallActivity extends BaseActivity {
             Log.i(TAG, "isCarComplete: carNoPicUrl-->" + carNoPicUrl);
             Log.i(TAG, "isCarComplete: frameNoPicUrl-->" + frameNoPicUrl);
 
-//            if (null == carNo || "".equals(carNo)) {
-//                carComplete = false;
-//                mEditTextCarNo.setHintTextColor(getResources().getColor(R.color.colorOrange));
-//            } else {
-//                mEditTextCarNo.setHintTextColor(getResources().getColor(R.color.colorBlack));
-//            }
-//            if (null == carType || "".equals(carType)) {
-//                carComplete = false;
-//                mEditTextCarType.setHintTextColor(getResources().getColor(R.color.colorOrange));
-//            } else {
-//                mEditTextCarType.setHintTextColor(getResources().getColor(R.color.colorBlack));
-//            }
+            if (null == carNo || "".equals(carNo)) {
+                carComplete = false;
+                mTextViewTip1.setVisibility(View.VISIBLE);
+                mTextViewTip1.setText(getString(R.string.tip_carno));
+            } else {
+                // 17-8-20 较验车牌
+                if (!RegularU.checkCarNo(carNo)) {
+                    mTextViewTip1.setVisibility(View.VISIBLE);
+                    mTextViewTip1.setText(getString(R.string.tip_carno_fault));
+                } else {
+                    mTextViewTip1.setVisibility(View.GONE);
+                }
+            }
+            if (null == carType || "".equals(carType)) {
+                carComplete = false;
+                mTextViewTip2.setVisibility(View.VISIBLE);
+            } else {
+                mTextViewTip2.setVisibility(View.GONE);
+            }
             if (null == carNoPicUrl || "".equals(carNoPicUrl)) {
                 carComplete = false;
             }
@@ -1257,7 +1266,7 @@ public class OperateInstallActivity extends BaseActivity {
 
     //  显示LoadingFragment
     private void showLoading() {
-        if (mLoadingDialogFragment.isAdded()){
+        if (mLoadingDialogFragment.isAdded()) {
             mLoadingDialogFragment.dismiss();
         }
         mLoadingDialogFragment.show(getFragmentManager(), "LoadingFragment");
@@ -1290,7 +1299,7 @@ public class OperateInstallActivity extends BaseActivity {
                     mOperateInstallListAdapter.notifyDataSetChanged();
                     break;
                 }
-                case Data.MSG_11:{
+                case Data.MSG_11: {
                     //  check imei failure或者获取 whole imei失败
                     AdapterOperateInstallListData data = mAdapterOperateInstallListDataList.get(itemPosition);
                     data.settNoNew(null);
@@ -1330,24 +1339,26 @@ public class OperateInstallActivity extends BaseActivity {
                 }
                 case Data.MSG_6: {
                     //  加载listview position图片
-                    ImageView imageView = mListView.getChildAt(itemPosition).findViewById(R.id.iv_item_operate_install_position_pic);
-                    Picasso.with(OperateInstallActivity.this)
-                            .load(itemPath)
-                            .fit()
-                            .centerInside()
-                            .error(R.drawable.ic_camera)
-                            .into(imageView);
+//                    ImageView imageView = mListView.getChildAt(itemPosition).findViewById(R.id.iv_item_operate_install_position_pic);
+//                    Picasso.with(OperateInstallActivity.this)
+//                            .load(itemPath)
+//                            .fit()
+//                            .centerInside()
+//                            .error(R.drawable.ic_camera)
+//                            .into(imageView);
+                    mOperateInstallListAdapter.notifyDataSetChanged();
                     break;
                 }
                 case Data.MSG_7: {
                     //  加载listview install图片
-                    ImageView imageView = mListView.getChildAt(itemPosition).findViewById(R.id.iv_item_operate_install_install_pic);
-                    Picasso.with(OperateInstallActivity.this)
-                            .load(itemPath)
-                            .fit()
-                            .centerInside()
-                            .error(R.drawable.ic_camera)
-                            .into(imageView);
+//                    ImageView imageView = mListView.getChildAt(itemPosition).findViewById(R.id.iv_item_operate_install_install_pic);
+//                    Picasso.with(OperateInstallActivity.this)
+//                            .load(itemPath)
+//                            .fit()
+//                            .centerInside()
+//                            .error(R.drawable.ic_camera)
+//                            .into(imageView);
+                    mOperateInstallListAdapter.notifyDataSetChanged();
                     break;
                 }
                 case Data.MSG_8: {
@@ -1368,7 +1379,6 @@ public class OperateInstallActivity extends BaseActivity {
                         mImageViewCarNoDelete.setVisibility(View.GONE);
                         break;
                     }
-
                     //  删除车架号图片
                     if (Data.DATA_UPLOAD_TYPE_2 == mDeleteType) {
                         mCarFramePicUrl = null;
