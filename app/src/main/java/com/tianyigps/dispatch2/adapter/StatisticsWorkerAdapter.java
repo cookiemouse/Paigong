@@ -18,6 +18,8 @@ import java.util.List;
 
 public class StatisticsWorkerAdapter extends BaseAdapter {
 
+    private static final String TAG = "StatisticsWorkerAdapter";
+
     private Context context;
     private List<AdapterStatisticsWorkderData> mStatisticsWorkderDataList;
 
@@ -45,7 +47,6 @@ public class StatisticsWorkerAdapter extends BaseAdapter {
     public View getView(int position, View contentView, ViewGroup viewGroup) {
 
         AdapterStatisticsWorkderData data = mStatisticsWorkderDataList.get(position);
-
         ViewHolder viewHolder = null;
 
         if (null == contentView) {

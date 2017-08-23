@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -48,6 +49,7 @@ public class StatisticsActivity extends BaseActivity {
     private ImageView mImageViewDate;
     private ListView mListViewStatistics;
     private FrameLayout mFrameLayoutTitle;
+    private LinearLayout mLinearLayoutDefault;
 
     private List<AdapterStatisticsWorkderData> mStatisticsWorkderDataList;
     private StatisticsWorkerAdapter mStatisticsWorkerAdapter;
@@ -107,6 +109,7 @@ public class StatisticsActivity extends BaseActivity {
         mImageViewDate = findViewById(R.id.iv_activity_statistics_date);
         mListViewStatistics = findViewById(R.id.lv_activity_statistics);
         mFrameLayoutTitle = findViewById(R.id.fl_activity_statistics_list_title);
+        mLinearLayoutDefault = findViewById(R.id.ll_layout_default);
 
         SimpleDateFormat simpleDateFormatShow = new SimpleDateFormat("yyyy年MM月", Locale.CHINA);
         Date dateShow = new Date(mills);
@@ -186,7 +189,7 @@ public class StatisticsActivity extends BaseActivity {
 
                 WorkerQualityBean.ObjBean objBean = workerQualityBean.getObj();
                 if (null == objBean) {
-                    myHandler.sendEmptyMessage(MSG_1);
+                    myHandler.sendEmptyMessage(Data.MSG_3);
                     return;
                 }
 
@@ -251,6 +254,10 @@ public class StatisticsActivity extends BaseActivity {
                             , objBean.getFinishCarNum()
                             , objBean.getFinishWiredNum()
                             , objBean.getFinishWirelessNum()));
+                }
+                if (mStatisticsManagerDataList.size() == 0) {
+                    myHandler.sendEmptyMessage(Data.MSG_3);
+                    return;
                 }
                 myHandler.sendEmptyMessage(Data.MSG_2);
             }
@@ -338,13 +345,19 @@ public class StatisticsActivity extends BaseActivity {
                 }
                 case Data.MSG_1: {
                     //  安装工程师
+                    mLinearLayoutDefault.setVisibility(View.GONE);
                     mStatisticsWorkerAdapter.notifyDataSetChanged();
                     break;
                 }
                 case Data.MSG_2: {
                     //  服务主任
+                    mLinearLayoutDefault.setVisibility(View.GONE);
                     mStatisticsManagerAdapter.notifyDataSetChanged();
                     break;
+                }
+                case Data.MSG_3: {
+                    //  无数据
+                    mLinearLayoutDefault.setVisibility(View.VISIBLE);
                 }
                 default: {
                     Log.i(TAG, "handleMessage: default");
