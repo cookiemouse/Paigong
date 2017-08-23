@@ -1,34 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_login"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.tianyigps.dispatch2.activity.LoginActivity">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:id="@+id/activity_login"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              tools:context="com.tianyigps.dispatch2.activity.LoginActivity">
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="@dimen/dp_120"
         android:layout_height="@dimen/dp_120"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="@dimen/dp_120"
-        android:src="@drawable/ic_login_logo" />
+        android:layout_marginTop="@dimen/dp_80"
+        android:src="@drawable/ic_login_logo"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_32"
         android:layout_marginLeft="@dimen/dp_32"
         android:layout_marginRight="@dimen/dp_32"
-        android:layout_marginTop="@dimen/dp_64"
+        android:layout_marginTop="@dimen/dp_48"
         android:orientation="horizontal">
 
         <ImageView
             android:layout_width="@dimen/dp_24"
             android:layout_height="@dimen/dp_24"
             android:layout_gravity="center_vertical"
-            android:src="@drawable/ic_account" />
+            android:src="@drawable/ic_account"/>
 
         <EditText
             android:id="@+id/et_activity_login_account"
@@ -39,7 +39,7 @@
             android:layout_weight="1"
             android:background="@color/colorNull"
             android:hint="@string/enter_account"
-            android:textSize="@dimen/sp_14" />
+            android:textSize="@dimen/sp_14"/>
     </LinearLayout>
 
     <View
@@ -48,7 +48,7 @@
         android:layout_marginLeft="@dimen/dp_24"
         android:layout_marginRight="@dimen/dp_24"
         android:layout_marginTop="@dimen/dp_4"
-        android:background="@color/colorBlueTheme" />
+        android:background="@color/colorBlueTheme"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -62,7 +62,7 @@
             android:layout_width="@dimen/dp_24"
             android:layout_height="@dimen/dp_24"
             android:layout_gravity="center_vertical"
-            android:src="@drawable/ic_password" />
+            android:src="@drawable/ic_password"/>
 
         <EditText
             android:id="@+id/et_activity_login_password"
@@ -74,7 +74,7 @@
             android:background="@color/colorNull"
             android:hint="@string/enter_password"
             android:inputType="textPassword"
-            android:textSize="@dimen/sp_14" />
+            android:textSize="@dimen/sp_14"/>
     </LinearLayout>
 
     <View
@@ -83,24 +83,30 @@
         android:layout_marginLeft="@dimen/dp_24"
         android:layout_marginRight="@dimen/dp_24"
         android:layout_marginTop="@dimen/dp_4"
-        android:background="@color/colorBlueTheme" />
+        android:background="@color/colorBlueTheme"/>
 
     <Button
         android:id="@+id/btn_activity_login"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="@dimen/dp_96"
-        android:paddingLeft="@dimen/dp_80"
-        android:paddingRight="@dimen/dp_80"
-        android:textColor="@color/colorWhite"
         android:background="@drawable/bg_button_flush"
-        android:text="@string/login" />
+        android:layout_marginLeft="@dimen/dp_24"
+        android:layout_marginRight="@dimen/dp_24"
+        android:text="@string/login"
+        android:textColor="@color/colorWhite"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal|bottom"
-        android:layout_marginTop="@dimen/dp_64"
-        android:text="@string/login_message" />
+        android:layout_marginBottom="@dimen/dp_20"
+        android:text="@string/login_message"/>
 </LinearLayout>

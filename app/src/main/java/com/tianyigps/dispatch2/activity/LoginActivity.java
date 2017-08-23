@@ -1,12 +1,12 @@
 package com.tianyigps.dispatch2.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -29,7 +29,7 @@ import com.tianyigps.dispatch2.utils.SnackbarU;
 
 import cn.jpush.android.api.JPushInterface;
 
-public class LoginActivity extends Activity {
+public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = "LoginActivity";
 
@@ -52,6 +52,13 @@ public class LoginActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //透明状态栏
+
+        //  透明状态栏
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
+
+        //  透明标题栏
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         setContentView(R.layout.activity_login);
 
@@ -61,9 +68,9 @@ public class LoginActivity extends Activity {
     }
 
     private void init() {
-        mEditTextAccount = findViewById(R.id.et_activity_login_account);
-        mEditTextPassword = findViewById(R.id.et_activity_login_password);
-        mButtonLogin = findViewById(R.id.btn_activity_login);
+        mEditTextAccount = (EditText) findViewById(R.id.et_activity_login_account);
+        mEditTextPassword = (EditText) findViewById(R.id.et_activity_login_password);
+        mButtonLogin = (Button) findViewById(R.id.btn_activity_login);
 
         mNetworkManager = new NetworkManager();
         myHandler = new MyHandler();
@@ -147,7 +154,7 @@ public class LoginActivity extends Activity {
     }
 
     private void showToast(String message) {
-        LinearLayout linearLayout = findViewById(R.id.activity_login);
+        LinearLayout linearLayout = (LinearLayout) findViewById(R.id.activity_login);
         View viewToast = LayoutInflater.from(LoginActivity.this).inflate(R.layout.layout_top_toast, null);
         TextView textViewInfo = viewToast.findViewById(R.id.tv_layout_top_toast);
         textViewInfo.setText(message);
