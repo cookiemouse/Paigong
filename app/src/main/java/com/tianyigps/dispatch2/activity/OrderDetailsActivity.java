@@ -471,6 +471,7 @@ public class OrderDetailsActivity extends Activity {
                         mRelativeLayoutRemove.setVisibility(View.GONE);
                     }
 
+                    // TODO: 2017/8/23 有问题，应该是节点信息
                     if (mIntOrderStaus == 3) {
                         isChecked = true;
                         mButtonSign.setText("开始");

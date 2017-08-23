@@ -202,6 +202,7 @@ public class HandingFragment extends Fragment implements View.OnClickListener {
                 }
                 Intent intent = new Intent(getActivity(), OrderDetailsActivity.class);
                 intent.putExtra(Data.DATA_INTENT_ORDER_NO, data.getId());
+                intent.putExtra(Data.DATA_INTENT_ORDER_STATUS, data.getOrderStatus());
                 startActivity(intent);
             }
         });
@@ -256,6 +257,7 @@ public class HandingFragment extends Fragment implements View.OnClickListener {
                             , objBean.getContactPhone()
                             , objBean.getOrderType()
                             , objBean.getCheckStatus()
+                            , objBean.getOrderStatus()
                             , wire, wireless, removeWire, removeWireless, modify));
                 }
 

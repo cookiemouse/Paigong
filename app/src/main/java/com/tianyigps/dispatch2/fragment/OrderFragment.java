@@ -279,6 +279,7 @@ public class OrderFragment extends Fragment {
             public void onItemClick(int position) {
                 Intent intent = new Intent(getActivity(), OrderDetailsActivity.class);
                 intent.putExtra(Data.DATA_INTENT_ORDER_NO, mAdapterOrderDataList.get(position).getId());
+                intent.putExtra(Data.DATA_INTENT_ORDER_STATUS, mIntOrderStaus);
                 startActivityForResult(intent, Data.DATA_INTENT_ORDER_DETAILS_REQUEST);
             }
 

@@ -6,7 +6,7 @@ package com.tianyigps.dispatch2.data;
 
 public class AdapterHandingData {
     private String name, time, address, id, callName, callNumber;
-    private int online, lineless, orderType, checkStatus;
+    private int online, lineless, orderType, checkStatus, orderStatus;
     private int removeWireNum, removeWirelessNum;
     private boolean modify;
 
@@ -54,7 +54,7 @@ public class AdapterHandingData {
     }
 
     public AdapterHandingData(String name, String time, String address, String id, String callName, String callNumber
-            , int orderType, int checkStatus, int online, int lineless, int removeWireNum, int removeWirelessNum, boolean modify) {
+            , int orderType, int checkStatus, int orderStatus, int online, int lineless, int removeWireNum, int removeWirelessNum, boolean modify) {
         this.name = name;
         this.time = time;
         this.address = address;
@@ -65,6 +65,7 @@ public class AdapterHandingData {
         this.lineless = lineless;
         this.orderType = orderType;
         this.checkStatus = checkStatus;
+        this.orderStatus = orderStatus;
         this.removeWireNum = removeWireNum;
         this.removeWirelessNum = removeWirelessNum;
         this.modify = modify;
@@ -140,6 +141,14 @@ public class AdapterHandingData {
 
     public void setCheckStatus(int checkStatus) {
         this.checkStatus = checkStatus;
+    }
+
+    public int getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(int orderStatus) {
+        this.orderStatus = orderStatus;
     }
 
     public int getOrderType() {
