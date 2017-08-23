@@ -859,6 +859,10 @@ public class OperateInstallActivity extends BaseActivity {
                         myHandler.sendEmptyMessage(Data.MSG_7);
                         break;
                     }
+                    default: {
+                        //  防止加载框不取消的情况
+                        myHandler.sendEmptyMessage(Data.MSG_11);
+                    }
                 }
             }
         });
