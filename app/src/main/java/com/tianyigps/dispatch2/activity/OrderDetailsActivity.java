@@ -28,6 +28,7 @@ import com.tianyigps.dispatch2.data.Data;
 import com.tianyigps.dispatch2.dialog.LoadingDialogFragment;
 import com.tianyigps.dispatch2.dialog.ReturnOrderDialogFragment;
 import com.tianyigps.dispatch2.interfaces.OnGetWorkerOrderInfoHandingListener;
+import com.tianyigps.dispatch2.interfaces.OnPendDetailsListener;
 import com.tianyigps.dispatch2.interfaces.OnSignedWorkerListener;
 import com.tianyigps.dispatch2.manager.LocateManager;
 import com.tianyigps.dispatch2.manager.NetworkManager;
@@ -47,10 +48,6 @@ public class OrderDetailsActivity extends Activity {
 
     private static final long TIME_2_HOUR = 7200000;
     private static final long TIME_1_SEC = 1000;
-
-    private static final int TYPE_INSTALL = 0;
-    private static final int TYPE_REPAIR = 1;
-    private static final int TYPE_REMOVE = 2;
 
     //Title栏
     private TextView mTextViewTitle;
@@ -79,6 +76,7 @@ public class OrderDetailsActivity extends Activity {
     private String userName;
     private String eName;
     private String orderNo;
+    private String jobNo;
 
     private String mStringMessage;
 
@@ -141,6 +139,7 @@ public class OrderDetailsActivity extends Activity {
         Intent intent = getIntent();
         orderNo = intent.getStringExtra(DATA_INTENT_ORDER_NO);
 
+
         //  内容
         mTextViewOrderName = findViewById(R.id.tv_layout_order_details_content_order_title);
         mTextViewOrderNum = findViewById(R.id.tv_layout_order_details_content_order_number);
@@ -175,9 +174,15 @@ public class OrderDetailsActivity extends Activity {
         token = mSharedpreferenceManager.getToken();
         userName = mSharedpreferenceManager.getAccount();
         eName = mSharedpreferenceManager.getName();
+        jobNo = mSharedpreferenceManager.getJobNo();
 
+        int orderStatus = intent.getIntExtra(Data.DATA_INTENT_ORDER_STATUS, 0);
         showLoading();
-        mNetworkManager.getWorkerOrderInfoHanding(eid, token, orderNo, userName);
+        if (0 == orderStatus) {
+            mNetworkManager.getPendDetails(jobNo, token, orderNo, userName);
+        } else {
+            mNetworkManager.getWorkerOrderInfoHanding(eid, token, orderNo, userName);
+        }
     }
 
     private void setEventListener() {
@@ -320,6 +325,18 @@ public class OrderDetailsActivity extends Activity {
                 }
 
                 myHandler.sendEmptyMessage(MSG_1);
+            }
+        });
+
+        mNetworkManager.setOnPendDetailsListener(new OnPendDetailsListener() {
+            @Override
+            public void onFailure() {
+                Log.i(TAG, "onFailure: ");
+            }
+
+            @Override
+            public void onSuccess(String result) {
+                Log.i(TAG, "onSuccess: PendDetails.result-->" + result);
             }
         });
 
