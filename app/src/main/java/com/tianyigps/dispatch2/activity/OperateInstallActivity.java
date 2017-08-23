@@ -1467,6 +1467,18 @@ public class OperateInstallActivity extends BaseActivity {
                     Log.i(TAG, "handleMessage: mCarNo-->" + mCarNo);
                     Log.i(TAG, "handleMessage: mCarBrand-->" + mCarBrand);
 
+                    //  判定车牌号及车型是否可编辑
+                    if (null == mCarNo || "".equals(mCarNo)) {
+                        mEditTextCarNo.setEnabled(true);
+                    } else {
+                        mEditTextCarNo.setEnabled(false);
+                    }
+                    if (null == mCarBrand || "".equals(mCarBrand)) {
+                        mEditTextCarType.setEnabled(true);
+                    } else {
+                        mEditTextCarType.setEnabled(false);
+                    }
+
                     //  将车辆信息置为本地最新
                     loadCarData();
                     mTextViewFrameNo.setText(mCarFrameNo);
