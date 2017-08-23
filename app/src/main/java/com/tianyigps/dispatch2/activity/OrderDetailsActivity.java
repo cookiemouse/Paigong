@@ -472,13 +472,13 @@ public class OrderDetailsActivity extends Activity {
                     }
 
                     if (mIntOrderStaus == 3) {
-                        isChecked = false;
-                        mButtonSign.setText("签到");
-                        mTextViewReturnOrder.setVisibility(View.VISIBLE);
-                    } else {
                         isChecked = true;
                         mButtonSign.setText("开始");
                         mTextViewReturnOrder.setVisibility(View.GONE);
+                    } else {
+                        isChecked = false;
+                        mButtonSign.setText("签到");
+                        mTextViewReturnOrder.setVisibility(View.VISIBLE);
                     }
 
                     updateTime();
