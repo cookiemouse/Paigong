@@ -14,10 +14,11 @@ public class AdapterPendingData {
     int orderId;
 
     private int orderStatus;
+    private int node;
 
     public AdapterPendingData(String order, String name, String contactName, String phoneNumber
             , String time, String address, int orderType
-            , int lineNumber, int linelessNumber, int orderId, int orderStatus) {
+            , int lineNumber, int linelessNumber, int orderId, int orderStatus, int node) {
         this.order = order;
         this.name = name;
         this.contactName = contactName;
@@ -29,11 +30,12 @@ public class AdapterPendingData {
         this.linelessNumber = linelessNumber;
         this.orderId = orderId;
         this.orderStatus = orderStatus;
+        this.node = node;
     }
 
-    public AdapterPendingData(String order, String name, String contactName, String phoneNumber, String time, String address,
-                              int orderType, int lineNumber, int linelessNumber, int wireRemove, int wirelessRemove
-            , int orderId, int orderStatus) {
+    public AdapterPendingData(String order, String name, String contactName, String phoneNumber, String time
+            , String address, int orderType, int lineNumber, int linelessNumber, int wireRemove, int wirelessRemove
+            , int orderId, int orderStatus, int note) {
         this.order = order;
         this.name = name;
         this.contactName = contactName;
@@ -47,6 +49,7 @@ public class AdapterPendingData {
         this.wirelessRemove = wirelessRemove;
         this.orderId = orderId;
         this.orderStatus = orderStatus;
+        this.node = note;
     }
 
     public String getOrder() {
@@ -151,5 +154,13 @@ public class AdapterPendingData {
 
     public void setOrderStatus(int orderStatus) {
         this.orderStatus = orderStatus;
+    }
+
+    public int getNode() {
+        return node;
+    }
+
+    public void setNode(int node) {
+        this.node = node;
     }
 }

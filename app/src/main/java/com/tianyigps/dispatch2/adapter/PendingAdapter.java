@@ -176,31 +176,7 @@ public class PendingAdapter extends BaseAdapter {
         private TextView tvWireRemove, tvWirelessRemove;
         private LinearLayout llRemove, llContact;
     }
-
-    //  确认签到对话框
-    private void showSignDialog() {
-//        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-//        View viewDialog = LayoutInflater.from(context).inflate(R.layout.layout_dialog_sign, null);
-//        TextView textViewEnsure = viewDialog.findViewById(R.id.tv_layout_dialog_sign_ensure);
-//        TextView textViewCancel = viewDialog.findViewById(R.id.tv_layout_dialog_sign_cancel);
-//        builder.setView(viewDialog);
-//        final Dialog dialog = builder.create();
-//        textViewEnsure.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                // TODO: 2017/7/11 确认 [
-//            }
-//        });
-//        textViewCancel.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                // TODO: 2017/7/11 取消
-//                dialog.dismiss();
-//            }
-//        });
-//        dialog.show();
-    }
-
+    
     //  订单状态
     private String getOrderStatus(int status) {
         String orderStatus = "";

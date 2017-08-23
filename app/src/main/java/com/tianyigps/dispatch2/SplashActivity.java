@@ -66,7 +66,7 @@ public class SplashActivity extends Activity {
         //百度地图
         SDKInitializer.initialize(getApplicationContext());
         //极光推送
-        JPushInterface.setDebugMode(true);
+//        JPushInterface.setDebugMode(true);
         JPushInterface.init(this);
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);

@@ -321,7 +321,8 @@ public class PendingFragment extends Fragment {
                                 , objBean.getRemoveWiredNum()
                                 , objBean.getRemoveWirelessNum()
                                 , objBean.getOrderId()
-                                , objBean.getOrderStatus());
+                                , objBean.getOrderStatus()
+                                , objBean.getNode());
                     } else {
                         data = new AdapterPendingData(objBean.getOrderNo()
                                 , custName
@@ -333,7 +334,8 @@ public class PendingFragment extends Fragment {
                                 , wire
                                 , wireless
                                 , objBean.getOrderId()
-                                , objBean.getOrderStatus());
+                                , objBean.getOrderStatus()
+                                , objBean.getNode());
                     }
                     mAdapterPendingDataList.add(data);
                 }

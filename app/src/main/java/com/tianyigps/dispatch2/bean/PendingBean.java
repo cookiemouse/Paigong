@@ -97,6 +97,7 @@ public class PendingBean {
         private int wirelessNum;
         private int removeWiredNum;
         private int orderType;
+        private int node;
         private int wiredNum;
         private int orderStatus;
         private int removeWirelessNum;
@@ -244,6 +245,14 @@ public class PendingBean {
 
         public void setOrderId(int orderId) {
             this.orderId = orderId;
+        }
+
+        public int getNode() {
+            return node;
+        }
+
+        public void setNode(int node) {
+            this.node = node;
         }
     }
 }
