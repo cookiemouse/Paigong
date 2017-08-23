@@ -28,6 +28,7 @@ import com.tianyigps.dispatch2.bean.StartHandingBean;
 import com.tianyigps.dispatch2.bean.WorkerHandingBean;
 import com.tianyigps.dispatch2.data.AdapterHandingData;
 import com.tianyigps.dispatch2.data.Data;
+import com.tianyigps.dispatch2.dialog.LoadingDialogFragmentV4;
 import com.tianyigps.dispatch2.interfaces.OnContactSiteListener;
 import com.tianyigps.dispatch2.interfaces.OnGetWorkerOrderHandingListener;
 import com.tianyigps.dispatch2.interfaces.OnStartHandingListener;
@@ -68,6 +69,9 @@ public class HandingFragment extends Fragment implements View.OnClickListener {
 
     //  正在操作的item
     private int mPosition = 0;
+
+    //  LoadingFragment
+    private LoadingDialogFragmentV4 mLoadingDialogFragment;
 
     @Nullable
     @Override
@@ -118,6 +122,7 @@ public class HandingFragment extends Fragment implements View.OnClickListener {
 
         mSwipeRefreshLayout = view.findViewById(R.id.srl_fragment_handing);
         mSwipeRefreshLayout.setColorSchemeColors(0xff3cabfa);
+        mLoadingDialogFragment = new LoadingDialogFragmentV4();
 
         mTextViewHead = view.findViewById(R.id.tv_fragment_handing_head);
         mTextViewManager = view.findViewById(R.id.tv_fragment_handing_manager);
@@ -192,6 +197,7 @@ public class HandingFragment extends Fragment implements View.OnClickListener {
             public void onStart(int position) {
                 mPosition = position;
                 AdapterHandingData data = mAdapterHandingDataList.get(position);
+                showLoading();
                 mNetworkManager.startHanding(eid, token, data.getId(), data.getCallName(), userName);
             }
 
@@ -308,6 +314,11 @@ public class HandingFragment extends Fragment implements View.OnClickListener {
         });
     }
 
+    //  显示LoadingFragment
+    private void showLoading() {
+        mLoadingDialogFragment.show(getChildFragmentManager(), "LoadingFragment");
+    }
+
     //  拨打电话
     private void toCall(String number) {
         Intent intent = new Intent();
@@ -337,6 +348,9 @@ public class HandingFragment extends Fragment implements View.OnClickListener {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
+            if (mLoadingDialogFragment.isAdded()) {
+                mLoadingDialogFragment.dismiss();
+            }
             mSwipeRefreshLayout.setRefreshing(false);
             switch (msg.what) {
                 case Data.MSG_ERO: {

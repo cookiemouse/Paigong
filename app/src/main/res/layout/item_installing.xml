@@ -18,12 +18,26 @@
         android:padding="@dimen/dp_16">
 
         <ImageView
+            android:id="@+id/iv_item_installing_go"
             android:layout_width="@dimen/dp_48"
             android:layout_height="@dimen/dp_32"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:src="@drawable/ic_item_go"/>
+
+        <TextView
+            android:id="@+id/tv_item_installing_go"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_32"
+            android:gravity="center"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/sp_20"
+            android:visibility="gone"
+            android:text="完成"/>
 
         <TextView
             android:id="@+id/tv_item_installing_frame_no_title"
@@ -129,7 +143,6 @@
             android:layout_below="@+id/tv_item_installing_pending_no_title"
             android:layout_marginTop="@dimen/dp_16"
             android:text="@string/complete_no"
-
             android:textColor="@color/colorWhite"/>
 
         <TextView

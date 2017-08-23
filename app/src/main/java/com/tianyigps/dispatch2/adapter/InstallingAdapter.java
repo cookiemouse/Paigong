@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.tianyigps.dispatch2.R;
@@ -73,6 +74,8 @@ public class InstallingAdapter extends BaseAdapter {
             viewHolder.textViewPendingOffline = contentView.findViewById(R.id.tv_item_installing_pending_offline);
             viewHolder.textViewCompleteOnline = contentView.findViewById(R.id.tv_item_installing_complete_online);
             viewHolder.textViewCompleteOffline = contentView.findViewById(R.id.tv_item_installing_complete_offline);
+            viewHolder.ivGo = contentView.findViewById(R.id.iv_item_installing_go);
+            viewHolder.tvGo = contentView.findViewById(R.id.tv_item_installing_go);
 
             contentView.setTag(viewHolder);
         } else {
@@ -92,9 +95,19 @@ public class InstallingAdapter extends BaseAdapter {
         viewHolder.textViewCompleteOffline.setText("" + data.getCompleteOffline());
 
         if (data.isComplete()) {
-            viewHolder.frameLayout.setBackgroundResource(R.drawable.bg_item_installing_blue);
+            if (data.getCompleteLine() > 0 || data.getCompleteOffline() > 0) {
+                viewHolder.frameLayout.setBackgroundResource(R.drawable.bg_item_installing_green);
+                viewHolder.ivGo.setVisibility(View.GONE);
+                viewHolder.tvGo.setVisibility(View.VISIBLE);
+            } else {
+                viewHolder.frameLayout.setBackgroundResource(R.drawable.bg_item_installing_blue);
+                viewHolder.ivGo.setVisibility(View.VISIBLE);
+                viewHolder.tvGo.setVisibility(View.GONE);
+            }
         } else {
             viewHolder.frameLayout.setBackgroundResource(R.drawable.bg_item_installing_orange);
+            viewHolder.ivGo.setVisibility(View.VISIBLE);
+            viewHolder.tvGo.setVisibility(View.GONE);
         }
 
         return contentView;
@@ -103,5 +116,7 @@ public class InstallingAdapter extends BaseAdapter {
     private class ViewHolder {
         private FrameLayout frameLayout;
         private TextView textViewFrameNo, textViewPendingOnline, textViewPendingOffline, textViewCompleteOnline, textViewCompleteOffline;
+        private ImageView ivGo;
+        private TextView tvGo;
     }
 }
