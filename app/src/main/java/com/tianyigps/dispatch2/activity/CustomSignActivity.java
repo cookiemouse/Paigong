@@ -109,6 +109,7 @@ public class CustomSignActivity extends BaseActivity {
         Intent intent = getIntent();
         installType = intent.getIntExtra(Data.DATA_INTENT_INSTALL_TYPE, TYPE_INSTALL);
         mOrderNo = intent.getStringExtra(Data.DATA_INTENT_ORDER_NO);
+        mPartReason = intent.getStringExtra(Data.DATA_INTENT_REASON);
     }
 
     private void setEventListener() {

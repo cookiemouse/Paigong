@@ -22,7 +22,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String TABLE_REPAIR = "create table " + Data.DATA_TAB_REPAIR
             + "(idMain INTEGER,tNo TEXT,position TEXT,positionPic TEXT,installPic TEXT,explain TEXT" +
-            ",newImei TEXT,positionUrl TEXT,installUrl TEXT,model INTEGER,locateType INTEGER)";
+            ",newImei TEXT,positionUrl TEXT,installUrl TEXT,model INTEGER,locateType INTEGER, wire INTEGER)";
 
     //  拆除似乎不用存本地数据
     private static final String TABLE_REMOVE = "create table " + Data.DATA_TAB_REMOVE
@@ -37,7 +37,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String TABLE_INSTALL_TERMINAL = "create table " + Data.DATA_TAB_INSTALL_TERMINAL
             + "(idMain TEXT,tNoOld TEXT,tNoNew TEXT,position TEXT,positionPic TEXT,installPic TEXT" +
-            ",positionPicUri TEXT,installPicUri TEXT,model INTEGER,tId INTEGER,locateType INTEGER,carId INTEGER)";
+            ",positionPicUri TEXT,installPicUri TEXT,model INTEGER,tId INTEGER,locateType INTEGER,carId INTEGER, wire INTEGER)";
 
     /*
     * 需要保存的信息

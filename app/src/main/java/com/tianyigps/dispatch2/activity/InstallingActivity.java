@@ -109,6 +109,20 @@ public class InstallingActivity extends BaseActivity {
         resetRepairList();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == Data.DATA_INTENT_REASON_REQUEST && resultCode == Data.DATA_INTENT_REASON_RESULT) {
+            String reason = data.getStringExtra(Data.DATA_INTENT_REASON);
+            Log.i(TAG, "onActivityResult: reason-->" + reason);
+            Intent intent = new Intent(InstallingActivity.this, CustomSignActivity.class);
+            intent.putExtra(Data.DATA_INTENT_ORDER_NO, orderNo);
+            intent.putExtra(Data.DATA_INTENT_INSTALL_TYPE, mAdapterType);
+            intent.putExtra(Data.DATA_INTENT_REASON, reason);
+            startActivity(intent);
+        }
+    }
+
     private void init() {
         this.setTitleText("");
 
@@ -216,7 +230,7 @@ public class InstallingActivity extends BaseActivity {
                     toCustomSign();
                     return;
                 }
-//                toEditRemarksActivity();
+                showPartDialog();
             }
         });
 
@@ -427,7 +441,7 @@ public class InstallingActivity extends BaseActivity {
 
     private void toEditRemarksActivity() {
         Intent intent = new Intent(InstallingActivity.this, EditRemarksActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent, Data.DATA_INTENT_REASON_REQUEST);
     }
 
     private void showFailureDialog(String msg) {
@@ -445,6 +459,30 @@ public class InstallingActivity extends BaseActivity {
         dialog.show();
     }
 
+    //  部分完成对话框
+    private void showPartDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(InstallingActivity.this);
+        View viewDialog = LayoutInflater.from(InstallingActivity.this).inflate(R.layout.dialog_button_editable, null);
+        builder.setView(viewDialog);
+        final AlertDialog dialog = builder.create();
+        Button buttonCancle = viewDialog.findViewById(R.id.btn_dialog_editable_cancel);
+        Button buttonEnsure = viewDialog.findViewById(R.id.btn_dialog_editable_ensure);
+        buttonCancle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        buttonEnsure.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                toEditRemarksActivity();
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+    }
+
     //  将维修背景色初始化
     private void resetRepairList() {
         if (mAdapterRepairDataList.size() > 0) {
@@ -453,6 +491,58 @@ public class InstallingActivity extends BaseActivity {
             }
         }
         myHandler.sendEmptyMessage(Data.MSG_3);
+    }
+
+    //  更新安装列表完成数量
+    private void updateInstallComplete() {
+        if (mAdapterInstallingDataList.size() > 0) {
+            for (AdapterInstallingData data : mAdapterInstallingDataList) {
+
+                boolean terComplete;
+                int carId = data.getCarId();
+
+                int wireComplete = 0, wirelessComplete = 0;
+
+                Cursor cursorTer = mDatabaseManager.getTerByCarId(carId);
+                if (null != cursorTer && cursorTer.moveToFirst()) {
+                    do {
+                        int idMainTer = cursorTer.getInt(0);
+                        String tNoNew = cursorTer.getString(2);
+                        String position = cursorTer.getString(3);
+                        String positionUrl = cursorTer.getString(6);
+                        String installUrl = cursorTer.getString(7);
+                        int wire = cursorTer.getInt(12);
+
+                        Log.i(TAG, "checkInstallListTer: idMainTer-->" + idMainTer);
+                        Log.i(TAG, "checkInstallListTer: tNoOld-->" + tNoNew);
+                        Log.i(TAG, "checkInstallListTer: position-->" + position);
+                        Log.i(TAG, "checkInstallListTer: positionUrl-->" + positionUrl);
+                        Log.i(TAG, "checkInstallListTer: installUrl-->" + installUrl);
+                        Log.i(TAG, "checkInstallListTer: wire-->" + wire);
+
+                        terComplete = ((null != tNoNew && !"".equals(tNoNew))
+                                && (null != position && !"".equals(position))
+                                && (null != positionUrl)
+                                && (null != installUrl));
+
+                        if (terComplete) {
+                            if (0 == wire) {
+                                wirelessComplete++;
+                            } else {
+                                wireComplete++;
+                            }
+                        }
+                    } while (cursorTer.moveToNext());
+
+                    cursorTer.close();
+                } else {
+                    Log.i(TAG, "checkInstallList: cursorTer is null");
+                }
+
+                data.setCompleteLine(wireComplete);
+                data.setCompleteOffline(wirelessComplete);
+            }
+        }
     }
 
     //  检验维修列表是否已完成
@@ -499,7 +589,7 @@ public class InstallingActivity extends BaseActivity {
         if (mAdapterInstallingDataList.size() > 0) {
             for (AdapterInstallingData data : mAdapterInstallingDataList) {
 
-                boolean carComplete = false, terComplete = true;
+                boolean carComplete = false;
                 int carId = data.getCarId();
 
                 //  check车辆信息是否完整
@@ -520,38 +610,14 @@ public class InstallingActivity extends BaseActivity {
 
                 //  ------------分割线---------------
                 //  check设备信息是否完整
-                Cursor cursorTer = mDatabaseManager.getTerByCarId(carId);
-                if (null != cursorTer && cursorTer.moveToFirst()) {
-                    do {
-                        int idMainTer = cursorTer.getInt(0);
-                        String tNoNew = cursorTer.getString(2);
-                        String position = cursorTer.getString(3);
-                        String positionUrl = cursorTer.getString(6);
-                        String installUrl = cursorTer.getString(7);
-
-                        Log.i(TAG, "checkInstallListTer: idMainTer-->" + idMainTer);
-                        Log.i(TAG, "checkInstallListTer: tNoOld-->" + tNoNew);
-                        Log.i(TAG, "checkInstallListTer: position-->" + position);
-                        Log.i(TAG, "checkInstallListTer: positionUrl-->" + positionUrl);
-                        Log.i(TAG, "checkInstallListTer: installUrl-->" + installUrl);
-
-                        if (terComplete) {
-                            terComplete = ((null != tNoNew)
-                                    && (null != position)
-                                    && (null != positionUrl)
-                                    && (null != installUrl));
-                        }
-                    } while (cursorTer.moveToNext());
-
-                    cursorTer.close();
+                if (carComplete && data.getOrderLine() == data.getCompleteLine() && data.getOrderOffline() == data.getCompleteOffline()) {
+                    data.setComplete(true);
                 } else {
-                    Log.i(TAG, "checkInstallList: cursorTer is null");
+                    data.setComplete(false);
                 }
 
-                data.setComplete(carComplete && terComplete);
-
                 if (nextAble) {
-                    nextAble = carComplete && terComplete;
+                    nextAble = data.isComplete();
                 }
             }
         }
@@ -628,6 +694,8 @@ public class InstallingActivity extends BaseActivity {
                 }
                 case Data.MSG_1: {
                     //  install
+                    //更新完成数量
+                    updateInstallComplete();
                     mInstallingAdapter.notifyDataSetChanged();
                     break;
                 }

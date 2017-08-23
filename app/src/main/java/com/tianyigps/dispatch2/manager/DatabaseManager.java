@@ -1035,13 +1035,13 @@ public class DatabaseManager {
 
     //  增，T
     public void addTer(String idMain, String tNoOld, String tNoNew, String position, String positionPic
-            , String installPic, String positionPicUri, String installPicUri, int carId) {
+            , String installPic, String positionPicUri, String installPicUri, int carId, int wire) {
         if (terExist(idMain)) {
-            modifyTer(idMain, tNoOld, tNoNew, position, positionPic, installPic, positionPicUri, installPicUri, carId);
+            modifyTer(idMain, tNoOld, tNoNew, position, positionPic, installPic, positionPicUri, installPicUri, carId, wire);
             return;
         }
         this.addTer(idMain);
-        this.addTer(idMain, tNoOld, tNoNew, position, positionPic, installPic, positionPicUri, installPicUri, carId);
+        this.addTer(idMain, tNoOld, tNoNew, position, positionPic, installPic, positionPicUri, installPicUri, carId, wire);
     }
 
     //  增，T
@@ -1166,7 +1166,7 @@ public class DatabaseManager {
 
     //  改，T
     public void modifyTer(String idMain, String tNoOld, String tNoNew, String position
-            , String positionPic, String installPic, String positionPicUri, String installPicUri, int carId) {
+            , String positionPic, String installPic, String positionPicUri, String installPicUri, int carId, int wire) {
         if (!terExist(idMain)) {
             return;
         }
@@ -1179,6 +1179,7 @@ public class DatabaseManager {
         contentValues.put("positionPicUri", positionPicUri);
         contentValues.put("installPicUri", installPicUri);
         contentValues.put("carId", carId);
+        contentValues.put("wire", wire);
 
         mSqLiteDatabase.beginTransaction();
         try {
@@ -1365,7 +1366,7 @@ public class DatabaseManager {
                     , new String[]{"idMain, tNoOld, tNoNew, position"
                             + ", positionPic, installPic"
                             + ", positionPicUri, installPicUri"
-                            + ", model, tId, locateType, carId"}
+                            + ", model, tId, locateType, carId, wire"}
                     , "idMain=?"
                     , new String[]{(idMain)}
                     , null, null, null);
@@ -1388,7 +1389,7 @@ public class DatabaseManager {
                     , new String[]{"idMain, tNoOld, tNoNew, position"
                             + ", positionPic, installPic"
                             + ", positionPicUri, installPicUri"
-                            + ", model, tId, locateType, carId"}
+                            + ", model, tId, locateType, carId, wire"}
                     , "tId=?"
                     , new String[]{("" + tId)}
                     , null, null, null);
@@ -1411,7 +1412,7 @@ public class DatabaseManager {
                     , new String[]{"idMain, tNoOld, tNoNew, position"
                             + ", positionPic, installPic"
                             + ", positionPicUri, installPicUri"
-                            + ", model, tId, locateType, carId"}
+                            + ", model, tId, locateType, carId, wire"}
                     , "carId=?"
                     , new String[]{("" + carId)}
                     , null, null, null);

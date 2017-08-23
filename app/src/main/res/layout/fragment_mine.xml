@@ -30,7 +30,7 @@
         android:layout_height="@dimen/dp_48"
         android:background="@color/colorWhite"
         android:gravity="center"
-        android:text="退出登陆"
+        android:text="退出登录"
         android:textColor="@color/colorBlueTheme"
         android:textSize="@dimen/sp_16" />
 

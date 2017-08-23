@@ -76,7 +76,7 @@ public class EditRemarksActivity extends BaseActivity {
 
     //  显示信息Dialog
     private void showMessageDialog(String msg) {
-        if (isFinishing()){
+        if (isFinishing()) {
             return;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(EditRemarksActivity.this);

@@ -999,9 +999,14 @@ public class OperateInstallActivity extends BaseActivity {
             Log.i(TAG, "saveData: positionPicUrl-->" + positionPicUrl);
             Log.i(TAG, "saveData: installPicUrl-->" + installPicUrl);
 
+            int wire = 0;
+            if (data.isWire()) {
+                wire = 1;
+            }
+
             mDatabaseManager.addTer(id, tNoOld, tNoNew, position
                     , positionPic, installPic
-                    , positionPicUrl, installPicUrl, carId);
+                    , positionPicUrl, installPicUrl, carId, wire);
             i++;
             Log.i(TAG, "----------------------------------------");
         }
