@@ -76,7 +76,6 @@ public class OrderDetailsActivity extends Activity {
     private String userName;
     private String eName;
     private String orderNo;
-    private String jobNo;
 
     private String mStringMessage;
 
@@ -174,15 +173,9 @@ public class OrderDetailsActivity extends Activity {
         token = mSharedpreferenceManager.getToken();
         userName = mSharedpreferenceManager.getAccount();
         eName = mSharedpreferenceManager.getName();
-        jobNo = mSharedpreferenceManager.getJobNo();
 
-        int orderStatus = intent.getIntExtra(Data.DATA_INTENT_ORDER_STATUS, 0);
         showLoading();
-        if (0 == orderStatus) {
-            mNetworkManager.getPendDetails(jobNo, token, orderNo, userName);
-        } else {
-            mNetworkManager.getWorkerOrderInfoHanding(eid, token, orderNo, userName);
-        }
+        mNetworkManager.getWorkerOrderInfoHanding(eid, token, orderNo, userName);
     }
 
     private void setEventListener() {
@@ -274,6 +267,10 @@ public class OrderDetailsActivity extends Activity {
                 mIntRemoveWireNum = objBean.getRemoveWiredNum();
                 mIntRemoveWirelessNum = objBean.getRemoveWirelessNum();
 
+                long checkTime = objBean.getCheckInTime();
+                Log.i(TAG, "onSuccess: checkTime-->" + checkTime);
+                isChecked = (0 != checkTime);
+
                 switch (mIntOrderType) {
                     case 1: {
                         //  新安装
@@ -325,18 +322,6 @@ public class OrderDetailsActivity extends Activity {
                 }
 
                 myHandler.sendEmptyMessage(MSG_1);
-            }
-        });
-
-        mNetworkManager.setOnPendDetailsListener(new OnPendDetailsListener() {
-            @Override
-            public void onFailure() {
-                Log.i(TAG, "onFailure: ");
-            }
-
-            @Override
-            public void onSuccess(String result) {
-                Log.i(TAG, "onSuccess: PendDetails.result-->" + result);
             }
         });
 
@@ -488,13 +473,11 @@ public class OrderDetailsActivity extends Activity {
                         mRelativeLayoutRemove.setVisibility(View.GONE);
                     }
 
-                    // TODO: 2017/8/23 有问题，应该是节点信息
-                    if (mIntOrderStaus == 3) {
+                    if (isChecked) {
                         isChecked = true;
                         mButtonSign.setText("开始");
                         mTextViewReturnOrder.setVisibility(View.GONE);
                     } else {
-                        isChecked = false;
                         mButtonSign.setText("签到");
                         mTextViewReturnOrder.setVisibility(View.VISIBLE);
                     }

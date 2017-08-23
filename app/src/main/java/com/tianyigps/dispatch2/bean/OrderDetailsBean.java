@@ -115,6 +115,7 @@ public class OrderDetailsBean {
         private int reviseFlag;
         private String orderNo;
         private long doorTime;
+        private long checkInTime;
         private String contactName;
         private int finishWiredNum;
         private String province;
@@ -210,6 +211,14 @@ public class OrderDetailsBean {
 
         public void setOrderStatus(int orderStatus) {
             this.orderStatus = orderStatus;
+        }
+
+        public long getCheckInTime() {
+            return checkInTime;
+        }
+
+        public void setCheckInTime(long checkInTime) {
+            this.checkInTime = checkInTime;
         }
 
         public int getRemoveWirelessNum() {
