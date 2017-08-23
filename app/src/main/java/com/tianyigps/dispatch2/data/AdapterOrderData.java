@@ -5,11 +5,13 @@ package com.tianyigps.dispatch2.data;
  */
 
 public class AdapterOrderData {
-    private String id, name, phoneNumber, phoneName, time, address, orderType;
-    int lineNumber, linelessNumber;
+    private String id, name, phoneNumber, phoneName, time, address;
+    private int orderType;
+    private int lineNumber, linelessNumber;
+    private int wireRemove, wirelessRemove;
 
     public AdapterOrderData(String name, String time, String address
-            , String id, String phoneName, String phoneNumber, String orderType
+            , String id, String phoneName, String phoneNumber, int orderType
             , int lineNumber, int linelessNumber) {
         this.id = id;
         this.name = name;
@@ -20,6 +22,20 @@ public class AdapterOrderData {
         this.orderType = orderType;
         this.lineNumber = lineNumber;
         this.linelessNumber = linelessNumber;
+    }
+
+    public AdapterOrderData(String id, String name, String phoneNumber, String phoneName, String time, String address, int orderType, int lineNumber, int linelessNumber, int wireRemove, int wirelessRemove) {
+        this.id = id;
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+        this.phoneName = phoneName;
+        this.time = time;
+        this.address = address;
+        this.orderType = orderType;
+        this.lineNumber = lineNumber;
+        this.linelessNumber = linelessNumber;
+        this.wireRemove = wireRemove;
+        this.wirelessRemove = wirelessRemove;
     }
 
     public String getId() {
@@ -70,11 +86,11 @@ public class AdapterOrderData {
         this.address = address;
     }
 
-    public String getOrderType() {
+    public int getOrderType() {
         return orderType;
     }
 
-    public void setOrderType(String orderType) {
+    public void setOrderType(int orderType) {
         this.orderType = orderType;
     }
 
@@ -92,5 +108,21 @@ public class AdapterOrderData {
 
     public void setLinelessNumber(int linelessNumber) {
         this.linelessNumber = linelessNumber;
+    }
+
+    public int getWireRemove() {
+        return wireRemove;
+    }
+
+    public void setWireRemove(int wireRemove) {
+        this.wireRemove = wireRemove;
+    }
+
+    public int getWirelessRemove() {
+        return wirelessRemove;
+    }
+
+    public void setWirelessRemove(int wirelessRemove) {
+        this.wirelessRemove = wirelessRemove;
     }
 }

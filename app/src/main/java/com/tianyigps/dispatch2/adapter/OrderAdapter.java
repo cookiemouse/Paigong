@@ -1,11 +1,13 @@
 package com.tianyigps.dispatch2.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.tianyigps.dispatch2.R;
@@ -70,6 +72,10 @@ public class OrderAdapter extends BaseAdapter {
             viewHolder.imageViewCall = contentView.findViewById(R.id.iv_item_order_phone);
             viewHolder.imageViewSign = contentView.findViewById(R.id.iv_item_order_sign);
 
+            viewHolder.llRemove = contentView.findViewById(R.id.ll_item_order_remove);
+            viewHolder.tvWireRemove = contentView.findViewById(R.id.tv_item_order_remove_content_wire);
+            viewHolder.tvWirelessRemove = contentView.findViewById(R.id.tv_item_order_remove_content_wireless);
+
             contentView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) contentView.getTag();
@@ -80,9 +86,36 @@ public class OrderAdapter extends BaseAdapter {
         viewHolder.textViewAddress.setText(data.getAddress());
         viewHolder.textViewId.setText(data.getId());
         viewHolder.textViewPhoneName.setText(data.getPhoneName());
-        viewHolder.textViewLine.setText(data.getOrderType());
+
         viewHolder.textViewLine.setText("" + data.getLineNumber());
         viewHolder.textViewLineless.setText("" + data.getLinelessNumber());
+        viewHolder.tvWireRemove.setText("" + data.getWireRemove());
+        viewHolder.tvWirelessRemove.setText("" + data.getWirelessRemove());
+
+        String orderType;
+        switch (data.getOrderType()) {
+            case 1: {
+                orderType = "安装：";
+                viewHolder.llRemove.setVisibility(View.GONE);
+                break;
+            }
+            case 2: {
+                orderType = "维修：";
+                viewHolder.llRemove.setVisibility(View.GONE);
+                break;
+            }
+            case 3: {
+                orderType = "安装：";
+                viewHolder.llRemove.setVisibility(View.VISIBLE);
+                break;
+            }
+            default: {
+                orderType = "安装：";
+                Log.i(TAG, "onResponse: default");
+            }
+        }
+
+        viewHolder.textViewContentTitle.setText(orderType);
 
         viewHolder.imageViewMap.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -134,6 +167,9 @@ public class OrderAdapter extends BaseAdapter {
         private TextView textViewName, textViewTime, textViewAddress, textViewId, textViewPhoneName, textViewLine, textViewLineless, textViewContentTitle;
 
         private ImageView imageViewMap, imageViewCall, imageViewSign;
+
+        private LinearLayout llRemove;
+        private TextView tvWireRemove, tvWirelessRemove;
     }
 
     public interface OnItemListener {

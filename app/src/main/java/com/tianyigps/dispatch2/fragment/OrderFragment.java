@@ -344,40 +344,18 @@ public class OrderFragment extends Fragment {
                     mIntOrderId = objBean.getOrderId();
 
                     mLongDoorTime = objBean.getDoorTime();
-                    String orderType;
-                    int wire, wireless;
-                    switch (objBean.getOrderType()) {
-                        case 1: {
-                            orderType = "安装：";
-                            wire = mIntWireNum;
-                            wireless = mIntWirelessNum;
-                            break;
-                        }
-                        case 2: {
-                            orderType = "维修：";
-                            wire = mIntWireNum;
-                            wireless = mIntWirelessNum;
-                            break;
-                        }
-                        case 3: {
-                            orderType = "拆改：";
-                            wire = mIntRemoveWireNum;
-                            wireless = mIntRemoveWirelessNum;
-                            break;
-                        }
-                        default: {
-                            orderType = "安装：";
-                            wire = 0;
-                            wireless = 0;
-                            Log.i(TAG, "onResponse: default");
-                        }
-                    }
-                    mAdapterOrderDataList.add(new AdapterOrderData(mStringCustName
+
+                    mAdapterOrderDataList.add(new AdapterOrderData(mStringOrderNum
+                            , mStringCustName
+                            , mStringContactPhone
+                            , mStringContactName
                             , new TimeFormatU().millisToDate(mLongDoorTime)
                             , mStringProvince + mStringCity + mStringDistrict + mStringDetail
-                            , mStringOrderNum
-                            , mStringContactName
-                            , mStringContactPhone, orderType, wire, wireless));
+                            , objBean.getOrderType()
+                            , objBean.getWiredNum()
+                            , objBean.getWirelessNum()
+                            , objBean.getRemoveWiredNum()
+                            , objBean.getRemoveWirelessNum()));
                 }
 
                 myHandler.sendEmptyMessage(MSG_1);
