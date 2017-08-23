@@ -110,10 +110,9 @@ public class OrderFragment extends Fragment {
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        if (hidden) {
-            Log.i(TAG, "onHiddenChanged: hidden");
-        } else {
-            Log.i(TAG, "onHiddenChanged: show");
+        if (!hidden) {
+            mSwipeRefreshLayout.setRefreshing(true);
+            mNetworkManager.getWorkerOrder(eid, token, "", userName);
         }
     }
 

@@ -83,6 +83,15 @@ public class HandingFragment extends Fragment implements View.OnClickListener {
     }
 
     @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden) {
+            mSwipeRefreshLayout.setRefreshing(true);
+            mNetworkManager.getWorkerOrderHanding(eid, token, userName);
+        }
+    }
+
+    @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_fragment_handing_head: {

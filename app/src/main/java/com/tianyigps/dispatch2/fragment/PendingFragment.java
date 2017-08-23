@@ -97,6 +97,15 @@ public class PendingFragment extends Fragment {
     }
 
     @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden) {
+            mSwipeRefreshLayout.setRefreshing(true);
+            mNetworkManager.getPendingOrder(jobNo, token, "", "", userName);
+        }
+    }
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Log.i(TAG, "onActivityResult: requestCode-->" + requestCode);

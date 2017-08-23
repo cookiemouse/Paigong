@@ -102,6 +102,15 @@ public class PendedFragment extends Fragment {
         return viewRoot;
     }
 
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden) {
+            mSwipeRefreshLayout.setRefreshing(true);
+            mNetworkManager.getPended(jobNo, token, "", "", "", userName);
+        }
+    }
+
     private void init(View view) {
         mImageViewTitleLeft = view.findViewById(R.id.iv_layout_title_base_left);
         mImageViewTitleRight = view.findViewById(R.id.iv_layout_title_base_right);
