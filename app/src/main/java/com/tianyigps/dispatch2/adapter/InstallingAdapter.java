@@ -95,7 +95,7 @@ public class InstallingAdapter extends BaseAdapter {
         viewHolder.textViewCompleteOffline.setText("" + data.getCompleteOffline());
 
         if (data.isComplete()) {
-            if (data.getCompleteLine() > 0 || data.getCompleteOffline() > 0) {
+            if (data.getCompleteLine() == data.getOrderLine() && data.getCompleteOffline() == data.getOrderOffline()) {
                 viewHolder.frameLayout.setBackgroundResource(R.drawable.bg_item_installing_green);
                 viewHolder.ivGo.setVisibility(View.GONE);
                 viewHolder.tvGo.setVisibility(View.VISIBLE);

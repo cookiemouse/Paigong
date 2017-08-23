@@ -1152,13 +1152,74 @@ public class OperateInstallActivity extends BaseActivity {
 
     //  checkTerminal数据
     private boolean isComplete() {
-        boolean complete;
-        boolean completeAll = true;
-
         if (!isCarComplete()) {
             return false;
         }
 
+        return checkTerComplete();
+
+//        for (int i = 0; i < mAdapterOperateInstallListDataList.size(); i++) {
+//            Cursor cursor = mDatabaseManager.getTer(ID_MAIN_TERMINAL + i);
+//            if (null != cursor && cursor.moveToFirst()) {
+//                String id = cursor.getString(0);
+//                String tNoOld = cursor.getString(1);
+//                String tNoNew = cursor.getString(2);
+//                String position = cursor.getString(3);
+//                String positionPic = cursor.getString(4);
+//                String installPic = cursor.getString(5);
+//                String positionPicUrl = cursor.getString(6);
+//                String installPicUrl = cursor.getString(7);
+//                int model = cursor.getInt(8);
+//                int tId = cursor.getInt(9);
+//
+//                Log.i(TAG, "loadTerminalData: id-->" + id);
+//                Log.i(TAG, "loadTerminalData: tNoOld-->" + tNoOld);
+//                Log.i(TAG, "loadTerminalData: tNoNew-->" + tNoNew);
+//                Log.i(TAG, "loadTerminalData: position-->" + position);
+//                Log.i(TAG, "loadTerminalData: positionPic-->" + positionPic);
+//                Log.i(TAG, "loadTerminalData: installPic-->" + installPic);
+//                Log.i(TAG, "loadTerminalData: positionPicUrl-->" + positionPicUrl);
+//                Log.i(TAG, "loadTerminalData: installPicUrl-->" + installPicUrl);
+//                Log.i(TAG, "loadTerminalData: model-->" + model);
+//                Log.i(TAG, "loadTerminalData: tId-->" + tId);
+//
+//                if ((null == tNoNew || "".equals(tNoNew))
+//                        && (null == position || "".equals(position))
+//                        && (null == positionPicUrl || "".equals(positionPicUrl))
+//                        && (null == installPicUrl || "".equals(installPicUrl))) {
+//                    complete = true;
+//                } else if (null != tNoNew && !"".equals(tNoNew)
+//                        && null != position && !"".equals(position)
+//                        && null != positionPicUrl && !"".equals(positionPicUrl)
+//                        && null != installPicUrl && !"".equals(installPicUrl)) {
+//                    complete = true;
+//                } else {
+//                    complete = false;
+//                }
+//
+//                Log.i(TAG, "isComplete: position-->" + idMainTerminal + "-->" + i);
+//                Log.i(TAG, "isComplete: complete-->" + complete);
+//                Log.i(TAG, ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+//
+//                if (!complete && completeAll) {
+//                    completeAll = false;
+//                }
+//                AdapterOperateInstallListData data = mAdapterOperateInstallListDataList.get(i);
+//                data.setComplete(complete);
+//
+//                cursor.close();
+//            }
+//        }
+//        if (!completeAll) {
+//            mOperateInstallListAdapter.notifyDataSetChanged();
+//        }
+//
+//        return completeAll;
+    }
+
+    //  checkTerminal数据
+    private boolean checkTerComplete() {
+        boolean complete = true;
         for (int i = 0; i < mAdapterOperateInstallListDataList.size(); i++) {
             Cursor cursor = mDatabaseManager.getTer(ID_MAIN_TERMINAL + i);
             if (null != cursor && cursor.moveToFirst()) {
@@ -1187,35 +1248,36 @@ public class OperateInstallActivity extends BaseActivity {
                 if ((null == tNoNew || "".equals(tNoNew))
                         && (null == position || "".equals(position))
                         && (null == positionPicUrl || "".equals(positionPicUrl))
-                        && (null == installPicUrl || "".equals(installPicUrl))) {
+                        && (null == installPicUrl || "".equals(installPicUrl))
+                        && (0 == model)) {
                     complete = true;
                 } else if (null != tNoNew && !"".equals(tNoNew)
                         && null != position && !"".equals(position)
                         && null != positionPicUrl && !"".equals(positionPicUrl)
-                        && null != installPicUrl && !"".equals(installPicUrl)) {
+                        && null != installPicUrl && !"".equals(installPicUrl)
+                        && (0 != model)) {
                     complete = true;
                 } else {
                     complete = false;
                 }
 
+                AdapterOperateInstallListData data = mAdapterOperateInstallListDataList.get(i);
+                data.setComplete(complete);
+
                 Log.i(TAG, "isComplete: position-->" + idMainTerminal + "-->" + i);
                 Log.i(TAG, "isComplete: complete-->" + complete);
                 Log.i(TAG, ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
 
-                if (!complete && completeAll) {
-                    completeAll = false;
-                }
-                AdapterOperateInstallListData data = mAdapterOperateInstallListDataList.get(i);
-                data.setComplete(complete);
-
                 cursor.close();
+
+                if (!complete) {
+                    break;
+                }
             }
         }
-        if (!completeAll) {
-            mOperateInstallListAdapter.notifyDataSetChanged();
-        }
 
-        return completeAll;
+        mOperateInstallListAdapter.notifyDataSetChanged();
+        return complete;
     }
 
     //checkCar数据
