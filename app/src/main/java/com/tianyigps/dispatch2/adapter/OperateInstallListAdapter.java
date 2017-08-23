@@ -186,24 +186,35 @@ public class OperateInstallListAdapter extends BaseAdapter {
             viewHolder.ivPositionPic.setBackgroundResource(R.color.colorNull);
         } else {
             viewHolder.rlItem.setBackgroundResource(R.drawable.bg_item_orange);
+            //  定位按钮
             if (0 == data.getModel()) {
                 viewHolder.ivLocate.setBackgroundResource(R.drawable.bg_edit_orange);
+            } else {
+                viewHolder.ivLocate.setBackgroundResource(R.color.colorNull);
             }
+            //  设备号
             if (null == tNoNew || "".equals(tNoNew)) {
                 viewHolder.tvTip1.setVisibility(View.VISIBLE);
             } else {
                 viewHolder.tvTip1.setVisibility(View.GONE);
             }
+            //  安装位置
             if (null == data.getPosition() || "".equals(data.getPosition())) {
                 viewHolder.tvTip2.setVisibility(View.VISIBLE);
             } else {
                 viewHolder.tvTip2.setVisibility(View.GONE);
             }
+            //  安装位置图
             if (null == data.getPositionPicUrl()) {
                 viewHolder.ivPositionPic.setBackgroundResource(R.drawable.bg_edit_orange);
+            } else {
+                viewHolder.ivPositionPic.setBackgroundResource(R.color.colorNull);
             }
+            //  接线图
             if (null == data.getInstallPicUrl()) {
                 viewHolder.ivInstallPic.setBackgroundResource(R.drawable.bg_edit_orange);
+            } else {
+                viewHolder.ivInstallPic.setBackgroundResource(R.color.colorNull);
             }
         }
 

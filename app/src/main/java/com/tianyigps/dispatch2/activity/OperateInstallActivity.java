@@ -1258,9 +1258,15 @@ public class OperateInstallActivity extends BaseActivity {
             }
             if (null == carNoPicUrl || "".equals(carNoPicUrl)) {
                 carComplete = false;
+                mImageViewCarNo.setBackgroundResource(R.drawable.bg_edit_orange);
+            } else {
+                mImageViewCarNo.setBackgroundResource(R.color.colorNull);
             }
             if (null == frameNoPicUrl || "".equals(frameNoPicUrl)) {
                 carComplete = false;
+                mImageViewFrameNo.setBackgroundResource(R.drawable.bg_edit_orange);
+            } else {
+                mImageViewFrameNo.setBackgroundResource(R.color.colorNull);
             }
         }
 
@@ -1326,6 +1332,7 @@ public class OperateInstallActivity extends BaseActivity {
                             .error(R.drawable.ic_camera)
                             .into(mImageViewCarNo);
 
+                    mImageViewCarNo.setBackgroundResource(R.color.colorNull);
                     mImageViewCarNoDelete.setVisibility(View.VISIBLE);
                     break;
                 }
@@ -1338,6 +1345,7 @@ public class OperateInstallActivity extends BaseActivity {
                             .error(R.drawable.ic_camera)
                             .into(mImageViewFrameNo);
 
+                    mImageViewFrameNo.setBackgroundResource(R.color.colorNull);
                     mImageViewFrameNoDelete.setVisibility(View.VISIBLE);
                     break;
                 }

@@ -38,6 +38,7 @@
     <dimen name="dp_16_n">-16dp</dimen>
 
     <dimen name="px_1">1px</dimen>
+    <dimen name="px_2">2px</dimen>
 
     <!--字体-->
     <dimen name="sp_12">12sp</dimen>
