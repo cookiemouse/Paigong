@@ -29,6 +29,7 @@ import com.tianyigps.dispatch2.interfaces.OnPendListener;
 import com.tianyigps.dispatch2.interfaces.OnWorkersListener;
 import com.tianyigps.dispatch2.manager.NetworkManager;
 import com.tianyigps.dispatch2.manager.SharedpreferenceManager;
+import com.tianyigps.dispatch2.utils.ToastU;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -286,6 +287,7 @@ public class ChoiceWorkerActivity extends BaseActivity {
                 }
                 case Data.MSG_2: {
                     //  派单成功
+                    new ToastU(ChoiceWorkerActivity.this).showToast("派单成功");
                     mIntent.putExtra(Data.DATA_INTENT_PEND_RESULT, true);
                     setResult(Data.DATA_INTENT_CHOICE_WORKER_RESULT, mIntent);
                     ChoiceWorkerActivity.this.finish();
