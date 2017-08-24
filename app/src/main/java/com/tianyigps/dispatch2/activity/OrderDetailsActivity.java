@@ -28,7 +28,6 @@ import com.tianyigps.dispatch2.data.Data;
 import com.tianyigps.dispatch2.dialog.LoadingDialogFragment;
 import com.tianyigps.dispatch2.dialog.ReturnOrderDialogFragment;
 import com.tianyigps.dispatch2.interfaces.OnGetWorkerOrderInfoHandingListener;
-import com.tianyigps.dispatch2.interfaces.OnPendDetailsListener;
 import com.tianyigps.dispatch2.interfaces.OnSignedWorkerListener;
 import com.tianyigps.dispatch2.manager.LocateManager;
 import com.tianyigps.dispatch2.manager.NetworkManager;
@@ -304,15 +303,20 @@ public class OrderDetailsActivity extends Activity {
 
                 for (OrderDetailsBean.ObjBean.CarInfoBean carInfoBean : objBean.getCarInfo()) {
                     if (carInfoBean.getRemoveFlag() == 0) {
-                        mStringTno = carInfoBean.getCarVin();
-                        mStringInstallInfo += carInfoBean.getCarVin();
+                        String carVin = carInfoBean.getCarVin();
+                        if (null != carVin) {
+                            mStringInstallInfo += carVin;
+                        }
                         String carBrand = carInfoBean.getCarBrand();
                         if (null != carBrand && !"".equals(carBrand)) {
                             mStringInstallInfo += ("，" + carInfoBean.getCarBrand());
                         }
                         mStringInstallInfo += "\n";
                     } else {
-                        mStringRemoveContent += carInfoBean.getCarVin();
+                        String carVin = carInfoBean.getCarVin();
+                        if (null != carVin) {
+                            mStringRemoveContent += carVin;
+                        }
                         String carBrand = carInfoBean.getCarBrand();
                         if (null != carBrand && !"".equals(carBrand)) {
                             mStringRemoveContent += ("，" + carInfoBean.getCarBrand());
