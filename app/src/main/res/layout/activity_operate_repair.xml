@@ -251,7 +251,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/tv_activity_operate_remove_state"
             android:layout_marginTop="@dimen/dp_16"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <ImageView
                 android:id="@+id/iv_activity_operate_replace"
@@ -304,6 +304,7 @@
                 android:src="@drawable/ic_scanner"/>
 
             <View
+                android:id="@+id/view_activity_operate_line_0"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_0_5"
                 android:layout_below="@+id/iv_activity_operate_replace"
@@ -311,6 +312,18 @@
                 android:layout_marginStart="@dimen/dp_40"
                 android:layout_marginTop="@dimen/dp_8"
                 android:background="@color/colorBlueTheme"/>
+
+            <TextView
+                android:id="@+id/tv_activity_operate_repair_tip_0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/view_activity_operate_line_0"
+                android:layout_marginLeft="@dimen/dp_40"
+                android:layout_marginStart="@dimen/dp_40"
+                android:text="@string/tip_imei"
+                android:textColor="@color/colorOrange"
+                android:visibility="gone">
+            </TextView>
         </RelativeLayout>
 
         <ImageView
@@ -389,7 +402,7 @@
             android:layout_marginStart="@dimen/dp_40"
             android:text="@string/tip_imei"
             android:textColor="@color/colorOrange"
-            android:visibility="invisible">
+            android:visibility="gone">
         </TextView>
 
         <RelativeLayout

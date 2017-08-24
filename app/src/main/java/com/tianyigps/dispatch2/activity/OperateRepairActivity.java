@@ -115,7 +115,7 @@ public class OperateRepairActivity extends BaseActivity {
     private int mPicPosition = Data.DATA_UPLOAD_TYPE_3;
 
     //  输入提示文字
-    private TextView mTextViewTip1, mTextViewTip2, mTextViewTip3;
+    private TextView mTextViewTip0, mTextViewTip1, mTextViewTip2, mTextViewTip3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -262,6 +262,7 @@ public class OperateRepairActivity extends BaseActivity {
 
         mEditTextPosition = findViewById(R.id.et_activity_operate_default_position_new);
         mEditTextExplain = findViewById(R.id.et_activity_operate_default_install_explain);
+        mTextViewTip0 = findViewById(R.id.tv_activity_operate_repair_tip_0);
         mTextViewTip1 = findViewById(R.id.tv_activity_operate_repair_tip_1);
         mTextViewTip2 = findViewById(R.id.tv_activity_operate_repair_tip_2);
         mTextViewTip3 = findViewById(R.id.tv_activity_operate_repair_tip_3);
@@ -694,7 +695,8 @@ public class OperateRepairActivity extends BaseActivity {
             mExplainNew = null;
         }
         if (mRelativeLayoutReplace.getVisibility() == View.GONE) {
-            mDatabaseManager.addRepair(tId, mPositionNew, mExplainNew);
+            mDatabaseManager.addRepair(tId, mPositionNew, mExplainNew, null);
+            mDatabaseManager.addRepair(tId, 0);
         } else {
             mDatabaseManager.addRepair(tId, mPositionNew, mExplainNew, mImeiNew);
         }
@@ -807,7 +809,18 @@ public class OperateRepairActivity extends BaseActivity {
                 mTextViewTip3.setVisibility(View.INVISIBLE);
             }
 
-            if (!(null == newTNo || "".equals(newTNo))) {
+            if (mRelativeLayoutReplace.getVisibility() == View.VISIBLE) {
+                if (null == newTNo || "".equals(newTNo)) {
+                    complete = false;
+                    mTextViewTip0.setVisibility(View.VISIBLE);
+                } else {
+                    mTextViewTip0.setVisibility(View.GONE);
+                }
+                if (0 == model) {
+                    mImageViewReplaceLocate.setBackgroundResource(R.drawable.bg_edit_orange);
+                } else {
+                    mImageViewReplaceLocate.setBackgroundResource(R.color.colorNull);
+                }
                 if (null == position || "".equals(position)) {
                     complete = false;
                     mTextViewTip1.setText(getString(R.string.tip_position));
@@ -832,7 +845,6 @@ public class OperateRepairActivity extends BaseActivity {
                     mTextViewTip2.setVisibility(View.INVISIBLE);
                 }
             }
-
             cursor.close();
         }
 
