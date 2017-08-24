@@ -545,7 +545,7 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
                     //  查询地址
                     mGeoCoderSearch.reverseGeoCode(new ReverseGeoCodeOption().location(latLng));
 
-                    myHandler.sendEmptyMessageDelayed(Data.MSG_5, 500);
+                    showInfoWindow(latLng, mStringTitle, mStringContent);
                     break;
                 }
                 case Data.MSG_2: {
@@ -562,11 +562,6 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
                 case Data.MSG_4: {
                     //  获取WholeImei失败
                     showToast(errMsg);
-                }
-                case Data.MSG_5: {
-                    LatLng latLng = new LatLng(lat, lng);
-                    showInfoWindow(latLng, mStringTitle, mStringContent);
-                    break;
                 }
                 default: {
                     Log.i(TAG, "handleMessage: default");

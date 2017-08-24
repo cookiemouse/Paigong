@@ -530,7 +530,7 @@ public class OperateInstallActivity extends BaseActivity {
             public void onTextChanged(int position, String imei) {
                 //  2017/7/31 检测imei
                 itemPosition = position;
-
+                idMainTerminal = ID_MAIN_TERMINAL + itemPosition;
                 myHandler.removeMessages(Data.MSG_1);
 
                 if ("".equals(imei)) {
