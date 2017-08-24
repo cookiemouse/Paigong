@@ -97,6 +97,13 @@ public class PendingFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        mSwipeRefreshLayout.setRefreshing(true);
+        mNetworkManager.getPendingOrder(jobNo, token, "", "", userName);
+    }
+
+    @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if (!hidden) {
@@ -153,9 +160,6 @@ public class PendingFragment extends Fragment {
         jobNo = mSharedpreferenceManager.getJobNo();
         token = mSharedpreferenceManager.getToken();
         userName = mSharedpreferenceManager.getAccount();
-
-        mSwipeRefreshLayout.setRefreshing(true);
-        mNetworkManager.getPendingOrder(jobNo, token, "", "", userName);
     }
 
     private void initTitle() {

@@ -108,6 +108,13 @@ public class OrderFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        mSwipeRefreshLayout.setRefreshing(true);
+        mNetworkManager.getWorkerOrder(eid, token, "", userName);
+    }
+
+    @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if (!hidden) {
@@ -182,9 +189,6 @@ public class OrderFragment extends Fragment {
         } else {
             mImageViewTitleLeft.setVisibility(View.VISIBLE);
         }
-
-        mSwipeRefreshLayout.setRefreshing(true);
-        mNetworkManager.getWorkerOrder(eid, token, "", userName);
     }
 
     private void initTitle() {
