@@ -92,6 +92,7 @@ public final class Data {
     public final static int MSG_9 = 0x09;
     public final static int MSG_10 = 0x10;
     public final static int MSG_11 = 0x11;
+    public final static int MSG_12 = 0x12;
 
     //  数据库
     public final static String DATA_TAB_ORDER = "paigong_database_tab_order";

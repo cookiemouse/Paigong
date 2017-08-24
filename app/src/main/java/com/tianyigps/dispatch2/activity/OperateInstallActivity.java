@@ -47,6 +47,7 @@ import com.tianyigps.dispatch2.manager.FileManager;
 import com.tianyigps.dispatch2.manager.NetworkManager;
 import com.tianyigps.dispatch2.manager.SharedpreferenceManager;
 import com.tianyigps.dispatch2.utils.TinyU;
+import com.tianyigps.dispatch2.utils.ToastU;
 import com.tianyigps.dispatch2.utils.UploadPicU;
 import com.tianyigps.dispatch2.utils.Uri2FileU;
 import com.yundian.bottomdialog.BottomDialog;
@@ -472,8 +473,8 @@ public class OperateInstallActivity extends BaseActivity {
             public void onClick(View view) {
                 // 2017/8/18 删除车牌号图片
                 mDeleteType = Data.DATA_UPLOAD_TYPE_1;
-                showLoading();
-                mNetworkManager.deletePic(eid, token, orderNo, carId, Data.DATA_UPLOAD_TYPE_1, mCarFramePicUrl, userName);
+                showDeletePicDialog(0, Data.DATA_UPLOAD_TYPE_1, mCarNoPicUrl);
+//                mNetworkManager.deletePic(eid, token, orderNo, carId, Data.DATA_UPLOAD_TYPE_1, mCarFramePicUrl, userName);
             }
         });
 
@@ -482,8 +483,8 @@ public class OperateInstallActivity extends BaseActivity {
             public void onClick(View view) {
                 // 2017/8/18 删除车架号图片
                 mDeleteType = Data.DATA_UPLOAD_TYPE_2;
-                showLoading();
-                mNetworkManager.deletePic(eid, token, orderNo, carId, Data.DATA_UPLOAD_TYPE_2, mCarFramePicUrl, userName);
+                showDeletePicDialog(0, Data.DATA_UPLOAD_TYPE_2, mCarFramePicUrl);
+//                mNetworkManager.deletePic(eid, token, orderNo, carId, Data.DATA_UPLOAD_TYPE_2, mCarFramePicUrl, userName);
             }
         });
 
@@ -599,7 +600,8 @@ public class OperateInstallActivity extends BaseActivity {
                 AdapterOperateInstallListData data = mAdapterOperateInstallListDataList.get(itemPosition);
                 int tid = data.gettId();
                 String url = data.getInstallPicUrl();
-                mNetworkManager.deletePic(eid, token, orderNo, carId, tid, mDeleteType, url, userName);
+                showDeletePicDialog(tid, mDeleteType, url);
+//                mNetworkManager.deletePic(eid, token, orderNo, carId, tid, mDeleteType, url, userName);
             }
 
             @Override
@@ -610,7 +612,8 @@ public class OperateInstallActivity extends BaseActivity {
                 AdapterOperateInstallListData data = mAdapterOperateInstallListDataList.get(itemPosition);
                 int tid = data.gettId();
                 String url = data.getInstallPicUrl();
-                mNetworkManager.deletePic(eid, token, orderNo, carId, tid, mDeleteType, url, userName);
+                showDeletePicDialog(tid, mDeleteType, url);
+//                mNetworkManager.deletePic(eid, token, orderNo, carId, tid, mDeleteType, url, userName);
             }
         });
 
@@ -883,7 +886,7 @@ public class OperateInstallActivity extends BaseActivity {
             @Override
             public void onFailure() {
                 Log.i(TAG, "onFailure: ");
-                myHandler.sendEmptyMessage(Data.MSG_ERO);
+                myHandler.sendEmptyMessage(Data.MSG_12);
             }
 
             @Override
@@ -893,7 +896,7 @@ public class OperateInstallActivity extends BaseActivity {
                 DeletePicBean deletePicBean = gson.fromJson(result, DeletePicBean.class);
                 mStringMessage = deletePicBean.getMsg();
                 if (!deletePicBean.isSuccess()) {
-                    myHandler.sendEmptyMessage(Data.MSG_ERO);
+                    myHandler.sendEmptyMessage(Data.MSG_12);
                     return;
                 }
 
@@ -1031,8 +1034,8 @@ public class OperateInstallActivity extends BaseActivity {
         if (null == url || "".equals(url)) {
             return;
         }
-        showLoading();
-        mNetworkManager.deletePic(eid, token, orderNo, carId, Data.DATA_UPLOAD_TYPE_5, url, userName);
+        showDeletePicDialog(carId, Data.DATA_UPLOAD_TYPE_5, url);
+//        mNetworkManager.deletePic(eid, token, orderNo, carId, Data.DATA_UPLOAD_TYPE_5, url, userName);
     }
 
     //  跳转到快速定位页面
@@ -1365,6 +1368,42 @@ public class OperateInstallActivity extends BaseActivity {
         mLoadingDialogFragment.show(getFragmentManager(), "LoadingFragment");
     }
 
+    //  删除图片确认框
+    private void showDeletePicDialog(final int tid, final int type, final String url) {
+        if (isFinishing()) {
+            return;
+        }
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View view = LayoutInflater.from(this).inflate(R.layout.dialog_button_editable, null);
+        Button ensure = view.findViewById(R.id.btn_dialog_editable_ensure);
+        Button cancle = view.findViewById(R.id.btn_dialog_editable_cancel);
+        TextView textView = view.findViewById(R.id.tv_dialog_editable_msg);
+        textView.setText("是否删除图片");
+        builder.setView(view);
+        final AlertDialog dialog = builder.create();
+
+        ensure.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showLoading();
+                if (0 == tid) {
+                    mNetworkManager.deletePic(eid, token, orderNo, carId, type, url, userName);
+                } else {
+                    mNetworkManager.deletePic(eid, token, orderNo, carId, tid, type, url, userName);
+                }
+                dialog.dismiss();
+            }
+        });
+        cancle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+    }
+
     private class MyHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
@@ -1461,7 +1500,7 @@ public class OperateInstallActivity extends BaseActivity {
                 }
                 case Data.MSG_8: {
                     //  删除图片
-                    showMessageDialog(mStringMessage);
+                    myHandler.sendEmptyMessage(Data.MSG_12);
 
                     //  删除车牌号图片
                     if (Data.DATA_UPLOAD_TYPE_1 == mDeleteType) {
@@ -1587,6 +1626,11 @@ public class OperateInstallActivity extends BaseActivity {
                 }
                 case Data.MSG_10: {
                     loadTerminalData();
+                    break;
+                }
+                case Data.MSG_12: {
+                    //  Toast
+                    new ToastU(OperateInstallActivity.this).showToast(mStringMessage);
                     break;
                 }
                 default: {
