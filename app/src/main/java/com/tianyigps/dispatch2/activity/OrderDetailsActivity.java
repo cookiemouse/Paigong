@@ -461,7 +461,7 @@ public class OrderDetailsActivity extends Activity {
                     mTextViewOrderNum.setText(mStringOrderNum);
                     mTextViewCallName.setText(mStringContactName);
 
-                    mTextViewTime.setText(new TimeFormatU().millisToDate(mLongDoorTime));
+                    mTextViewTime.setText(new TimeFormatU().millisToDate2(mLongDoorTime));
 
                     mTextViewAddress.setText(mStringProvince + mStringCity + mStringDistrict);
                     mTextViewRemarks.setText(mStringDetail);

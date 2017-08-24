@@ -16,6 +16,12 @@ public class TimeFormatU {
         return simpleDateFormat.format(date);
     }
 
+    public String millisToDate2(long mills) {
+        Date date = new Date(mills);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        return simpleDateFormat.format(date);
+    }
+
     public String millisToColock(long mills) {
 //        int hour = (int) (mills / 1000 / 3600);
 //        int min = (int) (mills / 1000 % 3600 / 60);

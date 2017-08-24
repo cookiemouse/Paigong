@@ -88,7 +88,7 @@ public class PendedAdapter extends BaseAdapter {
         viewHolder.tvStatus.setText(getOrderStatus(data.getOrderStatus()));
 
         viewHolder.tvTitle.setText(data.getTitle());
-        viewHolder.tvTime.setText(new TimeFormatU().millisToDate(data.getTime()));
+        viewHolder.tvTime.setText(new TimeFormatU().millisToDate2(data.getTime()));
         viewHolder.tvAddress.setText(data.getAddress());
         viewHolder.tvWorker.setText(data.getWorker());
         viewHolder.tvContactName.setText(data.getContact());

@@ -306,7 +306,7 @@ public class PendingFragment extends Fragment {
                                 , custName
                                 , objBean.getContactName()
                                 , objBean.getContactPhone()
-                                , new TimeFormatU().millisToDate(time)
+                                , new TimeFormatU().millisToDate2(time)
                                 , address
                                 , objBean.getOrderType()
                                 , wire
@@ -316,14 +316,14 @@ public class PendingFragment extends Fragment {
                                 , objBean.getOrderId()
                                 , objBean.getOrderStatus()
                                 , objBean.getNode()
-                                , new TimeFormatU().millisToDate(objBean.getReviseTime())
+                                , new TimeFormatU().millisToDate2(objBean.getReviseTime())
                                 , objBean.getReasonFilled());
                     } else {
                         data = new AdapterPendingData(objBean.getOrderNo()
                                 , custName
                                 , objBean.getContactName()
                                 , objBean.getContactPhone()
-                                , new TimeFormatU().millisToDate(time)
+                                , new TimeFormatU().millisToDate2(time)
                                 , address
                                 , objBean.getOrderType()
                                 , wire
@@ -331,7 +331,7 @@ public class PendingFragment extends Fragment {
                                 , objBean.getOrderId()
                                 , objBean.getOrderStatus()
                                 , objBean.getNode()
-                                , new TimeFormatU().millisToDate(objBean.getReviseTime())
+                                , new TimeFormatU().millisToDate2(objBean.getReviseTime())
                                 , objBean.getReasonFilled());
                     }
                     mAdapterPendingDataList.add(data);

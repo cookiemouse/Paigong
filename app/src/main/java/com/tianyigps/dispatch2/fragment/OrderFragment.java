@@ -349,7 +349,7 @@ public class OrderFragment extends Fragment {
                             , mStringCustName
                             , mStringContactPhone
                             , mStringContactName
-                            , new TimeFormatU().millisToDate(mLongDoorTime)
+                            , new TimeFormatU().millisToDate2(mLongDoorTime)
                             , mStringProvince + mStringCity + mStringDistrict + mStringDetail
                             , objBean.getOrderType()
                             , objBean.getWiredNum()

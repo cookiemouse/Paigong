@@ -154,7 +154,7 @@ public class OperateRemoveActivity extends BaseActivity {
                                 , carTerminalListBean.getNewInstallLocation()
                                 , carTerminalListBean.getNewInstallLocationPic()
                                 , carTerminalListBean.getNewWiringDiagramPic()
-                                , new TimeFormatU().millisToDate(carListBean.getWiredAnnual())
+                                , new TimeFormatU().millisToDate2(carListBean.getWiredAnnual())
                                 , objBean.getDispatchContactName()
                                 , objBean.getDispatchContactPhone()
                                 , carTerminalListBean.getRemoveStatus()));

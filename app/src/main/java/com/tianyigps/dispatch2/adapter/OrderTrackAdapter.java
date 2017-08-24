@@ -61,7 +61,7 @@ public class OrderTrackAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) contentView.getTag();
         }
 
-        String time = new TimeFormatU().millisToDate(data.getTime());
+        String time = new TimeFormatU().millisToDate2(data.getTime());
         viewHolder.tvTime.setText(time);
         viewHolder.tvInfo.setText(data.getInfo());
 

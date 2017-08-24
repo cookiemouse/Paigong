@@ -116,7 +116,7 @@ public class OrderTrackActivity extends BaseActivity {
             }
             case 2: {
                 info += "申请改约\n";     //not complete
-                String time = new TimeFormatU().millisToDate(orderNodeBean.getReviseTime());
+                String time = new TimeFormatU().millisToDate2(orderNodeBean.getReviseTime());
                 info += time + "\n";
                 info += orderNodeBean.getReasonFilled();
                 break;

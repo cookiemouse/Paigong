@@ -394,7 +394,7 @@ public class PendDetailsActivity extends Activity {
         calendar.set(year, month, day, mHour, mMin);
         long modify = calendar.getTimeInMillis();
 
-        String newTime = new TimeFormatU().millisToDate(modify);
+        String newTime = new TimeFormatU().millisToDate2(modify);
 
         showLoading();
         mNetworkManager.modifyDate(jobNo, userName, token, orderNo, orderStatus, newTime, mReason);
@@ -532,7 +532,7 @@ public class PendDetailsActivity extends Activity {
                 case Data.MSG_1: {
                     mTextViewContact.setText(mContact);
                     mTextViewContactPhone.setText(mContactPhone);
-                    mTextViewDoorTime.setText(new TimeFormatU().millisToDate(mDoorTime));
+                    mTextViewDoorTime.setText(new TimeFormatU().millisToDate2(mDoorTime));
                     mTextViewAddress.setText(mAddress);
                     mTextViewRemarks.setText(mRemarks);
                     mTextViewInstallType.setText(mInstallType);
