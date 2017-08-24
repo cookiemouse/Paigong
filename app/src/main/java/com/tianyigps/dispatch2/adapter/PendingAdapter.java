@@ -75,9 +75,13 @@ public class PendingAdapter extends BaseAdapter {
             viewHolder.tvWorkerName = view.findViewById(R.id.tv_item_pending_phone_name);
             viewHolder.llRemove = view.findViewById(R.id.ll_item_pending_remove);
             viewHolder.llContact = view.findViewById(R.id.ll_item_pending_contact);
+            viewHolder.llPend = view.findViewById(R.id.ll_item_pending_pend);
+            viewHolder.llModify = view.findViewById(R.id.ll_item_pending_modify);
             viewHolder.tvWireRemove = view.findViewById(R.id.tv_item_pending_remove_content_wire);
             viewHolder.tvWirelessRemove = view.findViewById(R.id.tv_item_pending_remove_content_wireless);
             viewHolder.tvStatus = view.findViewById(R.id.tv_item_pending_order_status);
+            viewHolder.tvModifyDate = view.findViewById(R.id.tv_item_pending_modify_date);
+            viewHolder.tvModifyReason = view.findViewById(R.id.tv_item_pending_modify_reason);
 
             view.setTag(viewHolder);
         } else {
@@ -91,6 +95,8 @@ public class PendingAdapter extends BaseAdapter {
         viewHolder.tvWire.setText("" + data.getLineNumber());
         viewHolder.tvWireless.setText("" + data.getLinelessNumber());
         viewHolder.tvWorkerName.setText(data.getContactName());
+        viewHolder.tvModifyDate.setText(data.getModifyTime());
+        viewHolder.tvModifyReason.setText(data.getModifyReason());
 
         String orderType;
         switch (data.getOrderType()) {
@@ -117,12 +123,21 @@ public class PendingAdapter extends BaseAdapter {
             }
         }
 
-        if (Data.STATUS_99 == data.getOrderStatus()) {
-            viewHolder.llContact.setVisibility(View.GONE);
-        } else {
-            viewHolder.llContact.setVisibility(View.VISIBLE);
-        }
+//        if (Data.STATUS_99 == data.getOrderStatus()) {
+//            viewHolder.tvStatus.setText("待审核");
+//            viewHolder.llContact.setVisibility(View.GONE);
+//        } else {
+//            viewHolder.llContact.setVisibility(View.VISIBLE);
+//        }
         viewHolder.tvStatus.setText(getOrderStatus(data.getOrderStatus()));
+        if (Data.NODE_2 == data.getNode() || Data.NODE_12 == data.getNode()) {
+            viewHolder.tvStatus.setText("待审核");
+            viewHolder.llPend.setVisibility(View.GONE);
+            viewHolder.llModify.setVisibility(View.VISIBLE);
+        } else {
+            viewHolder.llPend.setVisibility(View.VISIBLE);
+            viewHolder.llModify.setVisibility(View.GONE);
+        }
 
         viewHolder.tvOrderType.setText(orderType);
 
@@ -174,9 +189,10 @@ public class PendingAdapter extends BaseAdapter {
         private ImageView imageViewCall, imageViewLocate, imageViewPend;
         private TextView tvOrderNo, tvName, tvTime, tvAddress, tvOrderType, tvWire, tvWireless, tvWorkerName, tvStatus;
         private TextView tvWireRemove, tvWirelessRemove;
-        private LinearLayout llRemove, llContact;
+        private TextView tvModifyDate, tvModifyReason;
+        private LinearLayout llRemove, llContact, llPend, llModify;
     }
-    
+
     //  订单状态
     private String getOrderStatus(int status) {
         String orderStatus = "";

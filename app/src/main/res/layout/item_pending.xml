@@ -16,14 +16,6 @@
         android:textColor="@color/colorGrayBlack"
         android:textSize="@dimen/sp_20"/>
 
-    <View
-        android:id="@+id/line_item_pending_1"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_1"
-        android:layout_below="@+id/tv_item_pending_content_1"
-        android:layout_marginTop="@dimen/dp_8"
-        android:background="@color/color_cut_line"/>
-
     <TextView
         android:id="@+id/tv_item_pending_time"
         android:layout_width="wrap_content"
@@ -164,8 +156,39 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/ge"/>
-
     </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_item_pending_modify"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_item_pending_content_title"
+        android:layout_marginLeft="@dimen/dp_8"
+        android:layout_marginStart="@dimen/dp_8"
+        android:layout_marginTop="@dimen/dp_8"
+        android:visibility="gone"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_item_pending_modify_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/app_name"/>
+
+        <TextView
+            android:id="@+id/tv_item_pending_modify_reason"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/app_name"/>
+    </LinearLayout>
+
+    <View
+        android:id="@+id/line_item_pending_1"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_1"
+        android:layout_below="@+id/ll_item_pending_modify"
+        android:layout_marginTop="@dimen/dp_8"
+        android:background="@color/color_cut_line"/>
 
     <LinearLayout
         android:id="@+id/ll_item_pending_"
@@ -223,6 +246,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/ll_item_pending_pend"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

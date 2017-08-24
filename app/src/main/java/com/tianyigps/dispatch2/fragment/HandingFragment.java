@@ -356,6 +356,7 @@ public class HandingFragment extends Fragment implements View.OnClickListener {
                 case Data.MSG_ERO: {
                     Log.i(TAG, "handleMessage: ERO");
                     showMessageDialog(mStringMessage);
+                    break;
                 }
                 case Data.MSG_1: {
                     //  获取信息

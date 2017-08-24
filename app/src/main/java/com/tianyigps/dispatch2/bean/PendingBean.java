@@ -105,10 +105,12 @@ public class PendingBean {
         private int reviseFlag;
         private String orderNo;
         private long doorTime;
+        private long reviseTime;
         private String contactName;
         private String province;
         private String custName;
         private String district;
+        private String reasonFilled;
         private int orderId;
 
         public String getContactPhone() {
@@ -253,6 +255,22 @@ public class PendingBean {
 
         public void setNode(int node) {
             this.node = node;
+        }
+
+        public long getReviseTime() {
+            return reviseTime;
+        }
+
+        public void setReviseTime(long reviseTime) {
+            this.reviseTime = reviseTime;
+        }
+
+        public String getReasonFilled() {
+            return reasonFilled;
+        }
+
+        public void setReasonFilled(String reasonFilled) {
+            this.reasonFilled = reasonFilled;
         }
     }
 }

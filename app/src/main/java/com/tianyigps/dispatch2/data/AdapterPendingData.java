@@ -15,10 +15,12 @@ public class AdapterPendingData {
 
     private int orderStatus;
     private int node;
+    private String modifyTime, modifyReason;
 
     public AdapterPendingData(String order, String name, String contactName, String phoneNumber
             , String time, String address, int orderType
-            , int lineNumber, int linelessNumber, int orderId, int orderStatus, int node) {
+            , int lineNumber, int linelessNumber, int orderId, int orderStatus, int node
+            , String modifyTime, String modifyReason) {
         this.order = order;
         this.name = name;
         this.contactName = contactName;
@@ -31,11 +33,13 @@ public class AdapterPendingData {
         this.orderId = orderId;
         this.orderStatus = orderStatus;
         this.node = node;
+        this.modifyTime = modifyTime;
+        this.modifyReason = modifyReason;
     }
 
     public AdapterPendingData(String order, String name, String contactName, String phoneNumber, String time
             , String address, int orderType, int lineNumber, int linelessNumber, int wireRemove, int wirelessRemove
-            , int orderId, int orderStatus, int note) {
+            , int orderId, int orderStatus, int note, String modifyTime, String modifyReason) {
         this.order = order;
         this.name = name;
         this.contactName = contactName;
@@ -50,6 +54,8 @@ public class AdapterPendingData {
         this.orderId = orderId;
         this.orderStatus = orderStatus;
         this.node = note;
+        this.modifyTime = modifyTime;
+        this.modifyReason = modifyReason;
     }
 
     public String getOrder() {
@@ -162,5 +168,21 @@ public class AdapterPendingData {
 
     public void setNode(int node) {
         this.node = node;
+    }
+
+    public String getModifyTime() {
+        return modifyTime;
+    }
+
+    public void setModifyTime(String modifyTime) {
+        this.modifyTime = modifyTime;
+    }
+
+    public String getModifyReason() {
+        return modifyReason;
+    }
+
+    public void setModifyReason(String modifyReason) {
+        this.modifyReason = modifyReason;
     }
 }
