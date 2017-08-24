@@ -75,6 +75,7 @@ public class HandingAdapter extends BaseAdapter {
             viewHolder.imageViewCall = contentView.findViewById(R.id.iv_item_handing_phone);
             viewHolder.imageViewStart = contentView.findViewById(R.id.iv_item_handing_start);
             viewHolder.llRemove = contentView.findViewById(R.id.ll_item_handing_remove);
+            viewHolder.llCall = contentView.findViewById(R.id.ll_item_handing_call);
 
             contentView.setTag(viewHolder);
         } else {
@@ -161,6 +162,16 @@ public class HandingAdapter extends BaseAdapter {
             }
         });
 
+        viewHolder.llCall.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (null == mOnItemListener) {
+                    throw new NullPointerException("OnStartClickListener is null");
+                }
+                mOnItemListener.onCall(position);
+            }
+        });
+
         viewHolder.imageViewStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -190,7 +201,7 @@ public class HandingAdapter extends BaseAdapter {
         private TextView textViewName, textViewTime, textViewAddress, textViewId, textViewTitle, textViewPhoneName, textViewModify, textViewWire, textViewWireless, textViewStatue;
         private TextView tvRemoveWire, tvRemoveWireless;
         private ImageView imageViewCall, imageViewStart;
-        private LinearLayout llRemove;
+        private LinearLayout llRemove, llCall;
     }
 
     public interface OnItemListener {

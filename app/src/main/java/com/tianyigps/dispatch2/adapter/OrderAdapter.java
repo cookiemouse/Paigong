@@ -73,6 +73,7 @@ public class OrderAdapter extends BaseAdapter {
             viewHolder.imageViewSign = contentView.findViewById(R.id.iv_item_order_sign);
 
             viewHolder.llRemove = contentView.findViewById(R.id.ll_item_order_remove);
+            viewHolder.llCall = contentView.findViewById(R.id.ll_item_order_call);
             viewHolder.tvWireRemove = contentView.findViewById(R.id.tv_item_order_remove_content_wire);
             viewHolder.tvWirelessRemove = contentView.findViewById(R.id.tv_item_order_remove_content_wireless);
 
@@ -138,6 +139,16 @@ public class OrderAdapter extends BaseAdapter {
             }
         });
 
+        viewHolder.llCall.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (null == mOnItemListener) {
+                    throw new NullPointerException("OnItemListener is null");
+                }
+                mOnItemListener.onCallClick(position);
+            }
+        });
+
         viewHolder.imageViewSign.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -168,7 +179,7 @@ public class OrderAdapter extends BaseAdapter {
 
         private ImageView imageViewMap, imageViewCall, imageViewSign;
 
-        private LinearLayout llRemove;
+        private LinearLayout llRemove, llCall;
         private TextView tvWireRemove, tvWirelessRemove;
     }
 

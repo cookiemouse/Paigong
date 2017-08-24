@@ -70,6 +70,7 @@ public class PendedAdapter extends BaseAdapter {
             viewHolder.ivContact = contentView.findViewById(R.id.iv_item_pended_contact);
             viewHolder.ivMap = contentView.findViewById(R.id.iv_item_pended_map);
             viewHolder.llWorker = contentView.findViewById(R.id.ll_item_pended_worker);
+            viewHolder.llContact = contentView.findViewById(R.id.ll_item_pended_contact);
 
             contentView.setTag(viewHolder);
         } else {
@@ -95,6 +96,9 @@ public class PendedAdapter extends BaseAdapter {
         viewHolder.ivPhone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (null == mOnItemListener) {
+                    throw new NullPointerException("OnItemListener is null");
+                }
                 mOnItemListener.onCall(position);
             }
         });
@@ -102,6 +106,29 @@ public class PendedAdapter extends BaseAdapter {
         viewHolder.ivContact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (null == mOnItemListener) {
+                    throw new NullPointerException("OnItemListener is null");
+                }
+                mOnItemListener.onContact(position);
+            }
+        });
+
+        viewHolder.llWorker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (null == mOnItemListener) {
+                    throw new NullPointerException("OnItemListener is null");
+                }
+                mOnItemListener.onCall(position);
+            }
+        });
+
+        viewHolder.llContact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (null == mOnItemListener) {
+                    throw new NullPointerException("OnItemListener is null");
+                }
                 mOnItemListener.onContact(position);
             }
         });
@@ -109,6 +136,9 @@ public class PendedAdapter extends BaseAdapter {
         viewHolder.ivMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (null == mOnItemListener) {
+                    throw new NullPointerException("OnItemListener is null");
+                }
                 mOnItemListener.onMap(position);
             }
         });
@@ -116,6 +146,9 @@ public class PendedAdapter extends BaseAdapter {
         contentView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (null == mOnItemListener) {
+                    throw new NullPointerException("OnItemListener is null");
+                }
                 mOnItemListener.onItem(position);
             }
         });
@@ -126,7 +159,7 @@ public class PendedAdapter extends BaseAdapter {
     private class ViewHolder {
         TextView tvTitle, tvTime, tvAddress, tvWorker, tvContactName, tvStatus;
         ImageView ivPhone, ivContact, ivMap;
-        LinearLayout llWorker;
+        LinearLayout llWorker, llContact;
     }
 
     //  订单状态

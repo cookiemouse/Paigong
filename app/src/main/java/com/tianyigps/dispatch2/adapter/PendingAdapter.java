@@ -151,6 +151,16 @@ public class PendingAdapter extends BaseAdapter {
             }
         });
 
+        viewHolder.llContact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (null == mOnItemListener) {
+                    throw new NullPointerException("OnItemListener is null");
+                }
+                mOnItemListener.onCall(position);
+            }
+        });
+
         viewHolder.imageViewLocate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
