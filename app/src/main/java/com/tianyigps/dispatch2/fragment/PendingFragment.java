@@ -293,13 +293,6 @@ public class PendingFragment extends Fragment {
 
                 for (PendingBean.ObjBean objBean : pendingBean.getObj()) {
                     int orderStatus = objBean.getOrderStatus();
-                    if (Data.STATUS_2 == orderStatus
-                            || Data.STATUS_3 == orderStatus
-                            || Data.STATUS_4 == orderStatus
-                            || Data.STATUS_5 == orderStatus
-                            || Data.STATUS_7 == orderStatus) {
-                        continue;
-                    }
                     String custName = objBean.getCustName();
                     long time = objBean.getDoorTime();
                     String address = objBean.getProvince() + objBean.getCity() + objBean.getDistrict() + objBean.getDetail();
