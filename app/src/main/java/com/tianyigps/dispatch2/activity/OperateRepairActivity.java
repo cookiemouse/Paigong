@@ -25,6 +25,7 @@ import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 import com.tianyigps.dispatch2.R;
 import com.tianyigps.dispatch2.base.BaseActivity;
+import com.tianyigps.dispatch2.bean.CheckImeiBean;
 import com.tianyigps.dispatch2.bean.DeletePicBean;
 import com.tianyigps.dispatch2.bean.LastInstallerBean;
 import com.tianyigps.dispatch2.bean.StartOrderInfoBean;
@@ -32,6 +33,7 @@ import com.tianyigps.dispatch2.bean.UploadPicBean;
 import com.tianyigps.dispatch2.bean.WholeImeiBean;
 import com.tianyigps.dispatch2.data.Data;
 import com.tianyigps.dispatch2.dialog.LoadingDialogFragment;
+import com.tianyigps.dispatch2.interfaces.OnCheckIMEIListener;
 import com.tianyigps.dispatch2.interfaces.OnDeletePicListener;
 import com.tianyigps.dispatch2.interfaces.OnGetLastInstallerListener;
 import com.tianyigps.dispatch2.interfaces.OnGetWholeIMEIListener;
@@ -98,7 +100,7 @@ public class OperateRepairActivity extends BaseActivity {
     private String carNoG, frameNoG, typeAndNameG, positionG, positionPicG, installPicG, installNameG, installPhoneG;
     private String mDescribe;
     private String mPositionNew, mPositionPicNew, mInstallPicNew, mPositionPicUrlNew, mInstallPicUrlNew, mExplainNew, mImeiNew;
-
+    private int mOrderTerType;
     private String mLastInstaller, mLastPhoneNo;
 
     //  LoadingFragment
@@ -427,7 +429,7 @@ public class OperateRepairActivity extends BaseActivity {
                             carNoG = carListBean.getCarNo();
                             frameNoG = carListBean.getCarVin();
 
-                            int type = carTerminalListBean.getNewTerminalType();
+                            mOrderTerType = carTerminalListBean.getNewTerminalType();
                             String terminalType;
                             String terminalName = carTerminalListBean.getTerminalName();
                             if (null == terminalName) {
@@ -435,7 +437,7 @@ public class OperateRepairActivity extends BaseActivity {
                             } else {
                                 terminalName = "（" + terminalName + "）";
                             }
-                            switch (type) {
+                            switch (mOrderTerType) {
                                 case 1: {
                                     terminalType = "有线";
                                     break;
@@ -446,7 +448,7 @@ public class OperateRepairActivity extends BaseActivity {
                                 }
                                 default: {
                                     terminalType = "";
-                                    Log.i(TAG, "onSuccess: default.type-->" + type);
+                                    Log.i(TAG, "onSuccess: default.type-->" + mOrderTerType);
                                 }
                             }
                             typeAndNameG = terminalType + terminalName;
@@ -493,7 +495,7 @@ public class OperateRepairActivity extends BaseActivity {
                     return;
                 }
                 LastInstallerBean.ObjBean objBean = lastInstallerBean.getObj();
-                if (null == objBean){
+                if (null == objBean) {
                     return;
                 }
                 mLastInstaller = objBean.getName();
@@ -519,7 +521,35 @@ public class OperateRepairActivity extends BaseActivity {
                     onFailure();
                     return;
                 }
-                wholeImei = wholeImeiBean.getObj().getImei();
+                String imei = wholeImeiBean.getObj().getImei();
+                mNetworkManager.checkIMEI(eid, token, imei, mOrderTerType, orderNo, userName);
+            }
+        });
+
+        mNetworkManager.setCheckIMEIListener(new OnCheckIMEIListener() {
+            @Override
+            public void onFailure() {
+                Log.i(TAG, "onFailure: ");
+                mStringMessage = Data.DEFAULT_MESSAGE;
+                myHandler.sendEmptyMessage(Data.MSG_3);
+            }
+
+            @Override
+            public void onSuccess(String result) {
+                Log.i(TAG, "onSuccess: result-->" + result);
+                Gson gson = new Gson();
+                CheckImeiBean checkImeiBean = gson.fromJson(result, CheckImeiBean.class);
+                mStringMessage = checkImeiBean.getMsg();
+                if (!checkImeiBean.isSuccess()) {
+                    myHandler.sendEmptyMessage(Data.MSG_8);
+                    return;
+                }
+                CheckImeiBean.ObjBean objBean = checkImeiBean.getObj();
+                if (null == objBean) {
+                    myHandler.sendEmptyMessage(Data.MSG_3);
+                    return;
+                }
+                wholeImei = objBean.getImei();
                 myHandler.sendEmptyMessage(Data.MSG_2);
             }
         });
@@ -765,13 +795,6 @@ public class OperateRepairActivity extends BaseActivity {
             Log.i(TAG, "isComplete: model-->" + model);
             Log.i(TAG, "isComplete: locateType-->" + locateType);
 
-            if (null == position || "".equals(position)) {
-                complete = false;
-                mTextViewTip1.setText(getString(R.string.tip_position));
-                mTextViewTip1.setVisibility(View.VISIBLE);
-            } else {
-                mTextViewTip1.setVisibility(View.INVISIBLE);
-            }
             if (null == explain || "".equals(explain)) {
                 complete = false;
                 mTextViewTip3.setVisibility(View.VISIBLE);
@@ -779,21 +802,30 @@ public class OperateRepairActivity extends BaseActivity {
                 mTextViewTip3.setVisibility(View.INVISIBLE);
             }
 
-            if (null == positionUrl || "".equals(positionUrl)) {
-                complete = false;
-                if (mTextViewTip1.getVisibility() != View.VISIBLE) {
-                    mTextViewTip1.setText(getString(R.string.tip_pic));
+            if (!(null == newTNo || "".equals(newTNo))) {
+                if (null == position || "".equals(position)) {
+                    complete = false;
+                    mTextViewTip1.setText(getString(R.string.tip_position));
                     mTextViewTip1.setVisibility(View.VISIBLE);
+                } else {
+                    mTextViewTip1.setVisibility(View.INVISIBLE);
                 }
-            } else {
-                mTextViewTip1.setVisibility(View.INVISIBLE);
-            }
+                if (null == positionUrl || "".equals(positionUrl)) {
+                    complete = false;
+                    if (mTextViewTip1.getVisibility() != View.VISIBLE) {
+                        mTextViewTip1.setText(getString(R.string.tip_pic));
+                        mTextViewTip1.setVisibility(View.VISIBLE);
+                    }
+                } else {
+                    mTextViewTip1.setVisibility(View.INVISIBLE);
+                }
 
-            if (null == installUrl || "".equals(installUrl)) {
-                complete = false;
-                mTextViewTip2.setVisibility(View.VISIBLE);
-            } else {
-                mTextViewTip2.setVisibility(View.INVISIBLE);
+                if (null == installUrl || "".equals(installUrl)) {
+                    complete = false;
+                    mTextViewTip2.setVisibility(View.VISIBLE);
+                } else {
+                    mTextViewTip2.setVisibility(View.INVISIBLE);
+                }
             }
 
             cursor.close();
@@ -931,6 +963,12 @@ public class OperateRepairActivity extends BaseActivity {
                                 .centerInside().error(R.drawable.ic_camera)
                                 .into(mImageViewInstallNew);
                     }
+                    break;
+                }
+                case Data.MSG_8: {
+                    //  check imei failure或者获取 whole imei失败
+                    mEditTextNewImei.setText(null);
+                    myHandler.sendEmptyMessage(Data.MSG_ERO);
                     break;
                 }
                 default: {
