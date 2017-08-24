@@ -250,7 +250,7 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
         } else {
             mTextViewLook.setVisibility(View.GONE);
             mLinearLayout.setVisibility(View.GONE);
-            getImeiLocation(wholeImei);
+            myHandler.sendEmptyMessageDelayed(Data.MSG_5, 200);
         }
     }
 
@@ -562,6 +562,12 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
                 case Data.MSG_4: {
                     //  获取WholeImei失败
                     showToast(errMsg);
+                    break;
+                }
+                case Data.MSG_5:{
+                    //  init 获取设备信息，延时了200ms
+                    getImeiLocation(wholeImei);
+                    break;
                 }
                 default: {
                     Log.i(TAG, "handleMessage: default");
