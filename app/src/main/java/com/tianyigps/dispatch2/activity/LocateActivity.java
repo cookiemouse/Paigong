@@ -367,14 +367,21 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
 
                 setResult(Data.DATA_INTENT_LOCATE_RESULT, mIntent);
 
+                lat = redisObjBean.getLatitudeF();
+                lng = redisObjBean.getLongitudeF();
+
+                if (null == redisObjBean.getCurrent_time() || null == redisObjBean.getLocate_time()) {
+                    mStringContent = null;
+                    myHandler.sendEmptyMessage(Data.MSG_1);
+                    return;
+                }
+
                 mStringContent = "设备编号：" + objBean.getImei()
                         + "\n状态：" + objBean.getInfoWindowStatus()
                         + "\n定位类型：" + type
                         + "\n信号时间：" + redisObjBean.getCurrent_time()
                         + "\n定位时间：" + redisObjBean.getLocate_time() + "\n\n";
 
-                lat = redisObjBean.getLatitudeF();
-                lng = redisObjBean.getLongitudeF();
 
                 myHandler.sendEmptyMessage(Data.MSG_1);
             }
@@ -520,13 +527,17 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
                 }
                 case Data.MSG_1: {
                     LatLng latLng = new LatLng(lat, lng);
+                    markCar(latLng);
+                    moveToCenter(latLng);
 
+                    if (null == mStringContent){
+                        mTextViewAddress.setText(mStringTitle + "：未启用");
+                        break;
+                    }
                     //  查询地址
                     mGeoCoderSearch.reverseGeoCode(new ReverseGeoCodeOption().location(latLng));
 
-                    markCar(latLng);
                     showInfoWindow(latLng, mStringTitle, mStringContent);
-                    moveToCenter(latLng);
                     break;
                 }
                 case Data.MSG_2: {
