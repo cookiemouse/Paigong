@@ -353,6 +353,8 @@ public class OperateInstallActivity extends BaseActivity {
         saveData();
         if (isComplete()) {
             finish();
+        } else {
+            showNotCompleteDialog();
         }
     }
 
@@ -1080,6 +1082,27 @@ public class OperateInstallActivity extends BaseActivity {
         });
         bottomDialog.setContentView(viewDialog);
         bottomDialog.show(getFragmentManager(), "ChoicePic");
+    }
+
+    //  显示未完成对话框
+    private void showNotCompleteDialog() {
+        if (isFinishing()) {
+            return;
+        }
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View view = LayoutInflater.from(this).inflate(R.layout.dialog_message_editable, null);
+        Button button = view.findViewById(R.id.btn_dialog_message_cancel);
+        TextView textView = view.findViewById(R.id.tv_dialog_message_message);
+        textView.setText("车辆信息内有未填写内容，请填写完整");
+        builder.setView(view);
+        final AlertDialog dialog = builder.create();
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
     }
 
     //  跳转到选择图片
