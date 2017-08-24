@@ -160,7 +160,11 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(mEditTextImei.getWindowToken(), 0);
                 String imei = mEditTextImei.getText().toString();
-                getWholeImei(imei);
+                if (imei.length() > 5) {
+                    getWholeImei(imei);
+                } else {
+                    showToast("请至少输入IMEI号后6位数");
+                }
                 break;
             }
             case R.id.tv_layout_map_control_normal: {
@@ -188,7 +192,11 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
                     return;
                 }
                 String imei = mEditTextImei.getText().toString();
-                getWholeImei(imei);
+                if (imei.length() > 5) {
+                    getWholeImei(imei);
+                } else {
+                    showToast("请至少输入IMEI号后6位数");
+                }
                 break;
             }
             default: {
@@ -530,7 +538,7 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
                     markCar(latLng);
                     moveToCenter(latLng);
 
-                    if (null == mStringContent){
+                    if (null == mStringContent) {
                         mTextViewAddress.setText(mStringTitle + "：未启用");
                         break;
                     }
