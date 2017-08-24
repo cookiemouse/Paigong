@@ -46,6 +46,7 @@ import com.tianyigps.dispatch2.manager.DatabaseManager;
 import com.tianyigps.dispatch2.manager.FileManager;
 import com.tianyigps.dispatch2.manager.NetworkManager;
 import com.tianyigps.dispatch2.manager.SharedpreferenceManager;
+import com.tianyigps.dispatch2.utils.RegularU;
 import com.tianyigps.dispatch2.utils.TinyU;
 import com.tianyigps.dispatch2.utils.ToastU;
 import com.tianyigps.dispatch2.utils.UploadPicU;
@@ -1326,15 +1327,14 @@ public class OperateInstallActivity extends BaseActivity {
                 mTextViewTip1.setVisibility(View.VISIBLE);
                 mTextViewTip1.setText(getString(R.string.tip_carno));
             } else {
-                // todo 17-8-20 较验车牌
-//                if (!RegularU.checkCarNo(carNo)) {
-//                    carComplete = false;
-//                    mTextViewTip1.setVisibility(View.VISIBLE);
-//                    mTextViewTip1.setText(getString(R.string.tip_carno_fault));
-//                } else {
-//                    mTextViewTip1.setVisibility(View.GONE);
-//                }
-                mTextViewTip1.setVisibility(View.GONE);
+                // 17-8-20 较验车牌
+                if (!RegularU.checkCarNo(carNo)) {
+                    carComplete = false;
+                    mTextViewTip1.setVisibility(View.VISIBLE);
+                    mTextViewTip1.setText(getString(R.string.tip_carno_fault));
+                } else {
+                    mTextViewTip1.setVisibility(View.GONE);
+                }
             }
             if (null == carType || "".equals(carType)) {
                 carComplete = false;
