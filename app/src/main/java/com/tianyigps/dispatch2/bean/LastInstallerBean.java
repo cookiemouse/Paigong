@@ -73,10 +73,14 @@ public class LastInstallerBean {
         /**
          * phoneNo : 18256295795
          * name : 胡梅
+         * endDate : endDate
+         * imei : imei
          */
 
         private String phoneNo;
         private String name;
+        private String endDate;
+        private String imei;
 
         public String getPhoneNo() {
             return phoneNo;
@@ -92,6 +96,22 @@ public class LastInstallerBean {
 
         public void setName(String name) {
             this.name = name;
+        }
+
+        public String getEndDate() {
+            return endDate;
+        }
+
+        public void setEndDate(String endDate) {
+            this.endDate = endDate;
+        }
+
+        public String getImei() {
+            return imei;
+        }
+
+        public void setImei(String imei) {
+            this.imei = imei;
         }
     }
 }

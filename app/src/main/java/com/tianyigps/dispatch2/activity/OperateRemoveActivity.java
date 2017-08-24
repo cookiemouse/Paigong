@@ -16,11 +16,13 @@ import com.google.gson.Gson;
 import com.tianyigps.dispatch2.R;
 import com.tianyigps.dispatch2.adapter.OperateRemoveAdapter;
 import com.tianyigps.dispatch2.base.BaseActivity;
+import com.tianyigps.dispatch2.bean.LastInstallerBean;
 import com.tianyigps.dispatch2.bean.RemoveTerminalBean;
 import com.tianyigps.dispatch2.bean.StartOrderInfoBean;
 import com.tianyigps.dispatch2.data.AdapterOperateRemoveData;
 import com.tianyigps.dispatch2.data.Data;
 import com.tianyigps.dispatch2.dialog.LoadingDialogFragment;
+import com.tianyigps.dispatch2.interfaces.OnGetLastInstallerListener;
 import com.tianyigps.dispatch2.interfaces.OnGetWorkerOrderInfoStartListener;
 import com.tianyigps.dispatch2.interfaces.OnRemoveTerminalListener;
 import com.tianyigps.dispatch2.manager.NetworkManager;
@@ -49,12 +51,15 @@ public class OperateRemoveActivity extends BaseActivity {
     private String userName;
     private String orderNo;
 
+    private String mBaseUrl;
+
     private int mCarId;
 
-    private String mStringMsg = "数据请求失败，请检查网络！";
     private MyHandler myHandler;
     private int positionNow;
     private AlertDialog dialogRemove;
+
+    private String mStringMessage;
 
     //  LoadingFragment
     private LoadingDialogFragment mLoadingDialogFragment;
@@ -74,10 +79,12 @@ public class OperateRemoveActivity extends BaseActivity {
 
         mSharedpreferenceManager = new SharedpreferenceManager(this);
 
-        Intent intent = getIntent();
         eid = mSharedpreferenceManager.getEid();
         token = mSharedpreferenceManager.getToken();
         userName = mSharedpreferenceManager.getAccount();
+        mBaseUrl = mSharedpreferenceManager.getImageBaseUrl();
+
+        Intent intent = getIntent();
         orderNo = intent.getStringExtra(Data.DATA_INTENT_ORDER_NO);
         mCarId = intent.getIntExtra(Data.DATA_INTENT_CAR_ID, 0);
 
@@ -98,6 +105,8 @@ public class OperateRemoveActivity extends BaseActivity {
             @Override
             public void onFailure() {
                 Log.i(TAG, "onFailure: ");
+                mStringMessage = Data.DEFAULT_MESSAGE;
+                myHandler.sendEmptyMessage(Data.MSG_ERO);
             }
 
             @Override
@@ -107,8 +116,8 @@ public class OperateRemoveActivity extends BaseActivity {
                 StartOrderInfoBean startOrderInfoBean = gson.fromJson(result, StartOrderInfoBean.class);
 
                 if (!startOrderInfoBean.isSuccess()) {
-                    mStringMsg = startOrderInfoBean.getMsg();
-                    onFailure();
+                    mStringMessage = startOrderInfoBean.getMsg();
+                    myHandler.sendEmptyMessage(Data.MSG_ERO);
                     return;
                 }
 
@@ -145,19 +154,25 @@ public class OperateRemoveActivity extends BaseActivity {
                                 Log.i(TAG, "onSuccess: default");
                             }
                         }
+                        String location = carTerminalListBean.getInstallLocation();
+                        if (null == location){
+                            location = "";
+                        }
 
                         mAdapterOperateRemoveDataList.add(new AdapterOperateRemoveData(carNo
                                 , frameNo
                                 , terminalType
                                 , terminalName
                                 , carTerminalListBean.getTNo()
-                                , carTerminalListBean.getNewInstallLocation()
-                                , carTerminalListBean.getNewInstallLocationPic()
-                                , carTerminalListBean.getNewWiringDiagramPic()
+                                , location
+                                , mBaseUrl + carTerminalListBean.getInstallLocationPic()
+                                , mBaseUrl + carTerminalListBean.getWiringDiagramPic()
                                 , new TimeFormatU().millisToDate2(carListBean.getWiredAnnual())
                                 , objBean.getDispatchContactName()
                                 , objBean.getDispatchContactPhone()
                                 , carTerminalListBean.getRemoveStatus()));
+
+                        mNetworkManager.getLastInstaller(eid, token, carTerminalListBean.getTNo(), userName);
                     }
                 }
 
@@ -169,6 +184,8 @@ public class OperateRemoveActivity extends BaseActivity {
             @Override
             public void onFailure() {
                 Log.i(TAG, "onFailure: ");
+                mStringMessage = Data.DEFAULT_MESSAGE;
+                myHandler.sendEmptyMessage(Data.MSG_ERO);
             }
 
             @Override
@@ -177,7 +194,8 @@ public class OperateRemoveActivity extends BaseActivity {
                 Gson gson = new Gson();
                 RemoveTerminalBean removeTerminalBean = gson.fromJson(result, RemoveTerminalBean.class);
                 if (!removeTerminalBean.isSuccess()) {
-                    onFailure();
+                    mStringMessage = removeTerminalBean.getMsg();
+                    myHandler.sendEmptyMessage(Data.MSG_ERO);
                     return;
                 }
 
@@ -185,11 +203,45 @@ public class OperateRemoveActivity extends BaseActivity {
             }
         });
 
-        mOperateRemoveAdapter.setRemoveListener(new OperateRemoveAdapter.OnRemoveListener() {
+        mOperateRemoveAdapter.setItemListener(new OperateRemoveAdapter.OnItemListener() {
             @Override
             public void onRemove(int position) {
                 positionNow = position;
                 showRemoveDialog();
+            }
+        });
+
+        mNetworkManager.setOnGetLastInstallerListener(new OnGetLastInstallerListener() {
+            @Override
+            public void onFailure() {
+                Log.i(TAG, "onFailure: ");
+                mStringMessage = Data.DEFAULT_MESSAGE;
+                myHandler.sendEmptyMessage(Data.MSG_ERO);
+            }
+
+            @Override
+            public void onSuccess(String result) {
+                Log.i(TAG, "onSuccess: result-->" + result);
+                Gson gson = new Gson();
+                LastInstallerBean lastInstallerBean = gson.fromJson(result, LastInstallerBean.class);
+                if (!lastInstallerBean.isSuccess()) {
+                    mStringMessage = lastInstallerBean.getMsg();
+                    myHandler.sendEmptyMessage(Data.MSG_ERO);
+                    return;
+                }
+                LastInstallerBean.ObjBean objBean = lastInstallerBean.getObj();
+                if (null == objBean) {
+                    return;
+                }
+                for (AdapterOperateRemoveData data : mAdapterOperateRemoveDataList) {
+                    if (data.gettNo().equals(objBean.getImei())) {
+                        data.setInstallName(objBean.getName());
+                        data.setInstallPhone(objBean.getPhoneNo());
+                        data.setDate(objBean.getEndDate());
+                    }
+                }
+
+                myHandler.sendEmptyMessage(Data.MSG_1);
             }
         });
     }
@@ -222,7 +274,7 @@ public class OperateRemoveActivity extends BaseActivity {
     }
 
     private void showMessageDialog(String msg) {
-        if (isFinishing()){
+        if (isFinishing()) {
             return;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(OperateRemoveActivity.this);
@@ -252,7 +304,7 @@ public class OperateRemoveActivity extends BaseActivity {
 
             switch (msg.what) {
                 case Data.MSG_ERO: {
-                    showMessageDialog(mStringMsg);
+                    showMessageDialog(mStringMessage);
                     Log.i(TAG, "handleMessage: msg_ero");
                 }
                 case Data.MSG_1: {

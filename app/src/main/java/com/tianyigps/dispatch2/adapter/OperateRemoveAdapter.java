@@ -9,10 +9,12 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 import com.tianyigps.dispatch2.R;
+import com.tianyigps.dispatch2.bean.LastInstallerBean;
 import com.tianyigps.dispatch2.data.AdapterOperateRemoveData;
-import com.tianyigps.dispatch2.manager.SharedpreferenceManager;
+import com.tianyigps.dispatch2.interfaces.OnGetLastInstallerListener;
 
 import java.util.List;
 
@@ -26,16 +28,12 @@ public class OperateRemoveAdapter extends BaseAdapter {
 
     private Context context;
     private List<AdapterOperateRemoveData> mDataList;
-    private SharedpreferenceManager mSharedpreferenceManager;
-    private String picPathUrl;
 
-    private OnRemoveListener mOnRemoveListener;
+    private OnItemListener mOnItemListener;
 
     public OperateRemoveAdapter(Context context, List<AdapterOperateRemoveData> mDataList) {
         this.context = context;
         this.mDataList = mDataList;
-        mSharedpreferenceManager = new SharedpreferenceManager(context);
-        picPathUrl = mSharedpreferenceManager.getImageBaseUrl();
     }
 
     @Override
@@ -55,7 +53,7 @@ public class OperateRemoveAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View contentView, ViewGroup viewGroup) {
-        AdapterOperateRemoveData data = mDataList.get(position);
+        final AdapterOperateRemoveData data = mDataList.get(position);
         ViewHolder viewHolder = null;
         final int positionFinal = position;
 
@@ -86,9 +84,10 @@ public class OperateRemoveAdapter extends BaseAdapter {
         viewHolder.typeAndName.setText(typeAndName);
         viewHolder.tNo.setText(data.gettNo());
         viewHolder.position.setText(data.getInstallPosition());
-        viewHolder.date.setText(data.getDate());
+
         viewHolder.installName.setText(data.getInstallName());
         viewHolder.installPhone.setText(data.getInstallPhone());
+        viewHolder.date.setText(data.getDate());
 
         String state;
         switch (data.getRemoveState()) {
@@ -115,26 +114,38 @@ public class OperateRemoveAdapter extends BaseAdapter {
         }
         viewHolder.state.setText(state);
 
-        Log.i(TAG, "getView: url-->" + picPathUrl + data.getPicPosition());
-        Picasso.with(context).load(picPathUrl + data.getPicPosition()).resize(320, 160).into(viewHolder.picPosition);
-        Picasso.with(context).load(picPathUrl + data.getPicInstall()).resize(320, 160).into(viewHolder.picInstall);
+        Picasso.with(context)
+                .load(data.getPicPosition())
+                .error(R.color.colorNull)
+                .fit()
+                .centerInside()
+                .into(viewHolder.picPosition);
+        Picasso.with(context)
+                .load(data.getPicPosition())
+                .error(R.color.colorNull)
+                .fit()
+                .centerInside()
+                .into(viewHolder.picInstall);
 
         viewHolder.state.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mOnRemoveListener.onRemove(positionFinal);
+                if (null == mOnItemListener) {
+                    throw new NullPointerException("mOnItemListener is null");
+                }
+                mOnItemListener.onRemove(positionFinal);
             }
         });
 
         return contentView;
     }
 
-    public interface OnRemoveListener {
+    public interface OnItemListener {
         void onRemove(int position);
     }
 
-    public void setRemoveListener(OnRemoveListener listener) {
-        this.mOnRemoveListener = listener;
+    public void setItemListener(OnItemListener listener) {
+        this.mOnItemListener = listener;
     }
 
     private class ViewHolder {
