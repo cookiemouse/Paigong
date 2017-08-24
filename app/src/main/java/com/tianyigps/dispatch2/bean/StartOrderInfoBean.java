@@ -842,6 +842,7 @@ public class StartOrderInfoBean {
                 private String malDesc;
                 private String terminalName;
                 private String newSim;
+                private String sim;
                 private String newTNo;
                 private int newTerminalType;
                 private String newWiringDiagramPic;
@@ -893,6 +894,14 @@ public class StartOrderInfoBean {
 
                 public void setId(int id) {
                     this.id = id;
+                }
+
+                public String getSim() {
+                    return sim;
+                }
+
+                public void setSim(String sim) {
+                    this.sim = sim;
                 }
 
                 public String getNewInstallLocation() {

@@ -731,7 +731,7 @@ public class OperateInstallActivity extends BaseActivity {
                 } else {
                     model = 2;
                 }
-                mNetworkManager.checkIMEI(eid, token, imei, model, orderNo, userName);
+                mNetworkManager.checkIMEI(eid, token, imei, model, orderNo, userName, "");
             }
         });
 

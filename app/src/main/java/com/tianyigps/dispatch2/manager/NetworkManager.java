@@ -520,12 +520,13 @@ public class NetworkManager {
 
     //  安装工程师设备信息校验 13
     public void checkIMEI(int eid, String token, String imei
-            , int model, String orderNo, String userName) {
+            , int model, String orderNo, String userName, String repairImei) {
         Request.Builder builder = new Request.Builder();
         builder.url(Urls.URL_WORKER_CHECK_IMEI + "eid=" + eid
                 + "&token=" + token
                 + "&userName=" + userName
                 + "&imei=" + imei
+                + "&repairImei=" + repairImei
                 + "&model=" + model
                 + "&orderNo=" + orderNo);
         mRequest = builder.build();

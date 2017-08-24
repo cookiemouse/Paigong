@@ -101,6 +101,7 @@ public class OperateRepairActivity extends BaseActivity {
     private String mDescribe;
     private String mPositionNew, mPositionPicNew, mInstallPicNew, mPositionPicUrlNew, mInstallPicUrlNew, mExplainNew, mImeiNew;
     private int mOrderTerType;
+    private String mImeiOld;
     private String mLastInstaller, mLastPhoneNo;
 
     //  LoadingFragment
@@ -303,7 +304,10 @@ public class OperateRepairActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 // 2017/7/26 定位
-                toLocate(tNo);
+                Intent intent = new Intent(OperateRepairActivity.this, LocateActivity.class);
+                intent.putExtra(Data.DATA_INTENT_LOCATE_TYPE, false);
+                intent.putExtra(Data.DATA_INTENT_LOCATE_IMEI, tNo);
+                startActivity(intent);
             }
         });
 
@@ -429,7 +433,8 @@ public class OperateRepairActivity extends BaseActivity {
                             carNoG = carListBean.getCarNo();
                             frameNoG = carListBean.getCarVin();
 
-                            mOrderTerType = carTerminalListBean.getNewTerminalType();
+                            mImeiOld = carTerminalListBean.getTNo();
+                            mOrderTerType = carTerminalListBean.getTerminalType();
                             String terminalType;
                             String terminalName = carTerminalListBean.getTerminalName();
                             if (null == terminalName) {
@@ -522,7 +527,7 @@ public class OperateRepairActivity extends BaseActivity {
                     return;
                 }
                 String imei = wholeImeiBean.getObj().getImei();
-                mNetworkManager.checkIMEI(eid, token, imei, mOrderTerType, orderNo, userName);
+                mNetworkManager.checkIMEI(eid, token, imei, mOrderTerType, orderNo, userName, mImeiOld);
             }
         });
 
@@ -968,7 +973,7 @@ public class OperateRepairActivity extends BaseActivity {
                 case Data.MSG_8: {
                     //  check imei failure或者获取 whole imei失败
                     mEditTextNewImei.setText(null);
-                    myHandler.sendEmptyMessage(Data.MSG_ERO);
+                    myHandler.sendEmptyMessage(Data.MSG_3);
                     break;
                 }
                 default: {
