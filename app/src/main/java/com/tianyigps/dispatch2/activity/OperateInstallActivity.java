@@ -61,6 +61,9 @@ public class OperateInstallActivity extends BaseActivity {
     private static final int DELAY = 2000;
     private static final int PIC_MAX = 5;
 
+    private static final String KEY_IMEI = "imei";
+    private static final String KEY_REPLACE = "replace";
+
     private ImageView mImageViewCarNo, mImageViewFrameNo;
     private ImageView mImageViewCarNoDelete, mImageViewFrameNoDelete;
     private EditText mEditTextCarNo, mEditTextCarType;
@@ -129,6 +132,7 @@ public class OperateInstallActivity extends BaseActivity {
     private String mCarNo;
     private String mCarFrameNo;
     private String mCarBrand;
+    private boolean replaceAble = false;
 
     //  LoadingFragment
     private LoadingDialogFragment mLoadingDialogFragment;
@@ -760,7 +764,15 @@ public class OperateInstallActivity extends BaseActivity {
                 }
                 Message message = new Message();
                 String imei = objBean.getImei();
-                message.obj = imei;
+                boolean replaceAble = false;
+                if ("0".equals(objBean.getChangeFlag())) {
+                    replaceAble = true;
+                }
+
+                Bundle bundle = new Bundle();
+                bundle.putString(KEY_IMEI, imei);
+                bundle.putBoolean(KEY_REPLACE, replaceAble);
+                message.setData(bundle);
                 message.what = Data.MSG_2;
                 myHandler.sendMessage(message);
             }
@@ -1374,9 +1386,12 @@ public class OperateInstallActivity extends BaseActivity {
                 }
                 case Data.MSG_2: {
                     //  check imei success
-                    String imei = (String) msg.obj;
+                    Bundle bundle = msg.getData();
+                    String imei = bundle.getString(KEY_IMEI);
+                    boolean repalce = bundle.getBoolean(KEY_REPLACE);
                     AdapterOperateInstallListData data = mAdapterOperateInstallListDataList.get(itemPosition);
                     data.settNoNew(imei);
+                    data.setReplaceAble(repalce);
                     mOperateInstallListAdapter.notifyDataSetChanged();
                     break;
                 }

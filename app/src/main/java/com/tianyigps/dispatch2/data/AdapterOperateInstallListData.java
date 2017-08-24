@@ -15,6 +15,7 @@ public class AdapterOperateInstallListData {
 
     private int model = 0;
     private boolean complete = true;
+    private boolean replaceAble = false;
 
     public AdapterOperateInstallListData(boolean wire) {
         this.wire = wire;
@@ -130,5 +131,13 @@ public class AdapterOperateInstallListData {
 
     public void setComplete(boolean complete) {
         this.complete = complete;
+    }
+
+    public boolean isReplaceAble() {
+        return replaceAble;
+    }
+
+    public void setReplaceAble(boolean replaceAble) {
+        this.replaceAble = replaceAble;
     }
 }

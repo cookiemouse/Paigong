@@ -116,21 +116,21 @@ public class OperateInstallListAdapter extends BaseAdapter {
         String tNoOld = data.gettNoOld();
         String tNoNew = data.gettNoNew();
 
+        if (data.isReplaceAble()) {
+            viewHolder.tvStatus.setEnabled(true);
+        } else {
+            viewHolder.tvStatus.setEnabled(false);
+        }
+
         isChange = true;
         if (null != tNoOld && !tNoOld.equals("")) {
             viewHolder.rlOld.setVisibility(View.VISIBLE);
             viewHolder.tvStatus.setText(R.string.not_replace);
 
             viewHolder.tvTNoOld.setText(tNoOld);
-            viewHolder.tvStatus.setEnabled(true);
         } else {
             viewHolder.rlOld.setVisibility(View.GONE);
             viewHolder.tvStatus.setText(R.string.repair_replace);
-            if (null != tNoNew && !tNoNew.equals("")) {
-                viewHolder.tvStatus.setEnabled(true);
-            } else {
-                viewHolder.tvStatus.setEnabled(false);
-            }
         }
 
         if (data.isWire()) {
