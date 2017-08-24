@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.baidu.mapapi.model.LatLng;
 import com.tianyigps.dispatch2.R;
 import com.tianyigps.dispatch2.utils.GeoCoderU;
 
@@ -32,6 +33,8 @@ public class ChoiceMapDialogFragment extends DialogFragment {
 
     private static final String TAG = "ChoiceMapDialog";
 
+    private static final double X_PI = 3.14159265358979324 * 3000.0 / 180.0;
+
     private static final String PN_BAIDU = "com.baidu.BaiduMap";
     private static final String PN_GAODE = "com.autonavi.minimap";
 
@@ -44,6 +47,7 @@ public class ChoiceMapDialogFragment extends DialogFragment {
         super.onCreate(savedInstanceState);
         Bundle bundle = getArguments();
         address = bundle.getString(DATA_INTENT_ADDRESS);
+        address = "上海市黄浦区人民广场地铁站";
         Log.i(TAG, "onCreate: address-->" + address);
 
         mGeoCoderU = new GeoCoderU();
@@ -120,8 +124,11 @@ public class ChoiceMapDialogFragment extends DialogFragment {
             @Override
             public void onClick(View view) {
                 // 2017/7/19 高德地图
-//                toGaodeMap("36.547901", "104.258354", address);
-                toGaodeMap(mLat, mLng, address);
+                // sourceLatLng待转换坐标
+                LatLng desLatLng = bd09togcj02(mLat, mLng);
+                Log.i(TAG, "onClick: latLng-->" + mLat + ", " + mLng);
+                Log.i(TAG, "onClick: desLatLng-->" + desLatLng.latitude + ", " + desLatLng.longitude);
+                toGaodeMap(desLatLng.latitude, desLatLng.longitude, address);
                 dismiss();
             }
         });
@@ -146,6 +153,17 @@ public class ChoiceMapDialogFragment extends DialogFragment {
         Intent intent = new Intent();
         intent.setData(Uri.parse("baidumap://map/navi?query=" + address));
         startActivity(intent);
+    }
+
+    //  百度坐标系转高德
+    public LatLng bd09togcj02(double bd_lat, double bd_lon) {
+        double x = bd_lon - 0.0065;
+        double y = bd_lat - 0.006;
+        double z = Math.sqrt(x * x + y * y) - 0.00002 * Math.sin(y * X_PI);
+        double theta = Math.atan2(y, x) - 0.000003 * Math.cos(x * X_PI);
+        double gg_lng = z * Math.cos(theta);
+        double gg_lat = z * Math.sin(theta);
+        return new LatLng(gg_lat, gg_lng);
     }
 
     //  是否已安装地图
