@@ -1420,6 +1420,7 @@ public class OperateInstallActivity extends BaseActivity {
                 }
                 case Data.MSG_1: {
                     String imei = (String) msg.obj;
+                    mDatabaseManager.addTerModel(idMainTerminal, 0);
                     getWholeImei(imei);
                     break;
                 }

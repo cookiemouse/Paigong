@@ -923,6 +923,7 @@ public class OperateRepairActivity extends BaseActivity {
                 case Data.MSG_2: {
                     mEditTextNewImei.setText(wholeImei);
                     toLocate(wholeImei);
+                    mDatabaseManager.addRepair(tId, 0);
                     break;
                 }
                 case Data.MSG_3: {
