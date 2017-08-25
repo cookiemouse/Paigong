@@ -222,14 +222,6 @@ public class OperateRepairActivity extends BaseActivity {
     }
 
     @Override
-    public void onBackPressed() {
-        saveData();
-        if (isComplete()) {
-            super.onBackPressed();
-        }
-    }
-
-    @Override
     protected void onDestroy() {
         super.onDestroy();
         mDatabaseManager.close();
@@ -325,7 +317,7 @@ public class OperateRepairActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 // 2017/7/26 保存
-                OperateRepairActivity.this.onBackPressed();
+                saveData();
             }
         });
 
@@ -732,6 +724,10 @@ public class OperateRepairActivity extends BaseActivity {
         } else {
             mDatabaseManager.addRepair(tId, mPositionNew, mExplainNew, mImeiNew);
         }
+
+        if (isComplete()) {
+            this.onBackPressed();
+        }
     }
 
     private void loadSavedData() {
@@ -842,14 +838,14 @@ public class OperateRepairActivity extends BaseActivity {
             Log.i(TAG, "isComplete: model-->" + model);
             Log.i(TAG, "isComplete: locateType-->" + locateType);
 
-            if (mRelativeLayoutReplace.getVisibility() == View.VISIBLE) {
-                if (null == explain || "".equals(explain)) {
-                    complete = false;
-                    mTextViewTip3.setVisibility(View.VISIBLE);
-                } else {
-                    mTextViewTip3.setVisibility(View.INVISIBLE);
-                }
+            if (null == explain || "".equals(explain)) {
+                complete = false;
+                mTextViewTip3.setVisibility(View.VISIBLE);
+            } else {
+                mTextViewTip3.setVisibility(View.INVISIBLE);
+            }
 
+            if (mRelativeLayoutReplace.getVisibility() == View.VISIBLE) {
                 if (null == newTNo || "".equals(newTNo)) {
                     complete = false;
                     mTextViewTip0.setVisibility(View.VISIBLE);
