@@ -423,10 +423,26 @@ public class PendDetailsActivity extends Activity {
         tvEnsure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                bottomDialog.dismiss();
+                long current = System.currentTimeMillis();
                 mDay = mpDay.getValue();
                 mHour = mpHour.getValue();
                 mMin = mpMin.getValue();
+
+                Calendar calendar = Calendar.getInstance();
+                int year = calendar.get(Calendar.YEAR);
+
+                calendar.get(Calendar.DAY_OF_YEAR);
+                int month = calendar.get(Calendar.MONTH);
+                int day = calendar.get(Calendar.DATE);
+                day = day + mDay;
+                calendar.set(year, month, day, mHour, mMin);
+                long modify = calendar.getTimeInMillis();
+
+                if (current > modify){
+                    new ToastU(PendDetailsActivity.this).showToast("无法改约到历史时间");
+                    return;
+                }
+                bottomDialog.dismiss();
                 Log.i(TAG, "onClick: day-->" + mDay);
                 Log.i(TAG, "onClick: hour-->" + mHour);
                 Log.i(TAG, "onClick: min-->" + mMin);
