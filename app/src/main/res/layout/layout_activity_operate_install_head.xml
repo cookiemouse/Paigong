@@ -97,17 +97,16 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp_44"
         android:layout_marginStart="@dimen/dp_44"
-        android:visibility="gone"
         android:text="@string/tip_carno"
-        android:textColor="@color/colorOrange"/>
+        android:textColor="@color/colorOrange"
+        android:visibility="gone"/>
 
     <!--=====================================================-->
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/dp_4"
-        android:clipChildren="false">
+        android:layout_margin="@dimen/dp_4">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -122,7 +121,6 @@
                 android:layout_height="@dimen/dp_40"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
                 android:padding="@dimen/dp_8"
                 android:src="@drawable/ic_frame_no"/>
 
@@ -137,18 +135,19 @@
 
             <TextView
                 android:id="@+id/tv_layout_operate_install_frame_no"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/iv_layout_operate_install_frame_no"
+                android:layout_below="@id/tv_layout_operate_install_frame_no_title"
                 android:layout_marginEnd="@dimen/dp_80"
                 android:layout_marginRight="@dimen/dp_80"
+                android:layout_marginTop="@dimen/dp_8"
                 android:layout_toEndOf="@+id/iv_layout_operate_install_frame_no"
                 android:layout_toRightOf="@+id/iv_layout_operate_install_frame_no"
                 android:lines="1"
-                android:maxWidth="@dimen/dp_240"/>
+                android:maxWidth="@dimen/dp_240"
+                android:text="asdf"/>
 
         </RelativeLayout>
-
 
         <ImageView
             android:id="@+id/iv_layout_operate_install_frame_pic"
@@ -169,17 +168,28 @@
             android:background="@drawable/bg_cycle_delete"
             android:padding="@dimen/dp_4"
             android:src="@drawable/ic_delete"
-            android:visibility="gone"/>
+            android:visibility="visible"/>
 
         <View
+            android:id="@+id/view_activity_operate_install"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_0_5"
             android:layout_below="@id/iv_layout_operate_install_frame_pic"
             android:layout_marginLeft="@dimen/dp_40"
+            android:layout_marginStart="@dimen/dp_40"
             android:layout_marginTop="@dimen/dp_4"
             android:background="@color/colorBlueTheme"/>
-
     </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_activity_operate_install_tip_3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_44"
+        android:layout_marginStart="@dimen/dp_44"
+        android:text="@string/tip_pic"
+        android:textColor="@color/colorOrange"
+        android:visibility="gone"/>
 
     <!--===============================-->
 
@@ -222,20 +232,20 @@
             android:id="@+id/tv_activity_operate_install_tip_2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@id/et_layout_operate_install_car_type"
             android:layout_marginLeft="@dimen/dp_40"
             android:layout_marginStart="@dimen/dp_40"
-            android:layout_below="@id/et_layout_operate_install_car_type"
-            android:visibility="gone"
             android:text="@string/tip_car_type"
-            android:textColor="@color/colorOrange"/>
+            android:textColor="@color/colorOrange"
+            android:visibility="gone"/>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_0_5"
             android:layout_below="@id/tv_activity_operate_install_tip_2"
             android:layout_marginTop="@dimen/dp_4"
-            android:visibility="gone"
-            android:background="@color/colorBlueTheme"/>
+            android:background="@color/colorBlueTheme"
+            android:visibility="gone"/>
     </RelativeLayout>
 
     <com.tianyigps.dispatch2.customview.MyRecyclerView

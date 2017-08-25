@@ -72,7 +72,7 @@ public class OperateInstallActivity extends BaseActivity {
     private TextView mTextViewFrameNo;
 
     //  提示
-    private TextView mTextViewTip1, mTextViewTip2;
+    private TextView mTextViewTip1, mTextViewTip2, mTextViewTip3;
 
     private Button mButtonSave;
     private View mViewSave;
@@ -134,7 +134,6 @@ public class OperateInstallActivity extends BaseActivity {
     private String mCarNo;
     private String mCarFrameNo;
     private String mCarBrand;
-    private boolean replaceAble = false;
 
     //  LoadingFragment
     private LoadingDialogFragment mLoadingDialogFragment;
@@ -145,6 +144,9 @@ public class OperateInstallActivity extends BaseActivity {
 
     //  删除图片
     private int mDeleteType = Data.DATA_UPLOAD_TYPE_1;
+
+    //  设备里是否有信息，如果有则判断车辆是否填写完成
+    private boolean haveTerData = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -392,6 +394,7 @@ public class OperateInstallActivity extends BaseActivity {
 
         mTextViewTip1 = findViewById(R.id.tv_activity_operate_install_tip_1);
         mTextViewTip2 = findViewById(R.id.tv_activity_operate_install_tip_2);
+        mTextViewTip3 = findViewById(R.id.tv_activity_operate_install_tip_3);
 
         mLoadingDialogFragment = new LoadingDialogFragment();
 
@@ -1195,12 +1198,7 @@ public class OperateInstallActivity extends BaseActivity {
 
     //  checkTerminal数据
     private boolean isComplete() {
-        if (!isCarComplete()) {
-            return false;
-        }
-
-        return checkTerComplete();
-
+        return (checkTerComplete() && (!haveTerData || isCarComplete()));
 //        for (int i = 0; i < mAdapterOperateInstallListDataList.size(); i++) {
 //            Cursor cursor = mDatabaseManager.getTer(ID_MAIN_TERMINAL + i);
 //            if (null != cursor && cursor.moveToFirst()) {
@@ -1263,7 +1261,9 @@ public class OperateInstallActivity extends BaseActivity {
     //  checkTerminal数据
     private boolean checkTerComplete() {
         boolean complete = true;
-        for (int i = 0; i < mAdapterOperateInstallListDataList.size(); i++) {
+        haveTerData = false;
+        int count = mAdapterOperateInstallListDataList.size();
+        for (int i = 0; i < count; i++) {
             Cursor cursor = mDatabaseManager.getTer(ID_MAIN_TERMINAL + i);
             if (null != cursor && cursor.moveToFirst()) {
                 String id = cursor.getString(0);
@@ -1300,8 +1300,10 @@ public class OperateInstallActivity extends BaseActivity {
                         && null != installPicUrl && !"".equals(installPicUrl)
                         && (0 != model)) {
                     complete = true;
+                    haveTerData = true;
                 } else {
                     complete = false;
+                    haveTerData = true;
                 }
 
                 AdapterOperateInstallListData data = mAdapterOperateInstallListDataList.get(i);
@@ -1359,27 +1361,33 @@ public class OperateInstallActivity extends BaseActivity {
                     carComplete = false;
                     mTextViewTip1.setVisibility(View.VISIBLE);
                     mTextViewTip1.setText(getString(R.string.tip_carno_fault));
-                } else {
-                    mTextViewTip1.setVisibility(View.GONE);
                 }
             }
+            if (null == carNoPicUrl || "".equals(carNoPicUrl)) {
+                carComplete = false;
+                mImageViewCarNo.setBackgroundResource(R.drawable.bg_edit_orange);
+                mTextViewTip1.setVisibility(View.VISIBLE);
+                mTextViewTip1.setText(getString(R.string.tip_pic));
+            } else {
+                mImageViewCarNo.setBackgroundResource(R.color.colorNull);
+            }
+            if (null != carNo && !"".equals(carNo) && RegularU.checkCarNo(carNo) && null != carNoPicUrl && !"".equals(carNoPicUrl)) {
+                mTextViewTip1.setVisibility(View.GONE);
+            }
+
             if (null == carType || "".equals(carType)) {
                 carComplete = false;
                 mTextViewTip2.setVisibility(View.VISIBLE);
             } else {
                 mTextViewTip2.setVisibility(View.GONE);
             }
-            if (null == carNoPicUrl || "".equals(carNoPicUrl)) {
-                carComplete = false;
-                mImageViewCarNo.setBackgroundResource(R.drawable.bg_edit_orange);
-            } else {
-                mImageViewCarNo.setBackgroundResource(R.color.colorNull);
-            }
             if (null == frameNoPicUrl || "".equals(frameNoPicUrl)) {
                 carComplete = false;
+                mTextViewTip3.setVisibility(View.VISIBLE);
                 mImageViewFrameNo.setBackgroundResource(R.drawable.bg_edit_orange);
             } else {
                 mImageViewFrameNo.setBackgroundResource(R.color.colorNull);
+                mTextViewTip3.setVisibility(View.GONE);
             }
         }
 
@@ -1541,6 +1549,7 @@ public class OperateInstallActivity extends BaseActivity {
                                 .centerInside()
                                 .into(mImageViewCarNo);
 
+                        mDatabaseManager.addCarNoPic(idMainCar, null, null);
                         mImageViewCarNoDelete.setVisibility(View.GONE);
                         break;
                     }
@@ -1555,6 +1564,7 @@ public class OperateInstallActivity extends BaseActivity {
                                 .centerInside()
                                 .into(mImageViewFrameNo);
 
+                        mDatabaseManager.addCarFrameNoPic(idMainCar, null, null);
                         mImageViewFrameNoDelete.setVisibility(View.GONE);
                         break;
                     }

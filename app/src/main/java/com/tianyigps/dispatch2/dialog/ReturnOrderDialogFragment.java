@@ -116,13 +116,14 @@ public class ReturnOrderDialogFragment extends DialogFragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                Log.i(TAG, "onTextChanged: " + i);
-                String count = (i + 1) + "/200";
-                textViewCount.setText(count);
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
+                int count = editable.length();
+                Log.i(TAG, "onTextChanged: " + count);
+                String str = count + "/200";
+                textViewCount.setText(str);
             }
         });
 
