@@ -114,11 +114,21 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
         super.onResume();
         mMapView.onResume();
         mLocateManager.startLocate();
+        Log.i(TAG, "onResume: mIsShow-->" + mIsShow);
+        if (mIsShow) {
+            mTextViewLook.setVisibility(View.VISIBLE);
+            mLinearLayout.setVisibility(View.VISIBLE);
+        } else {
+            mTextViewLook.setVisibility(View.GONE);
+            mLinearLayout.setVisibility(View.GONE);
+        }
+        myHandler.sendEmptyMessageDelayed(Data.MSG_5, 200);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        mBaiduMap.hideInfoWindow();
         mMapView.onPause();
     }
 
@@ -244,14 +254,6 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
         mIsShow = mIntent.getBooleanExtra(Data.DATA_INTENT_LOCATE_TYPE, true);
         wholeImei = mIntent.getStringExtra(Data.DATA_INTENT_LOCATE_IMEI);
         Log.i(TAG, "init: wholeImei-->" + wholeImei);
-        if (mIsShow) {
-            mTextViewLook.setVisibility(View.VISIBLE);
-            mLinearLayout.setVisibility(View.VISIBLE);
-        } else {
-            mTextViewLook.setVisibility(View.GONE);
-            mLinearLayout.setVisibility(View.GONE);
-            myHandler.sendEmptyMessageDelayed(Data.MSG_5, 200);
-        }
     }
 
     private void setEventListener() {
