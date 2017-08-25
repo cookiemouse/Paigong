@@ -583,13 +583,14 @@ public class PendDetailsActivity extends Activity {
                 case Data.MSG_2: {
                     //  改约成功
                     showMessageToast(mStringMessage);
+                    PendDetailsActivity.this.finish();
                     //  刷新页面
-                    showLoading();
-                    if (0 == orderStatus) {
-                        mNetworkManager.getPendDetails(jobNo, token, orderNo, userName);
-                    } else {
-                        mNetworkManager.getPendDetails(jobNo, token, orderNo, userName, orderStatus);
-                    }
+//                    showLoading();
+//                    if (0 == orderStatus) {
+//                        mNetworkManager.getPendDetails(jobNo, token, orderNo, userName);
+//                    } else {
+//                        mNetworkManager.getPendDetails(jobNo, token, orderNo, userName, orderStatus);
+//                    }
                 }
                 default: {
                     Log.i(TAG, "handleMessage: default-->" + msg.what);
