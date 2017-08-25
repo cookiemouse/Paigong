@@ -975,11 +975,13 @@ public class OperateInstallActivity extends BaseActivity {
                 String tNoOld = cursor.getString(1);
                 String tNoNew = cursor.getString(2);
                 String position = cursor.getString(3);
+                int model = cursor.getInt(8);
 
                 Log.i(TAG, "loadTerminalData: id-->" + id);
                 Log.i(TAG, "loadTerminalData: tNoOld-->" + tNoOld);
                 Log.i(TAG, "loadTerminalData: tNoNew-->" + tNoNew);
                 Log.i(TAG, "loadTerminalData: position-->" + position);
+                Log.i(TAG, "loadTerminalData: model-->" + model);
                 Log.i(TAG, "........................................");
 
                 cursor.close();
@@ -987,6 +989,7 @@ public class OperateInstallActivity extends BaseActivity {
                 AdapterOperateInstallListData data = mAdapterOperateInstallListDataList.get(i);
                 data.settNoNew(tNoNew);
                 data.setPosition(position);
+                data.setModel(model);
             }
         }
         mOperateInstallListAdapter.notifyDataSetChanged();
