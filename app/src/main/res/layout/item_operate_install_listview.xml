@@ -250,12 +250,24 @@
             <TextView
                 android:id="@+id/tv_item_operate_install_install"
                 android:layout_width="wrap_content"
-                android:layout_height="@dimen/dp_40"
+                android:layout_height="wrap_content"
                 android:layout_alignTop="@+id/iv_item_operate_install_install"
                 android:layout_toEndOf="@+id/iv_item_operate_install_install"
                 android:layout_toRightOf="@+id/iv_item_operate_install_install"
                 android:gravity="center"
                 android:text="@string/install_pic"/>
+
+            <TextView
+                android:id="@+id/tv_item_operate_install_tip_3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_item_operate_install_install"
+                android:layout_marginTop="@dimen/dp_8"
+                android:layout_marginLeft="@dimen/dp_40"
+                android:layout_marginStart="@dimen/dp_40"
+                android:text="@string/tip_pic"
+                android:textColor="@color/colorOrange"
+                android:visibility="gone"/>
 
             <ImageView
                 android:id="@+id/iv_item_operate_install_install_pic"

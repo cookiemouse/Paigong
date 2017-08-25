@@ -71,6 +71,7 @@ public class OperateInstallListAdapter extends BaseAdapter {
             viewHolder.etTNoNew = contentView.findViewById(R.id.et_item_operate_new_device_no);
             viewHolder.tvTip1 = contentView.findViewById(R.id.tv_item_operate_install_tip_1);
             viewHolder.tvTip2 = contentView.findViewById(R.id.tv_item_operate_install_tip_2);
+            viewHolder.tvTip3 = contentView.findViewById(R.id.tv_item_operate_install_tip_3);
 
             viewHolder.etPosition = contentView.findViewById(R.id.et_item_operate_install_position);
 
@@ -189,32 +190,44 @@ public class OperateInstallListAdapter extends BaseAdapter {
             //  定位按钮
             if (0 == data.getModel()) {
                 viewHolder.ivLocate.setBackgroundResource(R.drawable.bg_edit_orange);
+                viewHolder.tvTip1.setVisibility(View.VISIBLE);
+                viewHolder.tvTip1.setText(context.getString(R.string.tip_locate));
             } else {
                 viewHolder.ivLocate.setBackgroundResource(R.color.colorNull);
             }
             //  设备号
             if (null == tNoNew || "".equals(tNoNew)) {
+                viewHolder.tvTip1.setText(context.getString(R.string.tip_imei));
                 viewHolder.tvTip1.setVisibility(View.VISIBLE);
-            } else {
+            }
+            if (null != tNoNew && !"".equals(tNoNew) && 0 != data.getModel()) {
                 viewHolder.tvTip1.setVisibility(View.GONE);
+            }
+
+            //  安装位置图
+            if (null == data.getPositionPicUrl()) {
+                viewHolder.ivPositionPic.setBackgroundResource(R.drawable.bg_edit_orange);
+                viewHolder.tvTip2.setVisibility(View.VISIBLE);
+                viewHolder.tvTip2.setText(context.getString(R.string.tip_pic));
+            } else {
+                viewHolder.ivPositionPic.setBackgroundResource(R.color.colorNull);
             }
             //  安装位置
             if (null == data.getPosition() || "".equals(data.getPosition())) {
                 viewHolder.tvTip2.setVisibility(View.VISIBLE);
-            } else {
+                viewHolder.tvTip2.setText(context.getString(R.string.tip_position));
+            }
+            if (null != data.getPositionPicUrl() && null != data.getPosition() && !"".equals(data.getPosition())){
                 viewHolder.tvTip2.setVisibility(View.GONE);
             }
-            //  安装位置图
-            if (null == data.getPositionPicUrl()) {
-                viewHolder.ivPositionPic.setBackgroundResource(R.drawable.bg_edit_orange);
-            } else {
-                viewHolder.ivPositionPic.setBackgroundResource(R.color.colorNull);
-            }
+
             //  接线图
             if (null == data.getInstallPicUrl()) {
                 viewHolder.ivInstallPic.setBackgroundResource(R.drawable.bg_edit_orange);
+                viewHolder.tvTip3.setVisibility(View.VISIBLE);
             } else {
                 viewHolder.ivInstallPic.setBackgroundResource(R.color.colorNull);
+                viewHolder.tvTip3.setVisibility(View.GONE);
             }
         }
 
@@ -296,7 +309,7 @@ public class OperateInstallListAdapter extends BaseAdapter {
 
     private class ViewHolder {
         private TextView tvTitle, tvStatus, tvTNoOld;
-        private TextView tvTip1, tvTip2;
+        private TextView tvTip1, tvTip2, tvTip3;
         private EditText etTNoNew, etPosition;
         private ImageView ivScanner, ivLocate, ivPositionPic, ivInstallPic;
         private RelativeLayout rlOld, rlItem;
