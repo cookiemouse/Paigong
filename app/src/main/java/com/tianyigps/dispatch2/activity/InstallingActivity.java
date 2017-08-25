@@ -547,8 +547,10 @@ public class InstallingActivity extends BaseActivity {
 
     //  检验维修列表是否已完成
     private boolean checkRepairList() {
-        boolean nextAble = true;
-        if (mAdapterRepairDataList.size() > 0) {
+        boolean nextAble = false;
+        int completeCount = 0;
+        int listSize = mAdapterRepairDataList.size();
+        if (listSize > 0) {
             for (AdapterRepairData data : mAdapterRepairDataList) {
                 boolean isComplete = false;
                 Cursor cursor = mDatabaseManager.getRepair(data.gettId());
@@ -563,22 +565,25 @@ public class InstallingActivity extends BaseActivity {
                     Log.i(TAG, "checkRepairList: positionUrl-->" + positionUrl);
                     Log.i(TAG, "checkRepairList: installUrl-->" + installUrl);
 
-                    isComplete = ((null != position)
-                            && (null != explain)
-                            && (null != positionUrl)
-                            && (null != installUrl));
-
+                    isComplete = ((null != position && !"".equals(position))
+                            && (null != explain && !"".equals(explain))
+                            && (null != positionUrl && !"".equals(positionUrl))
+                            && (null != installUrl && !"".equals(installUrl)));
                     cursor.close();
                 }
 
-                data.setComplete(isComplete);
-
-                if (nextAble) {
-                    nextAble = isComplete;
+                if (isComplete) {
+                    completeCount++;
                 }
+
+                data.setComplete(isComplete);
             }
         }
         myHandler.sendEmptyMessage(Data.MSG_3);
+
+        if (0 == completeCount || completeCount == listSize) {
+            nextAble = true;
+        }
 
         return nextAble;
     }
