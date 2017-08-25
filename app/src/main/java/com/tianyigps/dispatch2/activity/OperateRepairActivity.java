@@ -842,14 +842,14 @@ public class OperateRepairActivity extends BaseActivity {
             Log.i(TAG, "isComplete: model-->" + model);
             Log.i(TAG, "isComplete: locateType-->" + locateType);
 
-            if (null == explain || "".equals(explain)) {
-                complete = false;
-                mTextViewTip3.setVisibility(View.VISIBLE);
-            } else {
-                mTextViewTip3.setVisibility(View.INVISIBLE);
-            }
-
             if (mRelativeLayoutReplace.getVisibility() == View.VISIBLE) {
+                if (null == explain || "".equals(explain)) {
+                    complete = false;
+                    mTextViewTip3.setVisibility(View.VISIBLE);
+                } else {
+                    mTextViewTip3.setVisibility(View.INVISIBLE);
+                }
+
                 if (null == newTNo || "".equals(newTNo)) {
                     complete = false;
                     mTextViewTip0.setVisibility(View.VISIBLE);
