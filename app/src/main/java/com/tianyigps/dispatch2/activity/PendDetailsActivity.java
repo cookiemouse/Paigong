@@ -435,6 +435,10 @@ public class PendDetailsActivity extends Activity {
             }
         });
 
+        Calendar calendar = Calendar.getInstance();
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int min = calendar.get(Calendar.MINUTE);
+
         mpDay.setDisplayedValues(mDays);
         mpDay.setMinValue(0);
         mpDay.setMaxValue(mDays.length - 1);
@@ -442,10 +446,16 @@ public class PendDetailsActivity extends Activity {
         mpHour.setDisplayedValues(mHours);
         mpHour.setMinValue(0);
         mpHour.setMaxValue(mHours.length - 1);
+        mpHour.setValue(hour);
 
         mpMin.setDisplayedValues(mMins);
         mpMin.setMinValue(0);
         mpMin.setMaxValue(mMins.length - 1);
+        int value = (min + 5) / 10;
+        if (value > 5){
+            value = 5;
+        }
+        mpMin.setValue(value);
 
         bottomDialog.show(getFragmentManager(), "modify date");
     }

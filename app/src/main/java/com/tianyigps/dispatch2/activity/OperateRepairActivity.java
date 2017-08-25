@@ -799,7 +799,7 @@ public class OperateRepairActivity extends BaseActivity {
     }
 
     //  显示imei
-    private void setEditTextImei(String imei){
+    private void setEditTextImei(String imei) {
         isEditChange = false;
         mEditTextNewImei.setText(imei);
     }
@@ -1038,7 +1038,7 @@ public class OperateRepairActivity extends BaseActivity {
                     getWholeImei(imei);
                     break;
                 }
-                case Data.MSG_10:{
+                case Data.MSG_10: {
                     //  获取 whole imei
                     isEditChange = false;
                     setEditTextImei(wholeImei);
