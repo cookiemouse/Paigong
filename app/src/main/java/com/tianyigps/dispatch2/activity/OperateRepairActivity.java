@@ -117,6 +117,9 @@ public class OperateRepairActivity extends BaseActivity {
     //  输入提示文字
     private TextView mTextViewTip0, mTextViewTip1, mTextViewTip2, mTextViewTip3;
 
+    //  mEditTextNewImei是否为编辑改变
+    private boolean isEditChange = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -133,13 +136,19 @@ public class OperateRepairActivity extends BaseActivity {
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        myHandler.removeMessages(Data.MSG_9);
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == Data.DATA_INTENT_SCANNER_REQUEST && resultCode == Data.DATA_INTENT_SCANNER_RESULT) {
             Log.i(TAG, "onActivityResult: qrcode-->" + data.getStringExtra(Data.DATA_SCANNER));
             String imei = data.getStringExtra(Data.DATA_SCANNER);
-            mEditTextNewImei.setText(imei);
+            setEditTextImei(imei);
         }
 
         if (requestCode == Data.DATA_INTENT_LOCATE_REQUEST && resultCode == Data.DATA_INTENT_LOCATE_RESULT) {
@@ -383,7 +392,30 @@ public class OperateRepairActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 String imei = mEditTextNewImei.getText().toString();
-                getWholeImei(imei);
+                mNetworkManager.checkIMEI(eid, token, imei, mOrderTerType, orderNo, userName, mImeiOld);
+            }
+        });
+
+        mEditTextNewImei.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                myHandler.removeMessages(Data.MSG_9);
+                if (isEditChange) {
+                    String imei = editable.toString();
+                    Message message = new Message();
+                    message.what = Data.MSG_9;
+                    message.obj = imei;
+                    myHandler.sendMessageDelayed(message, 2000);
+                }
+                isEditChange = true;
             }
         });
 
@@ -527,8 +559,8 @@ public class OperateRepairActivity extends BaseActivity {
                     onFailure();
                     return;
                 }
-                String imei = wholeImeiBean.getObj().getImei();
-                mNetworkManager.checkIMEI(eid, token, imei, mOrderTerType, orderNo, userName, mImeiOld);
+                wholeImei = wholeImeiBean.getObj().getImei();
+                myHandler.sendEmptyMessage(Data.MSG_10);
             }
         });
 
@@ -708,6 +740,7 @@ public class OperateRepairActivity extends BaseActivity {
             mPositionNew = cursor.getString(2);
             mExplainNew = cursor.getString(5);
             mImeiNew = cursor.getString(6);
+            wholeImei = mImeiNew;
 
             Log.i(TAG, "loadSavedData: tId-->" + cursor.getInt(0));
             Log.i(TAG, "loadSavedData: mStringPosition-->" + mPositionNew);
@@ -722,7 +755,8 @@ public class OperateRepairActivity extends BaseActivity {
                 mTextViewState.setText(R.string.repair_replace);
             } else {
                 mRelativeLayoutReplace.setVisibility(View.VISIBLE);
-                mEditTextNewImei.setText(mImeiNew);
+                isEditChange = false;
+                setEditTextImei(mImeiNew);
                 mTextViewState.setText(R.string.not_replace);
             }
             cursor.close();
@@ -762,6 +796,12 @@ public class OperateRepairActivity extends BaseActivity {
     private void getWholeImei(String imei) {
         showLoading();
         mNetworkManager.getWholeImei(eid, token, imei, userName);
+    }
+
+    //  显示imei
+    private void setEditTextImei(String imei){
+        isEditChange = false;
+        mEditTextNewImei.setText(imei);
     }
 
     private void toLocate(String imei) {
@@ -921,9 +961,10 @@ public class OperateRepairActivity extends BaseActivity {
                     break;
                 }
                 case Data.MSG_2: {
-                    mEditTextNewImei.setText(wholeImei);
+                    //  check whole imei 成功
+                    isEditChange = false;
+                    setEditTextImei(wholeImei);
                     toLocate(wholeImei);
-                    mDatabaseManager.addRepair(tId, 0);
                     break;
                 }
                 case Data.MSG_3: {
@@ -985,8 +1026,23 @@ public class OperateRepairActivity extends BaseActivity {
                 }
                 case Data.MSG_8: {
                     //  check imei failure或者获取 whole imei失败
-                    mEditTextNewImei.setText(null);
+                    isEditChange = false;
+                    setEditTextImei(null);
                     myHandler.sendEmptyMessage(Data.MSG_3);
+                    break;
+                }
+                case Data.MSG_9: {
+                    //  mEditTextNewImei编辑完成
+                    Log.i(TAG, "handleMessage: mEditTextNewImei编辑完成");
+                    String imei = (String) msg.obj;
+                    getWholeImei(imei);
+                    break;
+                }
+                case Data.MSG_10:{
+                    //  获取 whole imei
+                    isEditChange = false;
+                    setEditTextImei(wholeImei);
+                    mDatabaseManager.addRepair(tId, 0);
                     break;
                 }
                 default: {
