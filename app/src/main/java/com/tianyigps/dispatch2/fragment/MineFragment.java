@@ -136,11 +136,11 @@ public class MineFragment extends Fragment {
                         startActivity(intent);
                         break;
                     }
-//                    case 2: {
-//                        //  测试
-//                        Intent intent = new Intent(getActivity(), TestActivity.class);
+                    case 2: {
+                        //  测试
+//                        Intent intent = new Intent(getActivity(), EditRemarksActivity.class);
 //                        startActivity(intent);
-//                    }
+                    }
                     default: {
                         Log.i(TAG, "onItemClick: default");
                     }

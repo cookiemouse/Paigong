@@ -1,11 +1,11 @@
 package com.tianyigps.dispatch2.activity;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -51,6 +51,10 @@ public class EditRemarksActivity extends BaseActivity {
             public void onClick(View view) {
                 // 2017/7/20 下一步
                 String reason = mEditTextRemarks.getText().toString();
+                if ("".equals(reason)) {
+                    showNullDialog();
+                    return;
+                }
                 mIntent.putExtra(Data.DATA_INTENT_REASON, reason);
                 setResult(Data.DATA_INTENT_REASON_RESULT, mIntent);
                 finish();
@@ -74,20 +78,25 @@ public class EditRemarksActivity extends BaseActivity {
         });
     }
 
-    //  显示信息Dialog
-    private void showMessageDialog(String msg) {
+    //  显示Dialog
+    private void showNullDialog() {
         if (isFinishing()) {
             return;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(EditRemarksActivity.this);
-        builder.setMessage(msg);
-        builder.setPositiveButton(R.string.ensure, new DialogInterface.OnClickListener() {
+        View view = LayoutInflater.from(this).inflate(R.layout.dialog_message_editable, null);
+        TextView textView = view.findViewById(R.id.tv_dialog_message_message);
+        Button button = view.findViewById(R.id.btn_dialog_message_cancel);
+        textView.setText("未填写任何信息，请填写内容再提交！");
+        button.setText(getString(R.string.ensure));
+        builder.setView(view);
+        final AlertDialog dialog = builder.create();
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                //  do nothing
+            public void onClick(View view) {
+                dialog.dismiss();
             }
         });
-        AlertDialog dialog = builder.create();
         dialog.show();
     }
 }
