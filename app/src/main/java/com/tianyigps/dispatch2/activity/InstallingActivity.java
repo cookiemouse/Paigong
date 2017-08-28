@@ -90,6 +90,9 @@ public class InstallingActivity extends BaseActivity {
     //  数据库
     private DatabaseManager mDatabaseManager;
 
+    //  完成数量
+    private int mCompleteCount = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -230,7 +233,12 @@ public class InstallingActivity extends BaseActivity {
                     toCustomSign();
                     return;
                 }
-                showPartDialog();
+                Log.i(TAG, "onClick: mCompleteCount-->" + mCompleteCount);
+                if (!checkRepairList() && mCompleteCount == 0) {
+                    showPartDialog(getString(R.string.msg_null_complete));
+                    return;
+                }
+                showPartDialog(getString(R.string.msg_part_complete));
             }
         });
 
@@ -467,14 +475,16 @@ public class InstallingActivity extends BaseActivity {
     }
 
     //  部分完成对话框
-    private void showPartDialog() {
+    private void showPartDialog(String msg) {
         AlertDialog.Builder builder = new AlertDialog.Builder(InstallingActivity.this);
         View viewDialog = LayoutInflater.from(InstallingActivity.this).inflate(R.layout.dialog_button_editable, null);
         builder.setView(viewDialog);
         final AlertDialog dialog = builder.create();
-        Button buttonCancle = viewDialog.findViewById(R.id.btn_dialog_editable_cancel);
+        TextView textView = viewDialog.findViewById(R.id.tv_dialog_editable_msg);
+        Button buttonCancel = viewDialog.findViewById(R.id.btn_dialog_editable_cancel);
         Button buttonEnsure = viewDialog.findViewById(R.id.btn_dialog_editable_ensure);
-        buttonCancle.setOnClickListener(new View.OnClickListener() {
+        textView.setText(msg);
+        buttonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 dialog.dismiss();
@@ -644,9 +654,11 @@ public class InstallingActivity extends BaseActivity {
         }
         myHandler.sendEmptyMessage(Data.MSG_3);
 
-        if (0 == completeCount || completeCount == listSize) {
+        if (completeCount == listSize) {
             nextAble = true;
         }
+
+        mCompleteCount = completeCount;
 
         return nextAble;
     }

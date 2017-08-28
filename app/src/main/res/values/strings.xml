@@ -92,6 +92,8 @@
     <string name="tip_carno">提示:请输入车牌号！</string>
     <string name="tip_car_type">提示:请输入车型！</string>
     <string name="tip_carno_fault">提示:请输入正确的车牌号！</string>
+    <string name="msg_part_complete">设备未全部安装，仍然提交？</string>
+    <string name="msg_null_complete">确认提交空单么？</string>
 
     <array name="picker_month">
         <item>01 月</item>
