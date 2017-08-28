@@ -263,7 +263,9 @@ public class InstallingActivity extends BaseActivity {
                     for (StartOrderInfoBean.ObjBean.CarListBean.CarTerminalListBean carTerminalListBean : carListBean.getCarTerminalList()) {
                         int cid = carListBean.getId();
                         int tid = carTerminalListBean.getId();
-                        mDatabaseManager.addOrder(orderNo, cid, tid);
+                        if (carListBean.getRemoveFlag() == 0) {
+                            mDatabaseManager.addOrder(orderNo, cid, tid);
+                        }
                     }
                 }
 
