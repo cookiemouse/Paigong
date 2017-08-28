@@ -77,6 +77,9 @@ public class LoginActivity extends AppCompatActivity {
 
         mSharedpreferenceManager = new SharedpreferenceManager(getApplicationContext());
         mLoadingDialogFragment = new LoadingDialogFragment();
+
+        String account = mSharedpreferenceManager.getAccount();
+        mEditTextAccount.setText(account);
     }
 
     private void setEventListener() {
