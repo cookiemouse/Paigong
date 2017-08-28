@@ -468,7 +468,7 @@ public class PendDetailsActivity extends Activity {
         mpMin.setDisplayedValues(mMins);
         mpMin.setMinValue(0);
         mpMin.setMaxValue(mMins.length - 1);
-        int value = (min + 5) / 10;
+        int value = (min + 10) / 10;
         if (value > 5) {
             value = 5;
         }
