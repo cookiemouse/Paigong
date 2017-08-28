@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.tianyigps.dispatch2.R;
@@ -61,6 +62,8 @@ public class RepairAdapter extends BaseAdapter {
             viewHolder.textViewCarNo = contentView.findViewById(R.id.tv_item_repair_car_no);
             viewHolder.textViewFrameNo = contentView.findViewById(R.id.tv_item_repair_frame_no);
             viewHolder.frameLayout = contentView.findViewById(R.id.fl_item_repair);
+            viewHolder.ivGo = contentView.findViewById(R.id.iv_item_repair_go);
+            viewHolder.tvGo = contentView.findViewById(R.id.tv_item_repair_go);
 
             contentView.setTag(viewHolder);
         } else {
@@ -89,23 +92,40 @@ public class RepairAdapter extends BaseAdapter {
         viewHolder.textViewCarNo.setText(data.getCarNo());
         viewHolder.textViewFrameNo.setText(data.getFrameNo());
 
-        if (data.isComplete()) {
-            switch (data.getType()) {
-                case 1: {
-                    viewHolder.frameLayout.setBackgroundResource(R.drawable.bg_item_installing_blue);
-                    break;
-                }
-                case 2: {
-                    viewHolder.frameLayout.setBackgroundResource(R.drawable.bg_item_installing_green);
-                    break;
-                }
-                default: {
-                    viewHolder.frameLayout.setBackgroundResource(R.drawable.bg_item_installing_blue);
-
-                }
+        switch (data.getType()) {
+            case 1: {
+                viewHolder.frameLayout.setBackgroundResource(R.drawable.bg_item_installing_blue);
+                break;
             }
-        } else {
-            viewHolder.frameLayout.setBackgroundResource(R.drawable.bg_item_installing_orange);
+            case 2: {
+                viewHolder.frameLayout.setBackgroundResource(R.drawable.bg_item_installing_green);
+                break;
+            }
+            default: {
+                viewHolder.frameLayout.setBackgroundResource(R.drawable.bg_item_installing_blue);
+
+            }
+        }
+        switch (data.getComplete()) {
+            case 0: {
+                viewHolder.ivGo.setVisibility(View.VISIBLE);
+                viewHolder.tvGo.setVisibility(View.GONE);
+                break;
+            }
+            case 1: {
+                viewHolder.ivGo.setVisibility(View.GONE);
+                viewHolder.tvGo.setVisibility(View.VISIBLE);
+                break;
+            }
+            case 2: {
+                viewHolder.ivGo.setVisibility(View.VISIBLE);
+                viewHolder.tvGo.setVisibility(View.GONE);
+                viewHolder.frameLayout.setBackgroundResource(R.drawable.bg_item_installing_orange);
+                break;
+            }
+            default: {
+                Log.i(TAG, "getView: default.complete-->" + data.getComplete());
+            }
         }
 
         return contentView;
@@ -114,5 +134,7 @@ public class RepairAdapter extends BaseAdapter {
     private class ViewHolder {
         private TextView textViewType, textViewId, textViewName, textViewCarNo, textViewFrameNo;
         private FrameLayout frameLayout;
+        private ImageView ivGo;
+        private TextView tvGo;
     }
 }

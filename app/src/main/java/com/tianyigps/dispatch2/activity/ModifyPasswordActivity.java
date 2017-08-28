@@ -78,7 +78,7 @@ public class ModifyPasswordActivity extends BaseActivity {
 
                 oldPsd = MD5U.getMd5(oldPsd);
 
-                if (newPsd.equals(ensurePsd)) {
+                if (!newPsd.equals(ensurePsd)) {
                     mStringMessage = "两次密码输入不同，请检查后提交！";
                     showMessageDialog(mStringMessage);
                     return;

@@ -504,7 +504,7 @@ public class InstallingActivity extends BaseActivity {
     private void resetRepairList() {
         if (mAdapterRepairDataList.size() > 0) {
             for (AdapterRepairData data : mAdapterRepairDataList) {
-                data.setComplete(true);
+                data.setComplete(0);
             }
         }
         myHandler.sendEmptyMessage(Data.MSG_3);
@@ -618,6 +618,48 @@ public class InstallingActivity extends BaseActivity {
         }
     }
 
+    //  更新维修列表完成
+    private void updateRepairComplete() {
+        int listSize = mAdapterRepairDataList.size();
+        if (listSize > 0) {
+            for (AdapterRepairData data : mAdapterRepairDataList) {
+                boolean isComplete = false;
+                Cursor cursor = mDatabaseManager.getRepair(data.gettId());
+                if (null != cursor && cursor.moveToFirst()) {
+                    String position = cursor.getString(2);
+                    String explain = cursor.getString(5);
+                    String newImei = cursor.getString(6);
+                    String positionUrl = cursor.getString(7);
+                    String installUrl = cursor.getString(8);
+
+                    Log.i(TAG, "checkRepairList: position-->" + position);
+                    Log.i(TAG, "checkRepairList: explain-->" + explain);
+                    Log.i(TAG, "checkRepairList: newImei-->" + newImei);
+                    Log.i(TAG, "checkRepairList: positionUrl-->" + positionUrl);
+                    Log.i(TAG, "checkRepairList: installUrl-->" + installUrl);
+
+                    if (null != newImei && !"".equals(newImei)) {
+                        isComplete = ((null != position && !"".equals(position))
+                                && (null != explain && !"".equals(explain))
+                                && (null != positionUrl && !"".equals(positionUrl))
+                                && (null != installUrl && !"".equals(installUrl)));
+                    } else {
+                        isComplete = (null != explain && !"".equals(explain));
+                    }
+
+                    cursor.close();
+                }
+
+                if (isComplete) {
+                    data.setComplete(1);
+                } else {
+                    data.setComplete(0);
+                }
+
+            }
+        }
+    }
+
     //  检验维修列表是否已完成
     private boolean checkRepairList() {
         boolean nextAble = false;
@@ -630,26 +672,35 @@ public class InstallingActivity extends BaseActivity {
                 if (null != cursor && cursor.moveToFirst()) {
                     String position = cursor.getString(2);
                     String explain = cursor.getString(5);
+                    String newImei = cursor.getString(6);
                     String positionUrl = cursor.getString(7);
                     String installUrl = cursor.getString(8);
 
                     Log.i(TAG, "checkRepairList: position-->" + position);
                     Log.i(TAG, "checkRepairList: explain-->" + explain);
+                    Log.i(TAG, "checkRepairList: newImei-->" + newImei);
                     Log.i(TAG, "checkRepairList: positionUrl-->" + positionUrl);
                     Log.i(TAG, "checkRepairList: installUrl-->" + installUrl);
 
-                    isComplete = ((null != position && !"".equals(position))
-                            && (null != explain && !"".equals(explain))
-                            && (null != positionUrl && !"".equals(positionUrl))
-                            && (null != installUrl && !"".equals(installUrl)));
+                    if (null != newImei && !"".equals(newImei)) {
+                        isComplete = ((null != position && !"".equals(position))
+                                && (null != explain && !"".equals(explain))
+                                && (null != positionUrl && !"".equals(positionUrl))
+                                && (null != installUrl && !"".equals(installUrl)));
+                    } else {
+                        isComplete = (null != explain && !"".equals(explain));
+                    }
+
                     cursor.close();
                 }
 
                 if (isComplete) {
                     completeCount++;
+                    data.setComplete(1);
+                } else {
+                    data.setComplete(2);
                 }
 
-                data.setComplete(isComplete);
             }
         }
         myHandler.sendEmptyMessage(Data.MSG_3);
@@ -787,6 +838,7 @@ public class InstallingActivity extends BaseActivity {
                 }
                 case Data.MSG_3: {
                     //  repair
+                    updateRepairComplete();
                     mRepairAdapter.notifyDataSetChanged();
                     break;
                 }

@@ -5,11 +5,13 @@ package com.tianyigps.dispatch2.data;
  */
 
 public class AdapterRepairData {
+
     private int tId;
     private int type;
     private String id, name, carNo, frameNo;
     //  是否完成，即item背景
-    private boolean complete;
+    //  complete 0=未check,1=check完成，2=check未完成
+    private int complete;
     private int carId;
 
     public AdapterRepairData(int tId, int type, String id, String name, String carNo, String frameNo, int carId) {
@@ -19,7 +21,7 @@ public class AdapterRepairData {
         this.name = name;
         this.carNo = carNo;
         this.frameNo = frameNo;
-        this.complete = true;
+        this.complete = 0;
         this.carId = carId;
     }
 
@@ -63,11 +65,11 @@ public class AdapterRepairData {
         this.frameNo = frameNo;
     }
 
-    public boolean isComplete() {
+    public int getComplete() {
         return complete;
     }
 
-    public void setComplete(boolean complete) {
+    public void setComplete(int complete) {
         this.complete = complete;
     }
 
