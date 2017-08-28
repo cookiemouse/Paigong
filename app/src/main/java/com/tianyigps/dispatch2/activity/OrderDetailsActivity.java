@@ -304,24 +304,30 @@ public class OrderDetailsActivity extends Activity {
                 for (OrderDetailsBean.ObjBean.CarInfoBean carInfoBean : objBean.getCarInfo()) {
                     if (carInfoBean.getRemoveFlag() == 0) {
                         String carVin = carInfoBean.getCarVin();
-                        if (null != carVin) {
-                            mStringInstallInfo += carVin;
-                        }
+                        String carNo = carInfoBean.getCarNo();
                         String carBrand = carInfoBean.getCarBrand();
-                        if (null != carBrand && !"".equals(carBrand)) {
-                            mStringInstallInfo += ("，" + carInfoBean.getCarBrand());
+                        if (null != carVin && !"".equals(carVin)) {
+                            mStringInstallInfo += carVin;
+                        } else if (null != carNo && !"".equals(carNo)) {
+                            mStringInstallInfo += carNo;
                         }
-                        mStringInstallInfo += "\n";
+                        if (!"".equals(mStringInstallInfo) && null != carBrand && !"".equals(carBrand)) {
+                            mStringInstallInfo += ("，" + carBrand);
+                            mStringInstallInfo += "\n";
+                        }
                     } else {
                         String carVin = carInfoBean.getCarVin();
-                        if (null != carVin) {
-                            mStringRemoveContent += carVin;
-                        }
+                        String carNo = carInfoBean.getCarNo();
                         String carBrand = carInfoBean.getCarBrand();
-                        if (null != carBrand && !"".equals(carBrand)) {
-                            mStringRemoveContent += ("，" + carInfoBean.getCarBrand());
+                        if (null != carVin && !"".equals(carVin)) {
+                            mStringRemoveContent += carVin;
+                        } else if (null != carNo && !"".equals(carNo)) {
+                            mStringRemoveContent += carNo;
                         }
-                        mStringRemoveContent += "\n";
+                        if (!"".equals(mStringRemoveContent) && null != carBrand && !"".equals(carBrand)) {
+                            mStringRemoveContent += ("，" + carBrand);
+                            mStringRemoveContent += "\n";
+                        }
                     }
                 }
 
