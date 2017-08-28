@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.tianyigps.dispatch2.R;
@@ -100,16 +101,32 @@ public class RemoveAdapter extends BaseAdapter {
                     viewHolderRomeve.textViewOfflineR = contentView.findViewById(R.id.tv_item_remove_remove_offline);
                     viewHolderRomeve.textViewOnlineRC = contentView.findViewById(R.id.tv_item_remove_complete_online);
                     viewHolderRomeve.textViewOfflineRC = contentView.findViewById(R.id.tv_item_remove_complete_offline);
+                    viewHolderRomeve.tvGo = contentView.findViewById(R.id.tv_item_remove_go);
+                    viewHolderRomeve.ivGo = contentView.findViewById(R.id.iv_item_remove_go);
 
                     contentView.setTag(viewHolderRomeve);
                 } else {
                     viewHolderRomeve = (ViewHolderRomeve) contentView.getTag();
                 }
 
-                viewHolderRomeve.textViewOnlineR.setText("" + data.getOnline());
-                viewHolderRomeve.textViewOfflineR.setText("" + data.getOffline());
-                viewHolderRomeve.textViewOnlineRC.setText("" + data.getOnlineComplete());
-                viewHolderRomeve.textViewOfflineRC.setText("" + data.getOfflineComplete());
+                int wire = data.getOnline();
+                int wireless = data.getOffline();
+                int wireComplete = data.getOnlineComplete();
+                int wirelessComplete = data.getOfflineComplete();
+
+                viewHolderRomeve.textViewOnlineR.setText("" + wire);
+                viewHolderRomeve.textViewOfflineR.setText("" + wireless);
+                viewHolderRomeve.textViewOnlineRC.setText("" + wireComplete);
+                viewHolderRomeve.textViewOfflineRC.setText("" + wirelessComplete);
+
+                if (wire == wireComplete && wireless == wirelessComplete) {
+                    viewHolderRomeve.tvGo.setVisibility(View.VISIBLE);
+                    viewHolderRomeve.ivGo.setVisibility(View.GONE);
+                } else {
+                    viewHolderRomeve.tvGo.setVisibility(View.GONE);
+                    viewHolderRomeve.ivGo.setVisibility(View.VISIBLE);
+                }
+
                 break;
             }
             case TYPE_INSTALL: {
@@ -123,22 +140,39 @@ public class RemoveAdapter extends BaseAdapter {
                     viewHolderInstall.textViewOnlinePC = contentView.findViewById(R.id.tv_item_installing_complete_online);
                     viewHolderInstall.textViewOfflinePC = contentView.findViewById(R.id.tv_item_installing_complete_offline);
                     viewHolderInstall.frameLayout = contentView.findViewById(R.id.fl_item_installing);
+                    viewHolderInstall.ivGo = contentView.findViewById(R.id.iv_item_installing_go);
+                    viewHolderInstall.tvGo = contentView.findViewById(R.id.tv_item_installing_go);
 
                     contentView.setTag(viewHolderInstall);
                 } else {
                     viewHolderInstall = (ViewHolderInstall) contentView.getTag();
                 }
 
+                int wire = data.getOnline();
+                int wireless = data.getOffline();
+                int wireComplete = data.getOnlineComplete();
+                int wirelessComplete = data.getOfflineComplete();
+
                 viewHolderInstall.textViewFrameNo.setText(data.getFrameNo());
-                viewHolderInstall.textViewOnlineP.setText("" + data.getOnline());
-                viewHolderInstall.textViewOfflineP.setText("" + data.getOffline());
-                viewHolderInstall.textViewOnlinePC.setText("" + data.getOnlineComplete());
-                viewHolderInstall.textViewOfflinePC.setText("" + data.getOfflineComplete());
+                viewHolderInstall.textViewOnlineP.setText("" + wire);
+                viewHolderInstall.textViewOfflineP.setText("" + wireless);
+                viewHolderInstall.textViewOnlinePC.setText("" + wireComplete);
+                viewHolderInstall.textViewOfflinePC.setText("" + wirelessComplete);
 
                 if (data.isComplete()) {
-                    viewHolderInstall.frameLayout.setBackgroundResource(R.drawable.bg_item_installing_blue);
+                    if (data.getOnlineComplete() == data.getOnline() && data.getOfflineComplete() == data.getOffline()) {
+                        viewHolderInstall.frameLayout.setBackgroundResource(R.drawable.bg_item_installing_green);
+                        viewHolderInstall.ivGo.setVisibility(View.GONE);
+                        viewHolderInstall.tvGo.setVisibility(View.VISIBLE);
+                    } else {
+                        viewHolderInstall.frameLayout.setBackgroundResource(R.drawable.bg_item_installing_blue);
+                        viewHolderInstall.ivGo.setVisibility(View.VISIBLE);
+                        viewHolderInstall.tvGo.setVisibility(View.GONE);
+                    }
                 } else {
                     viewHolderInstall.frameLayout.setBackgroundResource(R.drawable.bg_item_installing_orange);
+                    viewHolderInstall.ivGo.setVisibility(View.VISIBLE);
+                    viewHolderInstall.tvGo.setVisibility(View.GONE);
                 }
 
                 break;
@@ -157,10 +191,14 @@ public class RemoveAdapter extends BaseAdapter {
 
     private class ViewHolderRomeve {
         private TextView textViewOnlineR, textViewOfflineR, textViewOnlineRC, textViewOfflineRC;
+        private ImageView ivGo;
+        private TextView tvGo;
     }
 
     private class ViewHolderInstall {
         private FrameLayout frameLayout;
         private TextView textViewFrameNo, textViewOnlineP, textViewOfflineP, textViewOnlinePC, textViewOfflinePC;
+        private ImageView ivGo;
+        private TextView tvGo;
     }
 }

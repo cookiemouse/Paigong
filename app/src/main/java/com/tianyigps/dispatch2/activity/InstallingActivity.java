@@ -284,25 +284,30 @@ public class InstallingActivity extends BaseActivity {
                     case TYPE_REMOVE: {
                         mAdapterRemoveDataList.add(new AdapterRemoveData("拆除"));
 
-                        for (StartOrderInfoBean.ObjBean.CarListBean carListBean : objBean.getCarList()) {
-                            int wireNum = 0, wirelessNum = 0, wireComplete = 0, wirelessComplete = 0;
-                            if (carListBean.getRemoveFlag() == 1) {
-                                for (StartOrderInfoBean.ObjBean.CarListBean.CarTerminalListBean carTerminalListBean
-                                        : carListBean.getCarTerminalList()) {
-                                    wireNum = carListBean.getWiredNum();
-                                    wirelessNum = carListBean.getWirelessNum();
-                                    //  统计已完成的设备数
-                                    //  status == 1，表示该设备已被拆除
-                                    if (carTerminalListBean.getRemoveStatus() == 1) {
+                        int wireNum = 0, wirelessNum = 0, wireComplete = 0, wirelessComplete = 0, carId = 0;
+                        if (objBean.getCarList().size() > 0) {
+                            for (StartOrderInfoBean.ObjBean.CarListBean carListBean : objBean.getCarList()) {
+                                if (carListBean.getRemoveFlag() == 1) {
+                                    for (StartOrderInfoBean.ObjBean.CarListBean.CarTerminalListBean carTerminalListBean
+                                            : carListBean.getCarTerminalList()) {
+                                        int status = carTerminalListBean.getRemoveStatus();
+                                        //  统计已完成的设备数和需处理的数量
+                                        //  status == 1，表示该设备已被拆除；status == 2，表示已拆除已安装；status == 0，表示未拆除
                                         switch (carTerminalListBean.getTerminalType()) {
                                             case 1: {
-                                                wireComplete++;
                                                 //  有线
+                                                wireNum++;
+                                                if (status == 1 || status == 2) {
+                                                    wireComplete++;
+                                                }
                                                 break;
                                             }
                                             case 2: {
-                                                wirelessComplete++;
                                                 //  无线
+                                                wirelessNum++;
+                                                if (status == 1 || status == 2) {
+                                                    wirelessComplete++;
+                                                }
                                                 break;
                                             }
                                             default: {
@@ -311,12 +316,12 @@ public class InstallingActivity extends BaseActivity {
                                         }
                                     }
                                 }
-                                mAdapterRemoveDataList.add(new AdapterRemoveData(carListBean.getId()
-                                        , wireNum
-                                        , wirelessNum
-                                        , wireComplete
-                                        , wirelessComplete));
                             }
+                            mAdapterRemoveDataList.add(new AdapterRemoveData(carId
+                                    , wireNum
+                                    , wirelessNum
+                                    , wireComplete
+                                    , wirelessComplete));
                         }
 
                         mAdapterRemoveDataList.add(new AdapterRemoveData("安装"));
@@ -513,12 +518,12 @@ public class InstallingActivity extends BaseActivity {
                         String installUrl = cursorTer.getString(7);
                         int wire = cursorTer.getInt(12);
 
-                        Log.i(TAG, "checkInstallListTer: idMainTer-->" + idMainTer);
-                        Log.i(TAG, "checkInstallListTer: tNoOld-->" + tNoNew);
-                        Log.i(TAG, "checkInstallListTer: position-->" + position);
-                        Log.i(TAG, "checkInstallListTer: positionUrl-->" + positionUrl);
-                        Log.i(TAG, "checkInstallListTer: installUrl-->" + installUrl);
-                        Log.i(TAG, "checkInstallListTer: wire-->" + wire);
+                        Log.i(TAG, "updateInstallComplete: idMainTer-->" + idMainTer);
+                        Log.i(TAG, "updateInstallComplete: tNoOld-->" + tNoNew);
+                        Log.i(TAG, "updateInstallComplete: position-->" + position);
+                        Log.i(TAG, "updateInstallComplete: positionUrl-->" + positionUrl);
+                        Log.i(TAG, "updateInstallComplete: installUrl-->" + installUrl);
+                        Log.i(TAG, "updateInstallComplete: wire-->" + wire);
 
                         terComplete = ((null != tNoNew && !"".equals(tNoNew))
                                 && (null != position && !"".equals(position))
@@ -536,11 +541,67 @@ public class InstallingActivity extends BaseActivity {
 
                     cursorTer.close();
                 } else {
-                    Log.i(TAG, "checkInstallList: cursorTer is null");
+                    Log.i(TAG, "updateInstallComplete: cursorTer is null");
                 }
 
                 data.setCompleteLine(wireComplete);
                 data.setCompleteOffline(wirelessComplete);
+            }
+        }
+    }
+
+    //  更新拆改列表完成数量
+    private void updateRemoveComplete() {
+        if (mAdapterRemoveDataList.size() > 0) {
+            for (AdapterRemoveData data : mAdapterRemoveDataList) {
+
+                if (data.getType() != 2) {
+                    continue;
+                }
+
+                boolean terComplete;
+                int carId = data.getCarId();
+
+                int wireComplete = 0, wirelessComplete = 0;
+
+                Cursor cursorTer = mDatabaseManager.getTerByCarId(carId);
+                if (null != cursorTer && cursorTer.moveToFirst()) {
+                    do {
+                        int idMainTer = cursorTer.getInt(0);
+                        String tNoNew = cursorTer.getString(2);
+                        String position = cursorTer.getString(3);
+                        String positionUrl = cursorTer.getString(6);
+                        String installUrl = cursorTer.getString(7);
+                        int wire = cursorTer.getInt(12);
+
+                        Log.i(TAG, "updateRemoveComplete: idMainTer-->" + idMainTer);
+                        Log.i(TAG, "updateRemoveComplete: tNoOld-->" + tNoNew);
+                        Log.i(TAG, "updateRemoveComplete: position-->" + position);
+                        Log.i(TAG, "updateRemoveComplete: positionUrl-->" + positionUrl);
+                        Log.i(TAG, "updateRemoveComplete: installUrl-->" + installUrl);
+                        Log.i(TAG, "updateRemoveComplete: wire-->" + wire);
+
+                        terComplete = ((null != tNoNew && !"".equals(tNoNew))
+                                && (null != position && !"".equals(position))
+                                && (null != positionUrl)
+                                && (null != installUrl));
+
+                        if (terComplete) {
+                            if (0 == wire) {
+                                wirelessComplete++;
+                            } else {
+                                wireComplete++;
+                            }
+                        }
+                    } while (cursorTer.moveToNext());
+
+                    cursorTer.close();
+                } else {
+                    Log.i(TAG, "updateRemoveComplete: cursorTer is null");
+                }
+
+                data.setOnlineComplete(wireComplete);
+                data.setOfflineComplete(wirelessComplete);
             }
         }
     }
@@ -706,6 +767,7 @@ public class InstallingActivity extends BaseActivity {
                 }
                 case Data.MSG_2: {
                     //  remove
+                    updateRemoveComplete();
                     mRemoveAdapter.notifyDataSetChanged();
                     break;
                 }

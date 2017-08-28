@@ -124,7 +124,7 @@ public class OperateRemoveActivity extends BaseActivity {
                 StartOrderInfoBean.ObjBean objBean = startOrderInfoBean.getObj();
 
                 for (StartOrderInfoBean.ObjBean.CarListBean carListBean : objBean.getCarList()) {
-                    if (carListBean.getId() != mCarId) {
+                    if (carListBean.getRemoveFlag() == 0) {
                         continue;
                     }
                     String frameNo = carListBean.getCarVin();
@@ -155,7 +155,7 @@ public class OperateRemoveActivity extends BaseActivity {
                             }
                         }
                         String location = carTerminalListBean.getInstallLocation();
-                        if (null == location){
+                        if (null == location) {
                             location = "";
                         }
 
