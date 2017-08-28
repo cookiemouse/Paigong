@@ -223,7 +223,7 @@ public class PendDetailsActivity extends Activity {
         mTextViewModify.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showModifyDateDialog();
+                showModifyReason();
             }
         });
 
@@ -417,6 +417,7 @@ public class PendDetailsActivity extends Activity {
             @Override
             public void onClick(View view) {
                 bottomDialog.dismiss();
+                showModifyReason();
             }
         });
 
@@ -438,8 +439,8 @@ public class PendDetailsActivity extends Activity {
                 calendar.set(year, month, day, mHour, mMin);
                 long modify = calendar.getTimeInMillis();
 
-                if (current > modify){
-                    new ToastU(PendDetailsActivity.this).showToast("无法改约到历史时间");
+                if (current > modify) {
+                    showMessageToast("无法改约到历史时间");
                     return;
                 }
                 bottomDialog.dismiss();
@@ -468,7 +469,7 @@ public class PendDetailsActivity extends Activity {
         mpMin.setMinValue(0);
         mpMin.setMaxValue(mMins.length - 1);
         int value = (min + 5) / 10;
-        if (value > 5){
+        if (value > 5) {
             value = 5;
         }
         mpMin.setValue(value);
@@ -488,8 +489,18 @@ public class PendDetailsActivity extends Activity {
         final EditText etReason = viewReason.findViewById(R.id.et_dialog_modify_reason);
         final TextView tvInfo = viewReason.findViewById(R.id.tv_dialog_modify_reason_info);
 
-        String title = mDays[mDay] + " " + mHour + ":" + mMins[mMin];
-        tvTitle.setText(title);
+        etReason.setText(mReason);
+        if (null != mReason) {
+            int length = mReason.length();
+            if (length > 0) {
+                etReason.setSelection(length);
+            }
+        }
+
+        if (0 != mDay || 0 != mHour || 0 != mMin) {
+            String title = mDays[mDay] + " " + mHour + ":" + mMins[mMin];
+            tvTitle.setText(title);
+        }
 
         tvCancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -498,9 +509,23 @@ public class PendDetailsActivity extends Activity {
             }
         });
 
+        tvTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mReason = etReason.getText().toString();
+                bottomDialog.dismiss();
+                showModifyDateDialog();
+            }
+        });
+
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (0 == mDay && 0 == mHour && 0 == mMin) {
+                    showMessageToast("请填写完整改约信息");
+                    tvInfo.setText(null);
+                    return;
+                }
                 mReason = etReason.getText().toString();
                 if ("".equals(mReason)) {
                     tvInfo.setText("原因不能为空");
