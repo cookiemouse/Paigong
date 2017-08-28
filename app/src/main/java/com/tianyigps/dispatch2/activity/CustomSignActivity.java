@@ -378,10 +378,10 @@ public class CustomSignActivity extends BaseActivity {
         builder.setPositiveButton(R.string.ensure, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                // TODO: 2017/8/22 跳转到已处理Fragment
+                // 2017/8/22 跳转到已处理Fragment
                 Intent intent = new Intent(CustomSignActivity.this, WorkerFragmentContentActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra(Data.DATA_INTENT_HANDED_FRAGMENT, true);
+                intent.putExtra(Data.DATA_INTENT_WORKER_FRAGMENT, Data.DATA_INTENT_WORKER_FRAGMENT_HANDED);
                 startActivity(intent);
             }
         });
@@ -405,11 +405,17 @@ public class CustomSignActivity extends BaseActivity {
         btnCall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // 2017/8/16 拨打后台电话，即总部电话
-                Intent intent = new Intent();
-                intent.setAction(Intent.ACTION_DIAL);
-                intent.setData(Uri.parse("tel:" + "18017325972"));
+                //  跳转到进行中
+                Intent intent = new Intent(CustomSignActivity.this, WorkerFragmentContentActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra(Data.DATA_INTENT_WORKER_FRAGMENT, Data.DATA_INTENT_WORKER_FRAGMENT_HANDING);
                 startActivity(intent);
+
+                // 2017/8/16 拨打后台电话，即总部电话
+                Intent intentCall = new Intent();
+                intentCall.setAction(Intent.ACTION_DIAL);
+                intentCall.setData(Uri.parse("tel:" + "18017325972"));
+                startActivity(intentCall);
             }
         });
 

@@ -60,8 +60,10 @@ public final class Data {
 
     public final static String DATA_INTENT_REASON = "paigong_intent_reason";
 
-    //  WorkerFragmentContentActivity显示HandedFragment
-    public final static String DATA_INTENT_HANDED_FRAGMENT = "paigong_intent_handed_fragment";
+    //  WorkerFragmentContentActivity显示Fragment
+    public final static String DATA_INTENT_WORKER_FRAGMENT = "paigong_intent_worker_fragment";
+    public final static int DATA_INTENT_WORKER_FRAGMENT_HANDING = 1;
+    public final static int DATA_INTENT_WORKER_FRAGMENT_HANDED = 2;
 
     //  数据请求所需数据
     private final static String DATA_JSON = "paigong_json_";

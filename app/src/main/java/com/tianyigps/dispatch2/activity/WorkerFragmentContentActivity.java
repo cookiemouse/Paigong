@@ -172,10 +172,26 @@ public class WorkerFragmentContentActivity extends AppCompatActivity implements 
         mMineFragment = new MineFragment();
 
         Intent intent = getIntent();
-        boolean showHanded  = intent.getBooleanExtra(Data.DATA_INTENT_HANDED_FRAGMENT, false);
-        if (showHanded){
-            showHandFragment();
-            return;
+        int showFragment  = intent.getIntExtra(Data.DATA_INTENT_WORKER_FRAGMENT, 0);
+        switch (showFragment){
+            case 0:{
+                break;
+            }
+            case Data.DATA_INTENT_WORKER_FRAGMENT_HANDING:{
+                showHandingFragment();
+                return;
+            }
+            case Data.DATA_INTENT_WORKER_FRAGMENT_HANDED:{
+                showHandFragment();
+                return;
+            }
+            case 3:{
+                //  mine fragment
+                return;
+            }
+            default:{
+                Log.i(TAG, "init: default-->" + showFragment);
+            }
         }
 
         //  底部按钮标记第一个

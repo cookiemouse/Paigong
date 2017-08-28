@@ -138,7 +138,7 @@ public class MineFragment extends Fragment {
                     }
                     case 2: {
                         //  测试
-//                        Intent intent = new Intent(getActivity(), EditRemarksActivity.class);
+//                        Intent intent = new Intent(getActivity(), CustomSignActivity.class);
 //                        startActivity(intent);
                     }
                     default: {
