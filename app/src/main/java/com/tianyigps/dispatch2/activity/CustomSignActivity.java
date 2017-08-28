@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
@@ -30,6 +31,7 @@ import com.tianyigps.dispatch2.data.Data;
 import com.tianyigps.dispatch2.dialog.LoadingDialogFragment;
 import com.tianyigps.dispatch2.interfaces.OnSaveOrderInfoListener;
 import com.tianyigps.dispatch2.manager.DatabaseManager;
+import com.tianyigps.dispatch2.manager.FileManager;
 import com.tianyigps.dispatch2.manager.LocateManager;
 import com.tianyigps.dispatch2.manager.NetworkManager;
 import com.tianyigps.dispatch2.manager.SharedpreferenceManager;
@@ -55,6 +57,7 @@ public class CustomSignActivity extends BaseActivity {
     private NetworkManager mNetworkManager;
     private DatabaseManager mDatabaseManager;
     private LocateManager mLocateManager;
+    private FileManager mFileManager;
     private MyHandler myHandler;
     private int eid;
     private String token;
@@ -80,6 +83,15 @@ public class CustomSignActivity extends BaseActivity {
         init();
 
         setEventListener();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mFileManager.isExists()) {
+            mFileManager.delete();
+        }
+        mFileManager.saveBitmapPng(mSignView.getPic());
+        super.onBackPressed();
     }
 
     @Override
@@ -110,9 +122,21 @@ public class CustomSignActivity extends BaseActivity {
         installType = intent.getIntExtra(Data.DATA_INTENT_INSTALL_TYPE, TYPE_INSTALL);
         mOrderNo = intent.getStringExtra(Data.DATA_INTENT_ORDER_NO);
         mPartReason = intent.getStringExtra(Data.DATA_INTENT_REASON);
+
+        mFileManager = new FileManager(mOrderNo);
+        if (mFileManager.isExists()) {
+            mSignView.setBitmap(BitmapFactory.decodeFile(mFileManager.getPath()));
+        }
     }
 
     private void setEventListener() {
+        this.setOnTitleBackClickListener(new OnTitleBackClickListener() {
+            @Override
+            public void onClick() {
+                CustomSignActivity.this.onBackPressed();
+            }
+        });
+
         mLinearLayoutClear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -296,7 +320,6 @@ public class CustomSignActivity extends BaseActivity {
         return json;
     }
 
-
     private String getRepairJson() {
 
         List<TerminalInfoOut> terminalInfoOurList = new ArrayList<>();
@@ -441,6 +464,7 @@ public class CustomSignActivity extends BaseActivity {
                     break;
                 }
                 case Data.MSG_1: {
+                    mFileManager.delete();
                     showCompleteDialog(mStringMessage);
                     break;
                 }
