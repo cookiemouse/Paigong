@@ -40,7 +40,6 @@ import com.tianyigps.dispatch2.interfaces.OnSignedWorkerListener;
 import com.tianyigps.dispatch2.manager.LocateManager;
 import com.tianyigps.dispatch2.manager.NetworkManager;
 import com.tianyigps.dispatch2.manager.SharedpreferenceManager;
-import com.tianyigps.dispatch2.utils.TimeFormatU;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -353,7 +352,7 @@ public class OrderFragment extends Fragment {
                             , mStringCustName
                             , mStringContactPhone
                             , mStringContactName
-                            , new TimeFormatU().millisToDate2(mLongDoorTime)
+                            , mLongDoorTime
                             , mStringProvince + mStringCity + mStringDistrict + mStringDetail
                             , objBean.getOrderType()
                             , objBean.getWiredNum()

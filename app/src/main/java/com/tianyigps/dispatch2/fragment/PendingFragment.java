@@ -310,7 +310,7 @@ public class PendingFragment extends Fragment {
                                 , custName
                                 , objBean.getContactName()
                                 , objBean.getContactPhone()
-                                , new TimeFormatU().millisToDate2(time)
+                                , time
                                 , address
                                 , objBean.getOrderType()
                                 , wire
@@ -327,7 +327,7 @@ public class PendingFragment extends Fragment {
                                 , custName
                                 , objBean.getContactName()
                                 , objBean.getContactPhone()
-                                , new TimeFormatU().millisToDate2(time)
+                                , time
                                 , address
                                 , objBean.getOrderType()
                                 , wire

@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.tianyigps.dispatch2.R;
 import com.tianyigps.dispatch2.data.AdapterPendingData;
 import com.tianyigps.dispatch2.data.Data;
+import com.tianyigps.dispatch2.utils.TimeFormatU;
 
 import java.util.List;
 
@@ -82,6 +83,7 @@ public class PendingAdapter extends BaseAdapter {
             viewHolder.tvStatus = view.findViewById(R.id.tv_item_pending_order_status);
             viewHolder.tvModifyDate = view.findViewById(R.id.tv_item_pending_modify_date);
             viewHolder.tvModifyReason = view.findViewById(R.id.tv_item_pending_modify_reason);
+            viewHolder.tvRed = view.findViewById(R.id.tv_item_pending_red);
 
             view.setTag(viewHolder);
         } else {
@@ -90,7 +92,7 @@ public class PendingAdapter extends BaseAdapter {
 
         viewHolder.tvOrderNo.setText(data.getOrder());
         viewHolder.tvName.setText(data.getName());
-        viewHolder.tvTime.setText(data.getTime());
+        viewHolder.tvTime.setText(new TimeFormatU().millisToDate2(data.getTime()));
         viewHolder.tvAddress.setText(data.getAddress());
         viewHolder.tvWire.setText("" + data.getLineNumber());
         viewHolder.tvWireless.setText("" + data.getLinelessNumber());
@@ -200,6 +202,7 @@ public class PendingAdapter extends BaseAdapter {
         private TextView tvOrderNo, tvName, tvTime, tvAddress, tvOrderType, tvWire, tvWireless, tvWorkerName, tvStatus;
         private TextView tvWireRemove, tvWirelessRemove;
         private TextView tvModifyDate, tvModifyReason;
+        private TextView tvRed;
         private LinearLayout llRemove, llContact, llPend, llModify;
     }
 

@@ -6,11 +6,11 @@ package com.tianyigps.dispatch2.data;
 
 public class AdapterPendingData {
 
-    private String order, name, contactName, phoneNumber, time, address;
+    private String order, name, contactName, phoneNumber, address;
     int orderType;
     int lineNumber, linelessNumber;
     int wireRemove, wirelessRemove;
-
+    long time;
     int orderId;
 
     private int orderStatus;
@@ -18,7 +18,7 @@ public class AdapterPendingData {
     private String modifyTime, modifyReason;
 
     public AdapterPendingData(String order, String name, String contactName, String phoneNumber
-            , String time, String address, int orderType
+            , long time, String address, int orderType
             , int lineNumber, int linelessNumber, int orderId, int orderStatus, int node
             , String modifyTime, String modifyReason) {
         this.order = order;
@@ -37,7 +37,7 @@ public class AdapterPendingData {
         this.modifyReason = modifyReason;
     }
 
-    public AdapterPendingData(String order, String name, String contactName, String phoneNumber, String time
+    public AdapterPendingData(String order, String name, String contactName, String phoneNumber, long time
             , String address, int orderType, int lineNumber, int linelessNumber, int wireRemove, int wirelessRemove
             , int orderId, int orderStatus, int note, String modifyTime, String modifyReason) {
         this.order = order;
@@ -90,11 +90,11 @@ public class AdapterPendingData {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getTime() {
+    public long getTime() {
         return time;
     }
 
-    public void setTime(String time) {
+    public void setTime(long time) {
         this.time = time;
     }
 

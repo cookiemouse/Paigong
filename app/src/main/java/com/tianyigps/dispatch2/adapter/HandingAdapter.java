@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.tianyigps.dispatch2.R;
 import com.tianyigps.dispatch2.data.AdapterHandingData;
+import com.tianyigps.dispatch2.utils.TimeFormatU;
 
 import java.util.List;
 
@@ -83,7 +84,7 @@ public class HandingAdapter extends BaseAdapter {
         }
 
         viewHolder.textViewName.setText(data.getName());
-        viewHolder.textViewTime.setText(data.getTime());
+        viewHolder.textViewTime.setText(new TimeFormatU().millisToDate2(data.getTime()));
         viewHolder.textViewAddress.setText(data.getAddress());
         viewHolder.textViewId.setText(data.getId());
         viewHolder.textViewPhoneName.setText(data.getCallName());
@@ -147,6 +148,10 @@ public class HandingAdapter extends BaseAdapter {
         viewHolder.tvRemoveWireless.setText("" + data.getRemoveWirelessNum());
 
         if (data.isModify()) {
+            viewHolder.textViewModify.setText("（改）");
+            viewHolder.textViewModify.setVisibility(View.VISIBLE);
+        } else if (data.getSubmitTime() >= data.getTime()) {
+            viewHolder.textViewModify.setText("（迟到）");
             viewHolder.textViewModify.setVisibility(View.VISIBLE);
         } else {
             viewHolder.textViewModify.setVisibility(View.GONE);

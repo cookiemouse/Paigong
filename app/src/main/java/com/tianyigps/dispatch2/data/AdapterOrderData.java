@@ -5,12 +5,13 @@ package com.tianyigps.dispatch2.data;
  */
 
 public class AdapterOrderData {
-    private String id, name, phoneNumber, phoneName, time, address;
+    private String id, name, phoneNumber, phoneName, address;
+    private long time;
     private int orderType;
     private int lineNumber, linelessNumber;
     private int wireRemove, wirelessRemove;
 
-    public AdapterOrderData(String name, String time, String address
+    public AdapterOrderData(String name, long time, String address
             , String id, String phoneName, String phoneNumber, int orderType
             , int lineNumber, int linelessNumber) {
         this.id = id;
@@ -24,7 +25,7 @@ public class AdapterOrderData {
         this.linelessNumber = linelessNumber;
     }
 
-    public AdapterOrderData(String id, String name, String phoneNumber, String phoneName, String time, String address, int orderType, int lineNumber, int linelessNumber, int wireRemove, int wirelessRemove) {
+    public AdapterOrderData(String id, String name, String phoneNumber, String phoneName, long time, String address, int orderType, int lineNumber, int linelessNumber, int wireRemove, int wirelessRemove) {
         this.id = id;
         this.name = name;
         this.phoneNumber = phoneNumber;
@@ -70,11 +71,11 @@ public class AdapterOrderData {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getTime() {
+    public long getTime() {
         return time;
     }
 
-    public void setTime(String time) {
+    public void setTime(long time) {
         this.time = time;
     }
 

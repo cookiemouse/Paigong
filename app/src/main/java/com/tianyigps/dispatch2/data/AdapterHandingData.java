@@ -5,15 +5,18 @@ package com.tianyigps.dispatch2.data;
  */
 
 public class AdapterHandingData {
-    private String name, time, address, id, callName, callNumber;
+    private String name, address, id, callName, callNumber;
+    private long submitTime;
+    private long time;
     private int online, lineless, orderType, checkStatus, orderStatus;
     private int removeWireNum, removeWirelessNum;
     private boolean modify;
 
-    public AdapterHandingData(String name, String time, String address
+    public AdapterHandingData(String name, long submitTime, long time, String address
             , String id, String callName, String callNumber
             , int online, int lineless) {
         this.name = name;
+        this.submitTime = submitTime;
         this.time = time;
         this.address = address;
         this.id = id;
@@ -24,10 +27,11 @@ public class AdapterHandingData {
         this.modify = false;
     }
 
-    public AdapterHandingData(String name, String time, String address
+    public AdapterHandingData(String name, long submitTime, long time, String address
             , String id, String callName, String callNumber
             , int online, int lineless, boolean modify) {
         this.name = name;
+        this.submitTime = submitTime;
         this.time = time;
         this.address = address;
         this.id = id;
@@ -38,9 +42,10 @@ public class AdapterHandingData {
         this.modify = modify;
     }
 
-    public AdapterHandingData(String name, String time, String address, String id, String callName, String callNumber, int checkStatus
+    public AdapterHandingData(String name, long submitTime, long time, String address, String id, String callName, String callNumber, int checkStatus
             , int orderType, int online, int lineless, boolean modify) {
         this.name = name;
+        this.submitTime = submitTime;
         this.time = time;
         this.address = address;
         this.id = id;
@@ -53,9 +58,10 @@ public class AdapterHandingData {
         this.modify = modify;
     }
 
-    public AdapterHandingData(String name, String time, String address, String id, String callName, String callNumber
+    public AdapterHandingData(String name, long submitTime, long time, String address, String id, String callName, String callNumber
             , int orderType, int checkStatus, int orderStatus, int online, int lineless, int removeWireNum, int removeWirelessNum, boolean modify) {
         this.name = name;
+        this.submitTime = submitTime;
         this.time = time;
         this.address = address;
         this.id = id;
@@ -79,11 +85,11 @@ public class AdapterHandingData {
         this.name = name;
     }
 
-    public String getTime() {
+    public long getTime() {
         return time;
     }
 
-    public void setTime(String time) {
+    public void setTime(long time) {
         this.time = time;
     }
 
@@ -181,5 +187,13 @@ public class AdapterHandingData {
 
     public void setModify(boolean modify) {
         this.modify = modify;
+    }
+
+    public long getSubmitTime() {
+        return submitTime;
+    }
+
+    public void setSubmitTime(long submitTime) {
+        this.submitTime = submitTime;
     }
 }

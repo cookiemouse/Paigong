@@ -34,7 +34,6 @@ import com.tianyigps.dispatch2.interfaces.OnGetWorkerOrderHandingListener;
 import com.tianyigps.dispatch2.interfaces.OnStartHandingListener;
 import com.tianyigps.dispatch2.manager.NetworkManager;
 import com.tianyigps.dispatch2.manager.SharedpreferenceManager;
-import com.tianyigps.dispatch2.utils.TimeFormatU;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -264,8 +263,14 @@ public class HandingFragment extends Fragment implements View.OnClickListener {
                         }
                     }
 
+                    long submitTime = objBean.getSubmitTime();
+                    if (0 == submitTime){
+                        submitTime = System.currentTimeMillis();
+                    }
+
                     mAdapterHandingDataList.add(new AdapterHandingData(objBean.getCustName()
-                            , new TimeFormatU().millisToDate2(objBean.getDoorTime())
+                            , submitTime
+                            , objBean.getDoorTime()
                             , objBean.getProvince() + objBean.getCity() + objBean.getDistrict() + objBean.getDetail()
                             , objBean.getOrderNo()
                             , objBean.getContactName()

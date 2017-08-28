@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.tianyigps.dispatch2.R;
 import com.tianyigps.dispatch2.data.AdapterOrderData;
+import com.tianyigps.dispatch2.utils.TimeFormatU;
 
 import java.util.List;
 
@@ -25,6 +26,8 @@ public class OrderAdapter extends BaseAdapter {
 
     private Context context;
     private List<AdapterOrderData> mAdapterOrderDataList;
+
+    private long currentTime = System.currentTimeMillis();
 
     private OnItemListener mOnItemListener;
 
@@ -76,6 +79,7 @@ public class OrderAdapter extends BaseAdapter {
             viewHolder.llCall = contentView.findViewById(R.id.ll_item_order_call);
             viewHolder.tvWireRemove = contentView.findViewById(R.id.tv_item_order_remove_content_wire);
             viewHolder.tvWirelessRemove = contentView.findViewById(R.id.tv_item_order_remove_content_wireless);
+            viewHolder.tvRed = contentView.findViewById(R.id.tv_item_order_red);
 
             contentView.setTag(viewHolder);
         } else {
@@ -83,7 +87,7 @@ public class OrderAdapter extends BaseAdapter {
         }
 
         viewHolder.textViewName.setText(data.getName());
-        viewHolder.textViewTime.setText(data.getTime());
+        viewHolder.textViewTime.setText(new TimeFormatU().millisToDate2(data.getTime()));
         viewHolder.textViewAddress.setText(data.getAddress());
         viewHolder.textViewId.setText(data.getId());
         viewHolder.textViewPhoneName.setText(data.getPhoneName());
@@ -92,6 +96,13 @@ public class OrderAdapter extends BaseAdapter {
         viewHolder.textViewLineless.setText("" + data.getLinelessNumber());
         viewHolder.tvWireRemove.setText("" + data.getWireRemove());
         viewHolder.tvWirelessRemove.setText("" + data.getWirelessRemove());
+
+        if (currentTime >= data.getTime()) {
+            viewHolder.tvRed.setText("（迟到）");
+            viewHolder.tvRed.setVisibility(View.VISIBLE);
+        } else {
+            viewHolder.tvRed.setVisibility(View.GONE);
+        }
 
         String orderType;
         switch (data.getOrderType()) {
@@ -181,6 +192,7 @@ public class OrderAdapter extends BaseAdapter {
 
         private LinearLayout llRemove, llCall;
         private TextView tvWireRemove, tvWirelessRemove;
+        private TextView tvRed;
     }
 
     public interface OnItemListener {
