@@ -612,7 +612,7 @@ public class OperateInstallActivity extends BaseActivity {
                 mDeleteType = Data.DATA_UPLOAD_TYPE_3;
                 AdapterOperateInstallListData data = mAdapterOperateInstallListDataList.get(itemPosition);
                 int tid = data.gettId();
-                String url = data.getInstallPicUrl();
+                String url = data.getPositionPicUrl();
                 showDeletePicDialog(tid, mDeleteType, url);
 //                mNetworkManager.deletePic(eid, token, orderNo, carId, tid, mDeleteType, url, userName);
             }
@@ -875,6 +875,7 @@ public class OperateInstallActivity extends BaseActivity {
                         mDatabaseManager.addTerPositionPic(idMainTerminal, itemPath, imgUrl);
                         mDatabaseManager.addTerId(idMainTerminal, id, carId);
                         AdapterOperateInstallListData data = mAdapterOperateInstallListDataList.get(itemPosition);
+                        data.settId(id);
                         data.setPositionPic(itemPath);
                         data.setPositionPicUrl(imgUrl);
                         myHandler.sendEmptyMessage(Data.MSG_6);
@@ -889,6 +890,7 @@ public class OperateInstallActivity extends BaseActivity {
                         mDatabaseManager.addTerInstallPic(idMainTerminal, itemPath, imgUrl);
                         mDatabaseManager.addTerId(idMainTerminal, id, carId);
                         AdapterOperateInstallListData data = mAdapterOperateInstallListDataList.get(itemPosition);
+                        data.settId(id);
                         data.setInstallPic(itemPath);
                         data.setInstallPicUrl(imgUrl);
                         myHandler.sendEmptyMessage(Data.MSG_7);
