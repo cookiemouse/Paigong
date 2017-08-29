@@ -391,10 +391,11 @@ public class PendDetailsActivity extends Activity {
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DATE);
         day = day + mDay;
+        mMin *= 10;
         calendar.set(year, month, day, mHour, mMin);
         long modify = calendar.getTimeInMillis();
 
-        String newTime = new TimeFormatU().millisToDate2(modify);
+        String newTime = new TimeFormatU().millisToDate(modify);
 
         showLoading();
         mNetworkManager.modifyDate(jobNo, userName, token, orderNo, orderStatus, newTime, mReason);
