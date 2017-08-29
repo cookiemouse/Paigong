@@ -21,6 +21,7 @@ import com.tianyigps.dispatch2.activity.LoginActivity;
 import com.tianyigps.dispatch2.activity.ManagerFragmentContentActivity;
 import com.tianyigps.dispatch2.activity.ModifyPasswordActivity;
 import com.tianyigps.dispatch2.activity.StatisticsActivity;
+import com.tianyigps.dispatch2.activity.TestActivity;
 import com.tianyigps.dispatch2.activity.WorkerFragmentContentActivity;
 import com.tianyigps.dispatch2.adapter.MineAdapter;
 import com.tianyigps.dispatch2.data.AdapterMineData;
@@ -78,7 +79,7 @@ public class MineFragment extends Fragment {
         mAdapterMineDataList = new ArrayList<>();
         mAdapterMineDataList.add(new AdapterMineData(R.drawable.ic_statistics, "质量统计"));
         mAdapterMineDataList.add(new AdapterMineData(R.drawable.ic_modify_password, "修改密码"));
-//        mAdapterMineDataList.add(new AdapterMineData(R.drawable.ic_modify_password, "测试"));
+        mAdapterMineDataList.add(new AdapterMineData(R.drawable.ic_modify_password, "测试"));
 
         mMineAdapter = new MineAdapter(getActivity(), mAdapterMineDataList);
 
@@ -138,8 +139,8 @@ public class MineFragment extends Fragment {
                     }
                     case 2: {
                         //  测试
-//                        Intent intent = new Intent(getActivity(), TestActivity.class);
-//                        startActivity(intent);
+                        Intent intent = new Intent(getActivity(), TestActivity.class);
+                        startActivity(intent);
                         break;
                     }
                     default: {

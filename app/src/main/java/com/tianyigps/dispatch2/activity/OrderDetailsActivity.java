@@ -24,11 +24,13 @@ import com.tianyigps.cycleprogressview.CycleProgressView;
 import com.tianyigps.dispatch2.R;
 import com.tianyigps.dispatch2.bean.OrderDetailsBean;
 import com.tianyigps.dispatch2.bean.SignWorkerBean;
+import com.tianyigps.dispatch2.bean.StartHandingBean;
 import com.tianyigps.dispatch2.data.Data;
 import com.tianyigps.dispatch2.dialog.LoadingDialogFragment;
 import com.tianyigps.dispatch2.dialog.ReturnOrderDialogFragment;
 import com.tianyigps.dispatch2.interfaces.OnGetWorkerOrderInfoHandingListener;
 import com.tianyigps.dispatch2.interfaces.OnSignedWorkerListener;
+import com.tianyigps.dispatch2.interfaces.OnStartHandingListener;
 import com.tianyigps.dispatch2.manager.LocateManager;
 import com.tianyigps.dispatch2.manager.NetworkManager;
 import com.tianyigps.dispatch2.manager.SharedpreferenceManager;
@@ -38,7 +40,6 @@ import static com.tianyigps.dispatch2.data.Data.DATA_INTENT_ORDER_DETAILS_RESULT
 import static com.tianyigps.dispatch2.data.Data.DATA_INTENT_ORDER_NO;
 import static com.tianyigps.dispatch2.data.Data.MSG_1;
 import static com.tianyigps.dispatch2.data.Data.MSG_2;
-import static com.tianyigps.dispatch2.data.Data.MSG_3;
 import static com.tianyigps.dispatch2.data.Data.MSG_ERO;
 
 public class OrderDetailsActivity extends Activity {
@@ -197,10 +198,8 @@ public class OrderDetailsActivity extends Activity {
             public void onClick(View view) {
                 if (isChecked) {
                     // 2017/8/2 已签到，开始
-                    Intent intent = new Intent(OrderDetailsActivity.this, InstallingActivity.class);
-                    intent.putExtra(Data.DATA_INTENT_ORDER_NO, orderNo);
-                    intent.putExtra(Data.DATA_INTENT_INSTALL_TYPE, (mIntOrderType - 1));
-                    startActivity(intent);
+                    showLoading();
+                    mNetworkManager.startHanding(eid, token, orderNo, mStringContactPhone, userName);
                     return;
                 }
                 // 2017/8/2 签到
@@ -335,6 +334,27 @@ public class OrderDetailsActivity extends Activity {
             }
         });
 
+        mNetworkManager.setStartHandingListener(new OnStartHandingListener() {
+            @Override
+            public void onFailure() {
+                mStringMessage = Data.DEFAULT_MESSAGE;
+                myHandler.sendEmptyMessage(Data.MSG_ERO);
+            }
+
+            @Override
+            public void onSuccess(String result) {
+                Log.i(TAG, "onSuccess: result-->" + result);
+                Gson gson = new Gson();
+                StartHandingBean startHandingBean = gson.fromJson(result, StartHandingBean.class);
+                if (!startHandingBean.isSuccess()) {
+                    mStringMessage = startHandingBean.getMsg();
+                    myHandler.sendEmptyMessage(Data.MSG_ERO);
+                    return;
+                }
+                myHandler.sendEmptyMessage(Data.MSG_5);
+            }
+        });
+
         mNetworkManager.setSignedWorkerListener(new OnSignedWorkerListener() {
             @Override
             public void onFailure() {
@@ -458,11 +478,11 @@ public class OrderDetailsActivity extends Activity {
 
             super.handleMessage(msg);
             switch (msg.what) {
-                case MSG_ERO: {
+                case Data.MSG_ERO: {
                     showMessageDialog(mStringMessage);
                     break;
                 }
-                case MSG_1: {
+                case Data.MSG_1: {
                     mTextViewOrderName.setText(mStringCustName);
                     mTextViewOrderNum.setText(mStringOrderNum);
                     mTextViewCallName.setText(mStringContactName);
@@ -495,11 +515,11 @@ public class OrderDetailsActivity extends Activity {
                     updateTime();
                     break;
                 }
-                case MSG_2: {
+                case Data.MSG_2: {
                     updateTime();
                     break;
                 }
-                case MSG_3: {
+                case Data.MSG_3: {
                     //  获取到当前位置，并签到
                     showLoading();
                     mNetworkManager.signedWorker(eid, token, eName, orderNo
@@ -512,6 +532,14 @@ public class OrderDetailsActivity extends Activity {
                     //  签到成功，应该finish，然后显示HandingFragment
                     getIntent().putExtra(DATA_INTENT_ORDER_DETAILS_RESULT_SIGNED, true);
                     finish();
+                    break;
+                }
+                case Data.MSG_5: {
+                    //  开始
+                    Intent intent = new Intent(OrderDetailsActivity.this, InstallingActivity.class);
+                    intent.putExtra(Data.DATA_INTENT_ORDER_NO, orderNo);
+                    intent.putExtra(Data.DATA_INTENT_INSTALL_TYPE, (mIntOrderType - 1));
+                    startActivity(intent);
                     break;
                 }
                 default: {
