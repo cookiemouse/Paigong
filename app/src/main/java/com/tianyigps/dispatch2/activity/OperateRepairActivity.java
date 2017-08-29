@@ -72,6 +72,7 @@ public class OperateRepairActivity extends BaseActivity {
     private RelativeLayout mRelativeLayoutReplace;
     private TextView mTextViewState;
     private ImageView mImageViewScanner, mImageViewReplaceLocate;
+    private TextView mTextViewNewDeviceTitle;
     private EditText mEditTextNewImei;
 
     private DatabaseManager mDatabaseManager;
@@ -274,6 +275,7 @@ public class OperateRepairActivity extends BaseActivity {
         mRelativeLayoutReplace = findViewById(R.id.rl_activity_operate_replace);
         mImageViewScanner = findViewById(R.id.iv_activity_operate_replace_scanner);
         mImageViewReplaceLocate = findViewById(R.id.iv_activity_operate_replace_locate);
+        mTextViewNewDeviceTitle = findViewById(R.id.tv_activity_operate_replace_device_no_title);
         mEditTextNewImei = findViewById(R.id.et_activity_operate_replace_device_no);
 
         mDatabaseManager = new DatabaseManager(OperateRepairActivity.this);
@@ -911,6 +913,13 @@ public class OperateRepairActivity extends BaseActivity {
                     mTextViewFrameNo.setText(frameNoG);
                     mTextViewTypeAndName.setText(typeAndNameG);
                     mTextViewPositionOld.setText(positionG);
+                    mTextViewtNo.setText(mImeiOld);
+
+                    if (mOrderTerType == 1) {
+                        mTextViewNewDeviceTitle.setText("新有线设备号");
+                    }else {
+                        mTextViewNewDeviceTitle.setText("新无线设备号");
+                    }
 //                    mTextViewInstallName.setText(installNameG);
 //                    mTextViewInstallPhone.setText(installPhoneG);
                     mTextViewDescribe.setText(mDescribe);
