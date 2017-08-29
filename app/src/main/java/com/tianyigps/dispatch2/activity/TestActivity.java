@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
@@ -18,6 +19,7 @@ public class TestActivity extends AppCompatActivity {
     private static final int REQUEST = 1;
 
     private ImageView mImageView;
+    private EditText mEditText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +51,7 @@ public class TestActivity extends AppCompatActivity {
 
     private void init() {
         mImageView = (ImageView) findViewById(R.id.iv_activity_test);
+        mEditText = (EditText) findViewById(R.id.et_activity_test);
     }
 
     private void setEventListener() {
@@ -58,6 +61,13 @@ public class TestActivity extends AppCompatActivity {
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT, null);
                 intent.setType("image/*");
                 startActivityForResult(intent, REQUEST);
+            }
+        });
+
+        mEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                Log.i(TAG, "onFocusChange: focus-->" + b);
             }
         });
     }

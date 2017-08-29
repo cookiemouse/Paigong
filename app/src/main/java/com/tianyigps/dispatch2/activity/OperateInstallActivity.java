@@ -139,7 +139,7 @@ public class OperateInstallActivity extends BaseActivity {
     private LoadingDialogFragment mLoadingDialogFragment;
 
     //  压缩图片temp
-    private int mTempType, mTempId;
+    private int mTempType, mTempId, mTempModel;
     private String mTempImgUrl;
 
     //  删除图片
@@ -702,22 +702,25 @@ public class OperateInstallActivity extends BaseActivity {
                             if (i >= mAdapterOperateInstallListDataList.size()) {
                                 continue;
                             }
-
                             StartOrderInfoBean.ObjBean.CarListBean.CarTerminalListBean carTerminalListBean = carTerminalListBeanList.get(i);
                             String tNo = carTerminalListBean.getTNo();
                             int tId = carTerminalListBean.getId();
                             String position = carTerminalListBean.getNewInstallLocation();
                             String positionPic = carTerminalListBean.getNewInstallLocationPic();
                             String installPic = carTerminalListBean.getNewWiringDiagramPic();
+                            int type = carTerminalListBean.getTerminalType();
 
-                            AdapterOperateInstallListData data = mAdapterOperateInstallListDataList.get(i);
-                            data.settId(tId);
-                            data.settNoNew(tNo);
-                            data.setPosition(position);
-                            data.setPositionPic(mBaseImg + positionPic);
-                            data.setPositionPicUrl(positionPic);
-                            data.setInstallPic(mBaseImg + installPic);
-                            data.setInstallPicUrl(installPic);
+                            for (AdapterOperateInstallListData data : mAdapterOperateInstallListDataList) {
+                                if ((data.isWire() && type == 1) || (!data.isWire() && type == 2)) {
+                                    data.settId(tId);
+                                    data.settNoNew(tNo);
+                                    data.setPosition(position);
+                                    data.setPositionPic(mBaseImg + positionPic);
+                                    data.setPositionPicUrl(positionPic);
+                                    data.setInstallPic(mBaseImg + installPic);
+                                    data.setInstallPicUrl(installPic);
+                                }
+                            }
 
                             String idTemp = ID_MAIN_TERMINAL + i;
                             mDatabaseManager.addTerId(idTemp, tId, carId);
@@ -983,12 +986,14 @@ public class OperateInstallActivity extends BaseActivity {
                 String tNoNew = cursor.getString(2);
                 String position = cursor.getString(3);
                 int model = cursor.getInt(8);
+                int tid = cursor.getInt(9);
 
                 Log.i(TAG, "loadTerminalData: id-->" + id);
                 Log.i(TAG, "loadTerminalData: tNoOld-->" + tNoOld);
                 Log.i(TAG, "loadTerminalData: tNoNew-->" + tNoNew);
                 Log.i(TAG, "loadTerminalData: position-->" + position);
                 Log.i(TAG, "loadTerminalData: model-->" + model);
+                Log.i(TAG, "loadTerminalData: tid-->" + tid);
                 Log.i(TAG, "........................................");
 
                 cursor.close();
@@ -1188,6 +1193,11 @@ public class OperateInstallActivity extends BaseActivity {
             imgUrl = "";
         }
         mTempType = type;
+        if (mAdapterOperateInstallListDataList.get(itemPosition).isWire()) {
+            mTempModel = 1;
+        } else {
+            mTempModel = 2;
+        }
         mTempImgUrl = imgUrl;
         mTempId = tId;
         showLoading();
@@ -1195,7 +1205,7 @@ public class OperateInstallActivity extends BaseActivity {
             @Override
             public void callback(boolean isSuccess, String outfile) {
                 //  上传
-                new UploadPicU(mNetworkManager).uploadPic(eid, token, orderNo, carId, mTempId, mTempType, 1, mTempImgUrl, outfile, userName);
+                new UploadPicU(mNetworkManager).uploadPic(eid, token, orderNo, carId, mTempId, mTempType, mTempModel, mTempImgUrl, outfile, userName);
             }
         });
     }

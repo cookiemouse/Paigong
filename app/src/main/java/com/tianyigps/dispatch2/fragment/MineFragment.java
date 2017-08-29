@@ -138,8 +138,7 @@ public class MineFragment extends Fragment {
                     }
                     case 2: {
                         //  测试
-//                        Intent intent = new Intent(getActivity(), CustomSignActivity.class);
-//                        intent.putExtra(Data.DATA_INTENT_ORDER_NO, "1234");
+//                        Intent intent = new Intent(getActivity(), TestActivity.class);
 //                        startActivity(intent);
                         break;
                     }
