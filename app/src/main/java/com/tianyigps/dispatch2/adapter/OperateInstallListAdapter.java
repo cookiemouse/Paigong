@@ -56,7 +56,7 @@ public class OperateInstallListAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View contentView, ViewGroup viewGroup) {
 
-        AdapterOperateInstallListData data = mListDatas.get(position);
+        final AdapterOperateInstallListData data = mListDatas.get(position);
 
         final int positionFinal = position;
 
@@ -223,7 +223,7 @@ public class OperateInstallListAdapter extends BaseAdapter {
                 viewHolder.tvTip2.setVisibility(View.VISIBLE);
                 viewHolder.tvTip2.setText(context.getString(R.string.tip_position));
             }
-            if (null != data.getPositionPicUrl() && null != data.getPosition() && !"".equals(data.getPosition())){
+            if (null != data.getPositionPicUrl() && null != data.getPosition() && !"".equals(data.getPosition())) {
                 viewHolder.tvTip2.setVisibility(View.GONE);
             }
 
@@ -236,6 +236,15 @@ public class OperateInstallListAdapter extends BaseAdapter {
                 viewHolder.tvTip3.setVisibility(View.GONE);
             }
         }
+
+        viewHolder.etPosition.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (!b) {
+                    data.setPosition(((EditText) view).getText().toString());
+                }
+            }
+        });
 
         viewHolder.tvStatus.setOnClickListener(new View.OnClickListener() {
             @Override
