@@ -1361,28 +1361,30 @@ public class OperateInstallActivity extends BaseActivity {
             Log.i(TAG, "isCarComplete: carNoPicUrl-->" + carNoPicUrl);
             Log.i(TAG, "isCarComplete: frameNoPicUrl-->" + frameNoPicUrl);
 
-            if (null == carNo || "".equals(carNo)) {
-                carComplete = false;
-                mTextViewTip1.setVisibility(View.VISIBLE);
-                mTextViewTip1.setText(getString(R.string.tip_carno));
-            } else {
-                // 17-8-20 较验车牌
-                if (!RegularU.checkCarNo(carNo)) {
+            if (!RegularU.isNull(carNo) || !RegularU.isNull(carNoPicUrl)) {
+                if (RegularU.isNull(carNoPicUrl)) {
+                    carComplete = false;
+                    mImageViewCarNo.setBackgroundResource(R.drawable.bg_edit_orange);
+                    mTextViewTip1.setVisibility(View.VISIBLE);
+                    mTextViewTip1.setText(getString(R.string.tip_pic));
+                }
+                if (RegularU.isNull(carNo)) {
+                    carComplete = false;
+                    mTextViewTip1.setVisibility(View.VISIBLE);
+                    mTextViewTip1.setText(getString(R.string.tip_carno));
+                } else if (!RegularU.checkCarNo(carNo)) {
+                    // 17-8-20 较验车牌
                     carComplete = false;
                     mTextViewTip1.setVisibility(View.VISIBLE);
                     mTextViewTip1.setText(getString(R.string.tip_carno_fault));
                 }
-            }
-            if (null == carNoPicUrl || "".equals(carNoPicUrl)) {
-                carComplete = false;
-                mImageViewCarNo.setBackgroundResource(R.drawable.bg_edit_orange);
-                mTextViewTip1.setVisibility(View.VISIBLE);
-                mTextViewTip1.setText(getString(R.string.tip_pic));
+                if (!RegularU.isNull(carNo) && !RegularU.isNull(carNoPicUrl)) {
+                    mTextViewTip1.setVisibility(View.GONE);
+                    mImageViewCarNo.setBackgroundResource(R.color.colorNull);
+                }
             } else {
-                mImageViewCarNo.setBackgroundResource(R.color.colorNull);
-            }
-            if (null != carNo && !"".equals(carNo) && RegularU.checkCarNo(carNo) && null != carNoPicUrl && !"".equals(carNoPicUrl)) {
                 mTextViewTip1.setVisibility(View.GONE);
+                mImageViewCarNo.setBackgroundResource(R.color.colorNull);
             }
 
             if (null == carType || "".equals(carType)) {

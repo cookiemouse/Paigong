@@ -726,13 +726,11 @@ public class InstallingActivity extends BaseActivity {
                 //  check车辆信息是否完整
                 Cursor cursorCar = mDatabaseManager.getCar(carId);
                 if (null != cursorCar && cursorCar.moveToFirst()) {
-                    String carNoUrl = cursorCar.getString(6);
                     String frameNoUrl = cursorCar.getString(7);
 
-                    Log.i(TAG, "checkInstallListCar: carNoUrl-->" + carNoUrl);
                     Log.i(TAG, "checkInstallListCar: frameNoUrl-->" + frameNoUrl);
 
-                    carComplete = ((null != carNoUrl) && (null != frameNoUrl));
+                    carComplete = (null != frameNoUrl);
 
                     cursorCar.close();
                 } else {

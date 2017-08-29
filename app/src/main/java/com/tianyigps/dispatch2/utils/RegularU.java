@@ -20,4 +20,8 @@ public class RegularU {
         Log.i(TAG, "checkCarNo: result-->" + matcher.matches());
         return matcher.matches();
     }
+
+    public static boolean isNull(String content) {
+        return null == content || "".equals(content);
+    }
 }
