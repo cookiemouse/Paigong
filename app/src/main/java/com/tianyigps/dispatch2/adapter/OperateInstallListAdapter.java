@@ -185,6 +185,9 @@ public class OperateInstallListAdapter extends BaseAdapter {
             viewHolder.ivLocate.setBackgroundResource(R.color.colorNull);
             viewHolder.ivInstallPic.setBackgroundResource(R.color.colorNull);
             viewHolder.ivPositionPic.setBackgroundResource(R.color.colorNull);
+            viewHolder.tvTip1.setVisibility(View.GONE);
+            viewHolder.tvTip2.setVisibility(View.GONE);
+            viewHolder.tvTip3.setVisibility(View.GONE);
         } else {
             viewHolder.rlItem.setBackgroundResource(R.drawable.bg_item_orange);
             //  定位按钮

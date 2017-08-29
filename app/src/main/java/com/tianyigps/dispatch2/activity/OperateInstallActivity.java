@@ -1270,6 +1270,7 @@ public class OperateInstallActivity extends BaseActivity {
 
     //  checkTerminal数据
     private boolean checkTerComplete() {
+        boolean completeAll = true;
         boolean complete = true;
         haveTerData = false;
         int count = mAdapterOperateInstallListDataList.size();
@@ -1326,13 +1327,13 @@ public class OperateInstallActivity extends BaseActivity {
                 cursor.close();
 
                 if (!complete) {
-                    break;
+                    completeAll = false;
                 }
             }
         }
 
         mOperateInstallListAdapter.notifyDataSetChanged();
-        return complete;
+        return completeAll;
     }
 
     //checkCar数据
