@@ -21,7 +21,7 @@ public class RegularU {
         return matcher.matches();
     }
 
-    public static boolean isNull(String content) {
+    public static boolean isEmpty(String content) {
         return null == content || "".equals(content);
     }
 }

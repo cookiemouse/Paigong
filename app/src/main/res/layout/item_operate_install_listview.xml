@@ -25,6 +25,8 @@
             android:layout_marginTop="@dimen/dp_16"
             android:background="@drawable/bg_button_clickable"
             android:enabled="false"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:paddingBottom="@dimen/dp_8"
             android:paddingLeft="@dimen/dp_16"
             android:paddingRight="@dimen/dp_16"
@@ -107,7 +109,6 @@
                 android:layout_toRightOf="@+id/iv_item_operate_install_new"
                 android:background="@null"
                 android:hint="请输入设备号（至少6位）"
-                android:inputType="number"
                 android:lines="1"
                 android:maxWidth="@dimen/dp_240"
                 android:textSize="@dimen/sp_14"/>

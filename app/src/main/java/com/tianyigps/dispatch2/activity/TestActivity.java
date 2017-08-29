@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.squareup.picasso.Picasso;
 import com.tianyigps.dispatch2.R;
@@ -20,6 +21,8 @@ public class TestActivity extends AppCompatActivity {
 
     private ImageView mImageView;
     private EditText mEditText;
+
+    private LinearLayout mLinearLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +53,7 @@ public class TestActivity extends AppCompatActivity {
     }
 
     private void init() {
+        mLinearLayout = (LinearLayout) findViewById(R.id.ll_activity_test);
         mImageView = (ImageView) findViewById(R.id.iv_activity_test);
         mEditText = (EditText) findViewById(R.id.et_activity_test);
     }
@@ -68,6 +72,13 @@ public class TestActivity extends AppCompatActivity {
             @Override
             public void onFocusChange(View view, boolean b) {
                 Log.i(TAG, "onFocusChange: focus-->" + b);
+            }
+        });
+
+        mLinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mEditText.clearFocus();
             }
         });
     }

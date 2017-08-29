@@ -1374,14 +1374,14 @@ public class OperateInstallActivity extends BaseActivity {
             Log.i(TAG, "isCarComplete: carNoPicUrl-->" + carNoPicUrl);
             Log.i(TAG, "isCarComplete: frameNoPicUrl-->" + frameNoPicUrl);
 
-            if (!RegularU.isNull(carNo) || !RegularU.isNull(carNoPicUrl)) {
-                if (RegularU.isNull(carNoPicUrl)) {
+            if (!RegularU.isEmpty(carNo) || !RegularU.isEmpty(carNoPicUrl)) {
+                if (RegularU.isEmpty(carNoPicUrl)) {
                     carComplete = false;
                     mImageViewCarNo.setBackgroundResource(R.drawable.bg_edit_orange);
                     mTextViewTip1.setVisibility(View.VISIBLE);
                     mTextViewTip1.setText(getString(R.string.tip_pic));
                 }
-                if (RegularU.isNull(carNo)) {
+                if (RegularU.isEmpty(carNo)) {
                     carComplete = false;
                     mTextViewTip1.setVisibility(View.VISIBLE);
                     mTextViewTip1.setText(getString(R.string.tip_carno));
@@ -1391,7 +1391,7 @@ public class OperateInstallActivity extends BaseActivity {
                     mTextViewTip1.setVisibility(View.VISIBLE);
                     mTextViewTip1.setText(getString(R.string.tip_carno_fault));
                 }
-                if (!RegularU.isNull(carNo) && !RegularU.isNull(carNoPicUrl)) {
+                if (!RegularU.isEmpty(carNo) && !RegularU.isEmpty(carNoPicUrl)) {
                     mTextViewTip1.setVisibility(View.GONE);
                     mImageViewCarNo.setBackgroundResource(R.color.colorNull);
                 }
