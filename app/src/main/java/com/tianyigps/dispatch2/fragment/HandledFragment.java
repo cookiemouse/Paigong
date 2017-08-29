@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -30,6 +31,7 @@ import com.tianyigps.dispatch2.data.Data;
 import com.tianyigps.dispatch2.interfaces.OnGetWorkerOrderHandedListener;
 import com.tianyigps.dispatch2.manager.NetworkManager;
 import com.tianyigps.dispatch2.manager.SharedpreferenceManager;
+import com.tianyigps.dispatch2.utils.RegularU;
 import com.tianyigps.dispatch2.utils.TimeFormatU;
 
 import java.util.ArrayList;
@@ -54,7 +56,11 @@ public class HandledFragment extends Fragment {
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private ImageView mImageViewSearch, mImageViewDelete;
     private EditText mEditTextSearch;
+    private TextView mTextViewSearchNull;
     private ListView mListViewHandled;
+
+    //  无数据时显示UI
+    private LinearLayout mLinearLayoutDefault;
 
     //  加载更多
     private View mViewMore;
@@ -94,7 +100,10 @@ public class HandledFragment extends Fragment {
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if (!hidden) {
+            mEditTextSearch.setText(null);
+            mImageViewDelete.setVisibility(View.GONE);
             mSwipeRefreshLayout.setRefreshing(true);
+            mTextViewSearchNull.setVisibility(View.GONE);
             mNetworkManager.getWorkerOrderHanded(eid, token, "", "", userName);
         }
     }
@@ -110,6 +119,9 @@ public class HandledFragment extends Fragment {
         mImageViewDelete = view.findViewById(R.id.iv_layout_search_delete);
         mEditTextSearch = view.findViewById(R.id.et_layout_search);
         mListViewHandled = view.findViewById(R.id.lv_fragment_worker_handled);
+
+        mLinearLayoutDefault = view.findViewById(R.id.ll_fragment_handed_default);
+        mTextViewSearchNull = view.findViewById(R.id.tv_fragment_handed_default);
 
         mViewMore = LayoutInflater.from(getContext()).inflate(R.layout.layout_load_more, null);
         mTextViewMore = mViewMore.findViewById(R.id.tv_layout_load_more);
@@ -231,7 +243,7 @@ public class HandledFragment extends Fragment {
                 mSwipeRefreshLayout.setRefreshing(true);
                 mNetworkManager.getWorkerOrderHanded(eid, token, mKey, "", userName);
 
-                if (!"".equals(mKey)) {
+                if (!RegularU.isEmpty(mKey)) {
                     mImageViewDelete.setVisibility(View.VISIBLE);
                 }
             }
@@ -267,7 +279,7 @@ public class HandledFragment extends Fragment {
                 }
 
                 isLast = (workerHandedBean.getObj().size() == 0);
-                if (isLast) {
+                if (isLast && RegularU.isEmpty(mKey)) {
                     myHandler.sendEmptyMessageDelayed(MSG_3, DELAY_LAST);
                     return;
                 }
@@ -346,6 +358,14 @@ public class HandledFragment extends Fragment {
                     break;
                 }
                 case MSG_1: {
+                    if (mAdapterHandledDataList.size() == 0 && RegularU.isEmpty(mKey)) {
+                        mLinearLayoutDefault.setVisibility(View.VISIBLE);
+                    } else if (mAdapterHandledDataList.size() == 0 && !RegularU.isEmpty(mKey)) {
+                        mTextViewSearchNull.setVisibility(View.VISIBLE);
+                    } else {
+                        mTextViewSearchNull.setVisibility(View.GONE);
+                        mLinearLayoutDefault.setVisibility(View.GONE);
+                    }
                     mHandledAdapter.notifyDataSetChanged();
                     myHandler.sendEmptyMessage(Data.MSG_2);
                     break;

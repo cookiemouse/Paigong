@@ -1,42 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
 
     <include
         layout="@layout/layout_title_base"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"/>
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/srl_fragment_pended"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:paddingLeft="@dimen/dp_8"
-            android:paddingRight="@dimen/dp_8">
+            android:layout_height="match_parent">
 
-            <include
-                layout="@layout/layout_search"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_48" />
-
-            <ListView
-                android:id="@+id/lv_fragment_pended"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="@dimen/dp_8"
-                android:divider="@color/colorNull"
-                android:dividerHeight="@dimen/dp_8"
-                android:scrollbars="none"/>
+                android:orientation="vertical"
+                android:paddingLeft="@dimen/dp_8"
+                android:paddingRight="@dimen/dp_8">
 
-        </LinearLayout>
+                <include
+                    layout="@layout/layout_search"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_48"/>
 
+                <ListView
+                    android:id="@+id/lv_fragment_pended"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="@dimen/dp_8"
+                    android:divider="@color/colorNull"
+                    android:dividerHeight="@dimen/dp_8"
+                    android:scrollbars="none"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_fragment_pended_default"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/colorWhite"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="@dimen/dp_160"
+                    android:layout_height="@dimen/dp_160"
+                    android:src="@drawable/ic_no_data_pending"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="暂无需处理订单~"
+                    android:textColor="@color/colorGray"
+                    android:textSize="@dimen/sp_16"/>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_fragment_pended_default"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@string/msg_search_null"
+                android:textColor="@color/colorWhite"
+                android:textSize="@dimen/sp_16"
+                android:visibility="gone"/>
+
+        </FrameLayout>
     </android.support.v4.widget.SwipeRefreshLayout>
 
 </LinearLayout>

@@ -96,6 +96,8 @@
     <string name="msg_part_complete">设备未全部安装，仍然提交？</string>
     <string name="msg_null_complete">确认提交空单么？</string>
 
+    <string name="msg_search_null">没有查询到符合搜索条件的订单~</string>
+
     <array name="picker_month">
         <item>01 月</item>
         <item>02 月</item>

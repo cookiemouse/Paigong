@@ -19,6 +19,7 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
@@ -40,6 +41,7 @@ import com.tianyigps.dispatch2.interfaces.OnPendedListener;
 import com.tianyigps.dispatch2.interfaces.OnPendedNumListener;
 import com.tianyigps.dispatch2.manager.NetworkManager;
 import com.tianyigps.dispatch2.manager.SharedpreferenceManager;
+import com.tianyigps.dispatch2.utils.RegularU;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,7 +63,11 @@ public class PendedFragment extends Fragment {
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private ImageView mImageViewSearch, mImageViewDelete;
     private EditText mEditTextSearch;
+    private TextView mTextViewSearchNull;
     private ListView mListView;
+
+    //  无数据时显示UI
+    private LinearLayout mLinearLayoutDefault;
 
     //  标题栏
     private ImageView mImageViewTitleLeft, mImageViewTitleRight;
@@ -106,7 +112,10 @@ public class PendedFragment extends Fragment {
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if (!hidden) {
+            mEditTextSearch.setText(null);
+            mImageViewDelete.setVisibility(View.GONE);
             mSwipeRefreshLayout.setRefreshing(true);
+            mTextViewSearchNull.setVisibility(View.GONE);
             mNetworkManager.getPended(jobNo, token, "", "", "", userName);
         }
     }
@@ -129,6 +138,8 @@ public class PendedFragment extends Fragment {
         mImageViewDelete = view.findViewById(R.id.iv_layout_search_delete);
         mEditTextSearch = view.findViewById(R.id.et_layout_search);
         mListView = view.findViewById(R.id.lv_fragment_pended);
+        mLinearLayoutDefault = view.findViewById(R.id.ll_fragment_pended_default);
+        mTextViewSearchNull = view.findViewById(R.id.tv_fragment_pended_default);
 
         mViewMore = LayoutInflater.from(getContext()).inflate(R.layout.layout_load_more, null);
         mTextViewMore = mViewMore.findViewById(R.id.tv_layout_load_more);
@@ -465,6 +476,14 @@ public class PendedFragment extends Fragment {
                     break;
                 }
                 case Data.MSG_1: {
+                    if (mAdapterPendedDataList.size() == 0 && RegularU.isEmpty(mKey)) {
+                        mLinearLayoutDefault.setVisibility(View.VISIBLE);
+                    } else if (mAdapterPendedDataList.size() == 0 && !RegularU.isEmpty(mKey)) {
+                        mTextViewSearchNull.setVisibility(View.VISIBLE);
+                    } else {
+                        mTextViewSearchNull.setVisibility(View.GONE);
+                        mLinearLayoutDefault.setVisibility(View.GONE);
+                    }
                     mPendedAdapter.notifyDataSetChanged();
                     myHandler.sendEmptyMessage(Data.MSG_2);
                     break;

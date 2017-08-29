@@ -40,6 +40,7 @@ import com.tianyigps.dispatch2.interfaces.OnSignedWorkerListener;
 import com.tianyigps.dispatch2.manager.LocateManager;
 import com.tianyigps.dispatch2.manager.NetworkManager;
 import com.tianyigps.dispatch2.manager.SharedpreferenceManager;
+import com.tianyigps.dispatch2.utils.RegularU;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,6 +67,7 @@ public class OrderFragment extends Fragment {
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private LinearLayout mLinearLayoutDefault;
     private ImageView mImageViewSearch, mImageViewDelete;
+    private TextView mTextViewSearchNull;
     private EditText mEditTextSearch;
     private ListView mListView;
 
@@ -94,6 +96,9 @@ public class OrderFragment extends Fragment {
     private String userName;
     private String name;
 
+    //  搜索
+    private String mKey;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -117,6 +122,9 @@ public class OrderFragment extends Fragment {
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if (!hidden) {
+            mEditTextSearch.setText(null);
+            mImageViewDelete.setVisibility(View.GONE);
+            mTextViewSearchNull.setVisibility(View.GONE);
             mSwipeRefreshLayout.setRefreshing(true);
             mNetworkManager.getWorkerOrder(eid, token, "", userName);
         }
@@ -148,6 +156,7 @@ public class OrderFragment extends Fragment {
         mImageViewSearch = view.findViewById(R.id.iv_layout_search);
         mImageViewDelete = view.findViewById(R.id.iv_layout_search_delete);
         mEditTextSearch = view.findViewById(R.id.et_layout_search);
+        mTextViewSearchNull = view.findViewById(R.id.tv_fragment_order_default);
         mListView = view.findViewById(R.id.lv_fragment_worker_order);
 
         mEditTextSearch.clearFocus();
@@ -155,16 +164,6 @@ public class OrderFragment extends Fragment {
         mSwipeRefreshLayout.setColorSchemeColors(0xff3cabfa);
 
         mAdapterOrderDataList = new ArrayList<>();
-//        for (int i = 0; i < 6; i++) {
-//            mAdapterOrderDataList.add(new AdapterOrderData("万惠南宁"
-//                    , "2017-01-02 17:30"
-//                    , "上海市浦东区东方路985号一百杉杉大厦"
-//                    , "TY2017010215542001"
-//                    , "南柱赫"
-//                    , "1234567890"
-//                    , "orderType"
-//                    , i, 2));
-//        }
 
         mOrderAdapter = new OrderAdapter(getContext(), mAdapterOrderDataList);
 
@@ -239,11 +238,11 @@ public class OrderFragment extends Fragment {
         mImageViewSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String key = mEditTextSearch.getText().toString();
+                mKey = mEditTextSearch.getText().toString();
                 mSwipeRefreshLayout.setRefreshing(true);
-                mNetworkManager.getWorkerOrder(eid, token, key, userName);
+                mNetworkManager.getWorkerOrder(eid, token, mKey, userName);
 
-                if (!"".equals(key)) {
+                if (!RegularU.isEmpty(mKey)) {
                     mImageViewDelete.setVisibility(View.VISIBLE);
                 }
             }
@@ -361,7 +360,7 @@ public class OrderFragment extends Fragment {
                             , objBean.getRemoveWirelessNum()));
                 }
 
-                myHandler.sendEmptyMessage(MSG_1);
+                myHandler.sendEmptyMessage(Data.MSG_1);
             }
         });
 
@@ -465,10 +464,13 @@ public class OrderFragment extends Fragment {
                     break;
                 }
                 case MSG_1: {
-                    if (mAdapterOrderDataList.size() == 0) {
+                    if (mAdapterOrderDataList.size() == 0 && RegularU.isEmpty(mKey)) {
                         mLinearLayoutDefault.setVisibility(View.VISIBLE);
+                    } else if (mAdapterOrderDataList.size() == 0 && !RegularU.isEmpty(mKey)) {
+                        mTextViewSearchNull.setVisibility(View.VISIBLE);
                     } else {
                         mLinearLayoutDefault.setVisibility(View.GONE);
+                        mTextViewSearchNull.setVisibility(View.GONE);
                     }
                     mOrderAdapter.notifyDataSetChanged();
                     break;

@@ -41,6 +41,7 @@ import com.tianyigps.dispatch2.interfaces.OnPendingNumListener;
 import com.tianyigps.dispatch2.interfaces.OnPendingOrderListener;
 import com.tianyigps.dispatch2.manager.NetworkManager;
 import com.tianyigps.dispatch2.manager.SharedpreferenceManager;
+import com.tianyigps.dispatch2.utils.RegularU;
 import com.tianyigps.dispatch2.utils.TimeFormatU;
 
 import java.util.ArrayList;
@@ -59,6 +60,7 @@ public class PendingFragment extends Fragment {
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private ImageView mImageViewSearch, mImageViewDelete;
+    private TextView mTextViewSearchNull;
     private EditText mEditTextSearch;
     private ListView mListView;
 
@@ -82,6 +84,9 @@ public class PendingFragment extends Fragment {
 
     //  popup
     private List<AdapterPopupData> mAdapterPopupDataList;
+
+    //  搜索
+    private String mKey;
 
     @Nullable
     @Override
@@ -107,6 +112,9 @@ public class PendingFragment extends Fragment {
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if (!hidden) {
+            mEditTextSearch.setText(null);
+            mImageViewDelete.setVisibility(View.GONE);
+            mTextViewSearchNull.setVisibility(View.GONE);
             mSwipeRefreshLayout.setRefreshing(true);
             mNetworkManager.getPendingOrder(jobNo, token, "", "", userName);
         }
@@ -140,6 +148,7 @@ public class PendingFragment extends Fragment {
         mImageViewSearch = view.findViewById(R.id.iv_layout_search);
         mImageViewDelete = view.findViewById(R.id.iv_layout_search_delete);
         mEditTextSearch = view.findViewById(R.id.et_layout_search);
+        mTextViewSearchNull = view.findViewById(R.id.tv_fragment_pending_default);
         mListView = view.findViewById(R.id.lv_fragment_pending);
 
         mEditTextSearch.clearFocus();
@@ -191,10 +200,10 @@ public class PendingFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 // 2017/8/9 搜索
-                String key = mEditTextSearch.getText().toString();
+                mKey = mEditTextSearch.getText().toString();
                 mSwipeRefreshLayout.setRefreshing(true);
-                mNetworkManager.getPendingOrder(jobNo, token, "", key, userName);
-                if (!"".equals(key)) {
+                mNetworkManager.getPendingOrder(jobNo, token, "", mKey, userName);
+                if (!RegularU.isEmpty(mKey)) {
                     mImageViewDelete.setVisibility(View.VISIBLE);
                 }
             }
@@ -487,9 +496,12 @@ public class PendingFragment extends Fragment {
                 }
                 case Data.MSG_1: {
                     //  获取列表信息
-                    if (mAdapterPendingDataList.size() == 0) {
+                    if (mAdapterPendingDataList.size() == 0 && RegularU.isEmpty(mKey)) {
                         mLinearLayoutDefault.setVisibility(View.VISIBLE);
+                    } else if (mAdapterPendingDataList.size() == 0 && !RegularU.isEmpty(mKey)) {
+                        mTextViewSearchNull.setVisibility(View.VISIBLE);
                     } else {
+                        mTextViewSearchNull.setVisibility(View.GONE);
                         mLinearLayoutDefault.setVisibility(View.GONE);
                     }
                     mPendingAdapter.notifyDataSetChanged();

@@ -62,6 +62,16 @@
                     android:textColor="@color/colorGray"
                     android:textSize="@dimen/sp_16"/>
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_fragment_order_default"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@string/msg_search_null"
+                android:textColor="@color/colorWhite"
+                android:textSize="@dimen/sp_16"
+                android:visibility="gone"/>
         </FrameLayout>
 
 
