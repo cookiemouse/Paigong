@@ -113,7 +113,6 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
     protected void onResume() {
         super.onResume();
         mMapView.onResume();
-        mLocateManager.startLocate();
         Log.i(TAG, "onResume: mIsShow-->" + mIsShow);
         if (mIsShow) {
             mTextViewLook.setVisibility(View.VISIBLE);
@@ -254,6 +253,8 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
         mIsShow = mIntent.getBooleanExtra(Data.DATA_INTENT_LOCATE_TYPE, true);
         wholeImei = mIntent.getStringExtra(Data.DATA_INTENT_LOCATE_IMEI);
         Log.i(TAG, "init: wholeImei-->" + wholeImei);
+
+        mLocateManager.startLocate();
     }
 
     private void setEventListener() {
