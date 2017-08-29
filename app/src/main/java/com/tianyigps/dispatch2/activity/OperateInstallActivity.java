@@ -1220,7 +1220,7 @@ public class OperateInstallActivity extends BaseActivity {
 
     //  checkTerminal数据
     private boolean isComplete() {
-        return (checkTerComplete() && (!haveTerData || isCarComplete()));
+        return (checkTerComplete() & (!haveTerData | isCarComplete()));
 //        for (int i = 0; i < mAdapterOperateInstallListDataList.size(); i++) {
 //            Cursor cursor = mDatabaseManager.getTer(ID_MAIN_TERMINAL + i);
 //            if (null != cursor && cursor.moveToFirst()) {
