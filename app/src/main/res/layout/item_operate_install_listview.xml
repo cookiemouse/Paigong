@@ -23,8 +23,8 @@
             android:layout_marginEnd="@dimen/dp_16"
             android:layout_marginRight="@dimen/dp_16"
             android:layout_marginTop="@dimen/dp_16"
-            android:enabled="false"
             android:background="@drawable/bg_button_clickable"
+            android:enabled="false"
             android:paddingBottom="@dimen/dp_8"
             android:paddingLeft="@dimen/dp_16"
             android:paddingRight="@dimen/dp_16"
@@ -206,7 +206,7 @@
             android:background="@drawable/bg_cycle_delete"
             android:padding="@dimen/dp_4"
             android:src="@drawable/ic_delete"
-            android:visibility="visible"/>
+            android:visibility="gone"/>
 
         <View
             android:id="@+id/view_item_operate_install_line_3"
@@ -236,7 +236,8 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/view_item_operate_install_line_3"
-            android:layout_marginTop="@dimen/dp_16">
+            android:layout_marginTop="@dimen/dp_16"
+            android:visibility="visible">
 
             <ImageView
                 android:id="@+id/iv_item_operate_install_install"
@@ -262,9 +263,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tv_item_operate_install_install"
-                android:layout_marginTop="@dimen/dp_8"
                 android:layout_marginLeft="@dimen/dp_40"
                 android:layout_marginStart="@dimen/dp_40"
+                android:layout_marginTop="@dimen/dp_8"
                 android:text="@string/tip_pic"
                 android:textColor="@color/colorOrange"
                 android:visibility="gone"/>

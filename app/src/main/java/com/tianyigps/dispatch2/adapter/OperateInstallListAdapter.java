@@ -85,6 +85,7 @@ public class OperateInstallListAdapter extends BaseAdapter {
 
             viewHolder.rlOld = contentView.findViewById(R.id.rl_item_operate_install_old);
             viewHolder.rlItem = contentView.findViewById(R.id.rl_item_operate_install_list);
+            viewHolder.rlInstall = contentView.findViewById(R.id.rl_item_operate_install_install);
 
             viewHolder.etTNoNew.addTextChangedListener(new TextWatcher() {
                 @Override
@@ -134,12 +135,6 @@ public class OperateInstallListAdapter extends BaseAdapter {
             viewHolder.tvStatus.setText(R.string.repair_replace);
         }
 
-        if (data.isWire()) {
-            viewHolder.tvTitle.setText("新有线设备");
-        } else {
-            viewHolder.tvTitle.setText("新无线设备");
-        }
-
         viewHolder.etTNoNew.setText(data.gettNoNew());
         viewHolder.etPosition.setText(data.getPosition());
         isChange = false;
@@ -151,7 +146,6 @@ public class OperateInstallListAdapter extends BaseAdapter {
                     .centerInside()
                     .error(R.drawable.ic_camera)
                     .into(viewHolder.ivPositionPic);
-
             viewHolder.ivPositionDelete.setVisibility(View.VISIBLE);
         } else {
             Picasso.with(context)
@@ -177,6 +171,15 @@ public class OperateInstallListAdapter extends BaseAdapter {
                     .fit()
                     .centerInside()
                     .into(viewHolder.ivInstallPic);
+            viewHolder.ivInstallDelete.setVisibility(View.GONE);
+        }
+
+        if (data.isWire()) {
+            viewHolder.tvTitle.setText("新有线设备");
+            viewHolder.rlInstall.setVisibility(View.VISIBLE);
+        } else {
+            viewHolder.tvTitle.setText("新无线设备");
+            viewHolder.rlInstall.setVisibility(View.GONE);
             viewHolder.ivInstallDelete.setVisibility(View.GONE);
         }
 
@@ -315,7 +318,7 @@ public class OperateInstallListAdapter extends BaseAdapter {
         private TextView tvTip1, tvTip2, tvTip3;
         private EditText etTNoNew, etPosition;
         private ImageView ivScanner, ivLocate, ivPositionPic, ivInstallPic;
-        private RelativeLayout rlOld, rlItem;
+        private RelativeLayout rlOld, rlItem, rlInstall;
         private ImageView ivPositionDelete, ivInstallDelete;
     }
 
