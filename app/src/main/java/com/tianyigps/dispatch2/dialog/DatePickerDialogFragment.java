@@ -13,10 +13,6 @@ import android.widget.TextView;
 
 import com.tianyigps.dispatch2.R;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-
 /**
  * Created by djc on 2017/7/14.
  */
@@ -46,7 +42,7 @@ public class DatePickerDialogFragment extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        // TODO: 2017/7/14 what show be happen
+        //  2017/7/14 what showed be happen
         return super.onCreateDialog(savedInstanceState);
     }
 
@@ -60,13 +56,15 @@ public class DatePickerDialogFragment extends DialogFragment {
         mNumberPickerMonth.setDisplayedValues(getResources().getStringArray(R.array.picker_month));
         mNumberPickerMonth.setMinValue(0);
         mNumberPickerMonth.setMaxValue(11);
+        mNumberPickerMonth.setWrapSelectorWheel(false);
 
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy", Locale.CHINA);
-        Date date = new Date(System.currentTimeMillis());
-        String year = simpleDateFormat.format(date);
-        mIntYear = Integer.valueOf(year);
-        String[] strings = new String[100];
-        for (int i = 0; i < 100; i++) {
+//        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy", Locale.CHINA);
+//        Date date = new Date(System.currentTimeMillis());
+//        String year = simpleDateFormat.format(date);
+//        mIntYear = Integer.valueOf(year);
+        mIntYear = 2017;
+        String[] strings = new String[14];
+        for (int i = 0; i < 14; i++) {
             strings[i] = "" + (mIntYear + i);
         }
         mNumberPickerYear.setDisplayedValues(strings);
@@ -80,10 +78,10 @@ public class DatePickerDialogFragment extends DialogFragment {
         mTextViewEnsure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: 2017/7/14 选择时间
+                //  2017/7/14 选择时间
                 Log.i(TAG, "onSignClick: year-->" + (mIntYear + mNumberPickerYear.getValue()));
                 Log.i(TAG, "onSignClick: month-->" + (mNumberPickerMonth.getValue() + 1));
-                if (null == mOnEnsureListener){
+                if (null == mOnEnsureListener) {
                     throw new NullPointerException("OnEnsureListener is null, pleases setOnEnsureListener");
                 }
                 mOnEnsureListener.onEnsure(mIntYear + mNumberPickerYear.getValue()
@@ -96,7 +94,7 @@ public class DatePickerDialogFragment extends DialogFragment {
         mTextViewCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: 2017/7/14 取消
+                //  2017/7/14 取消
                 dismiss();
             }
         });

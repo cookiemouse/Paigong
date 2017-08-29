@@ -51,6 +51,7 @@
     <string name="tip">提示</string>
     <string name="choice_map">请选择地图</string>
     <string name="next_step">下一步</string>
+    <string name="submit_order">提交订单</string>
     <string name="frame_no">车架号</string>
     <string name="enter_frame_no">请输入车架号</string>
     <string name="frame_no_">车架号：</string>

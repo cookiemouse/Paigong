@@ -14,7 +14,7 @@
         android:background="@drawable/bg_flush"
         android:paddingLeft="@dimen/dp_72"
         android:paddingRight="@dimen/dp_72"
-        android:text="@string/next_step"
+        android:text="@string/submit_order"
         android:textColor="@color/colorWhite"/>
 
 </LinearLayout>
