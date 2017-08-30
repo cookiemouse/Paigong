@@ -449,6 +449,25 @@ public class OrderFragment extends Fragment {
         dialog.show();
     }
 
+    //  订单已被取消对话框
+    private void showNotPerfectDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        View viewDialog = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_message_editable, null);
+        builder.setView(viewDialog);
+        final AlertDialog dialog = builder.create();
+        TextView textView = viewDialog.findViewById(R.id.tv_dialog_message_message);
+        Button buttonCancel = viewDialog.findViewById(R.id.btn_dialog_message_cancel);
+        textView.setText(getString(R.string.order_canceled));
+        buttonCancel.setText(getString(R.string.known));
+        buttonCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+    }
+
     private class MyHandler extends Handler {
 
         //  MSG_1   获取Order数据
@@ -489,7 +508,8 @@ public class OrderFragment extends Fragment {
                     break;
                 }
                 case MSG_4: {
-                    showMessageDialog(strMessage);
+                    //  签到失败
+                    showNotPerfectDialog();
                 }
                 default: {
                     Log.i(TAG, "handleMessage: default");

@@ -329,7 +329,7 @@ public class OrderDetailsActivity extends Activity {
                         }
                         if (!"".equals(mStringRemoveContent)) {
                             if (!RegularU.isEmpty(carBrand)) {
-                                mStringRemoveContent += ("，" + carBrand  + "\n");
+                                mStringRemoveContent += ("，" + carBrand + "\n");
                             } else {
                                 mStringRemoveContent += "\n";
                             }
@@ -365,7 +365,7 @@ public class OrderDetailsActivity extends Activity {
         mNetworkManager.setSignedWorkerListener(new OnSignedWorkerListener() {
             @Override
             public void onFailure() {
-                mStringMessage = "数据请求失败，请检查网络！";
+                mStringMessage = Data.DEFAULT_MESSAGE;
                 myHandler.sendEmptyMessage(Data.MSG_ERO);
             }
 
@@ -374,8 +374,7 @@ public class OrderDetailsActivity extends Activity {
                 Gson gson = new Gson();
                 SignWorkerBean signWorkerBean = gson.fromJson(result, SignWorkerBean.class);
                 if (!signWorkerBean.isSuccess()) {
-                    mStringMessage = signWorkerBean.getMsg();
-                    myHandler.sendEmptyMessage(Data.MSG_ERO);
+                    myHandler.sendEmptyMessage(Data.MSG_6);
                     return;
                 }
                 myHandler.sendEmptyMessage(Data.MSG_4);
@@ -469,6 +468,25 @@ public class OrderDetailsActivity extends Activity {
         dialog.show();
     }
 
+    //  订单已被取消对话框
+    private void showNotPerfectDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(OrderDetailsActivity.this);
+        View viewDialog = LayoutInflater.from(OrderDetailsActivity.this).inflate(R.layout.dialog_message_editable, null);
+        builder.setView(viewDialog);
+        final AlertDialog dialog = builder.create();
+        TextView textView = viewDialog.findViewById(R.id.tv_dialog_message_message);
+        Button buttonCancel = viewDialog.findViewById(R.id.btn_dialog_message_cancel);
+        textView.setText(getString(R.string.order_canceled));
+        buttonCancel.setText(getString(R.string.known));
+        buttonCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+    }
+
     //  显示LoadingFragment
     private void showLoading() {
         mLoadingDialogFragment.show(getFragmentManager(), "LoadingFragment");
@@ -548,6 +566,10 @@ public class OrderDetailsActivity extends Activity {
                     intent.putExtra(Data.DATA_INTENT_INSTALL_TYPE, (mIntOrderType - 1));
                     startActivity(intent);
                     break;
+                }
+                case Data.MSG_6: {
+                    //  签到失败，
+                    showNotPerfectDialog();
                 }
                 default: {
                     Log.i(TAG, "handleMessage: default");
