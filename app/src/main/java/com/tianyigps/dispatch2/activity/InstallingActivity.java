@@ -235,10 +235,10 @@ public class InstallingActivity extends BaseActivity {
                 }
                 Log.i(TAG, "onClick: mCompleteCount-->" + mCompleteCount);
                 if (!checkRepairList() && mCompleteCount == 0) {
-                    showPartDialog(getString(R.string.msg_null_complete));
+                    showNullDialog();
                     return;
                 }
-                showPartDialog(getString(R.string.msg_part_complete));
+                showPartDialog();
             }
         });
 
@@ -475,7 +475,31 @@ public class InstallingActivity extends BaseActivity {
     }
 
     //  部分完成对话框
-    private void showPartDialog(String msg) {
+    private void showPartDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(InstallingActivity.this);
+        View viewDialog = LayoutInflater.from(InstallingActivity.this).inflate(R.layout.dialog_button_editable, null);
+        builder.setView(viewDialog);
+        final AlertDialog dialog = builder.create();
+        Button buttonCancel = viewDialog.findViewById(R.id.btn_dialog_editable_cancel);
+        Button buttonEnsure = viewDialog.findViewById(R.id.btn_dialog_editable_ensure);
+        buttonCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        buttonEnsure.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                toEditRemarksActivity();
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+    }
+
+    //  空单对话框
+    private void showNullDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(InstallingActivity.this);
         View viewDialog = LayoutInflater.from(InstallingActivity.this).inflate(R.layout.dialog_button_editable, null);
         builder.setView(viewDialog);
@@ -483,7 +507,7 @@ public class InstallingActivity extends BaseActivity {
         TextView textView = viewDialog.findViewById(R.id.tv_dialog_editable_msg);
         Button buttonCancel = viewDialog.findViewById(R.id.btn_dialog_editable_cancel);
         Button buttonEnsure = viewDialog.findViewById(R.id.btn_dialog_editable_ensure);
-        textView.setText(msg);
+        textView.setText(getString(R.string.msg_null_complete));
         buttonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

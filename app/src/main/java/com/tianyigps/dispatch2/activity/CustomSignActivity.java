@@ -339,8 +339,8 @@ public class CustomSignActivity extends BaseActivity {
                     String positionNew = cursorR.getString(2);
                     String explain = cursorR.getString(5);
                     String imeiNew = cursorR.getString(6);
-                    int model = cursorR.getInt(9);
                     int locateType = cursorR.getInt(10);
+                    int wire = cursorR.getInt(11);
 
                     if (0 == locateType) {
                         locateType = 3;
@@ -348,6 +348,16 @@ public class CustomSignActivity extends BaseActivity {
 
                     if (null == imeiNew) {
                         imeiNew = "";
+                    }
+                    if (null == positionNew) {
+                        positionNew = "";
+                    }
+
+                    int model;
+                    if (wire == 1) {
+                        model = 1;
+                    } else {
+                        model = 2;
                     }
                     Log.i(TAG, "getRepairJson: tid-->" + cursorR.getInt(0));
                     Log.i(TAG, "getRepairJson: imeiOld-->" + imeiOld);
@@ -360,6 +370,10 @@ public class CustomSignActivity extends BaseActivity {
                     TerminalInfo terminalInfo = new TerminalInfo(tId, imeiOld, imeiNew, model, locateType, positionNew, explain);
                     TerminalInfoOut terminalInfoOut = new TerminalInfoOut(terminalInfo);
                     terminalInfoOurList.add(terminalInfoOut);
+
+                    if (null == explain) {
+                        terminalInfoOurList.clear();
+                    }
                     cursorR.close();
                 }
             } while (cursor.moveToNext());
@@ -417,7 +431,8 @@ public class CustomSignActivity extends BaseActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(CustomSignActivity.this);
         View viewDialog = LayoutInflater.from(this).inflate(R.layout.dialog_message_editable, null);
         builder.setView(viewDialog);
-        AlertDialog alertDialog = builder.create();
+        builder.setCancelable(false);
+        final AlertDialog alertDialog = builder.create();
 
         TextView tvMessage = viewDialog.findViewById(R.id.tv_dialog_message_message);
         Button btnCall = viewDialog.findViewById(R.id.btn_dialog_message_cancel);
@@ -428,17 +443,19 @@ public class CustomSignActivity extends BaseActivity {
         btnCall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                alertDialog.dismiss();
+
                 //  跳转到进行中
                 Intent intent = new Intent(CustomSignActivity.this, WorkerFragmentContentActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.putExtra(Data.DATA_INTENT_WORKER_FRAGMENT, Data.DATA_INTENT_WORKER_FRAGMENT_HANDING);
-                startActivity(intent);
 
                 // 2017/8/16 拨打后台电话，即总部电话
                 Intent intentCall = new Intent();
                 intentCall.setAction(Intent.ACTION_DIAL);
                 intentCall.setData(Uri.parse("tel:" + "18017325972"));
-                startActivity(intentCall);
+
+                startActivities(new Intent[]{intent, intentCall});
             }
         });
 

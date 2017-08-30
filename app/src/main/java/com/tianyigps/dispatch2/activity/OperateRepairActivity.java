@@ -944,7 +944,9 @@ public class OperateRepairActivity extends BaseActivity {
 
                     if (mOrderTerType == 1) {
                         mTextViewNewDeviceTitle.setText("新有线设备号");
+                        mDatabaseManager.addRepairWire(tId, mOrderTerType);
                     } else {
+                        mDatabaseManager.addRepairWire(tId, 0);
                         mTextViewNewDeviceTitle.setText("新无线设备号");
                     }
 //                    mTextViewInstallName.setText(installNameG);
