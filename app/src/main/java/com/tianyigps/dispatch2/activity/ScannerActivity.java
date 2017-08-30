@@ -7,15 +7,16 @@ import android.util.Log;
 import com.tianyigps.dispatch2.R;
 import com.tianyigps.dispatch2.base.BaseActivity;
 import com.tianyigps.dispatch2.data.Data;
+import com.tianyigps.dispatch2.utils.MessageDialogU;
 
-import me.dm7.barcodescanner.zbar.Result;
-import me.dm7.barcodescanner.zbar.ZBarScannerView;
+import cn.bingoogolapple.qrcode.core.QRCodeView;
+import cn.bingoogolapple.qrcode.zxing.ZXingView;
 
 public class ScannerActivity extends BaseActivity {
 
     private static final String TAG = "ScannerActivity";
 
-    private ZBarScannerView mZBarScannerView;
+    private ZXingView mZXingView;
 
     private Intent mIntent;
 
@@ -32,29 +33,41 @@ public class ScannerActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        mZBarScannerView.startCamera();
+        mZXingView.startCamera();
+        mZXingView.startSpot();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        mZBarScannerView.stopCamera();
+        mZXingView.stopSpot();
+        mZXingView.stopCamera();
+    }
+
+    @Override
+    protected void onDestroy() {
+        mZXingView.onDestroy();
+        super.onDestroy();
     }
 
     private void init() {
         mIntent = getIntent();
-        mZBarScannerView = findViewById(R.id.zbsv_activity_scanner);
+        mZXingView = findViewById(R.id.zxv_activity_scanner);
     }
 
     private void setEventListener() {
-        mZBarScannerView.setResultHandler(new ZBarScannerView.ResultHandler() {
+        mZXingView.setDelegate(new QRCodeView.Delegate() {
             @Override
-            public void handleResult(Result result) {
-                Log.i(TAG, "handleResult: result-->" + result.getContents());
-                String code = result.getContents();
-                mIntent.putExtra(Data.DATA_SCANNER, code);
+            public void onScanQRCodeSuccess(String result) {
+                Log.i(TAG, "onScanQRCodeSuccess: result-->" + result);
+                mIntent.putExtra(Data.DATA_SCANNER, result);
                 setResult(Data.DATA_INTENT_SCANNER_RESULT, mIntent);
                 finish();
+            }
+
+            @Override
+            public void onScanQRCodeOpenCameraError() {
+                new MessageDialogU(ScannerActivity.this).show("扫描出错");
             }
         });
     }

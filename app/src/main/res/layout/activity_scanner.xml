@@ -7,22 +7,21 @@
              android:layout_height="match_parent"
              tools:context="com.tianyigps.dispatch2.activity.ScannerActivity">
 
-    <!--<com.dlazaro66.qrcodereaderview.QRCodeReaderView-->
-    <!--android:id="@+id/qrv_activity"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent" />-->
-
-    <!--<ImageView-->
-    <!--android:layout_width="@dimen/dp_240"-->
-    <!--android:layout_height="@dimen/dp_240"-->
-    <!--android:src="@drawable/bg_scanner"-->
-    <!--android:layout_gravity="center"/>-->
-
-    <me.dm7.barcodescanner.zbar.ZBarScannerView
-        android:id="@+id/zbsv_activity_scanner"
-        app:borderColor="@color/colorBlueTheme"
-        app:laserColor="@color/colorBlueTheme"
+    <cn.bingoogolapple.qrcode.zxing.ZXingView
+        android:id="@+id/zxv_activity_scanner"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-
+        android:layout_height="match_parent"
+        app:qrcv_animTime="1000"
+        app:qrcv_borderColor="@android:color/white"
+        app:qrcv_borderSize="@dimen/dp_1"
+        app:qrcv_cornerColor="@color/colorBlueTheme"
+        app:qrcv_cornerLength="@dimen/dp_20"
+        app:qrcv_cornerSize="@dimen/dp_2"
+        app:qrcv_isBarcode="true"
+        app:qrcv_isScanLineReverse="true"
+        app:qrcv_maskColor="#33FFFFFF"
+        app:qrcv_rectWidth="@dimen/dp_240"
+        app:qrcv_scanLineColor="@color/colorBlueTheme"
+        app:qrcv_scanLineSize="@dimen/dp_1"
+        app:qrcv_topOffset="@dimen/dp_120"/>
 </FrameLayout>
