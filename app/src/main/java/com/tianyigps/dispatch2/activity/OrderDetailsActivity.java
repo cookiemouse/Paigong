@@ -34,6 +34,7 @@ import com.tianyigps.dispatch2.interfaces.OnStartHandingListener;
 import com.tianyigps.dispatch2.manager.LocateManager;
 import com.tianyigps.dispatch2.manager.NetworkManager;
 import com.tianyigps.dispatch2.manager.SharedpreferenceManager;
+import com.tianyigps.dispatch2.utils.RegularU;
 import com.tianyigps.dispatch2.utils.TimeFormatU;
 
 import static com.tianyigps.dispatch2.data.Data.DATA_INTENT_ORDER_DETAILS_RESULT_SIGNED;
@@ -310,9 +311,12 @@ public class OrderDetailsActivity extends Activity {
                         } else if (null != carNo && !"".equals(carNo)) {
                             mStringInstallInfo += carNo;
                         }
-                        if (!"".equals(mStringInstallInfo) && null != carBrand && !"".equals(carBrand)) {
-                            mStringInstallInfo += ("，" + carBrand);
-                            mStringInstallInfo += "\n";
+                        if (!"".equals(mStringInstallInfo)) {
+                            if (!RegularU.isEmpty(carBrand)) {
+                                mStringInstallInfo += ("，" + carBrand + "\n");
+                            } else {
+                                mStringInstallInfo += "\n";
+                            }
                         }
                     } else {
                         String carVin = carInfoBean.getCarVin();
@@ -323,9 +327,12 @@ public class OrderDetailsActivity extends Activity {
                         } else if (null != carNo && !"".equals(carNo)) {
                             mStringRemoveContent += carNo;
                         }
-                        if (!"".equals(mStringRemoveContent) && null != carBrand && !"".equals(carBrand)) {
-                            mStringRemoveContent += ("，" + carBrand);
-                            mStringRemoveContent += "\n";
+                        if (!"".equals(mStringRemoveContent)) {
+                            if (!RegularU.isEmpty(carBrand)) {
+                                mStringRemoveContent += ("，" + carBrand  + "\n");
+                            } else {
+                                mStringRemoveContent += "\n";
+                            }
                         }
                     }
                 }
