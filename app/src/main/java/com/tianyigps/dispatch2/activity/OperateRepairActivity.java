@@ -44,6 +44,7 @@ import com.tianyigps.dispatch2.manager.FileManager;
 import com.tianyigps.dispatch2.manager.NetworkManager;
 import com.tianyigps.dispatch2.manager.SharedpreferenceManager;
 import com.tianyigps.dispatch2.utils.MessageDialogU;
+import com.tianyigps.dispatch2.utils.RegularU;
 import com.tianyigps.dispatch2.utils.TinyU;
 import com.tianyigps.dispatch2.utils.UploadPicU;
 import com.tianyigps.dispatch2.utils.Uri2FileU;
@@ -883,6 +884,32 @@ public class OperateRepairActivity extends BaseActivity {
                     mTextViewTip2.setVisibility(View.INVISIBLE);
                 }
             }
+
+            if (!RegularU.isEmpty(position) || !RegularU.isEmpty(positionUrl) || !RegularU.isEmpty(installUrl)) {
+                if (null == position || "".equals(position)) {
+                    complete = false;
+                    mTextViewTip1.setText(getString(R.string.tip_position));
+                    mTextViewTip1.setVisibility(View.VISIBLE);
+                } else {
+                    mTextViewTip1.setVisibility(View.INVISIBLE);
+                }
+                if (null == positionUrl || "".equals(positionUrl)) {
+                    complete = false;
+                    if (mTextViewTip1.getVisibility() != View.VISIBLE) {
+                        mTextViewTip1.setText(getString(R.string.tip_pic));
+                        mTextViewTip1.setVisibility(View.VISIBLE);
+                    }
+                } else {
+                    mTextViewTip1.setVisibility(View.INVISIBLE);
+                }
+
+                if (null == installUrl || "".equals(installUrl)) {
+                    complete = false;
+                    mTextViewTip2.setVisibility(View.VISIBLE);
+                } else {
+                    mTextViewTip2.setVisibility(View.INVISIBLE);
+                }
+            }
             cursor.close();
         }
 
@@ -917,7 +944,7 @@ public class OperateRepairActivity extends BaseActivity {
 
                     if (mOrderTerType == 1) {
                         mTextViewNewDeviceTitle.setText("新有线设备号");
-                    }else {
+                    } else {
                         mTextViewNewDeviceTitle.setText("新无线设备号");
                     }
 //                    mTextViewInstallName.setText(installNameG);
