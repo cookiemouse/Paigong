@@ -109,7 +109,7 @@ public class StatisticsActivity extends BaseActivity {
         mImageViewDate = findViewById(R.id.iv_activity_statistics_date);
         mListViewStatistics = findViewById(R.id.lv_activity_statistics);
         mFrameLayoutTitle = findViewById(R.id.fl_activity_statistics_list_title);
-        mLinearLayoutDefault = findViewById(R.id.ll_layout_default);
+        mLinearLayoutDefault = findViewById(R.id.ll_layout_default_statistics);
 
         SimpleDateFormat simpleDateFormatShow = new SimpleDateFormat("yyyy年MM月", Locale.CHINA);
         Date dateShow = new Date(mills);

@@ -106,7 +106,7 @@
                     android:divider="@color/colorNull"
                     android:scrollbars="none"/>
 
-                <include layout="@layout/layout_default"/>
+                <include layout="@layout/layout_default_statistics"/>
 
             </FrameLayout>
 
