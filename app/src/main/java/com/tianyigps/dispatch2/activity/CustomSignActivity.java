@@ -464,13 +464,14 @@ public class CustomSignActivity extends BaseActivity {
                 Intent intent = new Intent(CustomSignActivity.this, WorkerFragmentContentActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.putExtra(Data.DATA_INTENT_WORKER_FRAGMENT, Data.DATA_INTENT_WORKER_FRAGMENT_HANDING);
+                startActivity(intent);
 
                 // 2017/8/16 拨打后台电话，即总部电话
                 Intent intentCall = new Intent();
                 intentCall.setAction(Intent.ACTION_DIAL);
                 intentCall.setData(Uri.parse("tel:" + "18017325972"));
 
-                startActivities(new Intent[]{intent, intentCall});
+                startActivity(intentCall);
             }
         });
 
@@ -496,12 +497,14 @@ public class CustomSignActivity extends BaseActivity {
                     break;
                 }
                 case Data.MSG_1: {
+                    //  完成
                     mFileManager.delete();
                     showCompleteDialog(mStringMessage);
                     break;
                 }
                 case Data.MSG_2: {
                     //  部分完成
+                    mFileManager.delete();
                     showPartCompleteDialog();
                     break;
                 }

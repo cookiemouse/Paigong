@@ -103,6 +103,7 @@ public class RemoveAdapter extends BaseAdapter {
                     viewHolderRomeve.textViewOfflineRC = contentView.findViewById(R.id.tv_item_remove_complete_offline);
                     viewHolderRomeve.tvGo = contentView.findViewById(R.id.tv_item_remove_go);
                     viewHolderRomeve.ivGo = contentView.findViewById(R.id.iv_item_remove_go);
+                    viewHolderRomeve.frameLayout = contentView.findViewById(R.id.fl_item_remove);
 
                     contentView.setTag(viewHolderRomeve);
                 } else {
@@ -119,12 +120,21 @@ public class RemoveAdapter extends BaseAdapter {
                 viewHolderRomeve.textViewOnlineRC.setText("" + wireComplete);
                 viewHolderRomeve.textViewOfflineRC.setText("" + wirelessComplete);
 
-                if (wire == wireComplete && wireless == wirelessComplete) {
-                    viewHolderRomeve.tvGo.setVisibility(View.VISIBLE);
-                    viewHolderRomeve.ivGo.setVisibility(View.GONE);
+                if (data.isComplete()) {
+                    if (wire == wireComplete && wireless == wirelessComplete) {
+                        viewHolderRomeve.ivGo.setVisibility(View.GONE);
+                        viewHolderRomeve.tvGo.setVisibility(View.VISIBLE);
+                        viewHolderRomeve.frameLayout.setBackgroundResource(R.drawable.bg_item_installing_green);
+                    } else {
+                        viewHolderRomeve.ivGo.setVisibility(View.VISIBLE);
+                        viewHolderRomeve.tvGo.setVisibility(View.GONE);
+                        viewHolderRomeve.frameLayout.setBackgroundResource(R.drawable.bg_item_installing_blue);
+                    }
+
                 } else {
-                    viewHolderRomeve.tvGo.setVisibility(View.GONE);
                     viewHolderRomeve.ivGo.setVisibility(View.VISIBLE);
+                    viewHolderRomeve.tvGo.setVisibility(View.GONE);
+                    viewHolderRomeve.frameLayout.setBackgroundResource(R.drawable.bg_item_installing_orange);
                 }
 
                 break;
@@ -193,6 +203,7 @@ public class RemoveAdapter extends BaseAdapter {
         private TextView textViewOnlineR, textViewOfflineR, textViewOnlineRC, textViewOfflineRC;
         private ImageView ivGo;
         private TextView tvGo;
+        private FrameLayout frameLayout;
     }
 
     private class ViewHolderInstall {

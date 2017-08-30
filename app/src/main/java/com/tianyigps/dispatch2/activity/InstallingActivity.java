@@ -92,7 +92,7 @@ public class InstallingActivity extends BaseActivity {
     private DatabaseManager mDatabaseManager;
 
     //  完成数量
-    private int mCompleteCountRepair = 0, mCompleteCountInstall = 0;
+    private int mCompleteCountRepair = 0, mCompleteCountInstall = 0, mCompleteCountRemove = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -243,6 +243,10 @@ public class InstallingActivity extends BaseActivity {
                     showNullDialog();
                     return;
                 }
+                if (!checkRemoveList() && mCompleteCountRemove == 0){
+                    showNullDialog();
+                    return;
+                }
                 showPartDialog();
             }
         });
@@ -303,6 +307,7 @@ public class InstallingActivity extends BaseActivity {
                         if (objBean.getCarList().size() > 0) {
                             for (StartOrderInfoBean.ObjBean.CarListBean carListBean : objBean.getCarList()) {
                                 if (carListBean.getRemoveFlag() == 1) {
+                                    carId = carListBean.getId();
                                     for (StartOrderInfoBean.ObjBean.CarListBean.CarTerminalListBean carTerminalListBean
                                             : carListBean.getCarTerminalList()) {
                                         int status = carTerminalListBean.getRemoveStatus();
@@ -765,7 +770,7 @@ public class InstallingActivity extends BaseActivity {
                     Log.i(TAG, "checkInstallListCar: frameNoUrl-->" + frameNoUrl);
 
                     carComplete = (null != frameNoUrl);
-                    
+
                     cursorCar.close();
                 } else {
                     Log.i(TAG, "checkInstallList: cursorCar is null");
@@ -795,52 +800,39 @@ public class InstallingActivity extends BaseActivity {
     //  检验拆除列表是否完成
     private boolean checkRemoveList() {
         boolean nextAble = true;
+        int completeCount = 0;
         if (mAdapterRemoveDataList.size() > 0) {
             for (AdapterRemoveData data : mAdapterRemoveDataList) {
-                String frameNo = data.getFrameNo();
-                if (null == frameNo) {
+                int carId = data.getCarId();
+                if (0 == carId) {
                     continue;
                 }
 
-                int carId = data.getCarId();
-                boolean terComplete = true;
-                Cursor cursorTer = mDatabaseManager.getTerByCarId(carId);
-                if (null != cursorTer && cursorTer.moveToFirst()) {
-                    do {
-                        int idMainTer = cursorTer.getInt(0);
-                        String tNoNew = cursorTer.getString(2);
-                        String position = cursorTer.getString(3);
-                        String positionUrl = cursorTer.getString(6);
-                        String installUrl = cursorTer.getString(7);
+                int wire = data.getOnline();
+                int wireless = data.getOffline();
+                int wireComplete = data.getOnlineComplete();
+                int wirelessComplete = data.getOfflineComplete();
 
-                        Log.i(TAG, "checkRemoveList: idMainTer-->" + idMainTer);
-                        Log.i(TAG, "checkRemoveList: tNoOld-->" + tNoNew);
-                        Log.i(TAG, "checkRemoveList: position-->" + position);
-                        Log.i(TAG, "checkRemoveList: positionUrl-->" + positionUrl);
-                        Log.i(TAG, "checkRemoveList: installUrl-->" + installUrl);
+                Log.i(TAG, "checkRemoveList: wire-->" + wire);
+                Log.i(TAG, "checkRemoveList: wireless-->" + wireless);
+                Log.i(TAG, "checkRemoveList: wireComplete-->" + wireComplete);
+                Log.i(TAG, "checkRemoveList: wirelessComplete-->" + wirelessComplete);
 
-
-                        if (terComplete) {
-                            terComplete = ((null != tNoNew)
-                                    && (null != position)
-                                    && (null != positionUrl)
-                                    && (null != installUrl));
-                        }
-                    } while (cursorTer.moveToNext());
-
-                    cursorTer.close();
+                if (wire == wireComplete && wireless == wirelessComplete) {
+                    data.setComplete(true);
+                    completeCount++;
                 } else {
-                    Log.i(TAG, "checkRemoveList: cursorTer is null");
+                    data.setComplete(false);
                 }
 
-                data.setComplete(terComplete);
-
                 if (nextAble) {
-                    nextAble = terComplete;
+                    nextAble = data.isComplete();
                 }
             }
         }
         myHandler.sendEmptyMessage(Data.MSG_2);
+
+        mCompleteCountRemove = completeCount;
 
         return nextAble;
     }
