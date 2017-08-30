@@ -251,6 +251,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/tv_activity_operate_remove_state"
             android:layout_marginTop="@dimen/dp_16"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:visibility="visible">
 
             <ImageView

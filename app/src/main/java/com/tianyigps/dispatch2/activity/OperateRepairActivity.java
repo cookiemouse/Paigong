@@ -2,6 +2,7 @@ package com.tianyigps.dispatch2.activity;
 
 import android.app.AlertDialog;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -14,7 +15,9 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -119,8 +122,8 @@ public class OperateRepairActivity extends BaseActivity {
     //  输入提示文字
     private TextView mTextViewTip0, mTextViewTip1, mTextViewTip2, mTextViewTip3;
 
-    //  mEditTextNewImei是否为编辑改变
-    private boolean isEditChange = true;
+    //  imei号是否校验过
+    private boolean isCheckedImei = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,12 +141,6 @@ public class OperateRepairActivity extends BaseActivity {
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        myHandler.removeMessages(Data.MSG_9);
-    }
-
-    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
@@ -151,6 +148,7 @@ public class OperateRepairActivity extends BaseActivity {
             Log.i(TAG, "onActivityResult: qrcode-->" + data.getStringExtra(Data.DATA_SCANNER));
             String imei = data.getStringExtra(Data.DATA_SCANNER);
             setEditTextImei(imei);
+            mNetworkManager.checkIMEI(eid, token, wholeImei, mOrderTerType, orderNo, userName, mImeiOld);
         }
 
         if (requestCode == Data.DATA_INTENT_LOCATE_REQUEST && resultCode == Data.DATA_INTENT_LOCATE_RESULT) {
@@ -221,6 +219,45 @@ public class OperateRepairActivity extends BaseActivity {
                 Log.i(TAG, "onActivityResult: default");
             }
         }
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+            View v = getCurrentFocus();
+            if (isShouldHideInput(v, ev)) {
+
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (imm != null) {
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                }
+            }
+            return super.dispatchTouchEvent(ev);
+        }
+        if (getWindow().superDispatchTouchEvent(ev)) {
+            return true;
+        }
+        return onTouchEvent(ev);
+    }
+
+    public boolean isShouldHideInput(View v, MotionEvent event) {
+        if (v != null && (v instanceof EditText)) {
+            int[] leftTop = {0, 0};
+            v.getLocationInWindow(leftTop);
+            int left = leftTop[0];
+            int top = leftTop[1];
+            int bottom = top + v.getHeight();
+            int right = left + v.getWidth();
+            if (event.getX() > left && event.getX() < right
+                    && event.getY() > top && event.getY() < bottom) {
+                return false;
+            } else {
+                v.setFocusable(false);
+                v.setFocusableInTouchMode(true);
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -386,31 +423,25 @@ public class OperateRepairActivity extends BaseActivity {
         mImageViewReplaceLocate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String imei = mEditTextNewImei.getText().toString();
-                mNetworkManager.checkIMEI(eid, token, imei, mOrderTerType, orderNo, userName, mImeiOld);
+                // 2017/8/30 定位
+                if (isCheckedImei) {
+                    toLocate(wholeImei);
+                } else {
+                    mNetworkManager.checkIMEI(eid, token, wholeImei, mOrderTerType, orderNo, userName, mImeiOld);
+                }
             }
         });
 
-        mEditTextNewImei.addTextChangedListener(new TextWatcher() {
+        mEditTextNewImei.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                myHandler.removeMessages(Data.MSG_9);
-                if (isEditChange) {
-                    String imei = editable.toString();
-                    Message message = new Message();
-                    message.what = Data.MSG_9;
-                    message.obj = imei;
-                    myHandler.sendMessageDelayed(message, 2000);
+            public void onFocusChange(View view, boolean focus) {
+                Log.i(TAG, "onFocusChange: focus-->" + focus);
+                if (!focus) {
+                    // 丢失焦点
+                    isCheckedImei = false;
+                    String imei = ((TextView) view).getText().toString();
+                    getWholeImei(imei);
                 }
-                isEditChange = true;
             }
         });
 
@@ -754,7 +785,6 @@ public class OperateRepairActivity extends BaseActivity {
                 mTextViewState.setText(R.string.repair_replace);
             } else {
                 mRelativeLayoutReplace.setVisibility(View.VISIBLE);
-                isEditChange = false;
                 setEditTextImei(mImeiNew);
                 mTextViewState.setText(R.string.not_replace);
             }
@@ -764,8 +794,7 @@ public class OperateRepairActivity extends BaseActivity {
 
     //  删除图片
     private void removePic(int type, String url) {
-        showLoading();
-        mNetworkManager.deletePic(eid, token, orderNo, carId, tId, type, url, userName);
+        showDeletePicDialog(tId, type, url);
     }
 
     //  上传图片
@@ -797,9 +826,40 @@ public class OperateRepairActivity extends BaseActivity {
         mNetworkManager.getWholeImei(eid, token, imei, userName);
     }
 
+    //  删除图片确认框
+    private void showDeletePicDialog(final int tid, final int type, final String url) {
+        if (isFinishing()) {
+            return;
+        }
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View view = LayoutInflater.from(this).inflate(R.layout.dialog_button_editable, null);
+        Button ensure = view.findViewById(R.id.btn_dialog_editable_ensure);
+        Button cancle = view.findViewById(R.id.btn_dialog_editable_cancel);
+        TextView textView = view.findViewById(R.id.tv_dialog_editable_msg);
+        textView.setText("是否删除图片");
+        builder.setView(view);
+        final AlertDialog dialog = builder.create();
+
+        ensure.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showLoading();
+                mNetworkManager.deletePic(eid, token, orderNo, carId, tid, type, url, userName);
+                dialog.dismiss();
+            }
+        });
+        cancle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+    }
+
     //  显示imei
     private void setEditTextImei(String imei) {
-        isEditChange = false;
         mEditTextNewImei.setText(imei);
     }
 
@@ -886,14 +946,11 @@ public class OperateRepairActivity extends BaseActivity {
             }
 
             if (!RegularU.isEmpty(position) || !RegularU.isEmpty(positionUrl) || !RegularU.isEmpty(installUrl)) {
-                if (null == position || "".equals(position)) {
+                if (RegularU.isEmpty(position)) {
                     complete = false;
                     mTextViewTip1.setText(getString(R.string.tip_position));
                     mTextViewTip1.setVisibility(View.VISIBLE);
-                } else {
-                    mTextViewTip1.setVisibility(View.INVISIBLE);
-                }
-                if (null == positionUrl || "".equals(positionUrl)) {
+                } else if (RegularU.isEmpty(positionUrl)) {
                     complete = false;
                     if (mTextViewTip1.getVisibility() != View.VISIBLE) {
                         mTextViewTip1.setText(getString(R.string.tip_pic));
@@ -996,9 +1053,7 @@ public class OperateRepairActivity extends BaseActivity {
                 }
                 case Data.MSG_2: {
                     //  check whole imei 成功
-                    isEditChange = false;
                     setEditTextImei(wholeImei);
-                    toLocate(wholeImei);
                     break;
                 }
                 case Data.MSG_3: {
@@ -1060,23 +1115,15 @@ public class OperateRepairActivity extends BaseActivity {
                 }
                 case Data.MSG_8: {
                     //  check imei failure或者获取 whole imei失败
-                    isEditChange = false;
                     setEditTextImei(null);
                     myHandler.sendEmptyMessage(Data.MSG_3);
                     break;
                 }
-                case Data.MSG_9: {
-                    //  mEditTextNewImei编辑完成
-                    Log.i(TAG, "handleMessage: mEditTextNewImei编辑完成");
-                    String imei = (String) msg.obj;
-                    getWholeImei(imei);
-                    break;
-                }
                 case Data.MSG_10: {
                     //  获取 whole imei
-                    isEditChange = false;
                     setEditTextImei(wholeImei);
                     mDatabaseManager.addRepair(tId, 0);
+                    mNetworkManager.checkIMEI(eid, token, wholeImei, mOrderTerType, orderNo, userName, mImeiOld);
                     break;
                 }
                 default: {
