@@ -150,6 +150,9 @@ public class OperateInstallActivity extends BaseActivity {
     //  设备里是否有信息，如果有则判断车辆是否填写完成
     private boolean haveTerData = false;
 
+    //  imei号是否校验过
+    private boolean isCheckedImei = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -172,6 +175,7 @@ public class OperateInstallActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == Data.DATA_INTENT_SCANNER_REQUEST && resultCode == Data.DATA_INTENT_SCANNER_RESULT) {
             Log.i(TAG, "onActivityResult: qrcode-->" + data.getStringExtra(Data.DATA_SCANNER));
+            isCheckedImei = false;
             String imei = data.getStringExtra(Data.DATA_SCANNER);
             int model;
             if (mAdapterOperateInstallListDataList.get(itemPosition).isWire()) {
@@ -179,6 +183,7 @@ public class OperateInstallActivity extends BaseActivity {
             } else {
                 model = 2;
             }
+            showLoading();
             mNetworkManager.checkIMEI(eid, token, imei, model, orderNo, userName, "");
         }
 
@@ -586,6 +591,7 @@ public class OperateInstallActivity extends BaseActivity {
                 itemPosition = position;
                 idMainTerminal = ID_MAIN_TERMINAL + itemPosition;
 
+                isCheckedImei = false;
                 Log.i(TAG, "onTextChanged: imei-->" + imei);
                 myHandler.removeMessages(Data.MSG_1);
 
@@ -620,8 +626,11 @@ public class OperateInstallActivity extends BaseActivity {
                 //  2017/7/31 快速定位
                 itemPosition = position;
                 idMainTerminal = ID_MAIN_TERMINAL + itemPosition;
-                String tNo = mAdapterOperateInstallListDataList.get(position).gettNoNew();
-                toLocate(tNo);
+                AdapterOperateInstallListData data = mAdapterOperateInstallListDataList.get(position);
+                String tNo = data.gettNoNew();
+                if (isCheckedImei) {
+                    toLocate(tNo);
+                }
             }
 
             @Override
@@ -671,301 +680,311 @@ public class OperateInstallActivity extends BaseActivity {
             }
         });
 
-        mNetworkManager.setGetWorkerOrderInfoStartListener(new OnGetWorkerOrderInfoStartListener() {
-            @Override
-            public void onFailure() {
-                Log.i(TAG, "onFailure: ");
-                mStringMessage = Data.DEFAULT_MESSAGE;
-                myHandler.sendEmptyMessage(Data.MSG_ERO);
-            }
+        mNetworkManager.setGetWorkerOrderInfoStartListener(new
 
-            @Override
-            public void onSuccess(String result) {
-                Log.i(TAG, "onSuccess: result-->" + result);
-                Gson gson = new Gson();
-                StartOrderInfoBean startOrderInfoBean = gson.fromJson(result, StartOrderInfoBean.class);
+                                                                   OnGetWorkerOrderInfoStartListener() {
+                                                                       @Override
+                                                                       public void onFailure() {
+                                                                           Log.i(TAG, "onFailure: ");
+                                                                           mStringMessage = Data.DEFAULT_MESSAGE;
+                                                                           myHandler.sendEmptyMessage(Data.MSG_ERO);
+                                                                       }
 
-                if (!startOrderInfoBean.isSuccess()) {
-                    mStringMessage = startOrderInfoBean.getMsg();
-                    myHandler.sendEmptyMessage(Data.MSG_ERO);
-                    return;
-                }
+                                                                       @Override
+                                                                       public void onSuccess(String result) {
+                                                                           Log.i(TAG, "onSuccess: result-->" + result);
+                                                                           Gson gson = new Gson();
+                                                                           StartOrderInfoBean startOrderInfoBean = gson.fromJson(result, StartOrderInfoBean.class);
 
-                StartOrderInfoBean.ObjBean objBean = startOrderInfoBean.getObj();
+                                                                           if (!startOrderInfoBean.isSuccess()) {
+                                                                               mStringMessage = startOrderInfoBean.getMsg();
+                                                                               myHandler.sendEmptyMessage(Data.MSG_ERO);
+                                                                               return;
+                                                                           }
+
+                                                                           StartOrderInfoBean.ObjBean objBean = startOrderInfoBean.getObj();
 //                StartOrderInfoBean.ObjBean.CarListBean carListBean = objBean.getCarList().get(0);
-                for (StartOrderInfoBean.ObjBean.CarListBean carListBean : objBean.getCarList()) {
-                    if (carListBean.getId() == carId) {
-                        mCarNo = carListBean.getCarNo();
-                        mCarFrameNo = carListBean.getCarVin();
-                        mCarBrand = carListBean.getCarBrand();
-                        mCarNoPicUrl = carListBean.getCarNoPic();
-                        mCarFramePicUrl = carListBean.getCarVinPic();
-                        mCarNoPic = mBaseImg + mCarNoPicUrl;
-                        mCarFramePic = mBaseImg + mCarFramePicUrl;
+                                                                           for (StartOrderInfoBean.ObjBean.CarListBean carListBean : objBean.getCarList()) {
+                                                                               if (carListBean.getId() == carId) {
+                                                                                   mCarNo = carListBean.getCarNo();
+                                                                                   mCarFrameNo = carListBean.getCarVin();
+                                                                                   mCarBrand = carListBean.getCarBrand();
+                                                                                   mCarNoPicUrl = carListBean.getCarNoPic();
+                                                                                   mCarFramePicUrl = carListBean.getCarVinPic();
+                                                                                   mCarNoPic = mBaseImg + mCarNoPicUrl;
+                                                                                   mCarFramePic = mBaseImg + mCarFramePicUrl;
 
-                        mDatabaseManager.addCarNoPic(idMainCar, mCarNoPic, carListBean.getCarNoPic());
-                        mDatabaseManager.addCarFrameNoPic(idMainCar, mCarFramePic, carListBean.getCarVinPic());
+                                                                                   mDatabaseManager.addCarNoPic(idMainCar, mCarNoPic, carListBean.getCarNoPic());
+                                                                                   mDatabaseManager.addCarFrameNoPic(idMainCar, mCarFramePic, carListBean.getCarVinPic());
 
-                        String pic1 = carListBean.getPic1();
-                        String pic2 = carListBean.getPic2();
-                        String pic3 = carListBean.getPic3();
-                        String pic4 = carListBean.getPic4();
-                        String pic5 = carListBean.getPic5();
-                        String pic6 = carListBean.getPic6();
+                                                                                   String pic1 = carListBean.getPic1();
+                                                                                   String pic2 = carListBean.getPic2();
+                                                                                   String pic3 = carListBean.getPic3();
+                                                                                   String pic4 = carListBean.getPic4();
+                                                                                   String pic5 = carListBean.getPic5();
+                                                                                   String pic6 = carListBean.getPic6();
 
-                        if (null != pic1) {
-                            mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData(mBaseImg + pic1, pic1));
+                                                                                   if (null != pic1) {
+                                                                                       mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData(mBaseImg + pic1, pic1));
 //                    mDatabaseManager.addCarPics(idMainCar, 0, mBaseImg + pic1, pic1);
-                        }
-                        if (null != pic2) {
-                            mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData(mBaseImg + pic2, pic2));
+                                                                                   }
+                                                                                   if (null != pic2) {
+                                                                                       mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData(mBaseImg + pic2, pic2));
 //                    mDatabaseManager.addCarPics(idMainCar, 1, mBaseImg + pic1, pic1);
-                        }
-                        if (null != pic3) {
-                            mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData(mBaseImg + pic3, pic3));
+                                                                                   }
+                                                                                   if (null != pic3) {
+                                                                                       mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData(mBaseImg + pic3, pic3));
 //                    mDatabaseManager.addCarPics(idMainCar, 2, mBaseImg + pic1, pic1);
-                        }
-                        if (null != pic4) {
-                            mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData(mBaseImg + pic4, pic4));
+                                                                                   }
+                                                                                   if (null != pic4) {
+                                                                                       mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData(mBaseImg + pic4, pic4));
 //                    mDatabaseManager.addCarPics(idMainCar, 3, mBaseImg + pic1, pic1);
-                        }
-                        if (null != pic5) {
-                            mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData(mBaseImg + pic5, pic5));
+                                                                                   }
+                                                                                   if (null != pic5) {
+                                                                                       mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData(mBaseImg + pic5, pic5));
 //                    mDatabaseManager.addCarPics(idMainCar, 4, mBaseImg + pic1, pic1);
-                        }
-                        if (null != pic6) {
-                            mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData(mBaseImg + pic6, pic6));
+                                                                                   }
+                                                                                   if (null != pic6) {
+                                                                                       mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData(mBaseImg + pic6, pic6));
 //                    mDatabaseManager.addCarPics(idMainCar, 5, mBaseImg + pic1, pic1);
-                        }
-                        List<StartOrderInfoBean.ObjBean.CarListBean.CarTerminalListBean> carTerminalListBeanList = carListBean.getCarTerminalList();
-                        for (int i = 0; i < carTerminalListBeanList.size(); i++) {
+                                                                                   }
+                                                                                   List<StartOrderInfoBean.ObjBean.CarListBean.CarTerminalListBean> carTerminalListBeanList = carListBean.getCarTerminalList();
+                                                                                   for (int i = 0; i < carTerminalListBeanList.size(); i++) {
 
-                            if (i >= mAdapterOperateInstallListDataList.size()) {
-                                continue;
-                            }
-                            StartOrderInfoBean.ObjBean.CarListBean.CarTerminalListBean carTerminalListBean = carTerminalListBeanList.get(i);
-                            String tNo = carTerminalListBean.getTNo();
-                            int tId = carTerminalListBean.getId();
-                            String position = carTerminalListBean.getNewInstallLocation();
-                            String positionPic = carTerminalListBean.getNewInstallLocationPic();
-                            String installPic = carTerminalListBean.getNewWiringDiagramPic();
-                            int type = carTerminalListBean.getTerminalType();
+                                                                                       if (i >= mAdapterOperateInstallListDataList.size()) {
+                                                                                           continue;
+                                                                                       }
+                                                                                       StartOrderInfoBean.ObjBean.CarListBean.CarTerminalListBean carTerminalListBean = carTerminalListBeanList.get(i);
+                                                                                       String tNo = carTerminalListBean.getTNo();
+                                                                                       int tId = carTerminalListBean.getId();
+                                                                                       String position = carTerminalListBean.getNewInstallLocation();
+                                                                                       String positionPic = carTerminalListBean.getNewInstallLocationPic();
+                                                                                       String installPic = carTerminalListBean.getNewWiringDiagramPic();
+                                                                                       int type = carTerminalListBean.getTerminalType();
 
-                            for (AdapterOperateInstallListData data : mAdapterOperateInstallListDataList) {
-                                if ((data.isWire() && type == 1) || (!data.isWire() && type == 2)) {
-                                    data.settId(tId);
-                                    data.settNoNew(tNo);
-                                    data.setPosition(position);
-                                    data.setPositionPic(mBaseImg + positionPic);
-                                    data.setPositionPicUrl(positionPic);
-                                    data.setInstallPic(mBaseImg + installPic);
-                                    data.setInstallPicUrl(installPic);
-                                }
-                            }
+                                                                                       for (AdapterOperateInstallListData data : mAdapterOperateInstallListDataList) {
+                                                                                           if ((data.isWire() && type == 1) || (!data.isWire() && type == 2)) {
+                                                                                               data.settId(tId);
+                                                                                               data.settNoNew(tNo);
+                                                                                               data.setPosition(position);
+                                                                                               data.setPositionPic(mBaseImg + positionPic);
+                                                                                               data.setPositionPicUrl(positionPic);
+                                                                                               data.setInstallPic(mBaseImg + installPic);
+                                                                                               data.setInstallPicUrl(installPic);
+                                                                                           }
+                                                                                       }
 
-                            String idTemp = ID_MAIN_TERMINAL + i;
-                            mDatabaseManager.addTerId(idTemp, tId, carId);
-                        }
-                    }
-                }
+                                                                                       String idTemp = ID_MAIN_TERMINAL + i;
+                                                                                       mDatabaseManager.addTerId(idTemp, tId, carId);
+                                                                                   }
+                                                                               }
+                                                                           }
 
-                myHandler.sendEmptyMessage(Data.MSG_9);
-            }
-        });
+                                                                           myHandler.sendEmptyMessage(Data.MSG_9);
+                                                                       }
+                                                                   });
 
-        mNetworkManager.setOnGetWholeIMEIListener(new OnGetWholeIMEIListener() {
-            @Override
-            public void onFailure() {
-                mStringMessage = Data.DEFAULT_MESSAGE;
-                myHandler.sendEmptyMessage(Data.MSG_ERO);
-            }
+        mNetworkManager.setOnGetWholeIMEIListener(new
 
-            @Override
-            public void onSuccess(String result) {
-                Gson gson = new Gson();
-                WholeImeiBean wholeImeiBean = gson.fromJson(result, WholeImeiBean.class);
-                if (!wholeImeiBean.isSuccess()) {
-                    mStringMessage = wholeImeiBean.getMsg();
-                    myHandler.sendEmptyMessage(Data.MSG_11);
-                    return;
-                }
-                WholeImeiBean.ObjBean objBean = wholeImeiBean.getObj();
-                String imei = objBean.getImei();
-                //验证imei
-                AdapterOperateInstallListData data = mAdapterOperateInstallListDataList.get(itemPosition);
-                int model;
-                if (data.isWire()) {
-                    model = 1;
-                } else {
-                    model = 2;
-                }
-                mNetworkManager.checkIMEI(eid, token, imei, model, orderNo, userName, "");
-            }
-        });
+                                                          OnGetWholeIMEIListener() {
+                                                              @Override
+                                                              public void onFailure() {
+                                                                  mStringMessage = Data.DEFAULT_MESSAGE;
+                                                                  myHandler.sendEmptyMessage(Data.MSG_ERO);
+                                                              }
 
-        mNetworkManager.setCheckIMEIListener(new OnCheckIMEIListener() {
-            @Override
-            public void onFailure() {
-                Log.i(TAG, "onFailure: ");
-                mStringMessage = Data.DEFAULT_MESSAGE;
-                myHandler.sendEmptyMessage(Data.MSG_ERO);
-            }
+                                                              @Override
+                                                              public void onSuccess(String result) {
+                                                                  Gson gson = new Gson();
+                                                                  WholeImeiBean wholeImeiBean = gson.fromJson(result, WholeImeiBean.class);
+                                                                  if (!wholeImeiBean.isSuccess()) {
+                                                                      mStringMessage = wholeImeiBean.getMsg();
+                                                                      myHandler.sendEmptyMessage(Data.MSG_11);
+                                                                      return;
+                                                                  }
+                                                                  WholeImeiBean.ObjBean objBean = wholeImeiBean.getObj();
+                                                                  String imei = objBean.getImei();
+                                                                  //验证imei
+                                                                  AdapterOperateInstallListData data = mAdapterOperateInstallListDataList.get(itemPosition);
+                                                                  int model;
+                                                                  if (data.isWire()) {
+                                                                      model = 1;
+                                                                  } else {
+                                                                      model = 2;
+                                                                  }
+                                                                  mNetworkManager.checkIMEI(eid, token, imei, model, orderNo, userName, "");
+                                                              }
+                                                          });
 
-            @Override
-            public void onSuccess(String result) {
-                Log.i(TAG, "onSuccess: result-->" + result);
-                Gson gson = new Gson();
-                CheckImeiBean checkImeiBean = gson.fromJson(result, CheckImeiBean.class);
-                mStringMessage = checkImeiBean.getMsg();
-                if (!checkImeiBean.isSuccess()) {
-                    myHandler.sendEmptyMessage(Data.MSG_11);
-                    return;
-                }
-                CheckImeiBean.ObjBean objBean = checkImeiBean.getObj();
-                if (null == objBean) {
-                    myHandler.sendEmptyMessage(Data.MSG_ERO);
-                    return;
-                }
-                Message message = new Message();
-                String imei = objBean.getImei();
-                boolean replaceAble = false;
-                if ("0".equals(objBean.getChangeFlag())) {
-                    replaceAble = true;
-                }
+        mNetworkManager.setCheckIMEIListener(new
 
-                Bundle bundle = new Bundle();
-                bundle.putString(KEY_IMEI, imei);
-                bundle.putBoolean(KEY_REPLACE, replaceAble);
-                message.setData(bundle);
-                message.what = Data.MSG_2;
-                myHandler.sendMessage(message);
-            }
-        });
+                                                     OnCheckIMEIListener() {
+                                                         @Override
+                                                         public void onFailure() {
+                                                             Log.i(TAG, "onFailure: ");
+                                                             mStringMessage = Data.DEFAULT_MESSAGE;
+                                                             myHandler.sendEmptyMessage(Data.MSG_ERO);
+                                                         }
 
-        mNetworkManager.setOnUploadPicListener(new OnUploadPicListener() {
-            @Override
-            public void onFailure() {
-                myHandler.sendEmptyMessage(Data.MSG_ERO);
-            }
+                                                         @Override
+                                                         public void onSuccess(String result) {
+                                                             Log.i(TAG, "onSuccess: result-->" + result);
+                                                             Gson gson = new Gson();
+                                                             CheckImeiBean checkImeiBean = gson.fromJson(result, CheckImeiBean.class);
+                                                             mStringMessage = checkImeiBean.getMsg();
+                                                             if (!checkImeiBean.isSuccess()) {
+                                                                 myHandler.sendEmptyMessage(Data.MSG_11);
+                                                                 return;
+                                                             }
+                                                             CheckImeiBean.ObjBean objBean = checkImeiBean.getObj();
+                                                             if (null == objBean) {
+                                                                 myHandler.sendEmptyMessage(Data.MSG_ERO);
+                                                                 return;
+                                                             }
+                                                             Message message = new Message();
+                                                             String imei = objBean.getImei();
+                                                             boolean replaceAble = false;
+                                                             if ("0".equals(objBean.getChangeFlag())) {
+                                                                 replaceAble = true;
+                                                             }
 
-            @Override
-            public void onSuccess(String result) {
-                Log.i(TAG, "onSuccess: result-->" + result);
-                Gson gson = new Gson();
-                UploadPicBean uploadPicBean = gson.fromJson(result, UploadPicBean.class);
-                if (!uploadPicBean.isSuccess()) {
-                    mStringMessage = uploadPicBean.getMsg();
-                    onFailure();
-                    return;
-                }
-                UploadPicBean.ObjBean objBean = uploadPicBean.getObj();
+                                                             Bundle bundle = new Bundle();
+                                                             bundle.putString(KEY_IMEI, imei);
+                                                             bundle.putBoolean(KEY_REPLACE, replaceAble);
+                                                             message.setData(bundle);
+                                                             message.what = Data.MSG_2;
+                                                             myHandler.sendMessage(message);
+                                                         }
+                                                     });
 
-                int id = objBean.getId();
+        mNetworkManager.setOnUploadPicListener(new
 
-                String imgUrl = objBean.getImgUrl();
-                itemPath = mBaseImg + imgUrl;
+                                                       OnUploadPicListener() {
+                                                           @Override
+                                                           public void onFailure() {
+                                                               myHandler.sendEmptyMessage(Data.MSG_ERO);
+                                                           }
 
-                Log.i(TAG, "onSuccess: picType-->" + picType);
-                switch (picType) {
-                    //  Recycler
-                    case INTENT_CHOICE_R: {
-                    }
-                    case INTENT_PHOTO_R: {
+                                                           @Override
+                                                           public void onSuccess(String result) {
+                                                               Log.i(TAG, "onSuccess: result-->" + result);
+                                                               Gson gson = new Gson();
+                                                               UploadPicBean uploadPicBean = gson.fromJson(result, UploadPicBean.class);
+                                                               if (!uploadPicBean.isSuccess()) {
+                                                                   mStringMessage = uploadPicBean.getMsg();
+                                                                   onFailure();
+                                                                   return;
+                                                               }
+                                                               UploadPicBean.ObjBean objBean = uploadPicBean.getObj();
+
+                                                               int id = objBean.getId();
+
+                                                               String imgUrl = objBean.getImgUrl();
+                                                               itemPath = mBaseImg + imgUrl;
+
+                                                               Log.i(TAG, "onSuccess: picType-->" + picType);
+                                                               switch (picType) {
+                                                                   //  Recycler
+                                                                   case INTENT_CHOICE_R: {
+                                                                   }
+                                                                   case INTENT_PHOTO_R: {
 //                        mDatabaseManager.addCarPics(idMainCar, itemRecycler, itemPath, imgUrl);
-                        Log.i(TAG, "onSuccess: itemRecycle-->" + itemRecycler);
-                        AdapterOperateInstallRecyclerData data = mAdapterOperateInstallRecyclerDataList.get(itemRecycler);
-                        if (null == data || null == data.getImgUrl()) {
-                            int size = mAdapterOperateInstallRecyclerDataList.size();
-                            if (size < 6) {
-                                mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData());
-                            }
-                        }
-                        data.setPath(itemPath);
-                        data.setImgUrl(imgUrl);
-                        myHandler.sendEmptyMessage(Data.MSG_3);
-                        break;
-                    }
-                    // carNo
-                    case INTENT_CHOICE_C: {
-                    }
-                    case INTENT_PHOTO_C: {
-                        mCarNoPicUrl = imgUrl;
-                        mCarNoPic = mBaseImg + mCarNoPicUrl;
+                                                                       Log.i(TAG, "onSuccess: itemRecycle-->" + itemRecycler);
+                                                                       AdapterOperateInstallRecyclerData data = mAdapterOperateInstallRecyclerDataList.get(itemRecycler);
+                                                                       if (null == data || null == data.getImgUrl()) {
+                                                                           int size = mAdapterOperateInstallRecyclerDataList.size();
+                                                                           if (size < 6) {
+                                                                               mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData());
+                                                                           }
+                                                                       }
+                                                                       data.setPath(itemPath);
+                                                                       data.setImgUrl(imgUrl);
+                                                                       myHandler.sendEmptyMessage(Data.MSG_3);
+                                                                       break;
+                                                                   }
+                                                                   // carNo
+                                                                   case INTENT_CHOICE_C: {
+                                                                   }
+                                                                   case INTENT_PHOTO_C: {
+                                                                       mCarNoPicUrl = imgUrl;
+                                                                       mCarNoPic = mBaseImg + mCarNoPicUrl;
 
-                        mDatabaseManager.addCarNoPic(idMainCar, itemPath, imgUrl);
-                        myHandler.sendEmptyMessage(Data.MSG_4);
-                        break;
-                    }
-                    // frameNo
-                    case INTENT_CHOICE_F: {
-                    }
-                    case INTENT_PHOTO_F: {
-                        mCarFramePicUrl = imgUrl;
-                        mCarFramePic = mBaseImg + mCarFramePicUrl;
+                                                                       mDatabaseManager.addCarNoPic(idMainCar, itemPath, imgUrl);
+                                                                       myHandler.sendEmptyMessage(Data.MSG_4);
+                                                                       break;
+                                                                   }
+                                                                   // frameNo
+                                                                   case INTENT_CHOICE_F: {
+                                                                   }
+                                                                   case INTENT_PHOTO_F: {
+                                                                       mCarFramePicUrl = imgUrl;
+                                                                       mCarFramePic = mBaseImg + mCarFramePicUrl;
 
-                        mDatabaseManager.addCarFrameNoPic(idMainCar, itemPath, imgUrl);
-                        myHandler.sendEmptyMessage(Data.MSG_5);
-                        break;
-                    }
+                                                                       mDatabaseManager.addCarFrameNoPic(idMainCar, itemPath, imgUrl);
+                                                                       myHandler.sendEmptyMessage(Data.MSG_5);
+                                                                       break;
+                                                                   }
 
-                    //  positionPic
-                    case INTENT_CHOICE_P: {
-                    }
-                    case INTENT_PHOTO_P: {
+                                                                   //  positionPic
+                                                                   case INTENT_CHOICE_P: {
+                                                                   }
+                                                                   case INTENT_PHOTO_P: {
 
-                        mDatabaseManager.addTerPositionPic(idMainTerminal, itemPath, imgUrl);
-                        mDatabaseManager.addTerId(idMainTerminal, id, carId);
-                        AdapterOperateInstallListData data = mAdapterOperateInstallListDataList.get(itemPosition);
-                        data.settId(id);
-                        data.setPositionPic(itemPath);
-                        data.setPositionPicUrl(imgUrl);
-                        myHandler.sendEmptyMessage(Data.MSG_6);
-                        break;
-                    }
+                                                                       mDatabaseManager.addTerPositionPic(idMainTerminal, itemPath, imgUrl);
+                                                                       mDatabaseManager.addTerId(idMainTerminal, id, carId);
+                                                                       AdapterOperateInstallListData data = mAdapterOperateInstallListDataList.get(itemPosition);
+                                                                       data.settId(id);
+                                                                       data.setPositionPic(itemPath);
+                                                                       data.setPositionPicUrl(imgUrl);
+                                                                       myHandler.sendEmptyMessage(Data.MSG_6);
+                                                                       break;
+                                                                   }
 
-                    //  installPic
-                    case INTENT_CHOICE_I: {
-                    }
-                    case INTENT_PHOTO_I: {
+                                                                   //  installPic
+                                                                   case INTENT_CHOICE_I: {
+                                                                   }
+                                                                   case INTENT_PHOTO_I: {
 
-                        mDatabaseManager.addTerInstallPic(idMainTerminal, itemPath, imgUrl);
-                        mDatabaseManager.addTerId(idMainTerminal, id, carId);
-                        AdapterOperateInstallListData data = mAdapterOperateInstallListDataList.get(itemPosition);
-                        data.settId(id);
-                        data.setInstallPic(itemPath);
-                        data.setInstallPicUrl(imgUrl);
-                        myHandler.sendEmptyMessage(Data.MSG_7);
-                        break;
-                    }
-                    default: {
-                        //  防止加载框不取消的情况
-                        myHandler.sendEmptyMessage(Data.MSG_11);
-                    }
-                }
-            }
-        });
+                                                                       mDatabaseManager.addTerInstallPic(idMainTerminal, itemPath, imgUrl);
+                                                                       mDatabaseManager.addTerId(idMainTerminal, id, carId);
+                                                                       AdapterOperateInstallListData data = mAdapterOperateInstallListDataList.get(itemPosition);
+                                                                       data.settId(id);
+                                                                       data.setInstallPic(itemPath);
+                                                                       data.setInstallPicUrl(imgUrl);
+                                                                       myHandler.sendEmptyMessage(Data.MSG_7);
+                                                                       break;
+                                                                   }
+                                                                   default: {
+                                                                       //  防止加载框不取消的情况
+                                                                       myHandler.sendEmptyMessage(Data.MSG_11);
+                                                                   }
+                                                               }
+                                                           }
+                                                       });
 
-        mNetworkManager.setOnDeletePicListener(new OnDeletePicListener() {
-            @Override
-            public void onFailure() {
-                Log.i(TAG, "onFailure: ");
-                myHandler.sendEmptyMessage(Data.MSG_12);
-            }
+        mNetworkManager.setOnDeletePicListener(new
 
-            @Override
-            public void onSuccess(String result) {
-                Log.i(TAG, "onSuccess: result-->" + result);
-                Gson gson = new Gson();
-                DeletePicBean deletePicBean = gson.fromJson(result, DeletePicBean.class);
-                mStringMessage = deletePicBean.getMsg();
-                if (!deletePicBean.isSuccess()) {
-                    myHandler.sendEmptyMessage(Data.MSG_12);
-                    return;
-                }
+                                                       OnDeletePicListener() {
+                                                           @Override
+                                                           public void onFailure() {
+                                                               Log.i(TAG, "onFailure: ");
+                                                               myHandler.sendEmptyMessage(Data.MSG_12);
+                                                           }
 
-                myHandler.sendEmptyMessage(Data.MSG_8);
-            }
-        });
+                                                           @Override
+                                                           public void onSuccess(String result) {
+                                                               Log.i(TAG, "onSuccess: result-->" + result);
+                                                               Gson gson = new Gson();
+                                                               DeletePicBean deletePicBean = gson.fromJson(result, DeletePicBean.class);
+                                                               mStringMessage = deletePicBean.getMsg();
+                                                               if (!deletePicBean.isSuccess()) {
+                                                                   myHandler.sendEmptyMessage(Data.MSG_12);
+                                                                   return;
+                                                               }
+
+                                                               myHandler.sendEmptyMessage(Data.MSG_8);
+                                                           }
+                                                       });
     }
 
     //  获取并显示数据库里的车辆数据
@@ -1544,6 +1563,7 @@ public class OperateInstallActivity extends BaseActivity {
                 }
                 case Data.MSG_2: {
                     //  check imei success
+                    isCheckedImei = true;
                     Bundle bundle = msg.getData();
                     String imei = bundle.getString(KEY_IMEI);
                     boolean repalce = bundle.getBoolean(KEY_REPLACE);

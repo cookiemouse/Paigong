@@ -146,8 +146,10 @@ public class OperateRepairActivity extends BaseActivity {
 
         if (requestCode == Data.DATA_INTENT_SCANNER_REQUEST && resultCode == Data.DATA_INTENT_SCANNER_RESULT) {
             Log.i(TAG, "onActivityResult: qrcode-->" + data.getStringExtra(Data.DATA_SCANNER));
+            isCheckedImei = false;
             String imei = data.getStringExtra(Data.DATA_SCANNER);
             setEditTextImei(imei);
+            showLoading();
             mNetworkManager.checkIMEI(eid, token, wholeImei, mOrderTerType, orderNo, userName, mImeiOld);
         }
 
@@ -426,8 +428,6 @@ public class OperateRepairActivity extends BaseActivity {
                 // 2017/8/30 定位
                 if (isCheckedImei) {
                     toLocate(wholeImei);
-                } else {
-                    mNetworkManager.checkIMEI(eid, token, wholeImei, mOrderTerType, orderNo, userName, mImeiOld);
                 }
             }
         });
@@ -1053,6 +1053,7 @@ public class OperateRepairActivity extends BaseActivity {
                 }
                 case Data.MSG_2: {
                     //  check whole imei 成功
+                    isCheckedImei = true;
                     setEditTextImei(wholeImei);
                     break;
                 }
