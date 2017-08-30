@@ -31,6 +31,7 @@ import com.tianyigps.dispatch2.interfaces.OnGetWorkerOrderInfoStartListener;
 import com.tianyigps.dispatch2.manager.DatabaseManager;
 import com.tianyigps.dispatch2.manager.NetworkManager;
 import com.tianyigps.dispatch2.manager.SharedpreferenceManager;
+import com.tianyigps.dispatch2.utils.RegularU;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -499,7 +500,7 @@ public class InstallingActivity extends BaseActivity {
     }
 
     //  空单对话框
-    private void showNullDialog(){
+    private void showNullDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(InstallingActivity.this);
         View viewDialog = LayoutInflater.from(InstallingActivity.this).inflate(R.layout.dialog_button_editable, null);
         builder.setView(viewDialog);
@@ -561,15 +562,19 @@ public class InstallingActivity extends BaseActivity {
                         Log.i(TAG, "updateInstallComplete: installUrl-->" + installUrl);
                         Log.i(TAG, "updateInstallComplete: wire-->" + wire);
 
-                        terComplete = ((null != tNoNew && !"".equals(tNoNew))
-                                && (null != position && !"".equals(position))
-                                && (null != positionUrl)
-                                && (null != installUrl));
-
-                        if (terComplete) {
-                            if (0 == wire) {
+                        if (0 == wire) {
+                            terComplete = (!RegularU.isEmpty(tNoNew))
+                                    && (!RegularU.isEmpty(position))
+                                    && !RegularU.isEmpty(positionUrl);
+                            if (terComplete) {
                                 wirelessComplete++;
-                            } else {
+                            }
+                        } else {
+                            terComplete = (!RegularU.isEmpty(tNoNew))
+                                    && (!RegularU.isEmpty(position))
+                                    && !RegularU.isEmpty(positionUrl)
+                                    && !RegularU.isEmpty(installUrl);
+                            if (terComplete) {
                                 wireComplete++;
                             }
                         }

@@ -1287,6 +1287,7 @@ public class OperateInstallActivity extends BaseActivity {
         haveTerData = false;
         int count = mAdapterOperateInstallListDataList.size();
         for (int i = 0; i < count; i++) {
+            AdapterOperateInstallListData data = mAdapterOperateInstallListDataList.get(i);
             Cursor cursor = mDatabaseManager.getTer(ID_MAIN_TERMINAL + i);
             if (null != cursor && cursor.moveToFirst()) {
                 String id = cursor.getString(0);
@@ -1311,25 +1312,42 @@ public class OperateInstallActivity extends BaseActivity {
                 Log.i(TAG, "loadTerminalData: model-->" + model);
                 Log.i(TAG, "loadTerminalData: tId-->" + tId);
 
-                if ((null == tNoNew || "".equals(tNoNew))
-                        && (null == position || "".equals(position))
-                        && (null == positionPicUrl || "".equals(positionPicUrl))
-                        && (null == installPicUrl || "".equals(installPicUrl))
-                        && (0 == model)) {
-                    complete = true;
-                } else if (null != tNoNew && !"".equals(tNoNew)
-                        && null != position && !"".equals(position)
-                        && null != positionPicUrl && !"".equals(positionPicUrl)
-                        && null != installPicUrl && !"".equals(installPicUrl)
-                        && (0 != model)) {
-                    complete = true;
-                    haveTerData = true;
-                } else {
-                    complete = false;
-                    haveTerData = true;
+                if (data.isWire()) {
+                    if ((null == tNoNew || "".equals(tNoNew))
+                            && (null == position || "".equals(position))
+                            && (null == positionPicUrl || "".equals(positionPicUrl))
+                            && (null == installPicUrl || "".equals(installPicUrl))
+                            && (0 == model)) {
+                        complete = true;
+                    } else if (null != tNoNew && !"".equals(tNoNew)
+                            && null != position && !"".equals(position)
+                            && null != positionPicUrl && !"".equals(positionPicUrl)
+                            && null != installPicUrl && !"".equals(installPicUrl)
+                            && (0 != model)) {
+                        complete = true;
+                        haveTerData = true;
+                    } else {
+                        complete = false;
+                        haveTerData = true;
+                    }
+                }else {
+                    if ((null == tNoNew || "".equals(tNoNew))
+                            && (null == position || "".equals(position))
+                            && (null == positionPicUrl || "".equals(positionPicUrl))
+                            && (0 == model)) {
+                        complete = true;
+                    } else if (null != tNoNew && !"".equals(tNoNew)
+                            && null != position && !"".equals(position)
+                            && null != positionPicUrl && !"".equals(positionPicUrl)
+                            && (0 != model)) {
+                        complete = true;
+                        haveTerData = true;
+                    } else {
+                        complete = false;
+                        haveTerData = true;
+                    }
                 }
 
-                AdapterOperateInstallListData data = mAdapterOperateInstallListDataList.get(i);
                 data.setComplete(complete);
 
                 Log.i(TAG, "isComplete: position-->" + idMainTerminal + "-->" + i);
