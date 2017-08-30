@@ -2,6 +2,7 @@ package com.tianyigps.dispatch2.activity;
 
 import android.app.AlertDialog;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -14,7 +15,9 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -170,10 +173,13 @@ public class OperateInstallActivity extends BaseActivity {
         if (requestCode == Data.DATA_INTENT_SCANNER_REQUEST && resultCode == Data.DATA_INTENT_SCANNER_RESULT) {
             Log.i(TAG, "onActivityResult: qrcode-->" + data.getStringExtra(Data.DATA_SCANNER));
             String imei = data.getStringExtra(Data.DATA_SCANNER);
-            Message message = new Message();
-            message.obj = imei;
-            message.what = Data.MSG_2;
-            myHandler.sendMessage(message);
+            int model;
+            if (mAdapterOperateInstallListDataList.get(itemPosition).isWire()) {
+                model = 1;
+            } else {
+                model = 2;
+            }
+            mNetworkManager.checkIMEI(eid, token, imei, model, orderNo, userName, "");
         }
 
         if (requestCode == Data.DATA_INTENT_LOCATE_REQUEST && resultCode == Data.DATA_INTENT_LOCATE_RESULT) {
@@ -365,7 +371,7 @@ public class OperateInstallActivity extends BaseActivity {
             showNotCompleteDialog();
         }
     }
-/*
+
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         if (ev.getAction() == MotionEvent.ACTION_DOWN) {
@@ -404,7 +410,7 @@ public class OperateInstallActivity extends BaseActivity {
         }
         return false;
     }
-*/
+
     @Override
     protected void onDestroy() {
         mDatabaseManager.close();

@@ -1,8 +1,12 @@
 package com.tianyigps.dispatch2.adapter;
 
 import android.content.Context;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -14,6 +18,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.tianyigps.dispatch2.R;
 import com.tianyigps.dispatch2.data.AdapterOperateInstallListData;
+import com.tianyigps.dispatch2.data.Data;
 
 import java.util.List;
 
@@ -25,14 +30,21 @@ public class OperateInstallListAdapter extends BaseAdapter {
 
     private static final String TAG = "OperateInstallAdapter";
 
+    private static final String IMEI = "imei";
+    private static final String POSITION = "position";
+    private static final int DELAY = 200;
+
     private Context context;
     private List<AdapterOperateInstallListData> mListDatas;
 
     private OnItemOperateListener mOnItemOperateListener;
 
+    private MyHandler myHandler;
+
     public OperateInstallListAdapter(Context context, List<AdapterOperateInstallListData> mListDatas) {
         this.context = context;
         this.mListDatas = mListDatas;
+        myHandler = new MyHandler();
     }
 
     @Override
@@ -212,13 +224,20 @@ public class OperateInstallListAdapter extends BaseAdapter {
         viewHolder.etTNoNew.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean focus) {
-                Log.i(TAG, "onFocusChange: focus-->" + focus + ", position-->" + positionFinal);
-                if (!focus) {
+                Log.i(TAG, "onFocusChange: isfocus-->" + focus + ", position-->" + positionFinal);
+                if (focus) {
+                    myHandler.removeMessages(Data.MSG_1);
+                } else {
                     String imei = ((TextView) view).getText().toString();
-                    if (null == mOnItemOperateListener) {
-                        throw new NullPointerException("OnItemOperateListener is null");
-                    }
-                    mOnItemOperateListener.onTextChanged(positionFinal, imei);
+                    Bundle bundle = new Bundle();
+                    bundle.putString(IMEI, imei);
+                    bundle.putInt(POSITION, positionFinal);
+
+                    Message message = new Message();
+                    message.what = Data.MSG_1;
+                    message.obj = bundle;
+
+                    myHandler.sendMessageDelayed(message, DELAY);
                 }
             }
         });
@@ -337,5 +356,24 @@ public class OperateInstallListAdapter extends BaseAdapter {
 
     public void setOnItemOperateListener(OnItemOperateListener listener) {
         this.mOnItemOperateListener = listener;
+    }
+
+    private class MyHandler extends Handler {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case Data.MSG_1: {
+                    Bundle bundle = (Bundle) msg.obj;
+                    String imei = bundle.getString(IMEI);
+                    int position = bundle.getInt(POSITION);
+                    if (null == mOnItemOperateListener) {
+                        throw new NullPointerException("OnItemOperateListener is null");
+                    }
+                    mOnItemOperateListener.onTextChanged(position, imei);
+                    break;
+                }
+            }
+        }
     }
 }

@@ -5,7 +5,7 @@ android {
         debug {
             keyAlias 'paigong'
             keyPassword '12345678'
-            storeFile file('D:/Workspace/Paigong/keystore/key.jks')
+            storeFile file('/home/cookie/Workspace/Paigong/keystore/key.jks')
             storePassword '12345678'
         }
     }
@@ -61,7 +61,6 @@ dependencies {
     compile 'com.zxy.android:tiny:0.0.6'
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:design:26.0.0-alpha1'
-
     compile 'com.google.zxing:core:3.2.1'
     compile 'cn.bingoogolapple:bga-qrcodecore:1.1.7@aar'
     compile 'cn.bingoogolapple:bga-zxing:1.1.7@aar'
