@@ -36,6 +36,7 @@ import com.tianyigps.dispatch2.manager.LocateManager;
 import com.tianyigps.dispatch2.manager.NetworkManager;
 import com.tianyigps.dispatch2.manager.SharedpreferenceManager;
 import com.tianyigps.dispatch2.utils.Base64U;
+import com.tianyigps.dispatch2.utils.RegularU;
 import com.tianyigps.signviewlibrary.SignView;
 
 import java.util.ArrayList;
@@ -313,6 +314,20 @@ public class CustomSignActivity extends BaseActivity {
             cursor.close();
         }
 
+        //  判断是否为空单
+        boolean isNullOrder = true;
+        for (CarInfoOut carInfoOut : carInfoOutList) {
+            for (TerminalInfo terminalInfo : carInfoOut.getCarInfo().getTerminalInfo()) {
+                if (terminalInfo.getModel() != 0
+                        || !RegularU.isEmpty(terminalInfo.getNewImei())
+                        || !RegularU.isEmpty(terminalInfo.getNewInstallPosition())) {
+                    isNullOrder = false;
+                }
+            }
+        }
+        if (isNullOrder) {
+            carInfoOutList.clear();
+        }
         Gson gson = new Gson();
         String json = gson.toJson(carInfoOutList);
         Log.i(TAG, "getOrder: json-->" + json);

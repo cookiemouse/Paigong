@@ -21,4 +21,44 @@ public class CarInfo {
         this.carBrand = carBrand;
         this.terminalInfo = terminalInfo;
     }
+
+    public int getCarId() {
+        return carId;
+    }
+
+    public void setCarId(int carId) {
+        this.carId = carId;
+    }
+
+    public String getCarNo() {
+        return carNo;
+    }
+
+    public void setCarNo(String carNo) {
+        this.carNo = carNo;
+    }
+
+    public String getCarVin() {
+        return carVin;
+    }
+
+    public void setCarVin(String carVin) {
+        this.carVin = carVin;
+    }
+
+    public String getCarBrand() {
+        return carBrand;
+    }
+
+    public void setCarBrand(String carBrand) {
+        this.carBrand = carBrand;
+    }
+
+    public List<TerminalInfo> getTerminalInfo() {
+        return terminalInfo;
+    }
+
+    public void setTerminalInfo(List<TerminalInfo> terminalInfo) {
+        this.terminalInfo = terminalInfo;
+    }
 }

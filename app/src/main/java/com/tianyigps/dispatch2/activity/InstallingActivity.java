@@ -92,7 +92,7 @@ public class InstallingActivity extends BaseActivity {
     private DatabaseManager mDatabaseManager;
 
     //  完成数量
-    private int mCompleteCount = 0;
+    private int mCompleteCountRepair = 0, mCompleteCountInstall = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -234,8 +234,12 @@ public class InstallingActivity extends BaseActivity {
                     toCustomSign();
                     return;
                 }
-                Log.i(TAG, "onClick: mCompleteCount-->" + mCompleteCount);
-                if (!checkRepairList() && mCompleteCount == 0) {
+                Log.i(TAG, "onClick: mCompleteCountRepair-->" + mCompleteCountRepair);
+                if (!checkRepairList() && mCompleteCountRepair == 0) {
+                    showNullDialog();
+                    return;
+                }
+                if (!checkInstallList() && mCompleteCountInstall == 0) {
                     showNullDialog();
                     return;
                 }
@@ -738,7 +742,7 @@ public class InstallingActivity extends BaseActivity {
             nextAble = true;
         }
 
-        mCompleteCount = completeCount;
+        mCompleteCountRepair = completeCount;
 
         return nextAble;
     }
@@ -746,6 +750,7 @@ public class InstallingActivity extends BaseActivity {
     //  检验安装列表是否完成
     private boolean checkInstallList() {
         boolean nextAble = true;
+        int completeCount = 0;
         if (mAdapterInstallingDataList.size() > 0) {
             for (AdapterInstallingData data : mAdapterInstallingDataList) {
 
@@ -760,7 +765,7 @@ public class InstallingActivity extends BaseActivity {
                     Log.i(TAG, "checkInstallListCar: frameNoUrl-->" + frameNoUrl);
 
                     carComplete = (null != frameNoUrl);
-
+                    
                     cursorCar.close();
                 } else {
                     Log.i(TAG, "checkInstallList: cursorCar is null");
@@ -770,6 +775,7 @@ public class InstallingActivity extends BaseActivity {
                 //  check设备信息是否完整
                 if (carComplete && data.getOrderLine() == data.getCompleteLine() && data.getOrderOffline() == data.getCompleteOffline()) {
                     data.setComplete(true);
+                    completeCount++;
                 } else {
                     data.setComplete(false);
                 }
@@ -780,6 +786,8 @@ public class InstallingActivity extends BaseActivity {
             }
         }
         myHandler.sendEmptyMessage(Data.MSG_1);
+
+        mCompleteCountInstall = completeCount;
 
         return nextAble;
     }

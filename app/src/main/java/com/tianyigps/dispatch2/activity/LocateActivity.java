@@ -483,7 +483,7 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
         long now = System.currentTimeMillis();
         switch (locateType) {
             case 0: {
-                long mm = timeFormatU.dateToMillis(lbs);
+                long mm = timeFormatU.dateToMillis2(lbs);
                 if (now - mm <= MIN_10) {
                     locateType = 2;
                 } else {
@@ -492,7 +492,7 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
                 break;
             }
             case 1: {
-                long mm = timeFormatU.dateToMillis(gps);
+                long mm = timeFormatU.dateToMillis2(gps);
                 if (now - mm <= MIN_10) {
                     locateType = 1;
                 } else {

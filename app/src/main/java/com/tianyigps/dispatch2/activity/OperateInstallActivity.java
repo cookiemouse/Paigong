@@ -544,6 +544,7 @@ public class OperateInstallActivity extends BaseActivity {
                 myHandler.removeMessages(Data.MSG_1);
 
                 if ("".equals(imei)) {
+                    mDatabaseManager.addTerModel(idMainTerminal, 0);
                     Message message = new Message();
                     message.obj = imei;
                     message.what = Data.MSG_2;
