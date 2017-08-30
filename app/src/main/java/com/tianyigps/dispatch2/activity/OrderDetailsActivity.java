@@ -48,6 +48,7 @@ public class OrderDetailsActivity extends Activity {
     private static final String TAG = "OrderDetailsActivity";
 
     private static final long TIME_2_HOUR = 7200000;
+    private static final long TIME_1_MIN = 60000;
     private static final long TIME_1_SEC = 1000;
 
     //Title栏
@@ -391,22 +392,21 @@ public class OrderDetailsActivity extends Activity {
 
     private void updateTime() {
         long timeNow = System.currentTimeMillis();
-        long timeRemain = mLongDoorTime - timeNow;
+        long timeRemain = mLongDoorTime - timeNow + TIME_1_MIN;
 
         Log.i(TAG, "updateTime.timeRemain: -->" + timeRemain);
-        Log.i(TAG, "updateTime.TIME_2_HOUR: -->" + TIME_2_HOUR);
-        Log.i(TAG, "updateTime: -->" + new TimeFormatU().millisToColock(timeRemain));
+        Log.i(TAG, "updateTime.HourMin -->" + new TimeFormatU().millsToHourMin(timeRemain));
 
         if (timeRemain > TIME_2_HOUR) {
             mCycleProgressView.setProgress(100);
-            mTextViewTimeRemain.setText(new TimeFormatU().millisToColock(TIME_2_HOUR));
+            mTextViewTimeRemain.setText(new TimeFormatU().millsToHourMin(TIME_2_HOUR));
         } else if (timeRemain < 0) {
             mCycleProgressView.setProgress(0);
             mCycleProgressView.setDefaultColor(getResources().getColor(R.color.colorOrange));
             mTextViewTimeRemain.setText("00:00");
             mTextViewTimeRemain.setTextColor(getResources().getColor(R.color.colorRed));
         } else {
-            mTextViewTimeRemain.setText(new TimeFormatU().millisToColock(timeRemain));
+            mTextViewTimeRemain.setText(new TimeFormatU().millsToHourMin(timeRemain));
             mCycleProgressView.setProgress((int) (timeRemain * 100 / TIME_2_HOUR));
         }
 

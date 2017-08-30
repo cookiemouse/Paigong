@@ -46,6 +46,26 @@ public class TimeFormatU {
         return time;
     }
 
+    public String millsToHourMin(long mills) {
+        String time;
+        int hour = (int) (mills / 1000 / 3600);
+        int min = (int) (mills / 1000 % 3600 / 60);
+
+        if (hour < 10) {
+            time = "0" + hour;
+        } else {
+            time = "" + hour;
+        }
+
+        if (min < 10) {
+            time += ":0" + min;
+        } else {
+            time += ":" + min;
+        }
+
+        return time;
+    }
+
     //字符串转时间戳
     public long dateToMillis(String time) {
         long timeStamp = 0;
