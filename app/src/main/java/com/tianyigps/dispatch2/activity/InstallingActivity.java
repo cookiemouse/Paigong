@@ -93,6 +93,8 @@ public class InstallingActivity extends BaseActivity {
 
     //  完成数量
     private int mCompleteCountRepair = 0, mCompleteCountInstall = 0, mCompleteCountRemove = 0;
+    //  卡片中是否已有填写内容
+    private boolean isFilled = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -236,14 +238,30 @@ public class InstallingActivity extends BaseActivity {
                 }
                 Log.i(TAG, "onClick: mCompleteCountRepair-->" + mCompleteCountRepair);
                 if (!checkRepairList() && mCompleteCountRepair == 0) {
+                    if (isFilled) {
+                        // 2017/8/30 未完善对话框
+                        showNotPerfectDialog();
+                        return;
+                    }
                     showNullDialog();
                     return;
                 }
+
                 if (!checkInstallList() && mCompleteCountInstall == 0) {
+                    if (isFilled) {
+                        // 2017/8/30 未完善对话框
+                        showNotPerfectDialog();
+                        return;
+                    }
                     showNullDialog();
                     return;
                 }
-                if (!checkRemoveList() && mCompleteCountRemove == 0){
+                if (!checkRemoveList() && mCompleteCountRemove == 0) {
+                    if (isFilled) {
+                        // 2017/8/30 未完善对话框
+                        showNotPerfectDialog();
+                        return;
+                    }
                     showNullDialog();
                     return;
                 }
@@ -534,6 +552,24 @@ public class InstallingActivity extends BaseActivity {
         dialog.show();
     }
 
+    //  未完善对话框
+    private void showNotPerfectDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(InstallingActivity.this);
+        View viewDialog = LayoutInflater.from(InstallingActivity.this).inflate(R.layout.dialog_message_editable, null);
+        builder.setView(viewDialog);
+        final AlertDialog dialog = builder.create();
+        TextView textView = viewDialog.findViewById(R.id.tv_dialog_message_message);
+        Button buttonCancel = viewDialog.findViewById(R.id.btn_dialog_message_cancel);
+        textView.setText(getString(R.string.msg_not_perfect));
+        buttonCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+    }
+
     //  将维修背景色初始化
     private void resetRepairList() {
         if (mAdapterRepairDataList.size() > 0) {
@@ -700,6 +736,7 @@ public class InstallingActivity extends BaseActivity {
 
     //  检验维修列表是否已完成
     private boolean checkRepairList() {
+        isFilled = false;
         boolean nextAble = false;
         int completeCount = 0;
         int listSize = mAdapterRepairDataList.size();
@@ -729,6 +766,13 @@ public class InstallingActivity extends BaseActivity {
                         isComplete = (null != explain && !"".equals(explain));
                     }
 
+                    if (!isFilled) {
+                        isFilled = (!RegularU.isEmpty(newImei))
+                                || (!RegularU.isEmpty(position))
+                                || (!RegularU.isEmpty(positionUrl))
+                                || (!RegularU.isEmpty(installUrl));
+                    }
+
                     cursor.close();
                 }
 
@@ -755,6 +799,7 @@ public class InstallingActivity extends BaseActivity {
     //  检验安装列表是否完成
     private boolean checkInstallList() {
         boolean nextAble = true;
+        isFilled = false;
         int completeCount = 0;
         if (mAdapterInstallingDataList.size() > 0) {
             for (AdapterInstallingData data : mAdapterInstallingDataList) {
@@ -776,8 +821,35 @@ public class InstallingActivity extends BaseActivity {
                     Log.i(TAG, "checkInstallList: cursorCar is null");
                 }
 
+
                 //  ------------分割线---------------
                 //  check设备信息是否完整
+                Cursor cursorTer = mDatabaseManager.getTerByCarId(carId);
+                if (null != cursorTer && cursorTer.moveToFirst()) {
+                    do {
+                        int idMainTer = cursorTer.getInt(0);
+                        String tNoNew = cursorTer.getString(2);
+                        String position = cursorTer.getString(3);
+                        String positionUrl = cursorTer.getString(6);
+                        String installUrl = cursorTer.getString(7);
+
+                        Log.i(TAG, "checkInstallList: idMainTer-->" + idMainTer);
+                        Log.i(TAG, "checkInstallList: tNoOld-->" + tNoNew);
+                        Log.i(TAG, "checkInstallList: position-->" + position);
+                        Log.i(TAG, "checkInstallList: positionUrl-->" + positionUrl);
+                        Log.i(TAG, "checkInstallList: installUrl-->" + installUrl);
+                        if (!isFilled) {
+                            isFilled = (!RegularU.isEmpty(tNoNew))
+                                    || (!RegularU.isEmpty(position))
+                                    || (!RegularU.isEmpty(positionUrl))
+                                    || (!RegularU.isEmpty(installUrl));
+                        }
+                    } while (cursorTer.moveToNext());
+
+                    cursorTer.close();
+                }
+
+                //  设备数量是否全部安装完
                 if (carComplete && data.getOrderLine() == data.getCompleteLine() && data.getOrderOffline() == data.getCompleteOffline()) {
                     data.setComplete(true);
                     completeCount++;
@@ -798,9 +870,11 @@ public class InstallingActivity extends BaseActivity {
     }
 
     //  检验拆除列表是否完成
+
     private boolean checkRemoveList() {
         boolean nextAble = true;
         int completeCount = 0;
+        isFilled = false;
         if (mAdapterRemoveDataList.size() > 0) {
             for (AdapterRemoveData data : mAdapterRemoveDataList) {
                 int carId = data.getCarId();
@@ -808,6 +882,37 @@ public class InstallingActivity extends BaseActivity {
                     continue;
                 }
 
+                String frameNo = data.getFrameNo();
+                //  check设备信息是否完整
+                if (!RegularU.isEmpty(frameNo)) {
+                    Cursor cursorTer = mDatabaseManager.getTerByCarId(carId);
+                    if (null != cursorTer && cursorTer.moveToFirst()) {
+                        do {
+                            int idMainTer = cursorTer.getInt(0);
+                            String tNoNew = cursorTer.getString(2);
+                            String position = cursorTer.getString(3);
+                            String positionUrl = cursorTer.getString(6);
+                            String installUrl = cursorTer.getString(7);
+
+                            Log.i(TAG, "checkRemoveList: idMainTer-->" + idMainTer);
+                            Log.i(TAG, "checkRemoveList: tNoOld-->" + tNoNew);
+                            Log.i(TAG, "checkRemoveList: position-->" + position);
+                            Log.i(TAG, "checkRemoveList: positionUrl-->" + positionUrl);
+                            Log.i(TAG, "checkRemoveList: installUrl-->" + installUrl);
+                            if (!isFilled) {
+                                isFilled = (!RegularU.isEmpty(tNoNew))
+                                        || (!RegularU.isEmpty(position))
+                                        || (!RegularU.isEmpty(positionUrl))
+                                        || (!RegularU.isEmpty(installUrl));
+                            }
+                        } while (cursorTer.moveToNext());
+
+                        cursorTer.close();
+                    }
+                }
+
+
+                //  设备数量是否全部安装
                 int wire = data.getOnline();
                 int wireless = data.getOffline();
                 int wireComplete = data.getOnlineComplete();
