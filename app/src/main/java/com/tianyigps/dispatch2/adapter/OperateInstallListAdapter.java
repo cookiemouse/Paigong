@@ -1,8 +1,7 @@
 package com.tianyigps.dispatch2.adapter;
 
 import android.content.Context;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,8 +29,6 @@ public class OperateInstallListAdapter extends BaseAdapter {
     private List<AdapterOperateInstallListData> mListDatas;
 
     private OnItemOperateListener mOnItemOperateListener;
-
-    private boolean isChange = true;
 
     public OperateInstallListAdapter(Context context, List<AdapterOperateInstallListData> mListDatas) {
         this.context = context;
@@ -87,29 +84,6 @@ public class OperateInstallListAdapter extends BaseAdapter {
             viewHolder.rlItem = contentView.findViewById(R.id.rl_item_operate_install_list);
             viewHolder.rlInstall = contentView.findViewById(R.id.rl_item_operate_install_install);
 
-            viewHolder.etTNoNew.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                }
-
-                @Override
-                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                }
-
-                @Override
-                public void afterTextChanged(Editable editable) {
-                    //  2017/7/31 检查imei号是否完整，应暴露给外部
-                    String imei = editable.toString();
-                    if (isChange) {
-                        return;
-                    }
-                    if (null == mOnItemOperateListener) {
-                        throw new NullPointerException("OnItemOperateListener is null");
-                    }
-                    mOnItemOperateListener.onTextChanged(positionFinal, imei);
-                }
-            });
-
             contentView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) contentView.getTag();
@@ -124,7 +98,6 @@ public class OperateInstallListAdapter extends BaseAdapter {
             viewHolder.tvStatus.setEnabled(false);
         }
 
-        isChange = true;
         if (null != tNoOld && !tNoOld.equals("")) {
             viewHolder.rlOld.setVisibility(View.VISIBLE);
             viewHolder.tvStatus.setText(R.string.not_replace);
@@ -137,7 +110,6 @@ public class OperateInstallListAdapter extends BaseAdapter {
 
         viewHolder.etTNoNew.setText(data.gettNoNew());
         viewHolder.etPosition.setText(data.getPosition());
-        isChange = false;
 
         if (data.getPositionPicUrl() != null) {
             Picasso.with(context)
@@ -236,6 +208,20 @@ public class OperateInstallListAdapter extends BaseAdapter {
                 viewHolder.tvTip3.setVisibility(View.GONE);
             }
         }
+
+        viewHolder.etTNoNew.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean focus) {
+                Log.i(TAG, "onFocusChange: focus-->" + focus + ", position-->" + positionFinal);
+                if (!focus) {
+                    String imei = ((TextView) view).getText().toString();
+                    if (null == mOnItemOperateListener) {
+                        throw new NullPointerException("OnItemOperateListener is null");
+                    }
+                    mOnItemOperateListener.onTextChanged(positionFinal, imei);
+                }
+            }
+        });
 
         viewHolder.etPosition.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override

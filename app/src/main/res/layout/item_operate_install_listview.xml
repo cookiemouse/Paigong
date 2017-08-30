@@ -25,8 +25,6 @@
             android:layout_marginTop="@dimen/dp_16"
             android:background="@drawable/bg_button_clickable"
             android:enabled="false"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
             android:paddingBottom="@dimen/dp_8"
             android:paddingLeft="@dimen/dp_16"
             android:paddingRight="@dimen/dp_16"
@@ -80,6 +78,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/rl_item_operate_install_old"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:layout_marginTop="@dimen/dp_16">
 
             <ImageView

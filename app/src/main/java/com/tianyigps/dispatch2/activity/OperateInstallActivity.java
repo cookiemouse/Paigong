@@ -60,7 +60,6 @@ import java.util.List;
 public class OperateInstallActivity extends BaseActivity {
 
     private static final String TAG = "OperateInstall";
-    private static final int DELAY = 2000;
     private static final int PIC_MAX = 5;
 
     private static final String KEY_IMEI = "imei";
@@ -366,7 +365,46 @@ public class OperateInstallActivity extends BaseActivity {
             showNotCompleteDialog();
         }
     }
+/*
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+            View v = getCurrentFocus();
+            if (isShouldHideInput(v, ev)) {
 
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (imm != null) {
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                }
+            }
+            return super.dispatchTouchEvent(ev);
+        }
+        if (getWindow().superDispatchTouchEvent(ev)) {
+            return true;
+        }
+        return onTouchEvent(ev);
+    }
+
+    public boolean isShouldHideInput(View v, MotionEvent event) {
+        if (v != null && (v instanceof EditText)) {
+            int[] leftTop = {0, 0};
+            v.getLocationInWindow(leftTop);
+            int left = leftTop[0];
+            int top = leftTop[1];
+            int bottom = top + v.getHeight();
+            int right = left + v.getWidth();
+            if (event.getX() > left && event.getX() < right
+                    && event.getY() > top && event.getY() < bottom) {
+                return false;
+            } else {
+                v.setFocusable(false);
+                v.setFocusableInTouchMode(true);
+                return true;
+            }
+        }
+        return false;
+    }
+*/
     @Override
     protected void onDestroy() {
         mDatabaseManager.close();
@@ -541,21 +579,17 @@ public class OperateInstallActivity extends BaseActivity {
                 //  2017/7/31 检测imei
                 itemPosition = position;
                 idMainTerminal = ID_MAIN_TERMINAL + itemPosition;
+
+                Log.i(TAG, "onTextChanged: imei-->" + imei);
                 myHandler.removeMessages(Data.MSG_1);
 
-                if ("".equals(imei)) {
-                    mDatabaseManager.addTerModel(idMainTerminal, 0);
+                mDatabaseManager.addTerModel(idMainTerminal, 0);
+                if (!RegularU.isEmpty(imei)) {
                     Message message = new Message();
                     message.obj = imei;
-                    message.what = Data.MSG_2;
-                    myHandler.sendMessageDelayed(message, DELAY);
-                    return;
+                    message.what = Data.MSG_1;
+                    myHandler.sendMessage(message);
                 }
-
-                Message message = new Message();
-                message.obj = imei;
-                message.what = Data.MSG_1;
-                myHandler.sendMessageDelayed(message, DELAY);
             }
 
             @Override
@@ -1331,7 +1365,7 @@ public class OperateInstallActivity extends BaseActivity {
                         complete = false;
                         haveTerData = true;
                     }
-                }else {
+                } else {
                     if ((null == tNoNew || "".equals(tNoNew))
                             && (null == position || "".equals(position))
                             && (null == positionPicUrl || "".equals(positionPicUrl))
@@ -1499,7 +1533,6 @@ public class OperateInstallActivity extends BaseActivity {
                 }
                 case Data.MSG_1: {
                     String imei = (String) msg.obj;
-                    mDatabaseManager.addTerModel(idMainTerminal, 0);
                     getWholeImei(imei);
                     break;
                 }
