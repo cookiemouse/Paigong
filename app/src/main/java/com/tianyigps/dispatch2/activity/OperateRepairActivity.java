@@ -223,45 +223,6 @@ public class OperateRepairActivity extends BaseActivity {
     }
 
     @Override
-    public boolean dispatchTouchEvent(MotionEvent ev) {
-        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
-            View v = getCurrentFocus();
-            if (isShouldHideInput(v, ev)) {
-
-                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                if (imm != null) {
-                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-                }
-            }
-            return super.dispatchTouchEvent(ev);
-        }
-        if (getWindow().superDispatchTouchEvent(ev)) {
-            return true;
-        }
-        return onTouchEvent(ev);
-    }
-
-    public boolean isShouldHideInput(View v, MotionEvent event) {
-        if (v != null && (v instanceof EditText)) {
-            int[] leftTop = {0, 0};
-            v.getLocationInWindow(leftTop);
-            int left = leftTop[0];
-            int top = leftTop[1];
-            int bottom = top + v.getHeight();
-            int right = left + v.getWidth();
-            if (event.getX() > left && event.getX() < right
-                    && event.getY() > top && event.getY() < bottom) {
-                return false;
-            } else {
-                v.setFocusable(false);
-                v.setFocusableInTouchMode(true);
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @Override
     protected void onDestroy() {
         super.onDestroy();
         mDatabaseManager.close();
@@ -425,22 +386,8 @@ public class OperateRepairActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 // 2017/8/30 定位
-                if (isCheckedImei) {
-                    toLocate(wholeImei);
-                }
-            }
-        });
-
-        mEditTextNewImei.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean focus) {
-                Log.i(TAG, "onFocusChange: focus-->" + focus);
-                if (!focus) {
-                    // 丢失焦点
-                    isCheckedImei = false;
-                    String imei = ((TextView) view).getText().toString();
-                    getWholeImei(imei);
-                }
+                String imei = mEditTextNewImei.getText().toString();
+                getWholeImei(imei);
             }
         });
 
