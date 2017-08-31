@@ -705,17 +705,20 @@ public class InstallingActivity extends BaseActivity {
                     String newImei = cursor.getString(6);
                     String positionUrl = cursor.getString(7);
                     String installUrl = cursor.getString(8);
+                    int model = cursor.getInt(9);
 
                     Log.i(TAG, "checkRepairList: position-->" + position);
                     Log.i(TAG, "checkRepairList: explain-->" + explain);
                     Log.i(TAG, "checkRepairList: newImei-->" + newImei);
                     Log.i(TAG, "checkRepairList: positionUrl-->" + positionUrl);
                     Log.i(TAG, "checkRepairList: installUrl-->" + installUrl);
+                    Log.i(TAG, "checkRepairList: model-->" + model);
 
                     if (null != newImei && !"".equals(newImei)) {
                         isComplete = ((null != position && !"".equals(position))
                                 && (null != explain && !"".equals(explain))
                                 && (null != positionUrl && !"".equals(positionUrl))
+                                && (0 != model)
                                 && (null != installUrl && !"".equals(installUrl)));
                     } else {
                         isComplete = (null != explain && !"".equals(explain));
@@ -750,17 +753,20 @@ public class InstallingActivity extends BaseActivity {
                     String newImei = cursor.getString(6);
                     String positionUrl = cursor.getString(7);
                     String installUrl = cursor.getString(8);
+                    int model = cursor.getInt(9);
 
                     Log.i(TAG, "checkRepairList: position-->" + position);
                     Log.i(TAG, "checkRepairList: explain-->" + explain);
                     Log.i(TAG, "checkRepairList: newImei-->" + newImei);
                     Log.i(TAG, "checkRepairList: positionUrl-->" + positionUrl);
                     Log.i(TAG, "checkRepairList: installUrl-->" + installUrl);
+                    Log.i(TAG, "checkRepairList: model-->" + model);
 
                     if (null != newImei && !"".equals(newImei)) {
                         isComplete = ((null != position && !"".equals(position))
                                 && (null != explain && !"".equals(explain))
                                 && (null != positionUrl && !"".equals(positionUrl))
+                                && (0 != model)
                                 && (null != installUrl && !"".equals(installUrl)));
                     } else {
                         isComplete = (null != explain && !"".equals(explain));

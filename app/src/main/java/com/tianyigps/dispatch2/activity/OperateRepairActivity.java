@@ -99,7 +99,6 @@ public class OperateRepairActivity extends BaseActivity {
     private String wholeImei;
     private int tId;
     private int carId;
-    private int tType;
 
     //  网络数据返回
     private String carNoG, frameNoG, typeAndNameG, positionG, positionPicG, installPicG, installNameG, installPhoneG;
@@ -521,7 +520,6 @@ public class OperateRepairActivity extends BaseActivity {
                             installPicG = baseUrl + carTerminalListBean.getWiringDiagramPic();
 //                            installNameG = objBean.getDispatchContactName();
 //                            installPhoneG = objBean.getDispatchContactPhone();
-                            tType = carTerminalListBean.getNewTerminalType();
                             mDescribe = carTerminalListBean.getMalDesc();
 
                             mPositionNew = carTerminalListBean.getNewInstallLocation();
@@ -811,7 +809,7 @@ public class OperateRepairActivity extends BaseActivity {
             public void callback(boolean isSuccess, String outfile) {
                 //  上传
                 if (isSuccess) {
-                    new UploadPicU(mNetworkManager).uploadPic(eid, token, orderNo, carId, tId, mTempType, tType, mTempImgUrl, outfile, userName);
+                    new UploadPicU(mNetworkManager).uploadPic(eid, token, orderNo, carId, tId, mTempType, mOrderTerType, mTempImgUrl, outfile, userName);
                 } else {
                     mStringMessage = "选择图片出错，请重新上传！";
                     myHandler.sendEmptyMessage(Data.MSG_3);
@@ -916,6 +914,7 @@ public class OperateRepairActivity extends BaseActivity {
                     mTextViewTip0.setVisibility(View.GONE);
                 }
                 if (0 == model) {
+                    complete = false;
                     mImageViewReplaceLocate.setBackgroundResource(R.drawable.bg_edit_orange);
                 } else {
                     mImageViewReplaceLocate.setBackgroundResource(R.color.colorNull);
