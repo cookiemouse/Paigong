@@ -224,20 +224,8 @@ public class OperateInstallListAdapter extends BaseAdapter {
         viewHolder.etTNoNew.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean focus) {
-                Log.i(TAG, "onFocusChange: isfocus-->" + focus + ", position-->" + positionFinal);
-                if (focus) {
-                    myHandler.removeMessages(Data.MSG_1);
-                } else {
-                    String imei = ((TextView) view).getText().toString();
-                    Bundle bundle = new Bundle();
-                    bundle.putString(IMEI, imei);
-                    bundle.putInt(POSITION, positionFinal);
-
-                    Message message = new Message();
-                    message.what = Data.MSG_1;
-                    message.obj = bundle;
-
-                    myHandler.sendMessageDelayed(message, DELAY);
+                if (!focus) {
+                    data.settNoNew(((EditText) view).getText().toString());
                 }
             }
         });

@@ -28,6 +28,7 @@ import com.squareup.picasso.Picasso;
 import com.tianyigps.dispatch2.R;
 import com.tianyigps.dispatch2.adapter.OperateInstallAdapter;
 import com.tianyigps.dispatch2.adapter.OperateInstallListAdapter;
+import com.tianyigps.dispatch2.adapter.OperateInstallListAdapter2;
 import com.tianyigps.dispatch2.base.BaseActivity;
 import com.tianyigps.dispatch2.bean.CheckImeiBean;
 import com.tianyigps.dispatch2.bean.DeletePicBean;
@@ -83,7 +84,7 @@ public class OperateInstallActivity extends BaseActivity {
     private MyListView mListView;
 
     private OperateInstallAdapter mOperateInstallAdapter;
-    private OperateInstallListAdapter mOperateInstallListAdapter;
+    private OperateInstallListAdapter2 mOperateInstallListAdapter;
 
     private List<AdapterOperateInstallRecyclerData> mAdapterOperateInstallRecyclerDataList;
     private List<AdapterOperateInstallListData> mAdapterOperateInstallListDataList;
@@ -150,11 +151,11 @@ public class OperateInstallActivity extends BaseActivity {
     //  设备里是否有信息，如果有则判断车辆是否填写完成
     private boolean haveTerData = false;
 
-    //  imei号是否校验过
-    private boolean isCheckedImei = false;
-
     //  设备完成数量
     private int mCompleteCount = 0;
+
+    //  是否跳转到定位位页面
+    private boolean isToLocate = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -178,7 +179,6 @@ public class OperateInstallActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == Data.DATA_INTENT_SCANNER_REQUEST && resultCode == Data.DATA_INTENT_SCANNER_RESULT) {
             Log.i(TAG, "onActivityResult: qrcode-->" + data.getStringExtra(Data.DATA_SCANNER));
-            isCheckedImei = false;
             String imei = data.getStringExtra(Data.DATA_SCANNER);
             int model;
             if (mAdapterOperateInstallListDataList.get(itemPosition).isWire()) {
@@ -390,45 +390,6 @@ public class OperateInstallActivity extends BaseActivity {
     }
 
     @Override
-    public boolean dispatchTouchEvent(MotionEvent ev) {
-        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
-            View v = getCurrentFocus();
-            if (isShouldHideInput(v, ev)) {
-
-                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                if (imm != null) {
-                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-                }
-            }
-            return super.dispatchTouchEvent(ev);
-        }
-        if (getWindow().superDispatchTouchEvent(ev)) {
-            return true;
-        }
-        return onTouchEvent(ev);
-    }
-
-    public boolean isShouldHideInput(View v, MotionEvent event) {
-        if (v != null && (v instanceof EditText)) {
-            int[] leftTop = {0, 0};
-            v.getLocationInWindow(leftTop);
-            int left = leftTop[0];
-            int top = leftTop[1];
-            int bottom = top + v.getHeight();
-            int right = left + v.getWidth();
-            if (event.getX() > left && event.getX() < right
-                    && event.getY() > top && event.getY() < bottom) {
-                return false;
-            } else {
-                v.setFocusable(false);
-                v.setFocusableInTouchMode(true);
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @Override
     protected void onDestroy() {
         mDatabaseManager.close();
         super.onDestroy();
@@ -495,7 +456,7 @@ public class OperateInstallActivity extends BaseActivity {
 
         mRecyclerView.setAdapter(mOperateInstallAdapter);
 
-        mOperateInstallListAdapter = new OperateInstallListAdapter(OperateInstallActivity.this,
+        mOperateInstallListAdapter = new OperateInstallListAdapter2(OperateInstallActivity.this,
                 mAdapterOperateInstallListDataList);
         mListView.setAdapter(mOperateInstallListAdapter);
 
@@ -588,7 +549,7 @@ public class OperateInstallActivity extends BaseActivity {
             }
         });
 
-        mOperateInstallListAdapter.setOnItemOperateListener(new OperateInstallListAdapter.OnItemOperateListener() {
+        mOperateInstallListAdapter.setOnItemOperateListener(new OperateInstallListAdapter2.OnItemOperateListener() {
             @Override
             public void onScannerClick(int position) {
                 //  2017/7/31 扫描
@@ -600,6 +561,7 @@ public class OperateInstallActivity extends BaseActivity {
             @Override
             public void onTextChanged(int position, String imei) {
                 //  2017/7/31 检测imei
+                /*
                 itemPosition = position;
                 idMainTerminal = ID_MAIN_TERMINAL + itemPosition;
 
@@ -617,6 +579,7 @@ public class OperateInstallActivity extends BaseActivity {
                     AdapterOperateInstallListData data = mAdapterOperateInstallListDataList.get(position);
                     data.settNoNew(null);
                 }
+                */
             }
 
             @Override
@@ -637,15 +600,21 @@ public class OperateInstallActivity extends BaseActivity {
             }
 
             @Override
-            public void onLocateClick(int position) {
+            public void onLocateClick(int position, String imei) {
                 //  2017/7/31 快速定位
                 itemPosition = position;
                 idMainTerminal = ID_MAIN_TERMINAL + itemPosition;
+
+                isToLocate = true;
+
                 AdapterOperateInstallListData data = mAdapterOperateInstallListDataList.get(position);
-                String tNo = data.gettNoNew();
-                if (isCheckedImei) {
-                    toLocate(tNo);
+                int model;
+                if (data.isWire()) {
+                    model = 1;
+                } else {
+                    model = 2;
                 }
+                mNetworkManager.checkIMEI(eid, token, imei, model, orderNo, userName, "");
             }
 
             @Override
@@ -1605,7 +1574,6 @@ public class OperateInstallActivity extends BaseActivity {
                 }
                 case Data.MSG_2: {
                     //  check imei success
-                    isCheckedImei = true;
                     Bundle bundle = msg.getData();
                     String imei = bundle.getString(KEY_IMEI);
                     boolean repalce = bundle.getBoolean(KEY_REPLACE);
@@ -1613,6 +1581,12 @@ public class OperateInstallActivity extends BaseActivity {
                     data.settNoNew(imei);
                     data.setReplaceAble(repalce);
                     mOperateInstallListAdapter.notifyDataSetChanged();
+
+                    if (isToLocate){
+                        toLocate(imei);
+                        isToLocate = false;
+                    }
+
                     break;
                 }
                 case Data.MSG_11: {
