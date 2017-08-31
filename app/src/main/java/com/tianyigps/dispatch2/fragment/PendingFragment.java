@@ -255,6 +255,14 @@ public class PendingFragment extends Fragment {
             public void onCall(int position) {
                 Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_DIAL);
+                intent.setData(Uri.parse("tel:" + mAdapterPendingDataList.get(position).getContactPhone()));
+                startActivity(intent);
+            }
+
+            @Override
+            public void onContactCall(int position) {
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_DIAL);
                 intent.setData(Uri.parse("tel:" + mAdapterPendingDataList.get(position).getPhoneNumber()));
                 startActivity(intent);
             }
@@ -313,6 +321,13 @@ public class PendingFragment extends Fragment {
                     int wire = objBean.getWiredNum();
                     int wireless = objBean.getWirelessNum();
 
+                    String backReason;
+                    if (RegularU.isEmpty(objBean.getReasonFilled())) {
+                        backReason = objBean.getReasonChoosed();
+                    } else {
+                        backReason = objBean.getReasonFilled();
+                    }
+
                     AdapterPendingData data;
                     if (orderType == 3) {
                         data = new AdapterPendingData(objBean.getOrderNo()
@@ -330,7 +345,11 @@ public class PendingFragment extends Fragment {
                                 , objBean.getOrderStatus()
                                 , objBean.getNode()
                                 , new TimeFormatU().millisToDate2(objBean.getReviseTime())
-                                , objBean.getReasonFilled());
+                                , objBean.getReasonFilled()
+                                , backReason
+                                , objBean.geteName()
+                                , objBean.getPhoneNo()
+                                , objBean.getJobNo());
                     } else {
                         data = new AdapterPendingData(objBean.getOrderNo()
                                 , custName
@@ -345,7 +364,11 @@ public class PendingFragment extends Fragment {
                                 , objBean.getOrderStatus()
                                 , objBean.getNode()
                                 , new TimeFormatU().millisToDate2(objBean.getReviseTime())
-                                , objBean.getReasonFilled());
+                                , objBean.getReasonFilled()
+                                , backReason
+                                , objBean.geteName()
+                                , objBean.getPhoneNo()
+                                , objBean.getJobNo());
                     }
                     mAdapterPendingDataList.add(data);
                 }

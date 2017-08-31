@@ -166,8 +166,8 @@
         android:layout_marginLeft="@dimen/dp_8"
         android:layout_marginStart="@dimen/dp_8"
         android:layout_marginTop="@dimen/dp_8"
-        android:visibility="gone"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/tv_item_pending_modify_date"
@@ -182,11 +182,66 @@
             android:text="@string/app_name"/>
     </LinearLayout>
 
+    <RelativeLayout
+        android:id="@+id/rl_item_pending_contact"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ll_item_pending_modify"
+        android:layout_marginLeft="@dimen/dp_8"
+        android:layout_marginStart="@dimen/dp_8"
+        android:layout_marginTop="@dimen/dp_8">
+
+        <TextView
+            android:id="@+id/tv_item_pending_rl_contact_jobNo_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/tv_item_pending_rl_contact_phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_item_pending_rl_contact_jobNo_name"
+            android:textColor="@color/colorBlueTheme"/>
+
+        <TextView
+            android:id="@+id/tv_item_pending_rl_contact_line"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" | "
+            android:layout_alignBaseline="@+id/tv_item_pending_rl_contact_phone"
+            android:layout_alignBottom="@+id/tv_item_pending_rl_contact_phone"
+            android:layout_toRightOf="@+id/tv_item_pending_rl_contact_phone"
+            android:layout_toEndOf="@+id/tv_item_pending_rl_contact_phone"/>
+
+        <TextView
+            android:id="@+id/tv_item_pending_rl_contact_msg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/contact_worker"
+            android:textColor="@color/colorBlueTheme"
+            android:layout_alignBaseline="@+id/tv_item_pending_rl_contact_line"
+            android:layout_alignBottom="@+id/tv_item_pending_rl_contact_line"
+            android:layout_toRightOf="@+id/tv_item_pending_rl_contact_line"
+            android:layout_toEndOf="@+id/tv_item_pending_rl_contact_line"/>
+
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_item_pending_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/rl_item_pending_contact"
+        android:layout_marginLeft="@dimen/dp_8"
+        android:layout_marginStart="@dimen/dp_8"
+        android:layout_marginTop="@dimen/dp_8"
+        android:text="退回原因："/>
+
     <View
         android:id="@+id/line_item_pending_1"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_1"
-        android:layout_below="@+id/ll_item_pending_modify"
+        android:layout_below="@+id/tv_item_pending_back"
         android:layout_marginTop="@dimen/dp_8"
         android:background="@color/color_cut_line"/>
 
@@ -275,8 +330,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/tv_item_pending_time"
-        android:layout_marginStart="@dimen/dp_8"
         android:layout_marginLeft="@dimen/dp_8"
+        android:layout_marginStart="@dimen/dp_8"
         android:layout_toEndOf="@+id/tv_item_pending_time"
         android:layout_toRightOf="@+id/tv_item_pending_time"
         android:text="@string/modify"

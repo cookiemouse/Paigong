@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.tianyigps.dispatch2.R;
@@ -84,6 +85,10 @@ public class PendingAdapter extends BaseAdapter {
             viewHolder.tvModifyDate = view.findViewById(R.id.tv_item_pending_modify_date);
             viewHolder.tvModifyReason = view.findViewById(R.id.tv_item_pending_modify_reason);
             viewHolder.tvRed = view.findViewById(R.id.tv_item_pending_red);
+            viewHolder.tvBackReason = view.findViewById(R.id.tv_item_pending_back);
+            viewHolder.rlContact = view.findViewById(R.id.rl_item_pending_contact);
+            viewHolder.tvContactPhone = view.findViewById(R.id.tv_item_pending_rl_contact_phone);
+            viewHolder.tvJobNoName = view.findViewById(R.id.tv_item_pending_rl_contact_jobNo_name);
 
             view.setTag(viewHolder);
         } else {
@@ -141,6 +146,19 @@ public class PendingAdapter extends BaseAdapter {
             viewHolder.llModify.setVisibility(View.GONE);
         }
 
+        if (Data.STATUS_6 == data.getOrderStatus()) {
+            viewHolder.rlContact.setVisibility(View.VISIBLE);
+            String reason = "退回原因：" + data.getBackReason();
+            viewHolder.tvBackReason.setText(reason);
+
+            viewHolder.tvBackReason.setVisibility(View.VISIBLE);
+            viewHolder.tvContactPhone.setText(data.getPhoneNumber());
+            viewHolder.tvJobNoName.setText(data.getJobNo() + " " +data.geteName());
+        } else {
+            viewHolder.rlContact.setVisibility(View.GONE);
+            viewHolder.tvBackReason.setVisibility(View.GONE);
+        }
+
         viewHolder.tvOrderType.setText(orderType);
 
         viewHolder.imageViewCall.setOnClickListener(new View.OnClickListener() {
@@ -183,6 +201,16 @@ public class PendingAdapter extends BaseAdapter {
             }
         });
 
+        viewHolder.rlContact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (null == mOnItemListener) {
+                    throw new NullPointerException("OnItemListener is null");
+                }
+                mOnItemListener.onContactCall(position);
+            }
+        });
+
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -203,7 +231,10 @@ public class PendingAdapter extends BaseAdapter {
         private TextView tvWireRemove, tvWirelessRemove;
         private TextView tvModifyDate, tvModifyReason;
         private TextView tvRed;
+        private TextView tvBackReason;
         private LinearLayout llRemove, llContact, llPend, llModify;
+        private RelativeLayout rlContact;
+        private TextView tvContactPhone, tvJobNoName;
     }
 
     //  订单状态
@@ -261,6 +292,8 @@ public class PendingAdapter extends BaseAdapter {
         void onPend(int position);
 
         void onItem(int position);
+
+        void onContactCall(int position);
     }
 
     public void setOnItemListener(OnItemListener listener) {

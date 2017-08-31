@@ -6,7 +6,7 @@ package com.tianyigps.dispatch2.data;
 
 public class AdapterPendingData {
 
-    private String order, name, contactName, phoneNumber, address;
+    private String order, name, contactName, contactPhone, address;
     int orderType;
     int lineNumber, linelessNumber;
     int wireRemove, wirelessRemove;
@@ -16,11 +16,15 @@ public class AdapterPendingData {
     private int orderStatus;
     private int node;
     private String modifyTime, modifyReason;
+    private String backReason;
 
-    public AdapterPendingData(String order, String name, String contactName, String phoneNumber
+    private String eName, phoneNumber;
+    private String jobNo;
+
+    public AdapterPendingData(String order, String name, String contactName, String contactPhone
             , long time, String address, int orderType
             , int lineNumber, int linelessNumber, int orderId, int orderStatus, int node
-            , String modifyTime, String modifyReason) {
+            , String modifyTime, String modifyReason, String backReason, String eName, String phoneNumber, String jobNo) {
         this.order = order;
         this.name = name;
         this.contactName = contactName;
@@ -35,11 +39,16 @@ public class AdapterPendingData {
         this.node = node;
         this.modifyTime = modifyTime;
         this.modifyReason = modifyReason;
+        this.backReason = backReason;
+        this.eName = eName;
+        this.contactPhone = contactPhone;
+        this.jobNo = jobNo;
     }
 
-    public AdapterPendingData(String order, String name, String contactName, String phoneNumber, long time
+    public AdapterPendingData(String order, String name, String contactName, String contactPhone, long time
             , String address, int orderType, int lineNumber, int linelessNumber, int wireRemove, int wirelessRemove
-            , int orderId, int orderStatus, int note, String modifyTime, String modifyReason) {
+            , int orderId, int orderStatus, int note, String modifyTime, String modifyReason, String backReason
+            , String eName, String phoneNumber, String jobNo) {
         this.order = order;
         this.name = name;
         this.contactName = contactName;
@@ -56,6 +65,10 @@ public class AdapterPendingData {
         this.node = note;
         this.modifyTime = modifyTime;
         this.modifyReason = modifyReason;
+        this.backReason = backReason;
+        this.eName = eName;
+        this.contactPhone = contactPhone;
+        this.jobNo = jobNo;
     }
 
     public String getOrder() {
@@ -184,5 +197,37 @@ public class AdapterPendingData {
 
     public void setModifyReason(String modifyReason) {
         this.modifyReason = modifyReason;
+    }
+
+    public String getBackReason() {
+        return backReason;
+    }
+
+    public void setBackReason(String backReason) {
+        this.backReason = backReason;
+    }
+
+    public String getContactPhone() {
+        return contactPhone;
+    }
+
+    public void setContactPhone(String contactPhone) {
+        this.contactPhone = contactPhone;
+    }
+
+    public String geteName() {
+        return eName;
+    }
+
+    public void seteName(String eName) {
+        this.eName = eName;
+    }
+
+    public String getJobNo() {
+        return jobNo;
+    }
+
+    public void setJobNo(String jobNo) {
+        this.jobNo = jobNo;
     }
 }

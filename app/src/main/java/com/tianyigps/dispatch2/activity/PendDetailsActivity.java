@@ -37,6 +37,7 @@ import com.tianyigps.dispatch2.manager.NetworkManager;
 import com.tianyigps.dispatch2.manager.SharedpreferenceManager;
 import com.tianyigps.dispatch2.utils.BitmapU;
 import com.tianyigps.dispatch2.utils.NodeU;
+import com.tianyigps.dispatch2.utils.RegularU;
 import com.tianyigps.dispatch2.utils.TimeFormatU;
 import com.tianyigps.dispatch2.utils.ToastU;
 import com.yundian.bottomdialog.BottomDialog;
@@ -301,8 +302,17 @@ public class PendDetailsActivity extends Activity {
                                 , "" + nodeBean.getReviseTime()));
                     }
                 }
-                if (Data.NODE_8 == mNode || Data.NODE_9 == mNode || Data.NODE_10 == mNode) {
-                    String engineer = engineerBean.getName();
+                if (Data.NODE_11 == mNode) {
+                    String backReason;
+                    if (RegularU.isEmpty(nodeBean.getReasonFilled())) {
+                        backReason = nodeBean.getReasonChoosed();
+                    } else {
+                        backReason = nodeBean.getReasonFilled();
+                    }
+                    mAdapterPendDetailsDataList.add(new AdapterPendDetailsData(R.drawable.ic_modify_date_return, "退单原因", backReason));
+                }
+                if (Data.NODE_8 == mNode || Data.NODE_9 == mNode || Data.NODE_10 == mNode || Data.NODE_11 == mNode) {
+                    String engineer = engineerBean.getJobNo() + " " + engineerBean.getName();
                     String phone = engineerBean.getPhoneNo();
                     mAdapterPendDetailsDataList.add(new AdapterPendDetailsData(R.drawable.ic_modify_date_engineer, engineer, phone));
                 }

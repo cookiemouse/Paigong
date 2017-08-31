@@ -27,6 +27,7 @@ import com.tianyigps.dispatch2.data.Data;
 import com.tianyigps.dispatch2.interfaces.OnOrderTrackListener;
 import com.tianyigps.dispatch2.manager.NetworkManager;
 import com.tianyigps.dispatch2.manager.SharedpreferenceManager;
+import com.tianyigps.dispatch2.utils.RegularU;
 import com.tianyigps.dispatch2.utils.TimeFormatU;
 
 import java.util.ArrayList;
@@ -241,11 +242,10 @@ public class OrderTrackDialogFragment extends DialogFragment {
             }
             case 11: {
                 info += "安装退回：";        //ok
-                if (null != orderNodeBean.getCheckFalseReason()) {
-                    info += orderNodeBean.getCheckFalseReason();
-                }
-                if (null != orderNodeBean.getReasonFilled()) {
+                if (!RegularU.isEmpty(orderNodeBean.getReasonFilled())) {
                     info += orderNodeBean.getReasonFilled();
+                } else if (!RegularU.isEmpty(orderNodeBean.getReasonChoosed())) {
+                    info += orderNodeBean.getReasonChoosed();
                 }
                 break;
             }

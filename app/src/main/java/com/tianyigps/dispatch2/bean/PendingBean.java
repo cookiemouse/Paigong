@@ -107,10 +107,14 @@ public class PendingBean {
         private long doorTime;
         private long reviseTime;
         private String contactName;
+        private String eName;
         private String province;
         private String custName;
         private String district;
         private String reasonFilled;
+        private String reasonChoosed;
+        private String phoneNo;
+        private String jobNo;
         private int orderId;
 
         public String getContactPhone() {
@@ -271,6 +275,38 @@ public class PendingBean {
 
         public void setReasonFilled(String reasonFilled) {
             this.reasonFilled = reasonFilled;
+        }
+
+        public String getReasonChoosed() {
+            return reasonChoosed;
+        }
+
+        public void setReasonChoosed(String reasonChoosed) {
+            this.reasonChoosed = reasonChoosed;
+        }
+
+        public String geteName() {
+            return eName;
+        }
+
+        public void seteName(String eName) {
+            this.eName = eName;
+        }
+
+        public String getPhoneNo() {
+            return phoneNo;
+        }
+
+        public void setPhoneNo(String phoneNo) {
+            this.phoneNo = phoneNo;
+        }
+
+        public String getJobNo() {
+            return jobNo;
+        }
+
+        public void setJobNo(String jobNo) {
+            this.jobNo = jobNo;
         }
     }
 }
