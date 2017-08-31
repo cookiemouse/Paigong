@@ -153,6 +153,9 @@ public class OperateInstallActivity extends BaseActivity {
     //  imei号是否校验过
     private boolean isCheckedImei = false;
 
+    //  设备完成数量
+    private int mCompleteCount = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -371,7 +374,12 @@ public class OperateInstallActivity extends BaseActivity {
 //        super.onBackPressed();
         saveData();
         if (isComplete()) {
-            finish();
+            if (mCompleteCount == mAdapterOperateInstallListDataList.size() || mCompleteCount == 0) {
+                finish();
+            } else {
+                // 2017/8/31 对话框
+                showPartDialog();
+            }
         } else {
             if (mTextViewTip1.getVisibility() == View.VISIBLE && !RegularU.isEmpty(mCarNo)) {
                 showNotCompleteDialog("车牌号填写不正确");
@@ -1194,6 +1202,32 @@ public class OperateInstallActivity extends BaseActivity {
         dialog.show();
     }
 
+    //  部分完成对话框
+    private void showPartDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(OperateInstallActivity.this);
+        View viewDialog = LayoutInflater.from(OperateInstallActivity.this).inflate(R.layout.dialog_button_editable, null);
+        builder.setView(viewDialog);
+        final AlertDialog dialog = builder.create();
+        TextView textView = viewDialog.findViewById(R.id.tv_dialog_editable_msg);
+        textView.setText("有未完成设备卡片，仍然保存？");
+        Button buttonCancel = viewDialog.findViewById(R.id.btn_dialog_editable_cancel);
+        Button buttonEnsure = viewDialog.findViewById(R.id.btn_dialog_editable_ensure);
+        buttonCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        buttonEnsure.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+    }
+
     //  跳转到选择图片
     private void toChoicePic() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT, null);
@@ -1349,6 +1383,7 @@ public class OperateInstallActivity extends BaseActivity {
     private boolean checkTerComplete() {
         boolean completeAll = true;
         boolean complete = true;
+        mCompleteCount = 0;
         haveTerData = false;
         int count = mAdapterOperateInstallListDataList.size();
         for (int i = 0; i < count; i++) {
@@ -1391,6 +1426,7 @@ public class OperateInstallActivity extends BaseActivity {
                             && (0 != model)) {
                         complete = true;
                         haveTerData = true;
+                        mCompleteCount++;
                     } else {
                         complete = false;
                         haveTerData = true;
@@ -1407,6 +1443,7 @@ public class OperateInstallActivity extends BaseActivity {
                             && (0 != model)) {
                         complete = true;
                         haveTerData = true;
+                        mCompleteCount++;
                     } else {
                         complete = false;
                         haveTerData = true;
