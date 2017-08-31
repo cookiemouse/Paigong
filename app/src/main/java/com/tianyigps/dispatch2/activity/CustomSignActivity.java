@@ -419,6 +419,7 @@ public class CustomSignActivity extends BaseActivity {
         dialog.show();
     }
 
+    /*
     //  显示完成Dialog
     private void showCompleteDialog(String msg) {
         if (isFinishing()) {
@@ -440,6 +441,7 @@ public class CustomSignActivity extends BaseActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
+    */
 
     //  显示部分完成Dialog
     private void showPartCompleteDialog() {
@@ -499,7 +501,11 @@ public class CustomSignActivity extends BaseActivity {
                 case Data.MSG_1: {
                     //  完成
                     mFileManager.delete();
-                    showCompleteDialog(mStringMessage);
+                    // 2017/8/22 跳转到已处理Fragment
+                    Intent intent = new Intent(CustomSignActivity.this, WorkerFragmentContentActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra(Data.DATA_INTENT_WORKER_FRAGMENT, Data.DATA_INTENT_WORKER_FRAGMENT_HANDED);
+                    startActivity(intent);
                     break;
                 }
                 case Data.MSG_2: {
