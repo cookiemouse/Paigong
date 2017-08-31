@@ -150,7 +150,7 @@ public class OperateRepairActivity extends BaseActivity {
             String imei = data.getStringExtra(Data.DATA_SCANNER);
             setEditTextImei(imei);
             showLoading();
-            mNetworkManager.checkIMEI(eid, token, wholeImei, mOrderTerType, orderNo, userName, mImeiOld);
+            mNetworkManager.checkIMEI(eid, token, imei, mOrderTerType, orderNo, userName, mImeiOld);
         }
 
         if (requestCode == Data.DATA_INTENT_LOCATE_REQUEST && resultCode == Data.DATA_INTENT_LOCATE_RESULT) {
