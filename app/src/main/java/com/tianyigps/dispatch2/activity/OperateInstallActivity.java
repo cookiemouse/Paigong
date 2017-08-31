@@ -373,7 +373,11 @@ public class OperateInstallActivity extends BaseActivity {
         if (isComplete()) {
             finish();
         } else {
-            showNotCompleteDialog();
+            if (mTextViewTip1.getVisibility() == View.VISIBLE && !RegularU.isEmpty(mCarNo)) {
+                showNotCompleteDialog("车牌号填写不正确");
+            } else {
+                showNotCompleteDialog("车辆信息内有未填写内容，请填写完整");
+            }
         }
     }
 
@@ -601,6 +605,9 @@ public class OperateInstallActivity extends BaseActivity {
                     message.obj = imei;
                     message.what = Data.MSG_1;
                     myHandler.sendMessage(message);
+                } else {
+                    AdapterOperateInstallListData data = mAdapterOperateInstallListDataList.get(position);
+                    data.settNoNew(null);
                 }
             }
 
@@ -680,109 +687,107 @@ public class OperateInstallActivity extends BaseActivity {
             }
         });
 
-        mNetworkManager.setGetWorkerOrderInfoStartListener(new
+        mNetworkManager.setGetWorkerOrderInfoStartListener(new OnGetWorkerOrderInfoStartListener() {
+            @Override
+            public void onFailure() {
+                Log.i(TAG, "onFailure: ");
+                mStringMessage = Data.DEFAULT_MESSAGE;
+                myHandler.sendEmptyMessage(Data.MSG_ERO);
+            }
 
-                                                                   OnGetWorkerOrderInfoStartListener() {
-                                                                       @Override
-                                                                       public void onFailure() {
-                                                                           Log.i(TAG, "onFailure: ");
-                                                                           mStringMessage = Data.DEFAULT_MESSAGE;
-                                                                           myHandler.sendEmptyMessage(Data.MSG_ERO);
-                                                                       }
+            @Override
+            public void onSuccess(String result) {
+                Log.i(TAG, "onSuccess: result-->" + result);
+                Gson gson = new Gson();
+                StartOrderInfoBean startOrderInfoBean = gson.fromJson(result, StartOrderInfoBean.class);
 
-                                                                       @Override
-                                                                       public void onSuccess(String result) {
-                                                                           Log.i(TAG, "onSuccess: result-->" + result);
-                                                                           Gson gson = new Gson();
-                                                                           StartOrderInfoBean startOrderInfoBean = gson.fromJson(result, StartOrderInfoBean.class);
+                if (!startOrderInfoBean.isSuccess()) {
+                    mStringMessage = startOrderInfoBean.getMsg();
+                    myHandler.sendEmptyMessage(Data.MSG_ERO);
+                    return;
+                }
 
-                                                                           if (!startOrderInfoBean.isSuccess()) {
-                                                                               mStringMessage = startOrderInfoBean.getMsg();
-                                                                               myHandler.sendEmptyMessage(Data.MSG_ERO);
-                                                                               return;
-                                                                           }
-
-                                                                           StartOrderInfoBean.ObjBean objBean = startOrderInfoBean.getObj();
+                StartOrderInfoBean.ObjBean objBean = startOrderInfoBean.getObj();
 //                StartOrderInfoBean.ObjBean.CarListBean carListBean = objBean.getCarList().get(0);
-                                                                           for (StartOrderInfoBean.ObjBean.CarListBean carListBean : objBean.getCarList()) {
-                                                                               if (carListBean.getId() == carId) {
-                                                                                   mCarNo = carListBean.getCarNo();
-                                                                                   mCarFrameNo = carListBean.getCarVin();
-                                                                                   mCarBrand = carListBean.getCarBrand();
-                                                                                   mCarNoPicUrl = carListBean.getCarNoPic();
-                                                                                   mCarFramePicUrl = carListBean.getCarVinPic();
-                                                                                   mCarNoPic = mBaseImg + mCarNoPicUrl;
-                                                                                   mCarFramePic = mBaseImg + mCarFramePicUrl;
+                for (StartOrderInfoBean.ObjBean.CarListBean carListBean : objBean.getCarList()) {
+                    if (carListBean.getId() == carId) {
+                        mCarNo = carListBean.getCarNo();
+                        mCarFrameNo = carListBean.getCarVin();
+                        mCarBrand = carListBean.getCarBrand();
+                        mCarNoPicUrl = carListBean.getCarNoPic();
+                        mCarFramePicUrl = carListBean.getCarVinPic();
+                        mCarNoPic = mBaseImg + mCarNoPicUrl;
+                        mCarFramePic = mBaseImg + mCarFramePicUrl;
 
-                                                                                   mDatabaseManager.addCarNoPic(idMainCar, mCarNoPic, carListBean.getCarNoPic());
-                                                                                   mDatabaseManager.addCarFrameNoPic(idMainCar, mCarFramePic, carListBean.getCarVinPic());
+                        mDatabaseManager.addCarNoPic(idMainCar, mCarNoPic, carListBean.getCarNoPic());
+                        mDatabaseManager.addCarFrameNoPic(idMainCar, mCarFramePic, carListBean.getCarVinPic());
 
-                                                                                   String pic1 = carListBean.getPic1();
-                                                                                   String pic2 = carListBean.getPic2();
-                                                                                   String pic3 = carListBean.getPic3();
-                                                                                   String pic4 = carListBean.getPic4();
-                                                                                   String pic5 = carListBean.getPic5();
-                                                                                   String pic6 = carListBean.getPic6();
+                        String pic1 = carListBean.getPic1();
+                        String pic2 = carListBean.getPic2();
+                        String pic3 = carListBean.getPic3();
+                        String pic4 = carListBean.getPic4();
+                        String pic5 = carListBean.getPic5();
+                        String pic6 = carListBean.getPic6();
 
-                                                                                   if (null != pic1) {
-                                                                                       mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData(mBaseImg + pic1, pic1));
+                        if (null != pic1) {
+                            mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData(mBaseImg + pic1, pic1));
 //                    mDatabaseManager.addCarPics(idMainCar, 0, mBaseImg + pic1, pic1);
-                                                                                   }
-                                                                                   if (null != pic2) {
-                                                                                       mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData(mBaseImg + pic2, pic2));
+                        }
+                        if (null != pic2) {
+                            mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData(mBaseImg + pic2, pic2));
 //                    mDatabaseManager.addCarPics(idMainCar, 1, mBaseImg + pic1, pic1);
-                                                                                   }
-                                                                                   if (null != pic3) {
-                                                                                       mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData(mBaseImg + pic3, pic3));
+                        }
+                        if (null != pic3) {
+                            mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData(mBaseImg + pic3, pic3));
 //                    mDatabaseManager.addCarPics(idMainCar, 2, mBaseImg + pic1, pic1);
-                                                                                   }
-                                                                                   if (null != pic4) {
-                                                                                       mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData(mBaseImg + pic4, pic4));
+                        }
+                        if (null != pic4) {
+                            mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData(mBaseImg + pic4, pic4));
 //                    mDatabaseManager.addCarPics(idMainCar, 3, mBaseImg + pic1, pic1);
-                                                                                   }
-                                                                                   if (null != pic5) {
-                                                                                       mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData(mBaseImg + pic5, pic5));
+                        }
+                        if (null != pic5) {
+                            mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData(mBaseImg + pic5, pic5));
 //                    mDatabaseManager.addCarPics(idMainCar, 4, mBaseImg + pic1, pic1);
-                                                                                   }
-                                                                                   if (null != pic6) {
-                                                                                       mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData(mBaseImg + pic6, pic6));
+                        }
+                        if (null != pic6) {
+                            mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData(mBaseImg + pic6, pic6));
 //                    mDatabaseManager.addCarPics(idMainCar, 5, mBaseImg + pic1, pic1);
-                                                                                   }
-                                                                                   List<StartOrderInfoBean.ObjBean.CarListBean.CarTerminalListBean> carTerminalListBeanList = carListBean.getCarTerminalList();
-                                                                                   for (int i = 0; i < carTerminalListBeanList.size(); i++) {
+                        }
+                        List<StartOrderInfoBean.ObjBean.CarListBean.CarTerminalListBean> carTerminalListBeanList = carListBean.getCarTerminalList();
+                        for (int i = 0; i < carTerminalListBeanList.size(); i++) {
 
-                                                                                       if (i >= mAdapterOperateInstallListDataList.size()) {
-                                                                                           continue;
-                                                                                       }
-                                                                                       StartOrderInfoBean.ObjBean.CarListBean.CarTerminalListBean carTerminalListBean = carTerminalListBeanList.get(i);
-                                                                                       String tNo = carTerminalListBean.getTNo();
-                                                                                       int tId = carTerminalListBean.getId();
-                                                                                       String position = carTerminalListBean.getNewInstallLocation();
-                                                                                       String positionPic = carTerminalListBean.getNewInstallLocationPic();
-                                                                                       String installPic = carTerminalListBean.getNewWiringDiagramPic();
-                                                                                       int type = carTerminalListBean.getTerminalType();
+                            if (i >= mAdapterOperateInstallListDataList.size()) {
+                                continue;
+                            }
+                            StartOrderInfoBean.ObjBean.CarListBean.CarTerminalListBean carTerminalListBean = carTerminalListBeanList.get(i);
+                            String tNo = carTerminalListBean.getTNo();
+                            int tId = carTerminalListBean.getId();
+                            String position = carTerminalListBean.getNewInstallLocation();
+                            String positionPic = carTerminalListBean.getNewInstallLocationPic();
+                            String installPic = carTerminalListBean.getNewWiringDiagramPic();
+                            int type = carTerminalListBean.getTerminalType();
 
-                                                                                       for (AdapterOperateInstallListData data : mAdapterOperateInstallListDataList) {
-                                                                                           if ((data.isWire() && type == 1) || (!data.isWire() && type == 2)) {
-                                                                                               data.settId(tId);
-                                                                                               data.settNoNew(tNo);
-                                                                                               data.setPosition(position);
-                                                                                               data.setPositionPic(mBaseImg + positionPic);
-                                                                                               data.setPositionPicUrl(positionPic);
-                                                                                               data.setInstallPic(mBaseImg + installPic);
-                                                                                               data.setInstallPicUrl(installPic);
-                                                                                           }
-                                                                                       }
+                            for (AdapterOperateInstallListData data : mAdapterOperateInstallListDataList) {
+                                if ((data.isWire() && type == 1) || (!data.isWire() && type == 2)) {
+                                    data.settId(tId);
+                                    data.settNoNew(tNo);
+                                    data.setPosition(position);
+                                    data.setPositionPic(mBaseImg + positionPic);
+                                    data.setPositionPicUrl(positionPic);
+                                    data.setInstallPic(mBaseImg + installPic);
+                                    data.setInstallPicUrl(installPic);
+                                }
+                            }
 
-                                                                                       String idTemp = ID_MAIN_TERMINAL + i;
-                                                                                       mDatabaseManager.addTerId(idTemp, tId, carId);
-                                                                                   }
-                                                                               }
-                                                                           }
+                            String idTemp = ID_MAIN_TERMINAL + i;
+                            mDatabaseManager.addTerId(idTemp, tId, carId);
+                        }
+                    }
+                }
 
-                                                                           myHandler.sendEmptyMessage(Data.MSG_9);
-                                                                       }
-                                                                   });
+                myHandler.sendEmptyMessage(Data.MSG_9);
+            }
+        });
 
         mNetworkManager.setOnGetWholeIMEIListener(new
 
@@ -1169,7 +1174,7 @@ public class OperateInstallActivity extends BaseActivity {
     }
 
     //  显示未完成对话框
-    private void showNotCompleteDialog() {
+    private void showNotCompleteDialog(String msg) {
         if (isFinishing()) {
             return;
         }
@@ -1177,7 +1182,7 @@ public class OperateInstallActivity extends BaseActivity {
         View view = LayoutInflater.from(this).inflate(R.layout.dialog_message_editable, null);
         Button button = view.findViewById(R.id.btn_dialog_message_cancel);
         TextView textView = view.findViewById(R.id.tv_dialog_message_message);
-        textView.setText("车辆信息内有未填写内容，请填写完整");
+        textView.setText(msg);
         builder.setView(view);
         final AlertDialog dialog = builder.create();
         button.setOnClickListener(new View.OnClickListener() {
@@ -1469,7 +1474,7 @@ public class OperateInstallActivity extends BaseActivity {
                     mTextViewTip1.setVisibility(View.VISIBLE);
                     mTextViewTip1.setText(getString(R.string.tip_carno_fault));
                 }
-                if (!RegularU.isEmpty(carNo) && !RegularU.isEmpty(carNoPicUrl)) {
+                if (!RegularU.isEmpty(carNo) && !RegularU.isEmpty(carNoPicUrl) && RegularU.checkCarNo(carNo)) {
                     mTextViewTip1.setVisibility(View.GONE);
                     mImageViewCarNo.setBackgroundResource(R.color.colorNull);
                 }

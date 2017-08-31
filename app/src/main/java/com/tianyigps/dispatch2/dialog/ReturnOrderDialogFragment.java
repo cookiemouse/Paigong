@@ -140,19 +140,19 @@ public class ReturnOrderDialogFragment extends DialogFragment {
                 // 2017/7/19 提交
                 switch (radioGroup.getCheckedRadioButtonId()) {
                     case R.id.rb_layout_return_order_timeout: {
-                        chooseReason = "0";
+                        chooseReason = getString(R.string.unable_arrive_on_time);
                         break;
                     }
                     case R.id.rb_layout_return_order_no_device: {
-                        chooseReason = "1";
+                        chooseReason = getString(R.string.no_device);
                         break;
                     }
                     case R.id.rb_layout_return_order_manager_ask: {
-                        chooseReason = "2";
+                        chooseReason = getString(R.string.manager_ask);
                         break;
                     }
                     case R.id.rb_layout_return_order_other: {
-                        chooseReason = "3";
+                        chooseReason = getString(R.string.other_reason);
                         break;
                     }
                     default: {
