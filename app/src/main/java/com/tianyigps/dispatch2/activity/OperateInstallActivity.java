@@ -381,7 +381,7 @@ public class OperateInstallActivity extends BaseActivity {
                 showPartDialog();
             }
         } else {
-            if (mTextViewTip1.getVisibility() == View.VISIBLE && !RegularU.isEmpty(mCarNo)) {
+            if (mTextViewTip1.getVisibility() == View.VISIBLE && !RegularU.isEmpty(mCarNo) && !RegularU.checkCarNo(mCarNo)) {
                 showNotCompleteDialog("车牌号填写不正确");
             } else {
                 showNotCompleteDialog("车辆信息内有未填写内容，请填写完整");
