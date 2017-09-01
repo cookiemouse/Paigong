@@ -319,8 +319,6 @@ public class InstallingActivity extends BaseActivity {
                         break;
                     }
                     case TYPE_REMOVE: {
-                        mAdapterRemoveDataList.add(new AdapterRemoveData("拆除"));
-
                         int wireNum = 0, wirelessNum = 0, wireComplete = 0, wirelessComplete = 0, carId = 0;
                         if (objBean.getCarList().size() > 0) {
                             for (StartOrderInfoBean.ObjBean.CarListBean carListBean : objBean.getCarList()) {
@@ -355,14 +353,19 @@ public class InstallingActivity extends BaseActivity {
                                     }
                                 }
                             }
-                            mAdapterRemoveDataList.add(new AdapterRemoveData(carId
-                                    , wireNum
-                                    , wirelessNum
-                                    , wireComplete
-                                    , wirelessComplete));
-                        }
 
-                        mAdapterRemoveDataList.add(new AdapterRemoveData("安装"));
+                            if (wireNum > 0 || wirelessNum > 0) {
+                                mAdapterRemoveDataList.add(new AdapterRemoveData("拆除"));
+
+                                mAdapterRemoveDataList.add(new AdapterRemoveData(carId
+                                        , wireNum
+                                        , wirelessNum
+                                        , wireComplete
+                                        , wirelessComplete));
+
+                                mAdapterRemoveDataList.add(new AdapterRemoveData("安装"));
+                            }
+                        }
 
                         for (StartOrderInfoBean.ObjBean.CarListBean carListBean : objBean.getCarList()) {
                             String frameNo = carListBean.getCarVin();
