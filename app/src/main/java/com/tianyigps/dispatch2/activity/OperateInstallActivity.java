@@ -92,7 +92,6 @@ public class OperateInstallActivity extends BaseActivity {
     private int itemRecycler;   //  Recycler操作位置
     private int itemPosition;   //  listview操作位置
     private String itemPath;    //  从相册或拍照得到的图片物理位置
-    private String urlCarNoPic, urlFrameNoPic;  //  车牌号图片Url、车架号图片url
 
     private NetworkManager mNetworkManager;
     private SharedpreferenceManager mSharedpreferenceManager;
@@ -294,7 +293,7 @@ public class OperateInstallActivity extends BaseActivity {
                 String path = new Uri2FileU(OperateInstallActivity.this).getRealPathFromUri(selectedImage);
                 Log.i(TAG, "onActivityResult: path-->" + path);
 
-                uploadCarPic(Data.DATA_UPLOAD_TYPE_1, urlCarNoPic, path);
+                uploadCarPic(Data.DATA_UPLOAD_TYPE_1, mCarNoPicUrl, path);
                 break;
             }
             case INTENT_PHOTO_C: {
@@ -309,7 +308,7 @@ public class OperateInstallActivity extends BaseActivity {
                 }
 
                 String path = new Uri2FileU(OperateInstallActivity.this).getRealPathFromUri(uri);
-                uploadCarPic(Data.DATA_UPLOAD_TYPE_1, urlCarNoPic, path);
+                uploadCarPic(Data.DATA_UPLOAD_TYPE_1, mCarNoPicUrl, path);
                 break;
             }
             case INTENT_CHOICE_F: {
@@ -318,7 +317,7 @@ public class OperateInstallActivity extends BaseActivity {
                 String path = new Uri2FileU(OperateInstallActivity.this).getRealPathFromUri(selectedImage);
                 Log.i(TAG, "onActivityResult: path-->" + path);
 
-                uploadCarPic(Data.DATA_UPLOAD_TYPE_2, urlFrameNoPic, path);
+                uploadCarPic(Data.DATA_UPLOAD_TYPE_2, mCarFramePicUrl, path);
                 break;
             }
             case INTENT_PHOTO_F: {
@@ -333,7 +332,7 @@ public class OperateInstallActivity extends BaseActivity {
                 }
 
                 String path = new Uri2FileU(OperateInstallActivity.this).getRealPathFromUri(uri);
-                uploadCarPic(Data.DATA_UPLOAD_TYPE_2, urlFrameNoPic, path);
+                uploadCarPic(Data.DATA_UPLOAD_TYPE_2, mCarFramePicUrl, path);
                 break;
             }
             case INTENT_CHOICE_R: {
