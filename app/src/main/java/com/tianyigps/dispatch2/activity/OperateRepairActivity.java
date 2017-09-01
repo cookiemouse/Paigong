@@ -963,16 +963,20 @@ public class OperateRepairActivity extends BaseActivity {
                     if (mTextViewTip1.getVisibility() != View.VISIBLE) {
                         mTextViewTip1.setText(getString(R.string.tip_pic));
                         mTextViewTip1.setVisibility(View.VISIBLE);
+                        mImageViewPositionNew.setBackgroundResource(R.drawable.bg_edit_orange);
                     }
                 } else {
                     mTextViewTip1.setVisibility(View.INVISIBLE);
+                    mImageViewPositionNew.setBackgroundResource(R.color.colorNull);
                 }
 
                 if (null == installUrl || "".equals(installUrl)) {
                     complete = false;
                     mTextViewTip2.setVisibility(View.VISIBLE);
+                    mImageViewInstallNew.setBackgroundResource(R.drawable.bg_edit_orange);
                 } else {
                     mTextViewTip2.setVisibility(View.INVISIBLE);
+                    mImageViewInstallNew.setBackgroundResource(R.color.colorNull);
                 }
             }
 
