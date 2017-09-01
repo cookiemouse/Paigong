@@ -122,7 +122,7 @@ public class OperateRepairActivity extends BaseActivity {
     private TextView mTextViewTip0, mTextViewTip1, mTextViewTip2, mTextViewTip3;
 
     //  imei号是否校验过
-    private boolean isCheckedImei = false;
+    private boolean isCheckedImei = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -220,6 +220,45 @@ public class OperateRepairActivity extends BaseActivity {
                 Log.i(TAG, "onActivityResult: default");
             }
         }
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+            View v = getCurrentFocus();
+            if (isShouldHideInput(v, ev)) {
+
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (imm != null) {
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                }
+            }
+            return super.dispatchTouchEvent(ev);
+        }
+        if (getWindow().superDispatchTouchEvent(ev)) {
+            return true;
+        }
+        return onTouchEvent(ev);
+    }
+
+    public boolean isShouldHideInput(View v, MotionEvent event) {
+        if (v != null && (v instanceof EditText)) {
+            int[] leftTop = {0, 0};
+            v.getLocationInWindow(leftTop);
+            int left = leftTop[0];
+            int top = leftTop[1];
+            int bottom = top + v.getHeight();
+            int right = left + v.getWidth();
+            if (event.getX() > left && event.getX() < right
+                    && event.getY() > top && event.getY() < bottom) {
+                return false;
+            } else {
+                v.setFocusable(false);
+                v.setFocusableInTouchMode(true);
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -382,12 +421,50 @@ public class OperateRepairActivity extends BaseActivity {
             }
         });
 
+        mEditTextNewImei.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                myHandler.removeMessages(Data.MSG_11);
+                myHandler.sendEmptyMessageDelayed(Data.MSG_11, 200);
+            }
+        });
+
+        mEditTextNewImei.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean focus) {
+                if (!focus) {
+                    //  丢失焦点
+                    String imei = mEditTextNewImei.getText().toString();
+                    if (RegularU.isEmpty(imei)) {
+                        //  imei为空
+                        Log.i(TAG, "onFocusChange: imei为空");
+                    } else {
+                        isCheckedImei = false;
+                        getWholeImei(imei);
+                    }
+                }
+            }
+        });
+
         mImageViewReplaceLocate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // 2017/8/30 定位
-                String imei = mEditTextNewImei.getText().toString();
-                getWholeImei(imei);
+//                String imei = mEditTextNewImei.getText().toString();
+//                getWholeImei(imei);
+                if (wholeImei.length() > 5) {
+                    toLocate(wholeImei);
+                } else {
+                    showMessageDialog("请输入6位以上IMEI号");
+                }
             }
         });
 
@@ -1071,6 +1148,11 @@ public class OperateRepairActivity extends BaseActivity {
                     setEditTextImei(wholeImei);
                     mDatabaseManager.addRepair(tId, 0);
                     mNetworkManager.checkIMEI(eid, token, wholeImei, mOrderTerType, orderNo, userName, mImeiOld);
+                    break;
+                }
+                case Data.MSG_11: {
+                    //  EditTextNewImei TextChangedListener
+                    isCheckedImei = false;
                     break;
                 }
                 default: {

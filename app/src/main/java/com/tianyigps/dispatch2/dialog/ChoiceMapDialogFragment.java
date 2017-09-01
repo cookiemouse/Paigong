@@ -47,7 +47,6 @@ public class ChoiceMapDialogFragment extends DialogFragment {
         super.onCreate(savedInstanceState);
         Bundle bundle = getArguments();
         address = bundle.getString(DATA_INTENT_ADDRESS);
-        address = "上海市黄浦区人民广场地铁站";
         Log.i(TAG, "onCreate: address-->" + address);
 
         mGeoCoderU = new GeoCoderU();
@@ -124,11 +123,7 @@ public class ChoiceMapDialogFragment extends DialogFragment {
             @Override
             public void onClick(View view) {
                 // 2017/7/19 高德地图
-                // sourceLatLng待转换坐标
-                LatLng desLatLng = bd09togcj02(mLat, mLng);
-                Log.i(TAG, "onClick: latLng-->" + mLat + ", " + mLng);
-                Log.i(TAG, "onClick: desLatLng-->" + desLatLng.latitude + ", " + desLatLng.longitude);
-                toGaodeMap(desLatLng.latitude, desLatLng.longitude, address);
+                toGaodeMap(address);
                 dismiss();
             }
         });
@@ -136,16 +131,13 @@ public class ChoiceMapDialogFragment extends DialogFragment {
         return builder.create();
     }
 
-    private void toGaodeMap(double lat, double lng, String address) {
+    private void toGaodeMap(String address) {
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_VIEW);
         intent.addCategory(Intent.CATEGORY_DEFAULT);
-        String uri = "androidamap://navi?sourceApplication=amap" +
-                "&poiname=" + address +
-                "&lat=" + lat +
-                "&lon=" + lng +
-                "&dev=1&style=0";
-        intent.setData(Uri.parse(uri));
+        String url = "androidamap://keywordNavi?sourceApplication=amap&keyword=" + address + "&style=2";
+        intent.setData(Uri.parse(url));
+        intent.setPackage("com.autonavi.minimap");
         startActivity(intent);
     }
 
