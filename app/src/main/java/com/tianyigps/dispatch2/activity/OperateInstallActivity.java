@@ -372,8 +372,8 @@ public class OperateInstallActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
 //        super.onBackPressed();
-        saveData();
         if (isComplete()) {
+            saveData();
             if (mCompleteCount == mAdapterOperateInstallListDataList.size() || mCompleteCount == 0) {
                 finish();
             } else {
@@ -804,6 +804,10 @@ public class OperateInstallActivity extends BaseActivity {
                                     data.setPositionPicUrl(positionPic);
                                     data.setInstallPic(mBaseImg + installPic);
                                     data.setInstallPicUrl(installPic);
+                                    Log.i(TAG, "onSuccess: tid-->" + tId);
+                                    Log.i(TAG, "onSuccess: positionPic-->" + positionPic);
+                                    Log.i(TAG, "onSuccess: installPic-->" + installPic);
+                                    break;
                                 }
                             }
 
@@ -1086,9 +1090,15 @@ public class OperateInstallActivity extends BaseActivity {
                 cursor.close();
 
                 AdapterOperateInstallListData data = mAdapterOperateInstallListDataList.get(i);
-                data.settNoNew(tNoNew);
-                data.setPosition(position);
-                data.setModel(model);
+                if (data.gettId() == tid) {
+                    data.settNoNew(tNoNew);
+                    data.setPosition(position);
+                    data.setModel(model);
+                }
+
+                Log.i(TAG, "loadTerminalData: positionPic-->" + data.getPositionPic());
+                Log.i(TAG, "loadTerminalData: getInstallPic-->" + data.getInstallPic());
+                Log.i(TAG, "loadTerminalData: -------------------------------------");
             }
         }
         mOperateInstallListAdapter.notifyDataSetChanged();
@@ -1413,16 +1423,16 @@ public class OperateInstallActivity extends BaseActivity {
                 int model = cursor.getInt(8);
                 int tId = cursor.getInt(9);
 
-                Log.i(TAG, "loadTerminalData: id-->" + id);
-                Log.i(TAG, "loadTerminalData: tNoOld-->" + tNoOld);
-                Log.i(TAG, "loadTerminalData: tNoNew-->" + tNoNew);
-                Log.i(TAG, "loadTerminalData: position-->" + position);
-                Log.i(TAG, "loadTerminalData: positionPic-->" + positionPic);
-                Log.i(TAG, "loadTerminalData: installPic-->" + installPic);
-                Log.i(TAG, "loadTerminalData: positionPicUrl-->" + positionPicUrl);
-                Log.i(TAG, "loadTerminalData: installPicUrl-->" + installPicUrl);
-                Log.i(TAG, "loadTerminalData: model-->" + model);
-                Log.i(TAG, "loadTerminalData: tId-->" + tId);
+                Log.i(TAG, "checkTerComplete: id-->" + id);
+                Log.i(TAG, "checkTerComplete: tNoOld-->" + tNoOld);
+                Log.i(TAG, "checkTerComplete: tNoNew-->" + tNoNew);
+                Log.i(TAG, "checkTerComplete: position-->" + position);
+                Log.i(TAG, "checkTerComplete: positionPic-->" + positionPic);
+                Log.i(TAG, "checkTerComplete: installPic-->" + installPic);
+                Log.i(TAG, "checkTerComplete: positionPicUrl-->" + positionPicUrl);
+                Log.i(TAG, "checkTerComplete: installPicUrl-->" + installPicUrl);
+                Log.i(TAG, "checkTerComplete: model-->" + model);
+                Log.i(TAG, "checkTerComplete: tId-->" + tId);
 
                 if (data.isWire()) {
                     if ((null == tNoNew || "".equals(tNoNew))
