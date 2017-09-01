@@ -1139,6 +1139,7 @@ public class OperateRepairActivity extends BaseActivity {
                 }
                 case Data.MSG_8: {
                     //  check imei failure或者获取 whole imei失败
+                    isCheckedImei = false;
                     setEditTextImei(null);
                     myHandler.sendEmptyMessage(Data.MSG_3);
                     break;

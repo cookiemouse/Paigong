@@ -31,14 +31,22 @@ public class OperateInstallListAdapter2 extends BaseAdapter {
 
     private static final String TAG = "OperateInstallAdapter";
 
+    private static final String IMEI = "imei";
+    private static final String POSITION = "position";
+    private static final String FOCUS = "focus";
+    private static final int DELAY = 200;
+
     private Context context;
     private List<AdapterOperateInstallListData> mListDatas;
 
     private OnItemOperateListener mOnItemOperateListener;
 
+    private MyHandler myHandler;
+
     public OperateInstallListAdapter2(Context context, List<AdapterOperateInstallListData> mListDatas) {
         this.context = context;
         this.mListDatas = mListDatas;
+        myHandler = new MyHandler();
     }
 
     @Override
@@ -226,15 +234,43 @@ public class OperateInstallListAdapter2 extends BaseAdapter {
 
             @Override
             public void afterTextChanged(Editable editable) {
+                Log.i(TAG, "afterTextChanged: text-->" + editable.toString());
                 data.settNoNew(editable.toString());
+                myHandler.removeMessages(Data.MSG_1);
+                Bundle bundle = new Bundle();
+                bundle.putString(IMEI, editable.toString());
+                bundle.putInt(POSITION, positionFinal);
+                Message message = new Message();
+                message.what = Data.MSG_1;
+                message.obj = bundle;
+                myHandler.sendMessageDelayed(message, DELAY);
+            }
+        });
+
+        etTNoNew.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                Log.i(TAG, "onFocusChange: focus-->" + b);
+                myHandler.removeMessages(Data.MSG_2);
+                if (!b) {
+                    Message message = new Message();
+                    message.arg1 = positionFinal;
+                    message.what = Data.MSG_2;
+                    myHandler.sendMessageDelayed(message, DELAY);
+                }
             }
         });
 
         etPosition.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
+                myHandler.removeMessages(Data.MSG_3);
                 if (!b) {
-                    data.setPosition(((EditText) view).getText().toString());
+                    Message message = new Message();
+                    message.what = Data.MSG_3;
+                    message.arg1 = positionFinal;
+                    message.obj = ((EditText) view).getText().toString();
+                    myHandler.sendMessageDelayed(message, DELAY);
                 }
             }
         });
@@ -265,12 +301,10 @@ public class OperateInstallListAdapter2 extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 // 2017/7/31 快速定位，暴露给外部
-                String imei = etTNoNew.getText().toString();
-                Log.i(TAG, "onClick: imei-->" + imei);
                 if (null == mOnItemOperateListener) {
                     throw new NullPointerException("OnItemOperateListener is null");
                 }
-                mOnItemOperateListener.onLocateClick(positionFinal, imei);
+                mOnItemOperateListener.onLocateClick(positionFinal);
             }
         });
 
@@ -322,9 +356,11 @@ public class OperateInstallListAdapter2 extends BaseAdapter {
 
         void onTextChanged(int position, String imei);
 
+        void onLoseFocus(int position);
+
         void onStatusClick(int position);
 
-        void onLocateClick(int position, String imei);
+        void onLocateClick(int position);
 
         void onPositionPicClick(int position);
 
@@ -337,5 +373,38 @@ public class OperateInstallListAdapter2 extends BaseAdapter {
 
     public void setOnItemOperateListener(OnItemOperateListener listener) {
         this.mOnItemOperateListener = listener;
+    }
+
+    private class MyHandler extends Handler {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case Data.MSG_1: {
+                    Bundle bundle = (Bundle) msg.obj;
+                    String imei = bundle.getString(IMEI);
+                    int position = bundle.getInt(POSITION);
+                    if (null == mOnItemOperateListener) {
+                        throw new NullPointerException("OnItemOperateListener is null");
+                    }
+                    mOnItemOperateListener.onTextChanged(position, imei);
+                    break;
+                }
+                case Data.MSG_2: {
+                    int position = msg.arg1;
+                    if (null == mOnItemOperateListener) {
+                        throw new NullPointerException("OnItemOperateListener is null");
+                    }
+                    mOnItemOperateListener.onLoseFocus(position);
+                    break;
+                }
+                case Data.MSG_3: {
+                    String position = (String) msg.obj;
+                    int item = msg.arg1;
+                    mListDatas.get(item).setPosition(position);
+                    break;
+                }
+            }
+        }
     }
 }
