@@ -123,6 +123,7 @@ public class OperateRepairActivity extends BaseActivity {
 
     //  imei号是否校验过
     private boolean isCheckedImei = true;
+    private boolean isToLocate = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -460,10 +461,12 @@ public class OperateRepairActivity extends BaseActivity {
                 // 2017/8/30 定位
 //                String imei = mEditTextNewImei.getText().toString();
 //                getWholeImei(imei);
-                if (wholeImei.length() > 5) {
+                if (isCheckedImei) {
                     toLocate(wholeImei);
                 } else {
-                    showMessageDialog("请输入6位以上IMEI号");
+                    isToLocate = true;
+                    showLoading();
+                    mNetworkManager.checkIMEI(eid, token, wholeImei, mOrderTerType, orderNo, userName, mImeiOld);
                 }
             }
         });
@@ -604,7 +607,8 @@ public class OperateRepairActivity extends BaseActivity {
                 WholeImeiBean wholeImeiBean = gson.fromJson(result, WholeImeiBean.class);
                 if (!wholeImeiBean.isSuccess()) {
                     mStringMessage = wholeImeiBean.getMsg();
-                    onFailure();
+                    myHandler.sendEmptyMessage(Data.MSG_3);
+                    myHandler.sendEmptyMessage(Data.MSG_12);
                     return;
                 }
                 wholeImei = wholeImeiBean.getObj().getImei();
@@ -886,6 +890,10 @@ public class OperateRepairActivity extends BaseActivity {
     }
 
     private void toLocate(String imei) {
+        if (RegularU.isEmpty(imei)) {
+            showMessageDialog("IMEI号不可用！");
+            return;
+        }
         Intent intent = new Intent(OperateRepairActivity.this, LocateActivity.class);
         intent.putExtra(Data.DATA_INTENT_LOCATE_TYPE, false);
         intent.putExtra(Data.DATA_INTENT_LOCATE_IMEI, imei);
@@ -1078,6 +1086,10 @@ public class OperateRepairActivity extends BaseActivity {
                     //  check whole imei 成功
                     isCheckedImei = true;
                     setEditTextImei(wholeImei);
+                    if (isToLocate) {
+                        toLocate(wholeImei);
+                        isToLocate = false;
+                    }
                     break;
                 }
                 case Data.MSG_3: {
@@ -1154,6 +1166,11 @@ public class OperateRepairActivity extends BaseActivity {
                 case Data.MSG_11: {
                     //  EditTextNewImei TextChangedListener
                     isCheckedImei = false;
+                    break;
+                }
+                case Data.MSG_12: {
+                    //  获取whole imei失败
+                    setEditTextImei(null);
                     break;
                 }
                 default: {
