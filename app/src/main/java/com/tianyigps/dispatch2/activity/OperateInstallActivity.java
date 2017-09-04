@@ -795,6 +795,9 @@ public class OperateInstallActivity extends BaseActivity {
                             String installPic = carTerminalListBean.getNewWiringDiagramPic();
                             int type = carTerminalListBean.getTerminalType();
 
+                            String idTemp = ID_MAIN_TERMINAL + i;
+                            mDatabaseManager.addTerId(idTemp, tId, carId);
+
                             for (AdapterOperateInstallListData data : mAdapterOperateInstallListDataList) {
                                 if (((data.isWire() && type == 1) || (!data.isWire() && type == 2)) && data.gettId() == 0) {
                                     data.settId(tId);
@@ -810,9 +813,6 @@ public class OperateInstallActivity extends BaseActivity {
                                     break;
                                 }
                             }
-
-                            String idTemp = ID_MAIN_TERMINAL + i;
-                            mDatabaseManager.addTerId(idTemp, tId, carId);
                         }
                     }
                 }

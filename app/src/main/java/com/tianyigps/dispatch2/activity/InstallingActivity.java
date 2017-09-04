@@ -859,9 +859,9 @@ public class InstallingActivity extends BaseActivity {
                 }
 
                 //  设备数量是否全部安装完
+                completeCount = data.getCompleteLine() + data.getCompleteOffline();
                 if (carComplete && data.getOrderLine() == data.getCompleteLine() && data.getOrderOffline() == data.getCompleteOffline()) {
                     data.setComplete(true);
-                    completeCount++;
                 } else {
                     data.setComplete(false);
                 }
@@ -932,9 +932,9 @@ public class InstallingActivity extends BaseActivity {
                 Log.i(TAG, "checkRemoveList: wireComplete-->" + wireComplete);
                 Log.i(TAG, "checkRemoveList: wirelessComplete-->" + wirelessComplete);
 
+                completeCount = wireComplete + wirelessComplete;
                 if (wire == wireComplete && wireless == wirelessComplete) {
                     data.setComplete(true);
-                    completeCount++;
                 } else {
                     data.setComplete(false);
                 }

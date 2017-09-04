@@ -252,7 +252,7 @@ public class CustomSignActivity extends BaseActivity {
                 int tId = cursor.getInt(2);
 
 
-                Log.i(TAG, "getRepairJson: orderNo-->" + orderNo + " ,carId-->" + carId + " ,tId-->" + tId);
+                Log.i(TAG, "getInstallJson: orderNo-->" + orderNo + " ,carId-->" + carId + " ,tId-->" + tId);
                 Cursor cursorTer = mDatabaseManager.getTer(tId);
                 if (null != cursorTer && cursorTer.moveToFirst()) {
                     String id = cursorTer.getString(0);
@@ -278,6 +278,9 @@ public class CustomSignActivity extends BaseActivity {
                     Log.i(TAG, "loadTerminalData: model-->" + model);
                     Log.i(TAG, "loadTerminalData: tid-->" + tid);
                     Log.i(TAG, "loadTerminalData: locateType-->" + locateType);
+                    if (RegularU.isEmpty(position)) {
+                        continue;
+                    }
                     if (null == tNoOld) {
                         tNoOld = "";
                     }
