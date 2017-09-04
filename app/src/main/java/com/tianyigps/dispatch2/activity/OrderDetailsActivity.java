@@ -37,7 +37,6 @@ import com.tianyigps.dispatch2.manager.SharedpreferenceManager;
 import com.tianyigps.dispatch2.utils.RegularU;
 import com.tianyigps.dispatch2.utils.TimeFormatU;
 
-import static com.tianyigps.dispatch2.data.Data.DATA_INTENT_ORDER_DETAILS_RESULT_SIGNED;
 import static com.tianyigps.dispatch2.data.Data.DATA_INTENT_ORDER_NO;
 import static com.tianyigps.dispatch2.data.Data.MSG_1;
 import static com.tianyigps.dispatch2.data.Data.MSG_2;
@@ -555,8 +554,10 @@ public class OrderDetailsActivity extends Activity {
                 }
                 case Data.MSG_4: {
                     //  签到成功，应该finish，然后显示HandingFragment
-                    getIntent().putExtra(DATA_INTENT_ORDER_DETAILS_RESULT_SIGNED, true);
-                    finish();
+                    Intent intent = new Intent(OrderDetailsActivity.this, WorkerFragmentContentActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra(Data.DATA_INTENT_WORKER_FRAGMENT, Data.DATA_INTENT_WORKER_FRAGMENT_HANDING);
+                    startActivity(intent);
                     break;
                 }
                 case Data.MSG_5: {

@@ -130,17 +130,17 @@ public class OrderFragment extends Fragment {
         }
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == Data.DATA_INTENT_ORDER_DETAILS_REQUEST &&
-                resultCode == Data.DATA_INTENT_ORDER_DETAILS_RESULT) {
-            if (data.getBooleanExtra(Data.DATA_INTENT_ORDER_DETAILS_RESULT_SIGNED, false)) {
-                WorkerFragmentContentActivity activity = (WorkerFragmentContentActivity) getActivity();
-                activity.showHandingFragment();
-            }
-        }
-    }
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        if (requestCode == Data.DATA_INTENT_ORDER_DETAILS_REQUEST &&
+//                resultCode == Data.DATA_INTENT_ORDER_DETAILS_RESULT) {
+//            if (data.getBooleanExtra(Data.DATA_INTENT_ORDER_DETAILS_RESULT_SIGNED, false)) {
+//                WorkerFragmentContentActivity activity = (WorkerFragmentContentActivity) getActivity();
+//                activity.showHandingFragment();
+//            }
+//        }
+//    }
 
     private void init(View view) {
 
