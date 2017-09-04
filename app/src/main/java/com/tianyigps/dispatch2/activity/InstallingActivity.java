@@ -670,15 +670,19 @@ public class InstallingActivity extends BaseActivity {
                         Log.i(TAG, "updateRemoveComplete: installUrl-->" + installUrl);
                         Log.i(TAG, "updateRemoveComplete: wire-->" + wire);
 
-                        terComplete = ((null != tNoNew && !"".equals(tNoNew))
-                                && (null != position && !"".equals(position))
-                                && (null != positionUrl)
-                                && (null != installUrl));
-
-                        if (terComplete) {
-                            if (0 == wire) {
+                        if (0 == wire) {
+                            terComplete = ((null != tNoNew && !"".equals(tNoNew))
+                                    && (null != position && !"".equals(position))
+                                    && (null != positionUrl) && !"".equals(positionUrl));
+                            if (terComplete) {
                                 wirelessComplete++;
-                            } else {
+                            }
+                        } else {
+                            terComplete = ((null != tNoNew && !"".equals(tNoNew))
+                                    && (null != position && !"".equals(position))
+                                    && (null != positionUrl) && !"".equals(positionUrl)
+                                    && (null != installUrl) && !"".equals(installUrl));
+                            if (terComplete) {
                                 wireComplete++;
                             }
                         }
