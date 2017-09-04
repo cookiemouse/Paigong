@@ -150,6 +150,11 @@ public class CustomSignActivity extends BaseActivity {
             public void onClick(View view) {
                 // 2017/7/20 提交
 
+                if (mSignView.isNull()) {
+                    showNoSignDialog();
+                    return;
+                }
+
                 Bitmap bitmap = mSignView.getPic();
 
                 Matrix matrix = new Matrix();
@@ -403,6 +408,24 @@ public class CustomSignActivity extends BaseActivity {
         String json = gson.toJson(terminalInfoOurList);
         Log.i(TAG, "getRepairJson: json-->" + json);
         return json;
+    }
+
+    //  显示未签名Dialog
+    private void showNoSignDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View view = LayoutInflater.from(this).inflate(R.layout.dialog_message_editable, null);
+        builder.setView(view);
+        final AlertDialog dialog = builder.create();
+        TextView textView = view.findViewById(R.id.tv_dialog_message_message);
+        Button button = view.findViewById(R.id.btn_dialog_message_cancel);
+        textView.setText("请让客户签字！");
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
     }
 
     //  显示信息Dialog
