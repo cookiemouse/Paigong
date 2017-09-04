@@ -250,14 +250,16 @@ public class CustomSignActivity extends BaseActivity {
 
         Cursor cursor = mDatabaseManager.getOrder(mOrderNo);
         if (null != cursor && cursor.moveToFirst()) {
-            int carId = cursor.getInt(1);
-            List<TerminalInfo> terminalInfoList = new ArrayList<>();
             do {
                 String orderNo = cursor.getString(0);
+                int carId = cursor.getInt(1);
                 int tId = cursor.getInt(2);
-
+                List<TerminalInfo> terminalInfoList = new ArrayList<>();
 
                 Log.i(TAG, "getInstallJson: orderNo-->" + orderNo + " ,carId-->" + carId + " ,tId-->" + tId);
+
+                //  设备信息
+                TerminalInfo terminalInfo = null;
                 Cursor cursorTer = mDatabaseManager.getTer(tId);
                 if (null != cursorTer && cursorTer.moveToFirst()) {
                     String id = cursorTer.getString(0);
@@ -271,6 +273,7 @@ public class CustomSignActivity extends BaseActivity {
                     int model = cursorTer.getInt(8);
                     int tid = cursorTer.getInt(9);
                     int locateType = cursorTer.getInt(10);
+                    int cid = cursorTer.getInt(11);
 
                     Log.i(TAG, "loadTerminalData: id-->" + id);
                     Log.i(TAG, "loadTerminalData: tNoOld-->" + tNoOld);
@@ -282,6 +285,7 @@ public class CustomSignActivity extends BaseActivity {
                     Log.i(TAG, "loadTerminalData: installPicUrl-->" + installPicUrl);
                     Log.i(TAG, "loadTerminalData: model-->" + model);
                     Log.i(TAG, "loadTerminalData: tid-->" + tid);
+                    Log.i(TAG, "loadTerminalData: cid-->" + cid);
                     Log.i(TAG, "loadTerminalData: locateType-->" + locateType);
                     if (RegularU.isEmpty(position)) {
                         continue;
@@ -292,32 +296,52 @@ public class CustomSignActivity extends BaseActivity {
                     if (locateType == 0) {
                         locateType = 3;
                     }
-                    TerminalInfo terminalInfo = new TerminalInfo(tid, tNoNew, tNoOld, model, locateType, position);
-                    terminalInfoList.add(terminalInfo);
+                    terminalInfo = new TerminalInfo(tid, tNoNew, tNoOld, model, locateType, position);
+
+                    cursorTer.close();
+                }
+
+                //  车辆信息
+                Cursor cursorCar = mDatabaseManager.getCar(carId);
+                Log.i(TAG, "getOrder: cursorCar-->" + cursorCar);
+                if (null != cursorCar && cursorCar.moveToFirst()) {
+
+                    String carNo = cursorCar.getString(1);
+                    String carVin = cursorCar.getString(2);
+                    String carType = cursorCar.getString(3);
+
+                    Log.i(TAG, "getOrder: carNo-->" + carNo);
+                    Log.i(TAG, "getOrder: carVin-->" + carVin);
+                    Log.i(TAG, "getOrder: carType-->" + carType);
+                    Log.i(TAG, "getOrder: carId-->" + carId);
+
+                    if (carInfoOutList.size() > 0) {
+                        boolean had = false;
+                        for (int i = 0; i < carInfoOutList.size(); i++) {
+                            CarInfoOut carInfoOut2 = carInfoOutList.get(i);
+                            if (carInfoOut2.getCarInfo().getCarId() == carId) {
+                                had = true;
+                                carInfoOut2.getCarInfo().getTerminalInfo().add(terminalInfo);
+                                break;
+                            }
+                        }
+                        if (!had) {
+                            terminalInfoList.add(terminalInfo);
+                            CarInfo carInfo = new CarInfo(carId, carNo, carVin, carType, terminalInfoList);
+                            CarInfoOut carInfoOut = new CarInfoOut(carInfo);
+                            carInfoOutList.add(carInfoOut);
+                        }
+                    } else {
+                        terminalInfoList.add(terminalInfo);
+                        CarInfo carInfo = new CarInfo(carId, carNo, carVin, carType, terminalInfoList);
+                        CarInfoOut carInfoOut = new CarInfoOut(carInfo);
+                        carInfoOutList.add(carInfoOut);
+                    }
+
+                    cursorCar.close();
                 }
 
             } while (cursor.moveToNext());
-
-            Cursor cursorCar = mDatabaseManager.getCar(carId);
-            Log.i(TAG, "getOrder: cursorCar-->" + cursorCar);
-            if (null != cursorCar && cursorCar.moveToFirst()) {
-
-                String carNo = cursorCar.getString(1);
-                String carVin = cursorCar.getString(2);
-                String carType = cursorCar.getString(3);
-
-                Log.i(TAG, "getOrder: carNo-->" + carNo);
-                Log.i(TAG, "getOrder: carVin-->" + carVin);
-                Log.i(TAG, "getOrder: carType-->" + carType);
-
-                CarInfo carInfo = new CarInfo(carId, carNo, carVin, carType, terminalInfoList);
-
-                CarInfoOut carInfoOut = new CarInfoOut(carInfo);
-
-                carInfoOutList.add(carInfoOut);
-
-                cursorCar.close();
-            }
 
             cursor.close();
         }
