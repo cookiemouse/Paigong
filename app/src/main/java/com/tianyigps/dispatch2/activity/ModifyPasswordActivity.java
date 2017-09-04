@@ -3,13 +3,19 @@ package com.tianyigps.dispatch2.activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.design.widget.Snackbar;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.tianyigps.dispatch2.R;
@@ -21,6 +27,7 @@ import com.tianyigps.dispatch2.interfaces.OnModifyPasswordListener;
 import com.tianyigps.dispatch2.manager.NetworkManager;
 import com.tianyigps.dispatch2.manager.SharedpreferenceManager;
 import com.tianyigps.dispatch2.utils.MD5U;
+import com.tianyigps.dispatch2.utils.SnackbarU;
 
 import static com.tianyigps.dispatch2.data.Data.MSG_1;
 import static com.tianyigps.dispatch2.data.Data.MSG_ERO;
@@ -80,7 +87,7 @@ public class ModifyPasswordActivity extends BaseActivity {
 
                 if (!newPsd.equals(ensurePsd)) {
                     mStringMessage = "两次密码输入不同，请检查后提交！";
-                    showMessageDialog(mStringMessage);
+                    showToast(mStringMessage);
                     return;
                 }
                 showLoading();
@@ -134,7 +141,7 @@ public class ModifyPasswordActivity extends BaseActivity {
 
     //  显示信息对话框
     private void showMessageDialog(String msg) {
-        if (isFinishing()){
+        if (isFinishing()) {
             return;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(ModifyPasswordActivity.this);
@@ -147,6 +154,19 @@ public class ModifyPasswordActivity extends BaseActivity {
         });
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    //  显示Toast信息
+    private void showToast(String message) {
+        LinearLayout linearLayout = findViewById(R.id.activity_modify_password);
+        View viewToast = LayoutInflater.from(ModifyPasswordActivity.this).inflate(R.layout.layout_top_toast, null);
+        TextView textViewInfo = viewToast.findViewById(R.id.tv_layout_top_toast);
+        textViewInfo.setText(message);
+        new SnackbarU()
+                .make(linearLayout, viewToast, Snackbar.LENGTH_SHORT)
+                .setBackground(Color.WHITE)
+                .setGravity(Gravity.TOP)
+                .show();
     }
 
     //  显示LoadingFragment
@@ -163,11 +183,11 @@ public class ModifyPasswordActivity extends BaseActivity {
             }
 
             switch (msg.what) {
-                case MSG_ERO: {
-                    showMessageDialog(mStringMessage);
+                case Data.MSG_ERO: {
+                    showToast(mStringMessage);
                     break;
                 }
-                case MSG_1: {
+                case Data.MSG_1: {
                     showLoginDialog();
                     break;
                 }
