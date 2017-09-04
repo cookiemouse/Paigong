@@ -1106,9 +1106,9 @@ public class NetworkManager {
     }
 
     //  获取服务主任安装统计  23
-    public void getInstallCount(String jobNo, String token, String month, String userName) {
+    public void getInstallCount(int eid, String token, String month, String userName) {
         Request.Builder builder = new Request.Builder();
-        builder.url(Urls.URL_MANAGER_INSTALL_COUNT + "jobNo=" + jobNo
+        builder.url(Urls.URL_MANAGER_INSTALL_COUNT + "eid=" + eid
                 + "&token=" + token
                 + "&userName=" + userName
                 + "&month=" + month);

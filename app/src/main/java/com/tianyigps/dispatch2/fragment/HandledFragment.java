@@ -157,7 +157,7 @@ public class HandledFragment extends Fragment {
     }
 
     private void initTitle() {
-        mTextViewTitle.setText(R.string.handled);
+        mTextViewTitle.setText(R.string.handled_order);
         mImageViewTitleLeft.setImageResource(R.drawable.ic_switch_account);
         mImageViewTitleRight.setVisibility(View.GONE);
     }

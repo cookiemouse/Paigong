@@ -45,11 +45,11 @@ public class StatisticsActivity extends BaseActivity {
 
     private static final String TAG = "StatisticsActivity";
 
-    private TextView mTextViewDate;
+    private TextView mTextViewDate, mTextViewCount;
     private ImageView mImageViewDate;
     private ListView mListViewStatistics;
     private FrameLayout mFrameLayoutTitle;
-    private LinearLayout mLinearLayoutDefault;
+    private LinearLayout mLinearLayoutDefault, mLinearLayoutCount;
 
     private List<AdapterStatisticsWorkderData> mStatisticsWorkderDataList;
     private StatisticsWorkerAdapter mStatisticsWorkerAdapter;
@@ -73,6 +73,9 @@ public class StatisticsActivity extends BaseActivity {
 
     //  LoadingFragment
     LoadingDialogFragment mLoadingDialogFragment;
+
+    //  服务主任统计
+    private int mDoorNum, mCarNum, mWireNum, mWirelessNum;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,6 +113,8 @@ public class StatisticsActivity extends BaseActivity {
         mListViewStatistics = findViewById(R.id.lv_activity_statistics);
         mFrameLayoutTitle = findViewById(R.id.fl_activity_statistics_list_title);
         mLinearLayoutDefault = findViewById(R.id.ll_layout_default_statistics);
+        mLinearLayoutCount = findViewById(R.id.ll_activity_statistics_count);
+        mTextViewCount = findViewById(R.id.tv_activity_statistics_count);
 
         SimpleDateFormat simpleDateFormatShow = new SimpleDateFormat("yyyy年MM月", Locale.CHINA);
         Date dateShow = new Date(mills);
@@ -163,7 +168,7 @@ public class StatisticsActivity extends BaseActivity {
                 if (DATA_LAUNCH_MODE_WORKER == uiMode) {
                     mNetworkManager.getQualityCount(eid, token, monthP, userName);
                 } else {
-                    mNetworkManager.getInstallCount(jobNo, token, monthP, userName);
+                    mNetworkManager.getInstallCount(eid, token, monthP, userName);
                 }
             }
         });
@@ -249,6 +254,10 @@ public class StatisticsActivity extends BaseActivity {
 
                 for (InstallCountBean.ObjBean objBean : installCountBean.getObj()) {
                     String temp = objBean.getEngineerJobNo() + objBean.getEngineerName();
+                    mDoorNum += objBean.getDoorNum();
+                    mCarNum += objBean.getFinishCarNum();
+                    mWireNum += objBean.getFinishWiredNum();
+                    mWirelessNum += objBean.getFinishWirelessNum();
                     mStatisticsManagerDataList.add(new AdapterStatisticsManagerData(temp
                             , objBean.getDoorNum()
                             , objBean.getFinishCarNum()
@@ -293,7 +302,7 @@ public class StatisticsActivity extends BaseActivity {
 
         mListViewStatistics.setAdapter(mStatisticsManagerAdapter);
 
-        mNetworkManager.getInstallCount(jobNo, token, monthP, userName);
+        mNetworkManager.getInstallCount(eid, token, monthP, userName);
     }
 
     //  选择日期
@@ -346,6 +355,7 @@ public class StatisticsActivity extends BaseActivity {
                 case Data.MSG_1: {
                     //  安装工程师
                     mLinearLayoutDefault.setVisibility(View.GONE);
+                    mLinearLayoutCount.setVisibility(View.GONE);
                     mStatisticsWorkerAdapter.notifyDataSetChanged();
                     break;
                 }
@@ -353,11 +363,15 @@ public class StatisticsActivity extends BaseActivity {
                     //  服务主任
                     mLinearLayoutDefault.setVisibility(View.GONE);
                     mStatisticsManagerAdapter.notifyDataSetChanged();
+                    String count = mDoorNum + "/" + mCarNum + "/" + mWireNum + "/" + mWirelessNum;
+                    mTextViewCount.setText(count);
+                    mLinearLayoutCount.setVisibility(View.VISIBLE);
                     break;
                 }
                 case Data.MSG_3: {
                     //  无数据
                     mLinearLayoutDefault.setVisibility(View.VISIBLE);
+                    mLinearLayoutCount.setVisibility(View.GONE);
                 }
                 default: {
                     Log.i(TAG, "handleMessage: default");

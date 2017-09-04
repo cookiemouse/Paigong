@@ -180,8 +180,10 @@ public class OperateInstallActivity extends BaseActivity {
             Log.i(TAG, "onActivityResult: qrcode-->" + data.getStringExtra(Data.DATA_SCANNER));
             isCheckedImei = false;
             String imei = data.getStringExtra(Data.DATA_SCANNER);
+            AdapterOperateInstallListData dataInstall = mAdapterOperateInstallListDataList.get(itemPosition);
+            dataInstall.setModel(0);
             int model;
-            if (mAdapterOperateInstallListDataList.get(itemPosition).isWire()) {
+            if (dataInstall.isWire()) {
                 model = 1;
             } else {
                 model = 2;
@@ -198,7 +200,6 @@ public class OperateInstallActivity extends BaseActivity {
             Log.i(TAG, "onActivityResult: itemPosition-->" + itemPosition);
             AdapterOperateInstallListData listData = mAdapterOperateInstallListDataList.get(itemPosition);
             mDatabaseManager.addTerLocateType(idMainTerminal, locateType);
-            mDatabaseManager.addTerModel(idMainTerminal, model);
             listData.setModel(model);
         }
 
@@ -606,9 +607,8 @@ public class OperateInstallActivity extends BaseActivity {
 
                 AdapterOperateInstallListData data = mAdapterOperateInstallListDataList.get(position);
                 data.settNoNew(imei);
+                data.setModel(0);
                 isCheckedImei = false;
-
-                mDatabaseManager.addTerModel(idMainTerminal, 0);
             }
 
             @Override
@@ -796,7 +796,7 @@ public class OperateInstallActivity extends BaseActivity {
                             int type = carTerminalListBean.getTerminalType();
 
                             for (AdapterOperateInstallListData data : mAdapterOperateInstallListDataList) {
-                                if ((data.isWire() && type == 1) || (!data.isWire() && type == 2)) {
+                                if (((data.isWire() && type == 1) || (!data.isWire() && type == 2)) && data.gettId() == 0) {
                                     data.settId(tId);
                                     data.settNoNew(tNo);
                                     data.setPosition(position);
@@ -1144,6 +1144,7 @@ public class OperateInstallActivity extends BaseActivity {
             mDatabaseManager.addTer(id, tNoOld, tNoNew, position
                     , positionPic, installPic
                     , positionPicUrl, installPicUrl, carId, wire);
+            mDatabaseManager.addTerModel(id, data.getModel());
             i++;
             Log.i(TAG, "----------------------------------------");
         }
@@ -1410,79 +1411,72 @@ public class OperateInstallActivity extends BaseActivity {
         int count = mAdapterOperateInstallListDataList.size();
         for (int i = 0; i < count; i++) {
             AdapterOperateInstallListData data = mAdapterOperateInstallListDataList.get(i);
-            Cursor cursor = mDatabaseManager.getTer(ID_MAIN_TERMINAL + i);
-            if (null != cursor && cursor.moveToFirst()) {
-                String id = cursor.getString(0);
-                String tNoOld = cursor.getString(1);
-                String tNoNew = cursor.getString(2);
-                String position = cursor.getString(3);
-                String positionPic = cursor.getString(4);
-                String installPic = cursor.getString(5);
-                String positionPicUrl = cursor.getString(6);
-                String installPicUrl = cursor.getString(7);
-                int model = cursor.getInt(8);
-                int tId = cursor.getInt(9);
+            String tNoOld = data.gettNoOld();
+            String tNoNew = data.gettNoNew();
+            String position = data.getPosition();
+            String positionPic = data.getPositionPic();
+            String installPic = data.getInstallPic();
+            String positionPicUrl = data.getPositionPicUrl();
+            String installPicUrl = data.getInstallPicUrl();
+            int model = data.getModel();
+            int tId = data.gettId();
 
-                Log.i(TAG, "checkTerComplete: id-->" + id);
-                Log.i(TAG, "checkTerComplete: tNoOld-->" + tNoOld);
-                Log.i(TAG, "checkTerComplete: tNoNew-->" + tNoNew);
-                Log.i(TAG, "checkTerComplete: position-->" + position);
-                Log.i(TAG, "checkTerComplete: positionPic-->" + positionPic);
-                Log.i(TAG, "checkTerComplete: installPic-->" + installPic);
-                Log.i(TAG, "checkTerComplete: positionPicUrl-->" + positionPicUrl);
-                Log.i(TAG, "checkTerComplete: installPicUrl-->" + installPicUrl);
-                Log.i(TAG, "checkTerComplete: model-->" + model);
-                Log.i(TAG, "checkTerComplete: tId-->" + tId);
+            Log.i(TAG, "checkTerComplete: tNoOld-->" + tNoOld);
+            Log.i(TAG, "checkTerComplete: tNoNew-->" + tNoNew);
+            Log.i(TAG, "checkTerComplete: position-->" + position);
+            Log.i(TAG, "checkTerComplete: positionPic-->" + positionPic);
+            Log.i(TAG, "checkTerComplete: installPic-->" + installPic);
+            Log.i(TAG, "checkTerComplete: positionPicUrl-->" + positionPicUrl);
+            Log.i(TAG, "checkTerComplete: installPicUrl-->" + installPicUrl);
+            Log.i(TAG, "checkTerComplete: model-->" + model);
+            Log.i(TAG, "checkTerComplete: tId-->" + tId);
 
-                if (data.isWire()) {
-                    if ((null == tNoNew || "".equals(tNoNew))
-                            && (null == position || "".equals(position))
-                            && (null == positionPicUrl || "".equals(positionPicUrl))
-                            && (null == installPicUrl || "".equals(installPicUrl))
-                            && (0 == model)) {
-                        complete = true;
-                    } else if (null != tNoNew && !"".equals(tNoNew)
-                            && null != position && !"".equals(position)
-                            && null != positionPicUrl && !"".equals(positionPicUrl)
-                            && null != installPicUrl && !"".equals(installPicUrl)
-                            && (0 != model)) {
-                        complete = true;
-                        haveTerData = true;
-                        mCompleteCount++;
-                    } else {
-                        complete = false;
-                        haveTerData = true;
-                    }
+            if (data.isWire()) {
+                if ((null == tNoNew || "".equals(tNoNew))
+                        && (null == position || "".equals(position))
+                        && (null == positionPicUrl || "".equals(positionPicUrl))
+                        && (null == installPicUrl || "".equals(installPicUrl))
+                        && (0 == model)) {
+                    complete = true;
+                } else if (null != tNoNew && !"".equals(tNoNew)
+                        && null != position && !"".equals(position)
+                        && null != positionPicUrl && !"".equals(positionPicUrl)
+                        && null != installPicUrl && !"".equals(installPicUrl)
+                        && (0 != model)) {
+                    complete = true;
+                    haveTerData = true;
+                    mCompleteCount++;
                 } else {
-                    if ((null == tNoNew || "".equals(tNoNew))
-                            && (null == position || "".equals(position))
-                            && (null == positionPicUrl || "".equals(positionPicUrl))
-                            && (0 == model)) {
-                        complete = true;
-                    } else if (null != tNoNew && !"".equals(tNoNew)
-                            && null != position && !"".equals(position)
-                            && null != positionPicUrl && !"".equals(positionPicUrl)
-                            && (0 != model)) {
-                        complete = true;
-                        haveTerData = true;
-                        mCompleteCount++;
-                    } else {
-                        complete = false;
-                        haveTerData = true;
-                    }
+                    complete = false;
+                    haveTerData = true;
                 }
-
-                data.setComplete(complete);
-
-                Log.i(TAG, "isComplete: position-->" + idMainTerminal + "-->" + i);
-                Log.i(TAG, "isComplete: complete-->" + complete);
-                Log.i(TAG, ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-
-                cursor.close();
-
-                if (!complete) {
-                    completeAll = false;
+            } else {
+                if ((null == tNoNew || "".equals(tNoNew))
+                        && (null == position || "".equals(position))
+                        && (null == positionPicUrl || "".equals(positionPicUrl))
+                        && (0 == model)) {
+                    complete = true;
+                } else if (null != tNoNew && !"".equals(tNoNew)
+                        && null != position && !"".equals(position)
+                        && null != positionPicUrl && !"".equals(positionPicUrl)
+                        && (0 != model)) {
+                    complete = true;
+                    haveTerData = true;
+                    mCompleteCount++;
+                } else {
+                    complete = false;
+                    haveTerData = true;
                 }
+            }
+
+            data.setComplete(complete);
+
+            Log.i(TAG, "isComplete: position-->" + idMainTerminal + "-->" + i);
+            Log.i(TAG, "isComplete: complete-->" + complete);
+            Log.i(TAG, ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+
+            if (!complete) {
+                completeAll = false;
             }
         }
 
@@ -1493,69 +1487,63 @@ public class OperateInstallActivity extends BaseActivity {
     //checkCar数据
     private boolean isCarComplete() {
 
+        String carNo = mEditTextCarNo.getText().toString();
+        String carType = mEditTextCarType.getText().toString();
+
         boolean carComplete = true;
 
-        Cursor cursor = mDatabaseManager.getCar(idMainCar);
-        if (null != cursor && cursor.moveToFirst()) {
-            String carId = cursor.getString(0);
-            String carNo = cursor.getString(1);
-            String frameNo = cursor.getString(2);
-            String carType = cursor.getString(3);
-            String carNoPic = cursor.getString(4);
-            String frameNoPic = cursor.getString(5);
-            String carNoPicUrl = cursor.getString(6);
-            String frameNoPicUrl = cursor.getString(7);
+        String carNoPic = mCarNoPic;
+        String frameNoPic = mCarFramePic;
+        String carNoPicUrl = mCarNoPicUrl;
+        String frameNoPicUrl = mCarFramePicUrl;
 
+        Log.i(TAG, "isCarComplete: carNo-->" + carNo);
+        Log.i(TAG, "isCarComplete: frameNo-->" + frameNo);
+        Log.i(TAG, "isCarComplete: carType-->" + carType);
+        Log.i(TAG, "isCarComplete: carNoPic-->" + carNoPic);
+        Log.i(TAG, "isCarComplete: frameNoPic-->" + frameNoPic);
+        Log.i(TAG, "isCarComplete: carNoPicUrl-->" + carNoPicUrl);
+        Log.i(TAG, "isCarComplete: frameNoPicUrl-->" + frameNoPicUrl);
 
-            Log.i(TAG, "isCarComplete: carId-->" + carId);
-            Log.i(TAG, "isCarComplete: carNo-->" + carNo);
-            Log.i(TAG, "isCarComplete: frameNo-->" + frameNo);
-            Log.i(TAG, "isCarComplete: carType-->" + carType);
-            Log.i(TAG, "isCarComplete: carNoPic-->" + carNoPic);
-            Log.i(TAG, "isCarComplete: frameNoPic-->" + frameNoPic);
-            Log.i(TAG, "isCarComplete: carNoPicUrl-->" + carNoPicUrl);
-            Log.i(TAG, "isCarComplete: frameNoPicUrl-->" + frameNoPicUrl);
-
-            if (!RegularU.isEmpty(carNo) || !RegularU.isEmpty(carNoPicUrl)) {
-                if (RegularU.isEmpty(carNoPicUrl)) {
-                    carComplete = false;
-                    mImageViewCarNo.setBackgroundResource(R.drawable.bg_edit_orange);
-                    mTextViewTip1.setVisibility(View.VISIBLE);
-                    mTextViewTip1.setText(getString(R.string.tip_pic));
-                }
-                if (RegularU.isEmpty(carNo)) {
-                    carComplete = false;
-                    mTextViewTip1.setVisibility(View.VISIBLE);
-                    mTextViewTip1.setText(getString(R.string.tip_carno));
-                } else if (!RegularU.checkCarNo(carNo)) {
-                    // 17-8-20 较验车牌
-                    carComplete = false;
-                    mTextViewTip1.setVisibility(View.VISIBLE);
-                    mTextViewTip1.setText(getString(R.string.tip_carno_fault));
-                }
-                if (!RegularU.isEmpty(carNo) && !RegularU.isEmpty(carNoPicUrl) && RegularU.checkCarNo(carNo)) {
-                    mTextViewTip1.setVisibility(View.GONE);
-                    mImageViewCarNo.setBackgroundResource(R.color.colorNull);
-                }
-            } else {
+        if (!RegularU.isEmpty(carNo) || !RegularU.isEmpty(carNoPicUrl)) {
+            if (RegularU.isEmpty(carNoPicUrl)) {
+                carComplete = false;
+                mImageViewCarNo.setBackgroundResource(R.drawable.bg_edit_orange);
+                mTextViewTip1.setVisibility(View.VISIBLE);
+                mTextViewTip1.setText(getString(R.string.tip_pic));
+            }
+            if (RegularU.isEmpty(carNo)) {
+                carComplete = false;
+                mTextViewTip1.setVisibility(View.VISIBLE);
+                mTextViewTip1.setText(getString(R.string.tip_carno));
+            } else if (!RegularU.checkCarNo(carNo)) {
+                // 17-8-20 较验车牌
+                carComplete = false;
+                mTextViewTip1.setVisibility(View.VISIBLE);
+                mTextViewTip1.setText(getString(R.string.tip_carno_fault));
+            }
+            if (!RegularU.isEmpty(carNo) && !RegularU.isEmpty(carNoPicUrl) && RegularU.checkCarNo(carNo)) {
                 mTextViewTip1.setVisibility(View.GONE);
                 mImageViewCarNo.setBackgroundResource(R.color.colorNull);
             }
+        } else {
+            mTextViewTip1.setVisibility(View.GONE);
+            mImageViewCarNo.setBackgroundResource(R.color.colorNull);
+        }
 
-            if (null == carType || "".equals(carType)) {
-                carComplete = false;
-                mTextViewTip2.setVisibility(View.VISIBLE);
-            } else {
-                mTextViewTip2.setVisibility(View.GONE);
-            }
-            if (null == frameNoPicUrl || "".equals(frameNoPicUrl)) {
-                carComplete = false;
-                mTextViewTip3.setVisibility(View.VISIBLE);
-                mImageViewFrameNo.setBackgroundResource(R.drawable.bg_edit_orange);
-            } else {
-                mImageViewFrameNo.setBackgroundResource(R.color.colorNull);
-                mTextViewTip3.setVisibility(View.GONE);
-            }
+        if (RegularU.isEmpty(carType)) {
+            carComplete = false;
+            mTextViewTip2.setVisibility(View.VISIBLE);
+        } else {
+            mTextViewTip2.setVisibility(View.GONE);
+        }
+        if (RegularU.isEmpty(frameNoPicUrl)) {
+            carComplete = false;
+            mTextViewTip3.setVisibility(View.VISIBLE);
+            mImageViewFrameNo.setBackgroundResource(R.drawable.bg_edit_orange);
+        } else {
+            mImageViewFrameNo.setBackgroundResource(R.color.colorNull);
+            mTextViewTip3.setVisibility(View.GONE);
         }
 
         return carComplete;
