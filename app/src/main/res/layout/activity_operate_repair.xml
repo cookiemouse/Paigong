@@ -477,6 +477,7 @@
             android:layout_height="@dimen/dp_0_5"
             android:layout_below="@+id/rl_activity_operate_default_install_new"
             android:layout_marginTop="@dimen/dp_16"
+
             android:background="@color/colorBlueTheme"/>
 
         <TextView

@@ -988,21 +988,26 @@ public class OperateRepairActivity extends BaseActivity {
                     complete = false;
                     mTextViewTip1.setText(getString(R.string.tip_position));
                     mTextViewTip1.setVisibility(View.VISIBLE);
-                } else if (RegularU.isEmpty(positionUrl)) {
+                }
+                if (RegularU.isEmpty(positionUrl)) {
                     complete = false;
-                    if (mTextViewTip1.getVisibility() != View.VISIBLE) {
-                        mTextViewTip1.setText(getString(R.string.tip_pic));
-                        mTextViewTip1.setVisibility(View.VISIBLE);
-                    }
+                    mTextViewTip1.setVisibility(View.VISIBLE);
+                    mTextViewTip1.setText(getString(R.string.tip_pic));
+                    mImageViewPositionNew.setBackgroundResource(R.drawable.bg_edit_orange);
                 } else {
+                    mImageViewPositionNew.setBackgroundResource(R.color.colorNull);
+                }
+                if (!RegularU.isEmpty(position) && !RegularU.isEmpty(positionUrl)){
                     mTextViewTip1.setVisibility(View.INVISIBLE);
                 }
 
                 if (null == installUrl || "".equals(installUrl)) {
                     complete = false;
                     mTextViewTip2.setVisibility(View.VISIBLE);
+                    mImageViewInstallNew.setBackgroundResource(R.drawable.bg_edit_orange);
                 } else {
                     mTextViewTip2.setVisibility(View.INVISIBLE);
+                    mImageViewInstallNew.setBackgroundResource(R.color.colorNull);
                 }
             }
             cursor.close();
@@ -1053,13 +1058,13 @@ public class OperateRepairActivity extends BaseActivity {
                     mTextViewDescribe.setText(mDescribe);
                     Picasso.with(OperateRepairActivity.this)
                             .load(positionPicG)
-                            .error(R.color.colorNull)
+                            .error(R.drawable.ic_camera)
                             .fit()
                             .centerInside()
                             .into(mImageViewPositionOld);
                     Picasso.with(OperateRepairActivity.this)
                             .load(installPicG)
-                            .error(R.color.colorNull)
+                            .error(R.drawable.ic_camera)
                             .fit()
                             .centerInside()
                             .into(mImageViewInstallOld);
