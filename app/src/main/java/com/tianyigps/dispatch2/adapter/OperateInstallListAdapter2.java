@@ -261,17 +261,23 @@ public class OperateInstallListAdapter2 extends BaseAdapter {
             }
         });
 
-        etPosition.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        etPosition.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onFocusChange(View view, boolean b) {
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
                 myHandler.removeMessages(Data.MSG_3);
-                if (!b) {
-                    Message message = new Message();
-                    message.what = Data.MSG_3;
-                    message.arg1 = positionFinal;
-                    message.obj = ((EditText) view).getText().toString();
-                    myHandler.sendMessageDelayed(message, DELAY);
-                }
+                Message message = new Message();
+                message.what = Data.MSG_3;
+                message.arg1 = positionFinal;
+                message.obj = editable.toString();
+                myHandler.sendMessageDelayed(message, DELAY);
             }
         });
 
