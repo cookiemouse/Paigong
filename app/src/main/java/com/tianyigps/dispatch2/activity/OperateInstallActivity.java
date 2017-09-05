@@ -1093,6 +1093,7 @@ public class OperateInstallActivity extends BaseActivity {
                 AdapterOperateInstallListData data = mAdapterOperateInstallListDataList.get(i);
                 if (data.gettId() == tid) {
                     data.settNoNew(tNoNew);
+                    data.settNoOld(tNoOld);
                     data.setPosition(position);
                     data.setModel(model);
                 }
@@ -1142,7 +1143,8 @@ public class OperateInstallActivity extends BaseActivity {
                 wire = 1;
             }
 
-            mDatabaseManager.addTer(id, tNoOld, tNoNew, position
+            //  保存tNoNew和tNoOle位置是反的，因为布局的时候写反了
+            mDatabaseManager.addTer(id, tNoNew, tNoOld, position
                     , positionPic, installPic
                     , positionPicUrl, installPicUrl, carId, wire);
             mDatabaseManager.addTerModel(id, data.getModel());

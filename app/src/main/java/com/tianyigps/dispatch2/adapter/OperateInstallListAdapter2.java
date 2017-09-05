@@ -115,6 +115,7 @@ public class OperateInstallListAdapter2 extends BaseAdapter {
         if (null != tNoOld && !tNoOld.equals("")) {
             rlOld.setVisibility(View.VISIBLE);
             tvStatus.setText(R.string.not_replace);
+            tvStatus.setEnabled(true);
 
             tvTNoOld.setText(tNoOld);
         } else {
