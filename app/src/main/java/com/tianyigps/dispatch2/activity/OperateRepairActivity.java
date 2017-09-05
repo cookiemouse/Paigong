@@ -462,14 +462,16 @@ public class OperateRepairActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 // 2017/8/30 定位
-//                String imei = mEditTextNewImei.getText().toString();
-//                getWholeImei(imei);
+                String imei = mEditTextNewImei.getText().toString();
+                if (RegularU.isEmpty(imei)){
+                    return;
+                }
                 if (isCheckedImei) {
                     toLocate(wholeImei);
                 } else {
                     isToLocate = true;
                     showLoading();
-                    mNetworkManager.checkIMEI(eid, token, wholeImei, mOrderTerType, orderNo, userName, mImeiOld);
+                    mNetworkManager.checkIMEI(eid, token, imei, mOrderTerType, orderNo, userName, mImeiOld);
                 }
             }
         });
