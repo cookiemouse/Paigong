@@ -326,18 +326,36 @@ public class PendDetailsActivity extends Activity {
                 }
 
                 for (PendDetailsBean.ObjBean.OrderCarListBean carListBean : objBean.getOrderCarList()) {
+
                     String carVin = carListBean.getCarVin();
+                    String carNo = carListBean.getCarNo();
                     String carBrand = carListBean.getCarBrand();
-                    if (null == carVin) {
-                        carVin = "";
-                    }
-                    if (null == carBrand) {
-                        carBrand = "";
-                    }
                     if (1 == carListBean.getRemoveFlag()) {
-                        mRemoveContent += carVin + "，" + carBrand + "\n";
+                        if (null != carVin && !"".equals(carVin)) {
+                            mRemoveContent += carVin;
+                        } else if (null != carNo && !"".equals(carNo)) {
+                            mRemoveContent += carNo;
+                        }
+                        if (!"".equals(mRemoveContent)) {
+                            if (!RegularU.isEmpty(carBrand)) {
+                                mRemoveContent += ("，" + carBrand + "\n");
+                            } else {
+                                mRemoveContent += "\n";
+                            }
+                        }
                     } else {
-                        mInfoContent += carVin + "，" + carBrand + "\n";
+                        if (null != carVin && !"".equals(carVin)) {
+                            mInfoContent += carVin;
+                        } else if (null != carNo && !"".equals(carNo)) {
+                            mInfoContent += carNo;
+                        }
+                        if (!"".equals(mInfoContent)) {
+                            if (!RegularU.isEmpty(carBrand)) {
+                                mInfoContent += ("，" + carBrand + "\n");
+                            } else {
+                                mInfoContent += "\n";
+                            }
+                        }
                     }
                 }
 
