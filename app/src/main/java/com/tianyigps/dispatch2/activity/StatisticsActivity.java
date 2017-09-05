@@ -251,6 +251,10 @@ public class StatisticsActivity extends BaseActivity {
                 }
 
                 mStatisticsManagerDataList.clear();
+                mDoorNum = 0;
+                mCarNum = 0;
+                mWireNum = 0;
+                mWirelessNum = 0;
 
                 for (InstallCountBean.ObjBean objBean : installCountBean.getObj()) {
                     String temp = objBean.getEngineerJobNo() + objBean.getEngineerName();
