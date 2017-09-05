@@ -1060,13 +1060,13 @@ public class OperateRepairActivity extends BaseActivity {
                     mTextViewDescribe.setText(mDescribe);
                     Picasso.with(OperateRepairActivity.this)
                             .load(positionPicG)
-                            .error(R.drawable.ic_camera)
+                            .error(R.color.colorNull)
                             .fit()
                             .centerInside()
                             .into(mImageViewPositionOld);
                     Picasso.with(OperateRepairActivity.this)
                             .load(installPicG)
-                            .error(R.drawable.ic_camera)
+                            .error(R.color.colorNull)
                             .fit()
                             .centerInside()
                             .into(mImageViewInstallOld);
