@@ -296,7 +296,7 @@ public class CustomSignActivity extends BaseActivity {
                     if (locateType == 0) {
                         locateType = 3;
                     }
-                    terminalInfo = new TerminalInfo(tid, tNoNew, tNoOld, model, locateType, position);
+                    terminalInfo = new TerminalInfo(tid, tNoOld, tNoNew, model, locateType, position);
 
                     cursorTer.close();
                 }

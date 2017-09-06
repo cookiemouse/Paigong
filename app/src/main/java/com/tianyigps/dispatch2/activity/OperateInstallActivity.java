@@ -1143,8 +1143,7 @@ public class OperateInstallActivity extends BaseActivity {
                 wire = 1;
             }
 
-            //  保存tNoNew和tNoOle位置是反的，因为布局的时候写反了
-            mDatabaseManager.addTer(id, tNoNew, tNoOld, position
+            mDatabaseManager.addTer(id, tNoOld, tNoNew, position
                     , positionPic, installPic
                     , positionPicUrl, installPicUrl, carId, wire);
             mDatabaseManager.addTerModel(id, data.getModel());
