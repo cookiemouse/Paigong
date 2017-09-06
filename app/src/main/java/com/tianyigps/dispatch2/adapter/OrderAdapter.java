@@ -97,7 +97,10 @@ public class OrderAdapter extends BaseAdapter {
         viewHolder.tvWireRemove.setText("" + data.getWireRemove());
         viewHolder.tvWirelessRemove.setText("" + data.getWirelessRemove());
 
-        if (currentTime >= data.getTime()) {
+        if (data.getReviseFlag() == 1) {
+            viewHolder.tvRed.setText("（改）");
+            viewHolder.tvRed.setVisibility(View.VISIBLE);
+        } else if (currentTime >= data.getTime()) {
             viewHolder.tvRed.setText("（迟到）");
             viewHolder.tvRed.setVisibility(View.VISIBLE);
         } else {

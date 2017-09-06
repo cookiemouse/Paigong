@@ -357,7 +357,8 @@ public class OrderFragment extends Fragment {
                             , objBean.getWiredNum()
                             , objBean.getWirelessNum()
                             , objBean.getRemoveWiredNum()
-                            , objBean.getRemoveWirelessNum()));
+                            , objBean.getRemoveWirelessNum()
+                            , objBean.getReviseFlag()));
                 }
 
                 myHandler.sendEmptyMessage(Data.MSG_1);
