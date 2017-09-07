@@ -10,4 +10,12 @@ public class TerminalInfoOut {
     public TerminalInfoOut(TerminalInfo terminalInfo) {
         this.terminalInfo = terminalInfo;
     }
+
+    public TerminalInfo getTerminalInfo() {
+        return terminalInfo;
+    }
+
+    public void setTerminalInfo(TerminalInfo terminalInfo) {
+        this.terminalInfo = terminalInfo;
+    }
 }

@@ -200,7 +200,7 @@ public class OrderDetailsActivity extends Activity {
                 if (isChecked) {
                     // 2017/8/2 已签到，开始
                     showLoading();
-                    mNetworkManager.startHanding(eid, token, orderNo, mStringContactPhone, userName);
+                    mNetworkManager.startHanding(eid, token, orderNo, eName, userName);
                     return;
                 }
                 // 2017/8/2 签到

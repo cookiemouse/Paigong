@@ -65,6 +65,7 @@ public class HandingFragment extends Fragment implements View.OnClickListener {
     private int eid;
     private String token;
     private String userName;
+    private String eName;
 
     //  正在操作的item
     private int mPosition = 0;
@@ -140,6 +141,7 @@ public class HandingFragment extends Fragment implements View.OnClickListener {
         eid = mSharedpreferenceManager.getEid();
         token = mSharedpreferenceManager.getToken();
         userName = mSharedpreferenceManager.getAccount();
+        eName = mSharedpreferenceManager.getName();
         int launchMode = mSharedpreferenceManager.getLaunchMode();
         if (Data.DATA_LAUNCH_MODE_WORKER == launchMode) {
             mImageViewTitleLeft.setVisibility(View.GONE);
@@ -197,7 +199,7 @@ public class HandingFragment extends Fragment implements View.OnClickListener {
                 mPosition = position;
                 AdapterHandingData data = mAdapterHandingDataList.get(position);
                 showLoading();
-                mNetworkManager.startHanding(eid, token, data.getId(), data.getCallName(), userName);
+                mNetworkManager.startHanding(eid, token, data.getId(), eName, userName);
             }
 
             @Override

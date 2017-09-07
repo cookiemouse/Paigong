@@ -418,18 +418,29 @@ public class CustomSignActivity extends BaseActivity {
                     Log.i(TAG, "getRepairJson: model-->" + model);
                     Log.i(TAG, "getRepairJson: locateType-->" + locateType);
 
-                    TerminalInfo terminalInfo = new TerminalInfo(tId, imeiOld, imeiNew, model, locateType, positionNew, explain);
-                    TerminalInfoOut terminalInfoOut = new TerminalInfoOut(terminalInfo);
-                    terminalInfoOurList.add(terminalInfoOut);
-
-                    if (null == explain) {
-                        terminalInfoOurList.clear();
+                    if (!RegularU.isEmpty(explain)) {
+                        TerminalInfo terminalInfo = new TerminalInfo(tId, imeiOld, imeiNew, model, locateType, positionNew, explain);
+                        TerminalInfoOut terminalInfoOut = new TerminalInfoOut(terminalInfo);
+                        terminalInfoOurList.add(terminalInfoOut);
                     }
+
                     cursorR.close();
                 }
             } while (cursor.moveToNext());
 
             cursor.close();
+        }
+
+        //  判断是否为空单
+        boolean isNullOrder = true;
+        for (TerminalInfoOut terminalInfoOut : terminalInfoOurList) {
+            TerminalInfo terminalInfo = terminalInfoOut.getTerminalInfo();
+            if (!RegularU.isEmpty(terminalInfo.getRepaireRemark())) {
+                isNullOrder = false;
+            }
+        }
+        if (isNullOrder) {
+            terminalInfoOurList.clear();
         }
 
         Gson gson = new Gson();
