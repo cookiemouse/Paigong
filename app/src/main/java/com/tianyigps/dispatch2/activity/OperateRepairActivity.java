@@ -463,7 +463,7 @@ public class OperateRepairActivity extends BaseActivity {
             public void onClick(View view) {
                 // 2017/8/30 定位
                 String imei = mEditTextNewImei.getText().toString();
-                if (RegularU.isEmpty(imei)){
+                if (RegularU.isEmpty(imei)) {
                     return;
                 }
                 if (isCheckedImei) {
@@ -999,17 +999,19 @@ public class OperateRepairActivity extends BaseActivity {
                 } else {
                     mImageViewPositionNew.setBackgroundResource(R.color.colorNull);
                 }
-                if (!RegularU.isEmpty(position) && !RegularU.isEmpty(positionUrl)){
+                if (!RegularU.isEmpty(position) && !RegularU.isEmpty(positionUrl)) {
                     mTextViewTip1.setVisibility(View.INVISIBLE);
                 }
 
-                if (null == installUrl || "".equals(installUrl)) {
-                    complete = false;
-                    mTextViewTip2.setVisibility(View.VISIBLE);
-                    mImageViewInstallNew.setBackgroundResource(R.drawable.bg_edit_orange);
-                } else {
-                    mTextViewTip2.setVisibility(View.INVISIBLE);
-                    mImageViewInstallNew.setBackgroundResource(R.color.colorNull);
+                if (mRelativeLayoutReplace.getVisibility() == View.VISIBLE) {
+                    if (null == installUrl || "".equals(installUrl)) {
+                        complete = false;
+                        mTextViewTip2.setVisibility(View.VISIBLE);
+                        mImageViewInstallNew.setBackgroundResource(R.drawable.bg_edit_orange);
+                    } else {
+                        mTextViewTip2.setVisibility(View.INVISIBLE);
+                        mImageViewInstallNew.setBackgroundResource(R.color.colorNull);
+                    }
                 }
             }
             cursor.close();

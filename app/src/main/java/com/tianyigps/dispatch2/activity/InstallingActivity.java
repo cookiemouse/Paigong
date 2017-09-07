@@ -112,7 +112,7 @@ public class InstallingActivity extends BaseActivity {
         //将背景色复原
         mSwipeRefreshLayout.setRefreshing(true);
         mNetworkManager.getWorkerOrderInfoStart(eid, token, orderNo, userName);
-        resetRepairList();
+//        resetRepairList();
     }
 
     @Override

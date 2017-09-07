@@ -80,6 +80,7 @@ public class OrderAdapter extends BaseAdapter {
             viewHolder.tvWireRemove = contentView.findViewById(R.id.tv_item_order_remove_content_wire);
             viewHolder.tvWirelessRemove = contentView.findViewById(R.id.tv_item_order_remove_content_wireless);
             viewHolder.tvRed = contentView.findViewById(R.id.tv_item_order_red);
+            viewHolder.tvLate = contentView.findViewById(R.id.tv_item_order_late);
 
             contentView.setTag(viewHolder);
         } else {
@@ -98,13 +99,15 @@ public class OrderAdapter extends BaseAdapter {
         viewHolder.tvWirelessRemove.setText("" + data.getWirelessRemove());
 
         if (data.getReviseFlag() == 1) {
-            viewHolder.tvRed.setText("（改）");
-            viewHolder.tvRed.setVisibility(View.VISIBLE);
-        } else if (currentTime >= data.getTime()) {
-            viewHolder.tvRed.setText("（迟到）");
             viewHolder.tvRed.setVisibility(View.VISIBLE);
         } else {
             viewHolder.tvRed.setVisibility(View.GONE);
+        }
+
+        if (currentTime >= data.getTime()) {
+            viewHolder.tvLate.setVisibility(View.VISIBLE);
+        } else {
+            viewHolder.tvLate.setVisibility(View.GONE);
         }
 
         String orderType;
@@ -195,7 +198,7 @@ public class OrderAdapter extends BaseAdapter {
 
         private LinearLayout llRemove, llCall;
         private TextView tvWireRemove, tvWirelessRemove;
-        private TextView tvRed;
+        private TextView tvRed, tvLate;
     }
 
     public interface OnItemListener {

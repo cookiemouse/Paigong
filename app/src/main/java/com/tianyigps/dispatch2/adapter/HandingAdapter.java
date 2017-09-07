@@ -150,9 +150,6 @@ public class HandingAdapter extends BaseAdapter {
         if (data.isModify()) {
             viewHolder.textViewModify.setText("（改）");
             viewHolder.textViewModify.setVisibility(View.VISIBLE);
-        } else if (data.getSubmitTime() >= data.getTime()) {
-            viewHolder.textViewModify.setText("（迟到）");
-            viewHolder.textViewModify.setVisibility(View.VISIBLE);
         } else {
             viewHolder.textViewModify.setVisibility(View.GONE);
         }
