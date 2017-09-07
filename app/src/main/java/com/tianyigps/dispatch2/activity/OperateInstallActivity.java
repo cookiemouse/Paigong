@@ -170,7 +170,6 @@ public class OperateInstallActivity extends BaseActivity {
     protected void onPause() {
         super.onPause();
         myHandler.removeMessages(Data.MSG_1);
-        myHandler.removeMessages(Data.MSG_2);
     }
 
     @Override
