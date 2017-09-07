@@ -212,6 +212,7 @@ public class PendedFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 mKey = mEditTextSearch.getText().toString();
+                mKey = mKey.trim();
                 mSwipeRefreshLayout.setRefreshing(true);
                 mNetworkManager.getPended(jobNo, token, "", mKey, "", userName);
 

@@ -201,6 +201,7 @@ public class PendingFragment extends Fragment {
             public void onClick(View view) {
                 // 2017/8/9 搜索
                 mKey = mEditTextSearch.getText().toString();
+                mKey = mKey.trim();
                 mSwipeRefreshLayout.setRefreshing(true);
                 mNetworkManager.getPendingOrder(jobNo, token, "", mKey, userName);
                 if (!RegularU.isEmpty(mKey)) {

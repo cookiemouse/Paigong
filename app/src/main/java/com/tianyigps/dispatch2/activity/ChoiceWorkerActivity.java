@@ -118,6 +118,7 @@ public class ChoiceWorkerActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 String strSearch = mEditTextSearch.getText().toString();
+                strSearch = strSearch.trim();
                 search(strSearch);
             }
         });

@@ -240,6 +240,7 @@ public class HandledFragment extends Fragment {
             public void onClick(View view) {
                 // 2017/7/13 搜索
                 mKey = mEditTextSearch.getText().toString();
+                mKey = mKey.trim();
                 mSwipeRefreshLayout.setRefreshing(true);
                 mNetworkManager.getWorkerOrderHanded(eid, token, mKey, "", userName);
 

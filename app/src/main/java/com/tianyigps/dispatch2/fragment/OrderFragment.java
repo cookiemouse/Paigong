@@ -239,6 +239,7 @@ public class OrderFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 mKey = mEditTextSearch.getText().toString();
+                mKey = mKey.trim();
                 mSwipeRefreshLayout.setRefreshing(true);
                 mNetworkManager.getWorkerOrder(eid, token, mKey, userName);
 
