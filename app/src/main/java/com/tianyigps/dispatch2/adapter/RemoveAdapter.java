@@ -124,11 +124,9 @@ public class RemoveAdapter extends BaseAdapter {
                     if (wire == wireComplete && wireless == wirelessComplete) {
                         viewHolderRomeve.ivGo.setVisibility(View.GONE);
                         viewHolderRomeve.tvGo.setVisibility(View.VISIBLE);
-                        viewHolderRomeve.frameLayout.setBackgroundResource(R.drawable.bg_item_installing_green);
                     } else {
                         viewHolderRomeve.ivGo.setVisibility(View.VISIBLE);
                         viewHolderRomeve.tvGo.setVisibility(View.GONE);
-                        viewHolderRomeve.frameLayout.setBackgroundResource(R.drawable.bg_item_installing_blue);
                     }
 
                 } else {
@@ -169,13 +167,17 @@ public class RemoveAdapter extends BaseAdapter {
                 viewHolderInstall.textViewOnlinePC.setText("" + wireComplete);
                 viewHolderInstall.textViewOfflinePC.setText("" + wirelessComplete);
 
+                if (position % 2 == 0) {
+                    viewHolderInstall.frameLayout.setBackgroundResource(R.drawable.bg_item_installing_blue);
+                } else {
+                    viewHolderInstall.frameLayout.setBackgroundResource(R.drawable.bg_item_installing_green);
+                }
+
                 if (data.isComplete()) {
                     if (data.getOnlineComplete() == data.getOnline() && data.getOfflineComplete() == data.getOffline()) {
-                        viewHolderInstall.frameLayout.setBackgroundResource(R.drawable.bg_item_installing_green);
                         viewHolderInstall.ivGo.setVisibility(View.GONE);
                         viewHolderInstall.tvGo.setVisibility(View.VISIBLE);
                     } else {
-                        viewHolderInstall.frameLayout.setBackgroundResource(R.drawable.bg_item_installing_blue);
                         viewHolderInstall.ivGo.setVisibility(View.VISIBLE);
                         viewHolderInstall.tvGo.setVisibility(View.GONE);
                     }

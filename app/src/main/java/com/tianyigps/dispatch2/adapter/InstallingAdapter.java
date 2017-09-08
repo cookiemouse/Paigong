@@ -96,11 +96,9 @@ public class InstallingAdapter extends BaseAdapter {
 
         if (data.isComplete()) {
             if (data.getCompleteLine() == data.getOrderLine() && data.getCompleteOffline() == data.getOrderOffline()) {
-                viewHolder.frameLayout.setBackgroundResource(R.drawable.bg_item_installing_green);
                 viewHolder.ivGo.setVisibility(View.GONE);
                 viewHolder.tvGo.setVisibility(View.VISIBLE);
             } else {
-                viewHolder.frameLayout.setBackgroundResource(R.drawable.bg_item_installing_blue);
                 viewHolder.ivGo.setVisibility(View.VISIBLE);
                 viewHolder.tvGo.setVisibility(View.GONE);
             }
