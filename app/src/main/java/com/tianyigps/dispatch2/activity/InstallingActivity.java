@@ -23,6 +23,7 @@ import com.tianyigps.dispatch2.adapter.RemoveAdapter;
 import com.tianyigps.dispatch2.adapter.RepairAdapter;
 import com.tianyigps.dispatch2.base.BaseActivity;
 import com.tianyigps.dispatch2.bean.StartOrderInfoBean;
+import com.tianyigps.dispatch2.customview.MyListView;
 import com.tianyigps.dispatch2.data.AdapterInstallingData;
 import com.tianyigps.dispatch2.data.AdapterRemoveData;
 import com.tianyigps.dispatch2.data.AdapterRepairData;
@@ -56,7 +57,7 @@ public class InstallingActivity extends BaseActivity {
     private static final int TYPE_REMOVE = 2;
 
     private TextView mTextViewRemarks;
-    private ListView mListView;
+    private MyListView mListView;
     private Button mButtonNext;
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
@@ -69,8 +70,6 @@ public class InstallingActivity extends BaseActivity {
 
     private List<AdapterRepairData> mAdapterRepairDataList = new ArrayList<>();
     private RepairAdapter mRepairAdapter;
-
-    private View mViewRemarks, mViewNext;
 
     //  网络请求
     private NetworkManager mNetworkManager;
@@ -134,11 +133,8 @@ public class InstallingActivity extends BaseActivity {
 
         mListView = findViewById(R.id.lv_activity_installing);
 
-        mViewRemarks = LayoutInflater.from(this).inflate(R.layout.layout_activity_installing_remarks, null);
-        mViewNext = LayoutInflater.from(this).inflate(R.layout.layout_activity_installing_next, null);
-
-        mTextViewRemarks = mViewRemarks.findViewById(R.id.tv_layout_activity_installing_remarks);
-        mButtonNext = mViewNext.findViewById(R.id.btn_layout_activity_installing_next);
+        mTextViewRemarks = findViewById(R.id.tv_layout_activity_installing_remarks);
+        mButtonNext = findViewById(R.id.btn_layout_activity_installing_next);
 
         mSwipeRefreshLayout = findViewById(R.id.srl_activity_installing);
         mSwipeRefreshLayout.setColorSchemeColors(0xff3cabfa);
@@ -181,9 +177,6 @@ public class InstallingActivity extends BaseActivity {
                 Log.i(TAG, "init: default");
             }
         }
-
-        mListView.addHeaderView(mViewRemarks);
-        mListView.addFooterView(mViewNext);
     }
 
     private void setEventListener() {
@@ -196,11 +189,7 @@ public class InstallingActivity extends BaseActivity {
 
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                if (0 == i) {
-                    return;
-                }
-                int position = i - 1;
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
 
                 switch (mAdapterType) {
                     case TYPE_INSTALL: {
