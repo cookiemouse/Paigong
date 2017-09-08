@@ -1,6 +1,7 @@
 package com.tianyigps.dispatch2.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,12 +10,12 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 import com.tianyigps.dispatch2.R;
-import com.tianyigps.dispatch2.bean.LastInstallerBean;
+import com.tianyigps.dispatch2.activity.ShowPicActivity;
 import com.tianyigps.dispatch2.data.AdapterOperateRemoveData;
-import com.tianyigps.dispatch2.interfaces.OnGetLastInstallerListener;
+import com.tianyigps.dispatch2.manager.SharedpreferenceManager;
+import com.tianyigps.dispatch2.utils.RegularU;
 
 import java.util.List;
 
@@ -31,9 +32,12 @@ public class OperateRemoveAdapter extends BaseAdapter {
 
     private OnItemListener mOnItemListener;
 
+    private String baseUrl;
+
     public OperateRemoveAdapter(Context context, List<AdapterOperateRemoveData> mDataList) {
         this.context = context;
         this.mDataList = mDataList;
+        baseUrl = new SharedpreferenceManager(context).getImageBaseUrl();
     }
 
     @Override
@@ -121,11 +125,35 @@ public class OperateRemoveAdapter extends BaseAdapter {
                 .centerInside()
                 .into(viewHolder.picPosition);
         Picasso.with(context)
-                .load(data.getPicPosition())
+                .load(data.getPicInstall())
                 .error(R.color.colorNull)
                 .fit()
                 .centerInside()
                 .into(viewHolder.picInstall);
+
+        viewHolder.picInstall.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (RegularU.isEmpty(data.getPicInstall()) || (baseUrl + "null").equals(data.getPicInstall())) {
+                    return;
+                }
+                Intent intent = new Intent(context, ShowPicActivity.class);
+                intent.putExtra("URL", data.getPicInstall());
+                context.startActivity(intent);
+            }
+        });
+
+        viewHolder.picPosition.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (RegularU.isEmpty(data.getPicPosition()) || (baseUrl + "null").equals(data.getPicPosition())) {
+                    return;
+                }
+                Intent intent = new Intent(context, ShowPicActivity.class);
+                intent.putExtra("URL", data.getPicPosition());
+                context.startActivity(intent);
+            }
+        });
 
         viewHolder.state.setOnClickListener(new View.OnClickListener() {
             @Override

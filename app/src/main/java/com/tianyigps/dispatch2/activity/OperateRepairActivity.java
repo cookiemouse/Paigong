@@ -369,7 +369,6 @@ public class OperateRepairActivity extends BaseActivity {
         mImageViewPositionOld.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: 2017/9/8 显示图片
                 if (RegularU.isEmpty(positionPicG) || (baseUrl + "null").equals(positionPicG)) {
                     return;
                 }
@@ -382,7 +381,6 @@ public class OperateRepairActivity extends BaseActivity {
         mImageViewInstallOld.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: 2017/9/8 显示
                 if (RegularU.isEmpty(installPicG) || (baseUrl + "null").equals(installPicG)) {
                     return;
                 }
