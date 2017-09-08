@@ -366,6 +366,32 @@ public class OperateRepairActivity extends BaseActivity {
             }
         });
 
+        mImageViewPositionOld.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO: 2017/9/8 显示图片
+                if (RegularU.isEmpty(positionPicG) || (baseUrl + "null").equals(positionPicG)) {
+                    return;
+                }
+                Intent intent = new Intent(OperateRepairActivity.this, ShowPicActivity.class);
+                intent.putExtra("URL", positionPicG);
+                startActivity(intent);
+            }
+        });
+
+        mImageViewInstallOld.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO: 2017/9/8 显示
+                if (RegularU.isEmpty(installPicG) || (baseUrl + "null").equals(installPicG)) {
+                    return;
+                }
+                Intent intent = new Intent(OperateRepairActivity.this, ShowPicActivity.class);
+                intent.putExtra("URL", installPicG);
+                startActivity(intent);
+            }
+        });
+
         mImageViewPositionNew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

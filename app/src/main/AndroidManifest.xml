@@ -215,6 +215,8 @@
 
         <activity android:name=".activity.TestActivity">
         </activity>
+        <activity android:name=".activity.ShowPicActivity">
+        </activity>
     </application>
 
 </manifest>
