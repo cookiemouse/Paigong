@@ -311,7 +311,7 @@ public class InstallingActivity extends BaseActivity {
                         for (StartOrderInfoBean.ObjBean.CarListBean carListBean : objBean.getCarList()) {
                             if (carListBean.getRemoveFlag() == 0) {
                                 mAdapterInstallingDataList.add(new AdapterInstallingData(carListBean.getId()
-                                        , carListBean.getNewCarVin()
+                                        , carListBean.getCarVin()
                                         , carListBean.getWiredNum()
                                         , carListBean.getWirelessNum()));
                             }
