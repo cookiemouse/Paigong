@@ -34,7 +34,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="联系总部"
+                    android:text="联系后台"
                     android:textColor="@color/colorBlue"
                     android:textSize="@dimen/sp_16" />
 
