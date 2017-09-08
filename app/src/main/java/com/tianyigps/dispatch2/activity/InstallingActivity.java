@@ -237,6 +237,8 @@ public class InstallingActivity extends BaseActivity {
                     return;
                 }
                 Log.i(TAG, "onClick: mCompleteCountRepair-->" + mCompleteCountRepair);
+                Log.i(TAG, "onClick: mCompleteCountInstall-->" + mCompleteCountInstall);
+                Log.i(TAG, "onClick: mCompleteCountRemove-->" + mCompleteCountRemove);
                 if (!checkRepairList() && mCompleteCountRepair == 0) {
                     if (isFilled) {
                         // 2017/8/30 未完善对话框
@@ -863,7 +865,7 @@ public class InstallingActivity extends BaseActivity {
                 }
 
                 //  设备数量是否全部安装完
-                completeCount = data.getCompleteLine() + data.getCompleteOffline();
+                completeCount = completeCount + data.getCompleteLine() + data.getCompleteOffline();
                 if (carComplete && data.getOrderLine() == data.getCompleteLine() && data.getOrderOffline() == data.getCompleteOffline()) {
                     data.setComplete(true);
                 } else {
@@ -924,7 +926,6 @@ public class InstallingActivity extends BaseActivity {
                     }
                 }
 
-
                 //  设备数量是否全部安装
                 int wire = data.getOnline();
                 int wireless = data.getOffline();
@@ -936,7 +937,7 @@ public class InstallingActivity extends BaseActivity {
                 Log.i(TAG, "checkRemoveList: wireComplete-->" + wireComplete);
                 Log.i(TAG, "checkRemoveList: wirelessComplete-->" + wirelessComplete);
 
-                completeCount = wireComplete + wirelessComplete;
+                completeCount = completeCount + wireComplete + wirelessComplete;
                 if (wire == wireComplete && wireless == wirelessComplete) {
                     data.setComplete(true);
                 } else {
