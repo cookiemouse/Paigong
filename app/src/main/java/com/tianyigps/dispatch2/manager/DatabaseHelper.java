@@ -22,7 +22,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String TABLE_REPAIR = "create table " + Data.DATA_TAB_REPAIR
             + "(idMain INTEGER,tNo TEXT,position TEXT,positionPic TEXT,installPic TEXT,explain TEXT" +
-            ",newImei TEXT,positionUrl TEXT,installUrl TEXT,model INTEGER,locateType INTEGER, wire INTEGER)";
+            ",newImei TEXT,positionUrl TEXT,installUrl TEXT,model INTEGER,locateType INTEGER" +
+            ", wire INTEGER, replace INTEGER)";
 
     //  拆除似乎不用存本地数据
     private static final String TABLE_REMOVE = "create table " + Data.DATA_TAB_REMOVE

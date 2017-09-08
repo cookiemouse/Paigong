@@ -810,8 +810,10 @@ public class OperateRepairActivity extends BaseActivity {
         if (mRelativeLayoutReplace.getVisibility() == View.GONE) {
             mDatabaseManager.addRepair(tId, mPositionNew, mExplainNew, null);
             mDatabaseManager.addRepair(tId, 0);
+            mDatabaseManager.addRepairReplace(tId, 0);
         } else {
             mDatabaseManager.addRepair(tId, mPositionNew, mExplainNew, mImeiNew);
+            mDatabaseManager.addRepairReplace(tId, 1);
         }
 
         if (isComplete()) {
@@ -825,17 +827,19 @@ public class OperateRepairActivity extends BaseActivity {
             mPositionNew = cursor.getString(2);
             mExplainNew = cursor.getString(5);
             mImeiNew = cursor.getString(6);
+            int replace = cursor.getInt(12);
             wholeImei = mImeiNew;
 
             Log.i(TAG, "loadSavedData: tId-->" + cursor.getInt(0));
             Log.i(TAG, "loadSavedData: mStringPosition-->" + mPositionNew);
             Log.i(TAG, "loadSavedData: mStringExplain-->" + mExplainNew);
             Log.i(TAG, "loadSavedData: mStringNewImei-->" + mImeiNew);
+            Log.i(TAG, "loadSavedData: replace-->" + replace);
 
             mEditTextPosition.setText(mPositionNew);
             mEditTextExplain.setText(mExplainNew);
 
-            if (null == mImeiNew || "".equals(mImeiNew)) {
+            if (0 == replace) {
                 mRelativeLayoutReplace.setVisibility(View.GONE);
                 mTextViewState.setText(R.string.repair_replace);
             } else {
@@ -947,6 +951,7 @@ public class OperateRepairActivity extends BaseActivity {
             String installUrl = cursor.getString(8);
             int model = cursor.getInt(9);
             int locateType = cursor.getInt(10);
+            int replace = cursor.getInt(12);
 
             Log.i(TAG, "isComplete: idMain-->" + idMain);
             Log.i(TAG, "isComplete: tNo-->" + tNo);
@@ -959,6 +964,7 @@ public class OperateRepairActivity extends BaseActivity {
             Log.i(TAG, "isComplete: installUrl-->" + installUrl);
             Log.i(TAG, "isComplete: model-->" + model);
             Log.i(TAG, "isComplete: locateType-->" + locateType);
+            Log.i(TAG, "isComplete: replace-->" + replace);
 
             if (null == explain || "".equals(explain)) {
                 complete = false;
