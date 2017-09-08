@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import com.tianyigps.dispatch2.R;
 import com.tianyigps.dispatch2.data.AdapterHandledData;
+import com.tianyigps.dispatch2.utils.ClipU;
+import com.tianyigps.dispatch2.utils.ToastU;
 
 import java.util.List;
 
@@ -21,9 +23,12 @@ public class HandledAdapter extends BaseAdapter {
     private Context context;
     private List<AdapterHandledData> mHandledDataList;
 
+    private ToastU mToastU;
+
     public HandledAdapter(Context context, List<AdapterHandledData> mHandledDataList) {
         this.context = context;
         this.mHandledDataList = mHandledDataList;
+        mToastU = new ToastU(context);
     }
 
     @Override
@@ -46,7 +51,7 @@ public class HandledAdapter extends BaseAdapter {
 
         ViewHolder viewHolder = null;
 
-        AdapterHandledData data = mHandledDataList.get(position);
+        final AdapterHandledData data = mHandledDataList.get(position);
 
         if (null == contentView) {
             contentView = LayoutInflater.from(context).inflate(R.layout.item_handled, null);
@@ -73,6 +78,33 @@ public class HandledAdapter extends BaseAdapter {
         viewHolder.textViewWire.setText("" + data.getOnline());
         viewHolder.textViewWireless.setText("" + data.getLineLess());
 
+        viewHolder.textViewName.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                ClipU.clip(context, data.getName());
+                mToastU.showToast("客户名称已成功复制");
+                return true;
+            }
+        });
+
+        viewHolder.textViewAddress.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                ClipU.clip(context, data.getAddress());
+                mToastU.showToast("地址已成功复制");
+                return true;
+            }
+        });
+
+        viewHolder.textViewId.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                ClipU.clip(context, data.getId());
+                mToastU.showToast("订单编号已成功复制");
+                return true;
+            }
+        });
+
         contentView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -86,7 +118,6 @@ public class HandledAdapter extends BaseAdapter {
     }
 
     private class ViewHolder {
-        private TextView textViewName, textViewTime, textViewAddress
-                , textViewId, textViewTitle, textViewWire, textViewWireless;
+        private TextView textViewName, textViewTime, textViewAddress, textViewId, textViewTitle, textViewWire, textViewWireless;
     }
 }

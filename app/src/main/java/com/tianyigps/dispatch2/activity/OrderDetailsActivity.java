@@ -34,8 +34,10 @@ import com.tianyigps.dispatch2.interfaces.OnStartHandingListener;
 import com.tianyigps.dispatch2.manager.LocateManager;
 import com.tianyigps.dispatch2.manager.NetworkManager;
 import com.tianyigps.dispatch2.manager.SharedpreferenceManager;
+import com.tianyigps.dispatch2.utils.ClipU;
 import com.tianyigps.dispatch2.utils.RegularU;
 import com.tianyigps.dispatch2.utils.TimeFormatU;
+import com.tianyigps.dispatch2.utils.ToastU;
 
 import static com.tianyigps.dispatch2.data.Data.DATA_INTENT_ORDER_NO;
 import static com.tianyigps.dispatch2.data.Data.MSG_1;
@@ -98,6 +100,8 @@ public class OrderDetailsActivity extends Activity {
     //  LoadingFragment
     private LoadingDialogFragment mLoadingDialogFragment;
 
+    private ToastU mToastU;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -125,6 +129,7 @@ public class OrderDetailsActivity extends Activity {
     }
 
     private void init() {
+        mToastU = new ToastU(this);
         mTextViewTitle = findViewById(R.id.tv_layout_title_base_middle);
         mImageViewTitleLeft = findViewById(R.id.iv_layout_title_base_left);
         mImageViewTitleRight = findViewById(R.id.iv_layout_title_base_right);
@@ -213,6 +218,33 @@ public class OrderDetailsActivity extends Activity {
             public void onClick(View view) {
                 //  2017/7/19 退单
                 showReturnOrderDialog();
+            }
+        });
+
+        mTextViewAddress.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                ClipU.clip(OrderDetailsActivity.this, mStringProvince + mStringCity + mStringDistrict);
+                mToastU.showToast("地址已成功复制");
+                return true;
+            }
+        });
+
+        mTextViewOrderName.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                ClipU.clip(OrderDetailsActivity.this, mStringCustName);
+                mToastU.showToast("客户名称已成功复制");
+                return true;
+            }
+        });
+
+        mTextViewOrderNum.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                ClipU.clip(OrderDetailsActivity.this, mStringOrderNum);
+                mToastU.showToast("订单编号已成功复制");
+                return true;
             }
         });
 

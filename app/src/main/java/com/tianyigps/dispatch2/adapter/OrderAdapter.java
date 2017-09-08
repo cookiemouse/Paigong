@@ -12,7 +12,9 @@ import android.widget.TextView;
 
 import com.tianyigps.dispatch2.R;
 import com.tianyigps.dispatch2.data.AdapterOrderData;
+import com.tianyigps.dispatch2.utils.ClipU;
 import com.tianyigps.dispatch2.utils.TimeFormatU;
+import com.tianyigps.dispatch2.utils.ToastU;
 
 import java.util.List;
 
@@ -28,12 +30,14 @@ public class OrderAdapter extends BaseAdapter {
     private List<AdapterOrderData> mAdapterOrderDataList;
 
     private long currentTime = System.currentTimeMillis();
+    private ToastU mToastU;
 
     private OnItemListener mOnItemListener;
 
     public OrderAdapter(Context context, List<AdapterOrderData> mAdapterOrderDataList) {
         this.context = context;
         this.mAdapterOrderDataList = mAdapterOrderDataList;
+        mToastU = new ToastU(context);
     }
 
     @Override
@@ -174,6 +178,33 @@ public class OrderAdapter extends BaseAdapter {
                     throw new NullPointerException("OnItemListener is null");
                 }
                 mOnItemListener.onSignClick(position);
+            }
+        });
+
+        viewHolder.textViewName.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                ClipU.clip(context, data.getName());
+                mToastU.showToast("客户名称已成功复制");
+                return true;
+            }
+        });
+
+        viewHolder.textViewAddress.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                ClipU.clip(context, data.getAddress());
+                mToastU.showToast("地址已成功复制");
+                return true;
+            }
+        });
+
+        viewHolder.textViewId.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                ClipU.clip(context, data.getId());
+                mToastU.showToast("订单编号已成功复制");
+                return true;
             }
         });
 

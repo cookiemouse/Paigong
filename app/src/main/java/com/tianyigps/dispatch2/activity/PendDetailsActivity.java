@@ -36,6 +36,7 @@ import com.tianyigps.dispatch2.interfaces.OnPendDetailsListener;
 import com.tianyigps.dispatch2.manager.NetworkManager;
 import com.tianyigps.dispatch2.manager.SharedpreferenceManager;
 import com.tianyigps.dispatch2.utils.BitmapU;
+import com.tianyigps.dispatch2.utils.ClipU;
 import com.tianyigps.dispatch2.utils.NodeU;
 import com.tianyigps.dispatch2.utils.RegularU;
 import com.tianyigps.dispatch2.utils.TimeFormatU;
@@ -105,6 +106,8 @@ public class PendDetailsActivity extends Activity {
     //  LoadingFragment
     private LoadingDialogFragment mLoadingDialogFragment;
 
+    private ToastU mToastU;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -146,6 +149,8 @@ public class PendDetailsActivity extends Activity {
     }
 
     private void init() {
+        mToastU = new ToastU(this);
+
         mTextViewTitle = findViewById(R.id.tv_layout_title_base_middle);
         mImageViewTitleLeft = findViewById(R.id.iv_layout_title_base_left);
         mImageViewTitleRight = findViewById(R.id.iv_layout_title_base_right);
@@ -236,6 +241,15 @@ public class PendDetailsActivity extends Activity {
                 intent.putExtra(Data.DATA_INTENT_ORDER_NO, orderNo);
                 intent.putExtra(Data.DATA_INTENT_ORDER_STATUS, orderStatus);
                 startActivityForResult(intent, Data.DATA_INTENT_CHOICE_WORKER_REQUEST);
+            }
+        });
+
+        mTextViewAddress.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                ClipU.clip(PendDetailsActivity.this, mAddress);
+                mToastU.showToast("地址已成功复制");
+                return true;
             }
         });
 
@@ -589,7 +603,7 @@ public class PendDetailsActivity extends Activity {
 
     //  显示Toast
     private void showMessageToast(String msg) {
-        new ToastU(this).showToast(msg);
+        mToastU.showToast(msg);
     }
 
     //  显示LoadingFragment

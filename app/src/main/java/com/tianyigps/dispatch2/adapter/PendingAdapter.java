@@ -14,7 +14,9 @@ import android.widget.TextView;
 import com.tianyigps.dispatch2.R;
 import com.tianyigps.dispatch2.data.AdapterPendingData;
 import com.tianyigps.dispatch2.data.Data;
+import com.tianyigps.dispatch2.utils.ClipU;
 import com.tianyigps.dispatch2.utils.TimeFormatU;
+import com.tianyigps.dispatch2.utils.ToastU;
 
 import java.util.List;
 
@@ -29,11 +31,14 @@ public class PendingAdapter extends BaseAdapter {
     private Context context;
     private List<AdapterPendingData> mPendingDataList;
 
+    private ToastU mToastU;
+
     private OnItemListener mOnItemListener;
 
     public PendingAdapter(Context context, List<AdapterPendingData> mPendingDataList) {
         this.context = context;
         this.mPendingDataList = mPendingDataList;
+        mToastU = new ToastU(context);
     }
 
     @Override
@@ -153,7 +158,7 @@ public class PendingAdapter extends BaseAdapter {
 
             viewHolder.tvBackReason.setVisibility(View.VISIBLE);
             viewHolder.tvContactPhone.setText(data.getPhoneNumber());
-            viewHolder.tvJobNoName.setText(data.getJobNo() + " " +data.geteName());
+            viewHolder.tvJobNoName.setText(data.getJobNo() + " " + data.geteName());
         } else {
             viewHolder.rlContact.setVisibility(View.GONE);
             viewHolder.tvBackReason.setVisibility(View.GONE);
@@ -208,6 +213,33 @@ public class PendingAdapter extends BaseAdapter {
                     throw new NullPointerException("OnItemListener is null");
                 }
                 mOnItemListener.onContactCall(position);
+            }
+        });
+
+        viewHolder.tvName.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                ClipU.clip(context, data.getName());
+                mToastU.showToast("客户名称已成功复制");
+                return true;
+            }
+        });
+
+        viewHolder.tvAddress.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                ClipU.clip(context, data.getAddress());
+                mToastU.showToast("地址已成功复制");
+                return true;
+            }
+        });
+
+        viewHolder.tvOrderNo.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                ClipU.clip(context, data.getOrder());
+                mToastU.showToast("订单编号已成功复制");
+                return true;
             }
         });
 
