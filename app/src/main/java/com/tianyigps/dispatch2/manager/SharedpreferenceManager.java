@@ -109,6 +109,11 @@ public class SharedpreferenceManager {
     }
 
     //  获取服务主任号码
+    public String getManagerPhone(){
+        return mSharedPreferences.getString(Data.DATA_JSON_PHONE_NO, "");
+    }
+
+    //  获取服务主任号码
     public String getHeadPhone() {
         return mSharedPreferences.getString(DATA_JSON_HEAD_PHONE, "");
     }
@@ -125,12 +130,13 @@ public class SharedpreferenceManager {
         return mSharedPreferences.getString(DATA_JSON_JOB_NO, "");
     }
 
-    public void saveUserData(int eid, String token, String name, String headPhone, String jobNo, String url, int launchMode) {
+    public void saveUserData(int eid, String token, String name, String phone, String headPhone, String jobNo, String url, int launchMode) {
 
         SharedPreferences.Editor editor = mSharedPreferences.edit();
         editor.putInt(DATA_JSON_EID, eid);
         editor.putString(DATA_JSON_TOKEN, token);
         editor.putString(DATA_JSON_NAME, name);
+        editor.putString(Data.DATA_JSON_PHONE_NO, phone);
         editor.putString(DATA_JSON_HEAD_PHONE, headPhone);
         editor.putString(DATA_JSON_JOB_NO, jobNo);
         editor.putString(DATA_JSON_IMG_BASE_URL, url);

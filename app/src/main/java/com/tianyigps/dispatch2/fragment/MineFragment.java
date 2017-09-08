@@ -186,6 +186,6 @@ public class MineFragment extends Fragment {
 
     //  退出登陆，数据清零
     private void exitLogin() {
-        mSharedpreferenceManager.saveUserData(0, "", "", "", "", "", 1);
+        mSharedpreferenceManager.saveUserData(0, "", "", "", "", "", "", 1);
     }
 }

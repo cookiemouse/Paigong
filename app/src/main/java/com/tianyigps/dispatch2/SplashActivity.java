@@ -154,6 +154,7 @@ public class SplashActivity extends Activity {
                 mSharedpreferenceManager.saveUserData(objBean.getEid()
                         , objBean.getToken()
                         , objBean.getName()
+                        , objBean.getPhoneNo()
                         , objBean.getHeadPhone()
                         , objBean.getJobNo()
                         , objBean.getImgBaseUrl()

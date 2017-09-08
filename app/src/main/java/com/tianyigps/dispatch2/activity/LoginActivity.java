@@ -130,6 +130,7 @@ public class LoginActivity extends AppCompatActivity {
                 mSharedpreferenceManager.saveUserData(objBean.getEid()
                         , objBean.getToken()
                         , objBean.getName()
+                        , objBean.getPhoneNo()
                         , objBean.getHeadPhone()
                         , objBean.getJobNo()
                         , objBean.getImgBaseUrl()

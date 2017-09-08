@@ -99,12 +99,12 @@ public class HandingFragment extends Fragment implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_fragment_handing_head: {
-                // TODO: 2017/7/18 总部号码
-                toCall("18017325972");
+                String phone = mSharedpreferenceManager.getHeadPhone();
+                toCall(phone);
                 break;
             }
             case R.id.tv_fragment_handing_manager: {
-                String phone = mSharedpreferenceManager.getHeadPhone();
+                String phone = mSharedpreferenceManager.getManagerPhone();
                 toCall(phone);
                 break;
             }
