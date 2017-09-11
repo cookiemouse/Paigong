@@ -50,6 +50,7 @@
                 android:layout_toRightOf="@+id/iv_layout_operate_install_car_no"
                 android:background="@null"
                 android:hint="@string/enter_car_no"
+                android:textColor="@color/colorText"
                 android:lines="1"
                 android:maxWidth="@dimen/dp_240"
                 android:textSize="@dimen/sp_14"/>
@@ -222,6 +223,7 @@
             android:layout_toEndOf="@+id/iv_layout_operate_install_car_type"
             android:layout_toRightOf="@+id/iv_layout_operate_install_car_type"
             android:background="@null"
+            android:textColor="@color/colorText"
             android:hint="@string/car_type"
             android:lines="1"
             android:textSize="@dimen/sp_14"/>
