@@ -35,7 +35,6 @@ import java.util.List;
 
 import cn.jpush.android.api.JPushInterface;
 
-import static com.tianyigps.dispatch2.data.Data.DATA_LAUNCH_MODE_WORKER;
 import static com.tianyigps.dispatch2.data.Data.MSG_1;
 import static com.tianyigps.dispatch2.data.Data.MSG_ERO;
 
@@ -52,7 +51,7 @@ public class SplashActivity extends Activity {
 
     private NetworkManager mNetworkManager;
     private MyHandler myHandler;
-    private int launchMode = DATA_LAUNCH_MODE_WORKER;
+    private int launchMode = Data.DATA_LAUNCH_MODE_WORKER;
 
     private String userName;
     private String token;
@@ -151,14 +150,25 @@ public class SplashActivity extends Activity {
 
                 launchMode = objBean.getDuties();
 
-                mSharedpreferenceManager.saveUserData(objBean.getEid()
-                        , objBean.getToken()
-                        , objBean.getName()
-                        , objBean.getPhoneNo()
-                        , objBean.getHeadPhone()
-                        , objBean.getJobNo()
-                        , objBean.getImgBaseUrl()
-                        , launchMode);
+                if (launchMode == Data.DATA_LAUNCH_MODE_WORKER) {
+                    mSharedpreferenceManager.saveUserData(objBean.getEid()
+                            , objBean.getToken()
+                            , objBean.getName()
+                            , objBean.getDirectorPhone()
+                            , objBean.getHeadPhone()
+                            , objBean.getJobNo()
+                            , objBean.getImgBaseUrl()
+                            , launchMode);
+                } else {
+                    mSharedpreferenceManager.saveUserData(objBean.getEid()
+                            , objBean.getToken()
+                            , objBean.getName()
+                            , objBean.getPhoneNo()
+                            , objBean.getHeadPhone()
+                            , objBean.getJobNo()
+                            , objBean.getImgBaseUrl()
+                            , launchMode);
+                }
 
                 myHandler.sendEmptyMessage(MSG_1);
             }

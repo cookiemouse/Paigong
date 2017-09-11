@@ -7,9 +7,9 @@ package com.tianyigps.dispatch2.bean;
 public class CheckUserBean {
     /**
      * errCode :
-     * jsonStr : {"time":0,"errCode":"","obj":{"phoneNo":"17092562223","area":3,"token":"25d55ad283aa400af464c76d713c07ad","name":"谢鹏","duties":2,"jobNo":"10005","eid":205,"headPhone":"18017325972","imgBaseUrl":"http://121.43.178.183/file/pic/"},"msg":"验证通过","success":true}
+     * jsonStr : {"time":0,"errCode":"","obj":{"phoneNo":"13817234567","area":275,"token":"25d55ad283aa400af464c76d713c07ad","name":"张恩恩","directorPhone":"13817194123","duties":1,"jobNo":"10052","eid":367,"headPhone":"18017325972","imgBaseUrl":"http://121.43.178.183/file/pic/"},"msg":"验证通过","success":true}
      * msg : 验证通过
-     * obj : {"phoneNo":"17092562223","area":3,"token":"25d55ad283aa400af464c76d713c07ad","name":"谢鹏","duties":2,"jobNo":"10005","eid":205,"headPhone":"18017325972","imgBaseUrl":"http://121.43.178.183/file/pic/"}
+     * obj : {"phoneNo":"13817234567","area":275,"token":"25d55ad283aa400af464c76d713c07ad","name":"张恩恩","directorPhone":"13817194123","duties":1,"jobNo":"10052","eid":367,"headPhone":"18017325972","imgBaseUrl":"http://121.43.178.183/file/pic/"}
      * success : true
      * time : 0
      */
@@ -71,13 +71,14 @@ public class CheckUserBean {
 
     public static class ObjBean {
         /**
-         * phoneNo : 17092562223
-         * area : 3
+         * phoneNo : 13817234567
+         * area : 275
          * token : 25d55ad283aa400af464c76d713c07ad
-         * name : 谢鹏
-         * duties : 2
-         * jobNo : 10005
-         * eid : 205
+         * name : 张恩恩
+         * directorPhone : 13817194123
+         * duties : 1
+         * jobNo : 10052
+         * eid : 367
          * headPhone : 18017325972
          * imgBaseUrl : http://121.43.178.183/file/pic/
          */
@@ -86,6 +87,7 @@ public class CheckUserBean {
         private int area;
         private String token;
         private String name;
+        private String directorPhone;
         private int duties;
         private String jobNo;
         private int eid;
@@ -122,6 +124,14 @@ public class CheckUserBean {
 
         public void setName(String name) {
             this.name = name;
+        }
+
+        public String getDirectorPhone() {
+            return directorPhone;
+        }
+
+        public void setDirectorPhone(String directorPhone) {
+            this.directorPhone = directorPhone;
         }
 
         public int getDuties() {

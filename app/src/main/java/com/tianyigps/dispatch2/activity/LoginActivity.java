@@ -127,14 +127,25 @@ public class LoginActivity extends AppCompatActivity {
 
                 launchMode = objBean.getDuties();
 
-                mSharedpreferenceManager.saveUserData(objBean.getEid()
-                        , objBean.getToken()
-                        , objBean.getName()
-                        , objBean.getPhoneNo()
-                        , objBean.getHeadPhone()
-                        , objBean.getJobNo()
-                        , objBean.getImgBaseUrl()
-                        , launchMode);
+                if (launchMode == Data.DATA_LAUNCH_MODE_WORKER) {
+                    mSharedpreferenceManager.saveUserData(objBean.getEid()
+                            , objBean.getToken()
+                            , objBean.getName()
+                            , objBean.getDirectorPhone()
+                            , objBean.getHeadPhone()
+                            , objBean.getJobNo()
+                            , objBean.getImgBaseUrl()
+                            , launchMode);
+                } else {
+                    mSharedpreferenceManager.saveUserData(objBean.getEid()
+                            , objBean.getToken()
+                            , objBean.getName()
+                            , objBean.getPhoneNo()
+                            , objBean.getHeadPhone()
+                            , objBean.getJobNo()
+                            , objBean.getImgBaseUrl()
+                            , launchMode);
+                }
 
                 mSharedpreferenceManager.saveAccount(launchAccount);
 
