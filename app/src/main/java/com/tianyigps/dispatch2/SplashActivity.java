@@ -193,6 +193,7 @@ public class SplashActivity extends Activity {
                 .requestCode(100)
                 .permission(Manifest.permission.WRITE_EXTERNAL_STORAGE
                         , Manifest.permission.ACCESS_FINE_LOCATION
+                        , Manifest.permission.READ_PHONE_STATE
                         , Manifest.permission.CAMERA)
                 .rationale(new RationaleListener() {
                     @Override
