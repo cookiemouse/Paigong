@@ -1,5 +1,6 @@
 package com.tianyigps.dispatch2.activity;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,6 +12,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,6 +40,10 @@ import com.tianyigps.dispatch2.manager.SharedpreferenceManager;
 import com.tianyigps.dispatch2.utils.Base64U;
 import com.tianyigps.dispatch2.utils.RegularU;
 import com.tianyigps.signviewlibrary.SignView;
+import com.yanzhenjie.permission.AndPermission;
+import com.yanzhenjie.permission.PermissionListener;
+import com.yanzhenjie.permission.Rationale;
+import com.yanzhenjie.permission.RationaleListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -193,9 +199,7 @@ public class CustomSignActivity extends BaseActivity {
                 Log.i(TAG, "onClick: json-->" + json);
 
                 mJson = json;
-
-                showLoading();
-                mLocateManager.startLocate();
+                applyPermiss();
             }
         });
 
@@ -203,6 +207,12 @@ public class CustomSignActivity extends BaseActivity {
             @Override
             public void onReceive(LatLng latLng) {
 
+                Log.i(TAG, "onReceive: latitude-->" + latLng.latitude);
+                Log.i(TAG, "onReceive: longitude-->" + latLng.longitude);
+                if (latLng.latitude == 4.9E-324 || latLng.longitude == 4.9E-324) {
+                    showMessageDialog("定位失败，请确认是否给予相关权限！");
+                    return;
+                }
                 mLocateManager.stopLocate();
                 mNetworkManager.saveOrderInfo(eid
                         , token
@@ -449,6 +459,34 @@ public class CustomSignActivity extends BaseActivity {
         return json;
     }
 
+    //  运行时权限
+    private void applyPermiss() {
+        AndPermission
+                .with(CustomSignActivity.this)
+                .requestCode(100)
+                .permission(Manifest.permission.ACCESS_FINE_LOCATION)
+                .rationale(new RationaleListener() {
+                    @Override
+                    public void showRequestPermissionRationale(int requestCode, Rationale rationale) {
+                        AndPermission.rationaleDialog(CustomSignActivity.this, rationale).show();
+                    }
+                })
+                .callback(new PermissionListener() {
+                    @Override
+                    public void onSucceed(int requestCode, @NonNull List<String> grantPermissions) {
+                        showLoading();
+                        mLocateManager.startLocate();
+                    }
+
+                    @Override
+                    public void onFailed(int requestCode, @NonNull List<String> deniedPermissions) {
+                        if (AndPermission.hasAlwaysDeniedPermission(CustomSignActivity.this, deniedPermissions)) {
+                            showMessageDialog("应用权限被禁止，请打开相关权限");
+                        }
+                    }
+                }).start();
+    }
+
     //  显示未签名Dialog
     private void showNoSignDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -550,6 +588,26 @@ public class CustomSignActivity extends BaseActivity {
         mLoadingDialogFragment.show(getFragmentManager(), "LoadingFragment");
     }
 
+    //  删除本地数据库的订单信息
+    private void deleteOrderInfo() {
+        Cursor cursor = mDatabaseManager.getOrder(mOrderNo);
+        if (null != cursor && cursor.moveToFirst()) {
+            do {
+                String orderNo = cursor.getString(0);
+                int carId = cursor.getInt(1);
+                int tId = cursor.getInt(2);
+                Log.i(TAG, "deleteOrderInfo: orderNo-->" + orderNo + " ,carId-->" + carId + " ,tId-->" + tId);
+                mDatabaseManager.deleteTerByTid(tId);
+                mDatabaseManager.deleteCar(tId);
+                mDatabaseManager.deleteRepair(tId);
+
+            } while (cursor.moveToNext());
+
+            cursor.close();
+        }
+        mDatabaseManager.deleteOrder(mOrderNo);
+    }
+
     private class MyHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
@@ -565,6 +623,7 @@ public class CustomSignActivity extends BaseActivity {
                 }
                 case Data.MSG_1: {
                     //  完成
+                    deleteOrderInfo();
                     mFileManager.delete();
                     // 2017/8/22 跳转到已处理Fragment
                     Intent intent = new Intent(CustomSignActivity.this, WorkerFragmentContentActivity.class);
@@ -575,6 +634,7 @@ public class CustomSignActivity extends BaseActivity {
                 }
                 case Data.MSG_2: {
                     //  部分完成
+                    deleteOrderInfo();
                     mFileManager.delete();
                     showPartCompleteDialog();
                     break;

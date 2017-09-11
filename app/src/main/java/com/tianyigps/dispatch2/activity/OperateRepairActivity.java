@@ -1050,6 +1050,27 @@ public class OperateRepairActivity extends BaseActivity {
         return complete;
     }
 
+    //  显示imei重复填写对话框
+    private void showRepeatDialog() {
+        if (isFinishing()) {
+            return;
+        }
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View view = LayoutInflater.from(this).inflate(R.layout.dialog_message_editable, null);
+        Button button = view.findViewById(R.id.btn_dialog_message_cancel);
+        TextView textView = view.findViewById(R.id.tv_dialog_message_message);
+        textView.setText("设备名称填写重复，请重新填写");
+        builder.setView(view);
+        final AlertDialog dialog = builder.create();
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+    }
+
     //  显示LoadingFragment
     private void showLoading() {
         mLoadingDialogFragment.show(getFragmentManager(), "LoadingFragment");
@@ -1134,6 +1155,14 @@ public class OperateRepairActivity extends BaseActivity {
                 }
                 case Data.MSG_2: {
                     //  check whole imei 成功
+                    Log.i(TAG, "handleMessage: wholeImei-->" + wholeImei);
+                    boolean exist = mDatabaseManager.repairExistByImei(wholeImei);
+                    Log.i(TAG, "handleMessage: exist-->" + exist);
+                    if (exist) {
+                        setEditTextImei(null);
+                        showRepeatDialog();
+                        break;
+                    }
                     isCheckedImei = true;
                     setEditTextImei(wholeImei);
                     if (isToLocate) {

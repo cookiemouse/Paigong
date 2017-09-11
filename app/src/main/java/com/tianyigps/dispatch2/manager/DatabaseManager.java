@@ -193,8 +193,8 @@ public class DatabaseManager {
     }
 
     //  增,维修
-    public void addRepairReplace(int idMain, int replace){
-        if (repairExist(idMain)){
+    public void addRepairReplace(int idMain, int replace) {
+        if (repairExist(idMain)) {
             modifyRepairReplace(idMain, replace);
             return;
         }
@@ -768,6 +768,26 @@ public class DatabaseManager {
         return null != cursor && cursor.moveToFirst();
     }
 
+    //  查，是否存在该order
+    public boolean repairExistByImei(String imei) {
+        mSqLiteDatabase.beginTransaction();
+        try {
+            Cursor cursor = mSqLiteDatabase.query(Data.DATA_TAB_REPAIR
+                    , new String[]{}
+                    , "newImei=?"
+                    , new String[]{"" + imei}
+                    , null, null, null);
+            mSqLiteDatabase.setTransactionSuccessful();
+
+            return (null != cursor && cursor.moveToFirst());
+        } catch (Exception e) {
+            Log.e(TAG, e + "SqliteDatabase query error");
+        } finally {
+            mSqLiteDatabase.endTransaction();
+        }
+        return false;
+    }
+
     //=====================维修========================华丽的分割线=======================车辆============================
 
     //  添加Car
@@ -1209,6 +1229,24 @@ public class DatabaseManager {
         }
     }
 
+    //  删，T
+    public void deleteTerByTid(int tId) {
+        if (!terExistByTid(tId)) {
+            return;
+        }
+        mSqLiteDatabase.beginTransaction();
+        try {
+            mSqLiteDatabase.delete(Data.DATA_TAB_INSTALL_TERMINAL
+                    , "tId=?"
+                    , new String[]{"" + tId});
+            mSqLiteDatabase.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.e(TAG, e + "SqliteDatabase delete error");
+        } finally {
+            mSqLiteDatabase.endTransaction();
+        }
+    }
+
     //  改，T
     public void modifyTer(String idMain, int carId) {
         if (!terExist(idMain)) {
@@ -1507,6 +1545,32 @@ public class DatabaseManager {
     public boolean terExist(String idMain) {
         Cursor cursor = getTer(idMain);
         return null != cursor && cursor.moveToFirst();
+    }
+
+    //  查，T，重载
+    public boolean terExistByTid(int tId) {
+        Cursor cursor = getTer(tId);
+        return null != cursor && cursor.moveToFirst();
+    }
+
+    //  查，T，重载
+    public boolean terExistBytNo(String tNo) {
+        mSqLiteDatabase.beginTransaction();
+        try {
+            Cursor cursor = mSqLiteDatabase.query(Data.DATA_TAB_INSTALL_TERMINAL
+                    , new String[]{}
+                    , "tNoNew=?"
+                    , new String[]{(tNo)}
+                    , null, null, null);
+            mSqLiteDatabase.setTransactionSuccessful();
+
+            return (null != cursor && cursor.moveToFirst());
+        } catch (Exception e) {
+            Log.e(TAG, e + "SqliteDatabase query error");
+        } finally {
+            mSqLiteDatabase.endTransaction();
+        }
+        return false;
     }
 
     public void close() {
