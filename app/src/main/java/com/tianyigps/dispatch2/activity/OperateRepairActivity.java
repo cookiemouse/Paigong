@@ -73,7 +73,7 @@ public class OperateRepairActivity extends BaseActivity {
     private EditText mEditTextPosition, mEditTextExplain;
     private Button mButtonSave;
 
-    private RelativeLayout mRelativeLayoutReplace, mRelativeLayoutInstall;
+    private RelativeLayout mRelativeLayoutReplace, mRelativeLayoutInstall, mRelativeLayoutInstallOld;
     private View mViewLineInstall;
     private TextView mTextViewState;
     private ImageView mImageViewScanner, mImageViewReplaceLocate;
@@ -314,6 +314,7 @@ public class OperateRepairActivity extends BaseActivity {
 
         mTextViewState = findViewById(R.id.tv_activity_operate_remove_state);
         mRelativeLayoutReplace = findViewById(R.id.rl_activity_operate_replace);
+        mRelativeLayoutInstallOld = findViewById(R.id.rl_activity_operate_default_install);
         mRelativeLayoutInstall = findViewById(R.id.rl_activity_operate_default_install_new);
         mViewLineInstall = findViewById(R.id.view_activity_operate_default_line_4);
         mImageViewScanner = findViewById(R.id.iv_activity_operate_replace_scanner);
@@ -1102,11 +1103,13 @@ public class OperateRepairActivity extends BaseActivity {
                         mDatabaseManager.addRepairWire(tId, mOrderTerType);
                         mRelativeLayoutInstall.setVisibility(View.VISIBLE);
                         mViewLineInstall.setVisibility(View.VISIBLE);
+                        mRelativeLayoutInstallOld.setVisibility(View.VISIBLE);
                     } else {
                         mDatabaseManager.addRepairWire(tId, 0);
                         mTextViewNewDeviceTitle.setText("新无线设备号");
                         mRelativeLayoutInstall.setVisibility(View.GONE);
                         mViewLineInstall.setVisibility(View.GONE);
+                        mRelativeLayoutInstallOld.setVisibility(View.GONE);
                     }
 //                    mTextViewInstallName.setText(installNameG);
 //                    mTextViewInstallPhone.setText(installPhoneG);

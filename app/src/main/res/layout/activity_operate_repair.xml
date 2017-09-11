@@ -123,6 +123,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
+            android:visibility="gone"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/iv_activity_operate_default_position"
             android:layout_marginTop="@dimen/dp_16">
