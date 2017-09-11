@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -76,6 +77,7 @@ public class OperateRemoveAdapter extends BaseAdapter {
             viewHolder.picPosition = contentView.findViewById(R.id.iv_item_operate_remove_position_pic);
             viewHolder.picInstall = contentView.findViewById(R.id.iv_item_operate_remove_install_pic);
             viewHolder.state = contentView.findViewById(R.id.tv_item_operate_remove_state);
+            viewHolder.rlInstall = contentView.findViewById(R.id.rl_item_operate_remove_install);
 
             contentView.setTag(viewHolder);
         } else {
@@ -84,7 +86,25 @@ public class OperateRemoveAdapter extends BaseAdapter {
 
         viewHolder.carNo.setText(data.getCarNo());
         viewHolder.frameNo.setText(data.getFrameNo());
-        String typeAndName = data.getTerminalType() + data.getTerminalName();
+        String terminalType;
+        switch (data.getTerminalType()) {
+            case 1: {
+                terminalType = "有线";
+                viewHolder.rlInstall.setVisibility(View.VISIBLE);
+                break;
+            }
+            case 2: {
+                terminalType = "无线";
+                viewHolder.rlInstall.setVisibility(View.GONE);
+                break;
+            }
+            default: {
+                terminalType = "";
+                viewHolder.rlInstall.setVisibility(View.GONE);
+                Log.i(TAG, "onSuccess: default");
+            }
+        }
+        String typeAndName = terminalType + data.getTerminalName();
         viewHolder.typeAndName.setText(typeAndName);
         viewHolder.tNo.setText(data.gettNo());
         viewHolder.position.setText(data.getInstallPosition());
@@ -179,5 +199,6 @@ public class OperateRemoveAdapter extends BaseAdapter {
     private class ViewHolder {
         private TextView carNo, frameNo, typeAndName, tNo, position, date, installName, installPhone, state;
         private ImageView picPosition, picInstall;
+        private RelativeLayout rlInstall;
     }
 }

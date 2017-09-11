@@ -132,27 +132,11 @@ public class OperateRemoveActivity extends BaseActivity {
                     for (StartOrderInfoBean.ObjBean.CarListBean.CarTerminalListBean carTerminalListBean
                             : carListBean.getCarTerminalList()) {
 
-                        int type = carTerminalListBean.getTerminalType();
-                        String terminalType;
                         String terminalName = carTerminalListBean.getTerminalName();
                         if (null == terminalName) {
                             terminalName = "";
                         } else {
                             terminalName = "（" + terminalName + "）";
-                        }
-                        switch (type) {
-                            case 1: {
-                                terminalType = "有线";
-                                break;
-                            }
-                            case 2: {
-                                terminalType = "无线";
-                                break;
-                            }
-                            default: {
-                                terminalType = "";
-                                Log.i(TAG, "onSuccess: default");
-                            }
                         }
                         String location = carTerminalListBean.getInstallLocation();
                         if (null == location) {
@@ -161,7 +145,7 @@ public class OperateRemoveActivity extends BaseActivity {
 
                         mAdapterOperateRemoveDataList.add(new AdapterOperateRemoveData(carNo
                                 , frameNo
-                                , terminalType
+                                , carTerminalListBean.getTerminalType()
                                 , terminalName
                                 , carTerminalListBean.getTNo()
                                 , location

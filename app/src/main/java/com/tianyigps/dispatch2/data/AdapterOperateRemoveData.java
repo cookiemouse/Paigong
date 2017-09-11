@@ -5,14 +5,15 @@ package com.tianyigps.dispatch2.data;
  */
 
 public class AdapterOperateRemoveData {
-    private String carNo, frameNo, terminalType, terminalName, tNo, installPosition;
+    private String carNo, frameNo, terminalName, tNo, installPosition;
     private String picPosition, picInstall;
     private String date;
     private String installName, installPhone;
     //  功能性属性
     private int removeState;    //  0 = 未拆除，1 = 已拆除， 2 = 拆除后已改装
+    private int terminalType;
 
-    public AdapterOperateRemoveData(String carNo, String frameNo, String terminalType, String terminalName, String tNo
+    public AdapterOperateRemoveData(String carNo, String frameNo, int terminalType, String terminalName, String tNo
             , String installPosition, String picPosition, String picInstall, String date, String installName, String installPhone
             , int removeState) {
         this.carNo = carNo;
@@ -53,11 +54,11 @@ public class AdapterOperateRemoveData {
         this.frameNo = frameNo;
     }
 
-    public String getTerminalType() {
+    public int getTerminalType() {
         return terminalType;
     }
 
-    public void setTerminalType(String terminalType) {
+    public void setTerminalType(int terminalType) {
         this.terminalType = terminalType;
     }
 
