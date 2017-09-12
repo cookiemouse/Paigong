@@ -1006,13 +1006,15 @@ public class OperateRepairActivity extends BaseActivity {
                     mImageViewPositionNew.setBackgroundResource(R.color.colorNull);
                 }
 
-                if (null == installUrl || "".equals(installUrl)) {
-                    complete = false;
-                    mTextViewTip2.setVisibility(View.VISIBLE);
-                    mImageViewInstallNew.setBackgroundResource(R.drawable.bg_edit_orange);
-                } else {
-                    mTextViewTip2.setVisibility(View.INVISIBLE);
-                    mImageViewInstallNew.setBackgroundResource(R.color.colorNull);
+                if (mOrderTerType == 1) {
+                    if (null == installUrl || "".equals(installUrl)) {
+                        complete = false;
+                        mTextViewTip2.setVisibility(View.VISIBLE);
+                        mImageViewInstallNew.setBackgroundResource(R.drawable.bg_edit_orange);
+                    } else {
+                        mTextViewTip2.setVisibility(View.INVISIBLE);
+                        mImageViewInstallNew.setBackgroundResource(R.color.colorNull);
+                    }
                 }
             }
 
@@ -1034,14 +1036,16 @@ public class OperateRepairActivity extends BaseActivity {
                     mTextViewTip1.setVisibility(View.INVISIBLE);
                 }
 
-                if (mRelativeLayoutReplace.getVisibility() == View.VISIBLE) {
-                    if (null == installUrl || "".equals(installUrl)) {
-                        complete = false;
-                        mTextViewTip2.setVisibility(View.VISIBLE);
-                        mImageViewInstallNew.setBackgroundResource(R.drawable.bg_edit_orange);
-                    } else {
-                        mTextViewTip2.setVisibility(View.INVISIBLE);
-                        mImageViewInstallNew.setBackgroundResource(R.color.colorNull);
+                if (mOrderTerType == 1) {
+                    if (mRelativeLayoutReplace.getVisibility() == View.VISIBLE) {
+                        if (null == installUrl || "".equals(installUrl)) {
+                            complete = false;
+                            mTextViewTip2.setVisibility(View.VISIBLE);
+                            mImageViewInstallNew.setBackgroundResource(R.drawable.bg_edit_orange);
+                        } else {
+                            mTextViewTip2.setVisibility(View.INVISIBLE);
+                            mImageViewInstallNew.setBackgroundResource(R.color.colorNull);
+                        }
                     }
                 }
             }

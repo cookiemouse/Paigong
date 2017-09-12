@@ -365,7 +365,11 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
                         break;
                     }
                     case 2: {
-                        type = "上线不定位";
+                        type = "-";
+                        break;
+                    }
+                    case 3: {
+                        type = "Wifi";
                         break;
                     }
                     default: {
@@ -569,7 +573,7 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
                     showToast(errMsg);
                     break;
                 }
-                case Data.MSG_5:{
+                case Data.MSG_5: {
                     //  init 获取设备信息，延时了200ms
                     getImeiLocation(wholeImei);
                     break;

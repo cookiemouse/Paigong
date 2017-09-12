@@ -13,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -695,6 +694,7 @@ public class InstallingActivity extends BaseActivity {
         int listSize = mAdapterRepairDataList.size();
         if (listSize > 0) {
             for (AdapterRepairData data : mAdapterRepairDataList) {
+                int type = data.getType();
                 boolean isComplete = false;
                 Cursor cursor = mDatabaseManager.getRepair(data.gettId());
                 if (null != cursor && cursor.moveToFirst()) {
@@ -715,12 +715,20 @@ public class InstallingActivity extends BaseActivity {
                     Log.i(TAG, "checkRepairList: replace-->" + replace);
 
                     if (1 == replace) {
-                        isComplete = ((null != position && !"".equals(position))
-                                && (null != explain && !"".equals(explain))
-                                && (null != newImei && !"".equals(newImei))
-                                && (null != positionUrl && !"".equals(positionUrl))
-                                && (0 != model)
-                                && (null != installUrl && !"".equals(installUrl)));
+                        if (1 == type) {
+                            isComplete = ((null != position && !"".equals(position))
+                                    && (null != explain && !"".equals(explain))
+                                    && (null != newImei && !"".equals(newImei))
+                                    && (null != positionUrl && !"".equals(positionUrl))
+                                    && (0 != model)
+                                    && (null != installUrl && !"".equals(installUrl)));
+                        } else {
+                            isComplete = ((null != position && !"".equals(position))
+                                    && (null != explain && !"".equals(explain))
+                                    && (null != newImei && !"".equals(newImei))
+                                    && (null != positionUrl && !"".equals(positionUrl))
+                                    && (0 != model));
+                        }
                     } else {
                         isComplete = (null != explain && !"".equals(explain));
                     }
@@ -746,6 +754,8 @@ public class InstallingActivity extends BaseActivity {
         int listSize = mAdapterRepairDataList.size();
         if (listSize > 0) {
             for (AdapterRepairData data : mAdapterRepairDataList) {
+                int type = data.getType();
+                Log.i(TAG, "checkRepairList: type-->" + type);
                 boolean isComplete = false;
                 Cursor cursor = mDatabaseManager.getRepair(data.gettId());
                 if (null != cursor && cursor.moveToFirst()) {
@@ -766,12 +776,20 @@ public class InstallingActivity extends BaseActivity {
                     Log.i(TAG, "checkRepairList: replace-->" + replace);
 
                     if (1 == replace) {
-                        isComplete = ((null != position && !"".equals(position))
-                                && (null != explain && !"".equals(explain))
-                                && (null != newImei && !"".equals(newImei))
-                                && (null != positionUrl && !"".equals(positionUrl))
-                                && (0 != model)
-                                && (null != installUrl && !"".equals(installUrl)));
+                        if (1 == type) {
+                            isComplete = ((null != position && !"".equals(position))
+                                    && (null != explain && !"".equals(explain))
+                                    && (null != newImei && !"".equals(newImei))
+                                    && (null != positionUrl && !"".equals(positionUrl))
+                                    && (0 != model)
+                                    && (null != installUrl && !"".equals(installUrl)));
+                        } else {
+                            isComplete = ((null != position && !"".equals(position))
+                                    && (null != explain && !"".equals(explain))
+                                    && (null != newImei && !"".equals(newImei))
+                                    && (null != positionUrl && !"".equals(positionUrl))
+                                    && (0 != model));
+                        }
                     } else {
                         isComplete = (null != explain && !"".equals(explain));
                     }
@@ -880,7 +898,6 @@ public class InstallingActivity extends BaseActivity {
     }
 
     //  检验拆除列表是否完成
-
     private boolean checkRemoveList() {
         boolean nextAble = true;
         int completeCount = 0;
