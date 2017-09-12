@@ -303,10 +303,10 @@ public class OrderFragment extends Fragment {
             @Override
             public void onReceive(LatLng latLng) {
                 if (latLng.latitude == 4.9E-324 || latLng.longitude == 4.9E-324) {
-                    showMessageDialog("定位失败，请检查GPS是否开启！");
-                    return;
+                    mLatLngLocate = new LatLng(0, 0);
+                } else {
+                    mLatLngLocate = latLng;
                 }
-                mLatLngLocate = latLng;
                 myHandler.sendEmptyMessage(MSG_2);
             }
         });

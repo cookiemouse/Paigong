@@ -209,21 +209,30 @@ public class CustomSignActivity extends BaseActivity {
 
                 Log.i(TAG, "onReceive: latitude-->" + latLng.latitude);
                 Log.i(TAG, "onReceive: longitude-->" + latLng.longitude);
-                if (latLng.latitude == 4.9E-324 || latLng.longitude == 4.9E-324) {
-                    showMessageDialog("定位失败，请检查GPS是否开启！");
-                    return;
-                }
                 mLocateManager.stopLocate();
-                mNetworkManager.saveOrderInfo(eid
-                        , token
-                        , mOrderNo
-                        , mJson
-                        , mPartReason
-                        , mSignature
-                        , "" + latLng.latitude
-                        , "" + latLng.longitude
-                        , Data.LOCATE_TYPE_BAIDU
-                        , userName);
+                if (latLng.latitude == 4.9E-324 || latLng.longitude == 4.9E-324) {
+                    mNetworkManager.saveOrderInfo(eid
+                            , token
+                            , mOrderNo
+                            , mJson
+                            , mPartReason
+                            , mSignature
+                            , "0"
+                            , "0"
+                            , Data.LOCATE_TYPE_BAIDU
+                            , userName);
+                } else {
+                    mNetworkManager.saveOrderInfo(eid
+                            , token
+                            , mOrderNo
+                            , mJson
+                            , mPartReason
+                            , mSignature
+                            , "" + latLng.latitude
+                            , "" + latLng.longitude
+                            , Data.LOCATE_TYPE_BAIDU
+                            , userName);
+                }
             }
         });
 
