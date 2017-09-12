@@ -1619,8 +1619,9 @@ public class OperateInstallActivity extends BaseActivity {
     //  校验该订单中是否填有该imei
     private boolean isExistImei(String imei) {
 
-        for (AdapterOperateInstallListData data : mAdapterOperateInstallListDataList) {
-            if (imei.equals(data.gettNoNew())) {
+        for (int i = 0; i < mAdapterOperateInstallListDataList.size(); i++) {
+            AdapterOperateInstallListData data = mAdapterOperateInstallListDataList.get(i);
+            if (imei.equals(data.gettNoNew()) && i != itemPosition) {
                 return true;
             }
         }
