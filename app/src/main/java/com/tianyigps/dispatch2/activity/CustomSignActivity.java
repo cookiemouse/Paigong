@@ -210,7 +210,7 @@ public class CustomSignActivity extends BaseActivity {
                 Log.i(TAG, "onReceive: latitude-->" + latLng.latitude);
                 Log.i(TAG, "onReceive: longitude-->" + latLng.longitude);
                 if (latLng.latitude == 4.9E-324 || latLng.longitude == 4.9E-324) {
-                    showMessageDialog("定位失败，请确认是否给予相关权限！");
+                    showMessageDialog("定位失败，请检查GPS是否开启！");
                     return;
                 }
                 mLocateManager.stopLocate();

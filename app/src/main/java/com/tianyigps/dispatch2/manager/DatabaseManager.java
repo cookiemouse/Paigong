@@ -775,7 +775,7 @@ public class DatabaseManager {
             Cursor cursor = mSqLiteDatabase.query(Data.DATA_TAB_REPAIR
                     , new String[]{}
                     , "newImei=?"
-                    , new String[]{"" + imei}
+                    , new String[]{imei}
                     , null, null, null);
             mSqLiteDatabase.setTransactionSuccessful();
 
@@ -1551,26 +1551,6 @@ public class DatabaseManager {
     public boolean terExistByTid(int tId) {
         Cursor cursor = getTer(tId);
         return null != cursor && cursor.moveToFirst();
-    }
-
-    //  查，T，重载
-    public boolean terExistBytNo(String tNo) {
-        mSqLiteDatabase.beginTransaction();
-        try {
-            Cursor cursor = mSqLiteDatabase.query(Data.DATA_TAB_INSTALL_TERMINAL
-                    , new String[]{}
-                    , "tNoNew=?"
-                    , new String[]{(tNo)}
-                    , null, null, null);
-            mSqLiteDatabase.setTransactionSuccessful();
-
-            return (null != cursor && cursor.moveToFirst());
-        } catch (Exception e) {
-            Log.e(TAG, e + "SqliteDatabase query error");
-        } finally {
-            mSqLiteDatabase.endTransaction();
-        }
-        return false;
     }
 
     public void close() {

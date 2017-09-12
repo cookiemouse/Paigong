@@ -1077,6 +1077,36 @@ public class OperateRepairActivity extends BaseActivity {
         mLoadingDialogFragment.show(getFragmentManager(), "LoadingFragment");
     }
 
+    //  校验该订单中是否填有该imei
+    private boolean isExistImei(String imei) {
+        Cursor cursor = mDatabaseManager.getOrder(orderNo);
+        if (null != cursor) {
+            if (cursor.moveToFirst()) {
+                do {
+                    int tId = cursor.getInt(2);
+
+                    Cursor cursorTer = mDatabaseManager.getRepair(tId);
+                    if (null != cursorTer) {
+                        if (cursorTer.moveToFirst()) {
+                            do {
+                                String tNo = cursorTer.getString(1);
+
+                                if (imei.equals(tNo)) {
+                                    return true;
+                                }
+                            } while (cursorTer.moveToNext());
+                        }
+                        cursorTer.close();
+                    }
+
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+        }
+
+        return false;
+    }
+
     private class MyHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
@@ -1159,7 +1189,7 @@ public class OperateRepairActivity extends BaseActivity {
                 case Data.MSG_2: {
                     //  check whole imei 成功
                     Log.i(TAG, "handleMessage: wholeImei-->" + wholeImei);
-                    boolean exist = mDatabaseManager.repairExistByImei(wholeImei);
+                    boolean exist = isExistImei(wholeImei);
                     Log.i(TAG, "handleMessage: exist-->" + exist);
                     if (exist) {
                         setEditTextImei(null);

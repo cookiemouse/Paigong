@@ -1616,6 +1616,44 @@ public class OperateInstallActivity extends BaseActivity {
         dialog.show();
     }
 
+    //  校验该订单中是否填有该imei
+    private boolean isExistImei(String imei) {
+
+        for (AdapterOperateInstallListData data : mAdapterOperateInstallListDataList) {
+            if (imei.equals(data.gettNoNew())) {
+                return true;
+            }
+        }
+
+        Cursor cursor = mDatabaseManager.getOrder(orderNo);
+        if (null != cursor) {
+            if (cursor.moveToFirst()) {
+                do {
+                    int tId = cursor.getInt(2);
+
+                    Cursor cursorTer = mDatabaseManager.getTer(tId);
+                    if (null != cursorTer) {
+                        if (cursorTer.moveToFirst()) {
+                            do {
+                                String tNoOld = cursorTer.getString(1);
+                                String tNoNew = cursorTer.getString(2);
+
+                                if (imei.equals(tNoNew)) {
+                                    return true;
+                                }
+                            } while (cursorTer.moveToNext());
+                        }
+                        cursorTer.close();
+                    }
+
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+        }
+
+        return false;
+    }
+
     private class MyHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
@@ -1645,7 +1683,7 @@ public class OperateInstallActivity extends BaseActivity {
 
                     //  判定该imei是否已安装
                     Log.i(TAG, "handleMessage: imei-->" + imei);
-                    boolean exist = mDatabaseManager.terExistBytNo(imei);
+                    boolean exist = isExistImei(imei);
                     Log.i(TAG, "handleMessage: exist-->" + exist);
                     if (exist) {
                         data.settNoNew(null);
