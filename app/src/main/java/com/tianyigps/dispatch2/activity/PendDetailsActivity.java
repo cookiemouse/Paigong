@@ -326,7 +326,7 @@ public class PendDetailsActivity extends Activity {
                     }
                     mAdapterPendDetailsDataList.add(new AdapterPendDetailsData(R.drawable.ic_modify_date_return, "退单原因", backReason));
                 }
-                if (Data.NODE_8 == mNode || Data.NODE_9 == mNode || Data.NODE_10 == mNode || Data.NODE_11 == mNode) {
+                if (Data.NODE_8 == mNode || Data.NODE_9 == mNode || Data.NODE_10 == mNode || Data.NODE_11 == mNode || Data.NODE_14 == mNode) {
                     String engineer = engineerBean.getJobNo() + " " + engineerBean.getName();
                     String phone = engineerBean.getPhoneNo();
                     mAdapterPendDetailsDataList.add(new AdapterPendDetailsData(R.drawable.ic_modify_date_engineer, engineer, phone));
@@ -339,7 +339,7 @@ public class PendDetailsActivity extends Activity {
                     String reason = nodeBean.getReasonChoosed() + "，" + nodeBean.getReasonFilled();
                     mAdapterPendDetailsDataList.add(new AdapterPendDetailsData(R.drawable.ic_modify_date_return, "退回客户", reason));
                 }
-                if (Data.STATUS_2 == mOrderStatusGet){
+                if (Data.STATUS_2 == mOrderStatusGet) {
                     String reason = objBean.getPartSubReason();
                     mAdapterPendDetailsDataList.add(new AdapterPendDetailsData(R.drawable.ic_modify_date_reason, "空单原因", reason));
                 }
@@ -382,20 +382,37 @@ public class PendDetailsActivity extends Activity {
                     case 1: {
                         mInstallType = "安装";
                         mInfoTitle = "安装车辆信息";
-                        mInstallContent += "有线" + objBean.getWiredNum() + "个，无线" + objBean.getWirelessNum() + "个";
+                        if (Data.NODE_14 == mNode) {
+                            mInstallContent += "派单：有线" + objBean.getWiredNum() + "个，无线" + objBean.getWirelessNum() + "个";
+                            mInstallContent += "\n完成：有线" + objBean.getFinishWiredNum() + "个，无线" + objBean.getFinishWirelessNum() + "个";
+                        } else {
+                            mInstallContent += "有线" + objBean.getWiredNum() + "个，无线" + objBean.getWirelessNum() + "个";
+                        }
                         break;
                     }
                     case 2: {
                         mInstallType = "维修";
                         mInfoTitle = "维修车辆信息";
-                        mInstallContent += "有线" + objBean.getWiredNum() + "个，无线" + objBean.getWirelessNum() + "个";
+                        if (Data.NODE_14 == mNode) {
+                            mInstallContent += "派单：有线" + objBean.getWiredNum() + "个，无线" + objBean.getWirelessNum() + "个";
+                            mInstallContent += "\n完成：有线" + objBean.getFinishWiredNum() + "个，无线" + objBean.getFinishWirelessNum() + "个";
+                        } else {
+                            mInstallContent += "有线" + objBean.getWiredNum() + "个，无线" + objBean.getWirelessNum() + "个";
+                        }
                         break;
                     }
                     case 3: {
                         mInstallType = "拆改";
                         mInfoTitle = "安装车辆信息";
-                        mInstallContent += "拆除：有线" + objBean.getRemoveWiredNum() + "个，无线" + objBean.getRemoveWirelessNum() + "个\n";
-                        mInstallContent += "安装：有线" + objBean.getWiredNum() + "个，无线" + objBean.getWirelessNum() + "个";
+                        if (Data.NODE_14 == mNode) {
+                            mInstallContent += "拆除 派单：有线" + objBean.getRemoveWiredNum() + "个，无线" + objBean.getRemoveWirelessNum() + "个";
+                            mInstallContent += "\n完成：有线" + objBean.getRemoFinWiredNum() + "个，无线" + objBean.getRemoFinWirelessNum() + "个";
+                            mInstallContent += "\n安装 派单：有线" + objBean.getWiredNum() + "个，无线" + objBean.getWirelessNum() + "个";
+                            mInstallContent += "\n完成：有线" + objBean.getFinishWiredNum() + "个，无线" + objBean.getFinishWirelessNum() + "个";
+                        } else {
+                            mInstallContent += "拆除：有线" + objBean.getRemoveWiredNum() + "个，无线" + objBean.getRemoveWirelessNum() + "个\n";
+                            mInstallContent += "安装：有线" + objBean.getWiredNum() + "个，无线" + objBean.getWirelessNum() + "个";
+                        }
                         break;
                     }
                     default: {

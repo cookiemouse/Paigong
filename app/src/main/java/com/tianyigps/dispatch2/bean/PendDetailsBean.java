@@ -109,6 +109,10 @@ public class PendDetailsBean {
         private int removeWirelessNum;
         private int wiredNum;
         private int wirelessNum;
+        private int finishWiredNum;
+        private int finishWirelessNum;
+        private int remoFinWiredNum;
+        private int remoFinWirelessNum;
         private List<OrderCarListBean> orderCarList;
 
         public String getPartSubReason() {
@@ -117,6 +121,38 @@ public class PendDetailsBean {
 
         public void setPartSubReason(String partSubReason) {
             this.partSubReason = partSubReason;
+        }
+
+        public int getFinishWiredNum() {
+            return finishWiredNum;
+        }
+
+        public void setFinishWiredNum(int finishWiredNum) {
+            this.finishWiredNum = finishWiredNum;
+        }
+
+        public int getFinishWirelessNum() {
+            return finishWirelessNum;
+        }
+
+        public void setFinishWirelessNum(int finishWirelessNum) {
+            this.finishWirelessNum = finishWirelessNum;
+        }
+
+        public int getRemoFinWiredNum() {
+            return remoFinWiredNum;
+        }
+
+        public void setRemoFinWiredNum(int remoFinWiredNum) {
+            this.remoFinWiredNum = remoFinWiredNum;
+        }
+
+        public int getRemoFinWirelessNum() {
+            return remoFinWirelessNum;
+        }
+
+        public void setRemoFinWirelessNum(int remoFinWirelessNum) {
+            this.remoFinWirelessNum = remoFinWirelessNum;
         }
 
         public String getAddress() {
