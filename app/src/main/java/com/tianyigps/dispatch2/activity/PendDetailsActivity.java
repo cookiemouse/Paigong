@@ -145,6 +145,7 @@ public class PendDetailsActivity extends Activity {
             boolean success = data.getBooleanExtra(Data.DATA_INTENT_PEND_RESULT, false);
             mIntent.putExtra(Data.DATA_INTENT_PEND_RESULT, success);
             setResult(Data.DATA_INTENT_CHOICE_WORKER_RESULT, mIntent);
+            this.finish();
         }
     }
 

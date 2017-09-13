@@ -893,6 +893,7 @@ public class OperateInstallActivity extends BaseActivity {
         mNetworkManager.setOnUploadPicListener(new OnUploadPicListener() {
             @Override
             public void onFailure() {
+                mStringMessage = Data.DEFAULT_MESSAGE;
                 myHandler.sendEmptyMessage(Data.MSG_ERO);
             }
 
@@ -903,7 +904,7 @@ public class OperateInstallActivity extends BaseActivity {
                 UploadPicBean uploadPicBean = gson.fromJson(result, UploadPicBean.class);
                 if (!uploadPicBean.isSuccess()) {
                     mStringMessage = uploadPicBean.getMsg();
-                    onFailure();
+                    myHandler.sendEmptyMessage(Data.MSG_ERO);
                     return;
                 }
                 UploadPicBean.ObjBean objBean = uploadPicBean.getObj();
