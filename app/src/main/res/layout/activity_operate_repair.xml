@@ -284,6 +284,8 @@
                 android:background="@null"
                 android:hint="请输入设备号（至少6位）"
                 android:inputType="number"
+                android:ellipsize="end"
+                android:singleLine="true"
                 android:lines="1"
                 android:maxWidth="@dimen/dp_240"
                 android:textSize="@dimen/sp_14"/>
@@ -360,6 +362,8 @@
             android:layout_toRightOf="@+id/iv_activity_operate_default_position_new"
             android:background="@null"
             android:hint="@string/enter_install_place"
+            android:ellipsize="end"
+            android:singleLine="true"
             android:lines="1"
             android:maxWidth="@dimen/dp_240"
             android:textSize="@dimen/sp_14"/>
