@@ -339,6 +339,10 @@ public class PendDetailsActivity extends Activity {
                     String reason = nodeBean.getReasonChoosed() + "，" + nodeBean.getReasonFilled();
                     mAdapterPendDetailsDataList.add(new AdapterPendDetailsData(R.drawable.ic_modify_date_return, "退回客户", reason));
                 }
+                if (Data.STATUS_2 == mOrderStatusGet){
+                    String reason = objBean.getPartSubReason();
+                    mAdapterPendDetailsDataList.add(new AdapterPendDetailsData(R.drawable.ic_modify_date_reason, "空单原因", reason));
+                }
 
                 for (PendDetailsBean.ObjBean.OrderCarListBean carListBean : objBean.getOrderCarList()) {
 

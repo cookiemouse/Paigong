@@ -104,11 +104,20 @@ public class PendDetailsBean {
         private int orderStatus;
         private int orderType;
         private String remark;
+        private String partSubReason;
         private int removeWiredNum;
         private int removeWirelessNum;
         private int wiredNum;
         private int wirelessNum;
         private List<OrderCarListBean> orderCarList;
+
+        public String getPartSubReason() {
+            return partSubReason;
+        }
+
+        public void setPartSubReason(String partSubReason) {
+            this.partSubReason = partSubReason;
+        }
 
         public String getAddress() {
             return address;
