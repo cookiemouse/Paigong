@@ -21,10 +21,16 @@ public class AdapterPendingData {
     private String eName, phoneNumber;
     private String jobNo;
 
+    private int finishWiredNum;
+    private int finishWirelessNum;
+    private int remoFinWiredNum;
+    private int remoFinWirelessNum;
+
     public AdapterPendingData(String order, String name, String contactName, String contactPhone
             , long time, String address, int orderType
             , int lineNumber, int linelessNumber, int orderId, int orderStatus, int node
-            , String modifyTime, String modifyReason, String backReason, String eName, String phoneNumber, String jobNo) {
+            , String modifyTime, String modifyReason, String backReason, String eName, String phoneNumber, String jobNo
+            , int finishWiredNum, int finishWirelessNum, int remoFinWiredNum, int remoFinWirelessNum) {
         this.order = order;
         this.name = name;
         this.contactName = contactName;
@@ -43,12 +49,17 @@ public class AdapterPendingData {
         this.eName = eName;
         this.contactPhone = contactPhone;
         this.jobNo = jobNo;
+        this.finishWiredNum = finishWiredNum;
+        this.finishWirelessNum = finishWirelessNum;
+        this.remoFinWiredNum = remoFinWiredNum;
+        this.remoFinWirelessNum = remoFinWirelessNum;
     }
 
     public AdapterPendingData(String order, String name, String contactName, String contactPhone, long time
             , String address, int orderType, int lineNumber, int linelessNumber, int wireRemove, int wirelessRemove
             , int orderId, int orderStatus, int note, String modifyTime, String modifyReason, String backReason
-            , String eName, String phoneNumber, String jobNo) {
+            , String eName, String phoneNumber, String jobNo
+            , int finishWiredNum, int finishWirelessNum, int remoFinWiredNum, int remoFinWirelessNum) {
         this.order = order;
         this.name = name;
         this.contactName = contactName;
@@ -69,6 +80,10 @@ public class AdapterPendingData {
         this.eName = eName;
         this.contactPhone = contactPhone;
         this.jobNo = jobNo;
+        this.finishWiredNum = finishWiredNum;
+        this.finishWirelessNum = finishWirelessNum;
+        this.remoFinWiredNum = remoFinWiredNum;
+        this.remoFinWirelessNum = remoFinWirelessNum;
     }
 
     public String getOrder() {
@@ -229,5 +244,37 @@ public class AdapterPendingData {
 
     public void setJobNo(String jobNo) {
         this.jobNo = jobNo;
+    }
+
+    public int getFinishWiredNum() {
+        return finishWiredNum;
+    }
+
+    public void setFinishWiredNum(int finishWiredNum) {
+        this.finishWiredNum = finishWiredNum;
+    }
+
+    public int getFinishWirelessNum() {
+        return finishWirelessNum;
+    }
+
+    public void setFinishWirelessNum(int finishWirelessNum) {
+        this.finishWirelessNum = finishWirelessNum;
+    }
+
+    public int getRemoFinWiredNum() {
+        return remoFinWiredNum;
+    }
+
+    public void setRemoFinWiredNum(int remoFinWiredNum) {
+        this.remoFinWiredNum = remoFinWiredNum;
+    }
+
+    public int getRemoFinWirelessNum() {
+        return remoFinWirelessNum;
+    }
+
+    public void setRemoFinWirelessNum(int remoFinWirelessNum) {
+        this.remoFinWirelessNum = remoFinWirelessNum;
     }
 }

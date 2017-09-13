@@ -350,7 +350,11 @@ public class PendingFragment extends Fragment {
                                 , backReason
                                 , objBean.geteName()
                                 , objBean.getPhoneNo()
-                                , objBean.getJobNo());
+                                , objBean.getJobNo()
+                                , objBean.getFinishWiredNum()
+                                , objBean.getFinishWirelessNum()
+                                , objBean.getRemoFinWiredNum()
+                                , objBean.getRemoFinWirelessNum());
                     } else {
                         data = new AdapterPendingData(objBean.getOrderNo()
                                 , custName
@@ -369,7 +373,11 @@ public class PendingFragment extends Fragment {
                                 , backReason
                                 , objBean.geteName()
                                 , objBean.getPhoneNo()
-                                , objBean.getJobNo());
+                                , objBean.getJobNo()
+                                , objBean.getFinishWiredNum()
+                                , objBean.getFinishWirelessNum()
+                                , objBean.getRemoFinWiredNum()
+                                , objBean.getRemoFinWirelessNum());
                     }
                     mAdapterPendingDataList.add(data);
                 }

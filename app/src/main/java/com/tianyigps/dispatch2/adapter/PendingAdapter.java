@@ -84,6 +84,8 @@ public class PendingAdapter extends BaseAdapter {
             viewHolder.llContact = view.findViewById(R.id.ll_item_pending_contact);
             viewHolder.llPend = view.findViewById(R.id.ll_item_pending_pend);
             viewHolder.llModify = view.findViewById(R.id.ll_item_pending_modify);
+            viewHolder.llInstallComplete = view.findViewById(R.id.ll_item_pending_install_complete);
+            viewHolder.llRemoveComplete = view.findViewById(R.id.ll_item_pending_remove_complete);
             viewHolder.tvWireRemove = view.findViewById(R.id.tv_item_pending_remove_content_wire);
             viewHolder.tvWirelessRemove = view.findViewById(R.id.tv_item_pending_remove_content_wireless);
             viewHolder.tvStatus = view.findViewById(R.id.tv_item_pending_order_status);
@@ -94,6 +96,11 @@ public class PendingAdapter extends BaseAdapter {
             viewHolder.rlContact = view.findViewById(R.id.rl_item_pending_contact);
             viewHolder.tvContactPhone = view.findViewById(R.id.tv_item_pending_rl_contact_phone);
             viewHolder.tvJobNoName = view.findViewById(R.id.tv_item_pending_rl_contact_jobNo_name);
+            viewHolder.tvRemoveTitle = view.findViewById(R.id.tv_item_pending_remove_content_title);
+            viewHolder.tvWireC = view.findViewById(R.id.tv_item_pending_install_content_wire_complete);
+            viewHolder.tvWirelessC = view.findViewById(R.id.tv_item_pending_install_content_wireless_complete);
+            viewHolder.tvRemoveWireC = view.findViewById(R.id.tv_item_pending_remove_content_wire_complete);
+            viewHolder.tvRemoveWirelessC = view.findViewById(R.id.tv_item_pending_remove_content_wireless_complete);
 
             view.setTag(viewHolder);
         } else {
@@ -109,6 +116,10 @@ public class PendingAdapter extends BaseAdapter {
         viewHolder.tvWorkerName.setText(data.getContactName());
         viewHolder.tvModifyDate.setText(data.getModifyTime());
         viewHolder.tvModifyReason.setText(data.getModifyReason());
+        viewHolder.tvWireC.setText("" + data.getFinishWiredNum());
+        viewHolder.tvWirelessC.setText("" + data.getFinishWirelessNum());
+        viewHolder.tvRemoveWireC.setText("" + data.getRemoFinWiredNum());
+        viewHolder.tvRemoveWirelessC.setText("" + data.getRemoFinWirelessNum());
 
         String orderType;
         switch (data.getOrderType()) {
@@ -142,7 +153,7 @@ public class PendingAdapter extends BaseAdapter {
 //            viewHolder.llContact.setVisibility(View.VISIBLE);
 //        }
         viewHolder.tvStatus.setText(getOrderStatus(data.getOrderStatus()));
-        if (Data.NODE_2 == data.getNode() || Data.NODE_12 == data.getNode()) {
+        if (Data.NODE_2 == data.getNode()) {
             viewHolder.tvStatus.setText("待审核");
             viewHolder.llPend.setVisibility(View.GONE);
             viewHolder.llModify.setVisibility(View.VISIBLE);
@@ -162,6 +173,53 @@ public class PendingAdapter extends BaseAdapter {
         } else {
             viewHolder.rlContact.setVisibility(View.GONE);
             viewHolder.tvBackReason.setVisibility(View.GONE);
+        }
+
+        if (Data.NODE_12 == data.getNode()) {
+            viewHolder.llPend.setVisibility(View.GONE);
+            viewHolder.tvStatus.setText("待审核");
+            viewHolder.tvModifyReason.setVisibility(View.GONE);
+            viewHolder.tvModifyDate.setVisibility(View.GONE);
+            String reason = "部分完成：" + data.getModifyReason();
+            viewHolder.tvBackReason.setText(reason);
+            viewHolder.tvBackReason.setVisibility(View.VISIBLE);
+            viewHolder.tvContactPhone.setText(data.getPhoneNumber());
+            viewHolder.tvJobNoName.setText(data.getJobNo() + " " + data.geteName());
+            viewHolder.rlContact.setVisibility(View.VISIBLE);
+
+            viewHolder.llInstallComplete.setVisibility(View.VISIBLE);
+
+            switch (data.getOrderType()) {
+                case 1: {
+                    orderType = "安装 派单：";
+                    viewHolder.llRemoveComplete.setVisibility(View.GONE);
+                    break;
+                }
+                case 2: {
+                    orderType = "维修 派单：";
+                    viewHolder.llRemoveComplete.setVisibility(View.GONE);
+                    break;
+                }
+                case 3: {
+                    orderType = "安装 派单：";
+                    viewHolder.tvRemoveTitle.setText("拆除 派单：");
+                    viewHolder.llRemoveComplete.setVisibility(View.VISIBLE);
+                    break;
+                }
+                default: {
+                    orderType = "安装 派单：";
+                    Log.i(TAG, "onSuccess: orderType.default-->" + data.getOrderType());
+                }
+            }
+        }else {
+            viewHolder.llPend.setVisibility(View.VISIBLE);
+            viewHolder.tvModifyReason.setVisibility(View.VISIBLE);
+            viewHolder.tvModifyDate.setVisibility(View.VISIBLE);
+
+            viewHolder.tvBackReason.setVisibility(View.GONE);
+            viewHolder.rlContact.setVisibility(View.GONE);
+            viewHolder.llInstallComplete.setVisibility(View.GONE);
+            viewHolder.llRemoveComplete.setVisibility(View.GONE);
         }
 
         viewHolder.tvOrderType.setText(orderType);
@@ -263,8 +321,10 @@ public class PendingAdapter extends BaseAdapter {
         private TextView tvWireRemove, tvWirelessRemove;
         private TextView tvModifyDate, tvModifyReason;
         private TextView tvRed;
+        private TextView tvRemoveTitle;
         private TextView tvBackReason;
-        private LinearLayout llRemove, llContact, llPend, llModify;
+        private TextView tvWireC, tvWirelessC, tvRemoveWireC, tvRemoveWirelessC;
+        private LinearLayout llRemove, llContact, llPend, llModify, llInstallComplete, llRemoveComplete;
         private RelativeLayout rlContact;
         private TextView tvContactPhone, tvJobNoName;
     }

@@ -54,6 +54,7 @@ public class OrderTrackDialogFragment extends DialogFragment {
     private NetworkManager mNetworkManager;
     private MyHandler myHandler;
     private String mStringMessage;
+    private int mEngineerType = 0;
 
     private View mView;
 
@@ -162,6 +163,9 @@ public class OrderTrackDialogFragment extends DialogFragment {
                 mAdapterOrderTrackDataList.clear();
 
                 for (OrderTrackBean.ObjBean objBean : orderTrackBean.getObj()) {
+                    if (null != objBean.getEngineer()) {
+                        mEngineerType = objBean.getEngineer().getType();
+                    }
                     mAdapterOrderTrackDataList.add(new AdapterOrderTrackData(objBean.getOrderNode().getUpdateTime(), func(objBean)));
                 }
 
@@ -207,10 +211,12 @@ public class OrderTrackDialogFragment extends DialogFragment {
                 info += "派单\n";     //ok
                 OrderTrackBean.ObjBean.EngineerBean engineerBean = objBean.getEngineer();
                 info += engineerBean.getJobNo() + "\t" + engineerBean.getName() + "\t";
-                if (orderNodeBean.getPayDoorFee() == 0) {
-                    info += "不支付上门费";
-                } else {
-                    info += "支付上门费";
+                if (mEngineerType != 1) {
+                    if (orderNodeBean.getPayDoorFee() == 0) {
+                        info += "不支付上门费";
+                    } else {
+                        info += "支付上门费";
+                    }
                 }
                 break;
             }
@@ -257,7 +263,9 @@ public class OrderTrackDialogFragment extends DialogFragment {
             }
             case 13: {
                 info += "退回客户\n";       //ok
-                info += orderNodeBean.getCheckFalseReason();
+                if (!RegularU.isEmpty(orderNodeBean.getCheckFalseReason())) {
+                    info += orderNodeBean.getCheckFalseReason();
+                }
                 info += orderNodeBean.getReasonFilled();
                 break;
             }
