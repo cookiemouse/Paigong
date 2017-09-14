@@ -481,6 +481,7 @@ public class PendDetailsActivity extends Activity {
         final BottomDialog bottomDialog = new BottomDialog();
         View viewDate = LayoutInflater.from(this).inflate(R.layout.dialog_modify_date, null);
         bottomDialog.setContentView(viewDate);
+        bottomDialog.setCancelable(false);
 
         final NumberPicker mpDay = viewDate.findViewById(R.id.np_dialog_modify_day);
         final NumberPicker mpHour = viewDate.findViewById(R.id.np_dialog_modify_hour);
@@ -512,43 +513,55 @@ public class PendDetailsActivity extends Activity {
                 int month = calendar.get(Calendar.MONTH);
                 int day = calendar.get(Calendar.DATE);
                 day = day + mDay;
-                calendar.set(year, month, day, mHour, mMin);
+                calendar.set(year, month, day, mHour, mMin * 10, 0);
                 long modify = calendar.getTimeInMillis();
+                Log.i(TAG, "onClick: date-->" + calendar.get(Calendar.YEAR) + "-"
+                        + calendar.get(Calendar.MONTH) + "-"
+                        + calendar.get(Calendar.DAY_OF_MONTH) + " "
+                        + calendar.get(Calendar.HOUR_OF_DAY) + ":"
+                        + calendar.get(Calendar.MINUTE));
 
                 if (current > modify) {
                     showMessageToast("无法改约到历史时间");
+                    mDay = 0;
+                    mHour = 0;
+                    mMin = 0;
                     return;
                 }
                 bottomDialog.dismiss();
-                Log.i(TAG, "onClick: day-->" + mDay);
-                Log.i(TAG, "onClick: hour-->" + mHour);
-                Log.i(TAG, "onClick: min-->" + mMin);
 
                 showModifyReason();
             }
         });
 
         Calendar calendar = Calendar.getInstance();
+        int day = 0;
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
         int min = calendar.get(Calendar.MINUTE);
-
-        mpDay.setDisplayedValues(mDays);
-        mpDay.setMinValue(0);
-        mpDay.setMaxValue(mDays.length - 1);
-
-        mpHour.setDisplayedValues(mHours);
-        mpHour.setMinValue(0);
-        mpHour.setMaxValue(mHours.length - 1);
-        mpHour.setValue(hour);
 
         mpMin.setDisplayedValues(mMins);
         mpMin.setMinValue(0);
         mpMin.setMaxValue(mMins.length - 1);
         int value = (min + 10) / 10;
         if (value > 5) {
-            value = 5;
+            value = 0;
+            hour += 1;
         }
+        if (hour > 23){
+            hour = 0;
+            day += 1;
+        }
+
+        mpHour.setDisplayedValues(mHours);
+        mpHour.setMinValue(0);
+        mpHour.setMaxValue(mHours.length - 1);
+        mpHour.setValue(hour);
         mpMin.setValue(value);
+
+        mpDay.setDisplayedValues(mDays);
+        mpDay.setMinValue(0);
+        mpDay.setMaxValue(mDays.length - 1);
+        mpDay.setValue(day);
 
         bottomDialog.show(getFragmentManager(), "modify date");
     }
@@ -558,6 +571,7 @@ public class PendDetailsActivity extends Activity {
         final BottomDialog bottomDialog = new BottomDialog();
         View viewReason = LayoutInflater.from(this).inflate(R.layout.dialog_modify_reason, null);
         bottomDialog.setContentView(viewReason);
+        bottomDialog.setCancelable(false);
 
         TextView tvTitle = viewReason.findViewById(R.id.tv_dialog_modify_title);
         TextView tvCancel = viewReason.findViewById(R.id.tv_dialog_modify_reason_cancel);
@@ -581,6 +595,9 @@ public class PendDetailsActivity extends Activity {
         tvCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                mDay = 0;
+                mHour = 0;
+                mMin = 0;
                 bottomDialog.dismiss();
             }
         });
@@ -649,9 +666,6 @@ public class PendDetailsActivity extends Activity {
         long timeNow = System.currentTimeMillis();
         long timeRemain = mCreateTime - timeNow + TIME_1_MIN;
         timeRemain += TIME_15_MIN;
-
-        Log.i(TAG, "updateTime.timeRemain: -->" + timeRemain);
-        Log.i(TAG, "updateTime.HourMin -->" + new TimeFormatU().millsToHourMin(timeRemain));
 
         if (timeRemain > TIME_15_MIN) {
             mCycleProgressView.setProgress(100);
