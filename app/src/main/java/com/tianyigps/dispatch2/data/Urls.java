@@ -6,6 +6,7 @@ package com.tianyigps.dispatch2.data;
 
 public class Urls {
     private static final String IP = "http://sit.tianyigps.cn/dispatch-services";
+//    private static final String IP = "http://116.62.58.232:8081/dispatch-services";
 
     public static final String URL_CHECK_USER = IP + "/dispatch4AppController/checkuser?";
     public static final String URL_CHANGE_PSD = IP + "/dispatch4AppController/changePwd?";
