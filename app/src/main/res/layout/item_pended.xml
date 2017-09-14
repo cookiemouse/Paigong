@@ -133,7 +133,6 @@
         android:layout_toEndOf="@+id/tv_item_pended_time"
         android:layout_toRightOf="@+id/tv_item_pended_time"
         android:text="@string/modify"
-        android:textColor="@color/colorRed"
         android:visibility="gone"/>
 
     <TextView

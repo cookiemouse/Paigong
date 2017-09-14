@@ -47,11 +47,17 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import static com.tianyigps.dispatch2.data.Data.MSG_2;
+
 public class PendDetailsActivity extends Activity {
 
     private static final String TAG = "PendDetailsActivity";
 
     private static final int ORDER_STATUS_1 = 1;
+
+    private static final long TIME_1_MIN = 60000;
+    private static final long TIME_15_MIN = 15 * TIME_1_MIN;
+    private static final long TIME_1_SEC = 1000;
 
     //Title栏
     private TextView mTextViewTitle;
@@ -77,7 +83,7 @@ public class PendDetailsActivity extends Activity {
     private Button mButtonPend;
 
     private String mContact, mContactPhone, mAddress, mRemarks, mInstallType, mInstallContent = "", mInfoTitle, mInfoContent = "", mRemoveContent = "";
-    private long mDoorTime;
+    private long mDoorTime, mCreateTime;
     private int mOrderStatusGet;
     private int mNode;
     private boolean isModify;
@@ -124,6 +130,9 @@ public class PendDetailsActivity extends Activity {
     protected void onResume() {
         mBitmap = BitmapU.getBitmap(this, R.drawable.bg_order_details_top, 320, 160);
         mImageViewTitle.setImageBitmap(mBitmap);
+        if (mCreateTime > 0) {
+            updateTime();
+        }
         super.onResume();
     }
 
@@ -133,6 +142,7 @@ public class PendDetailsActivity extends Activity {
         if (null != mBitmap) {
             mBitmap.recycle();
         }
+        myHandler.removeMessages(Data.MSG_3);
     }
 
     @Override
@@ -294,6 +304,7 @@ public class PendDetailsActivity extends Activity {
 
                 mRemarks = objBean.getRemark();
                 mDoorTime = objBean.getDoorTime();
+                mCreateTime = objBean.getCreateTime();
                 mAddress = objBean.getAddress();
                 mContact = objBean.getContactName();
                 mContactPhone = objBean.getContactPhone();
@@ -441,7 +452,7 @@ public class PendDetailsActivity extends Activity {
                     myHandler.sendEmptyMessage(Data.MSG_ERO);
                     return;
                 }
-                myHandler.sendEmptyMessage(Data.MSG_2);
+                myHandler.sendEmptyMessage(MSG_2);
             }
         });
     }
@@ -633,6 +644,31 @@ public class PendDetailsActivity extends Activity {
         mLoadingDialogFragment.show(getFragmentManager(), "LoadingFragment");
     }
 
+    //  倒计时
+    private void updateTime() {
+        long timeNow = System.currentTimeMillis();
+        long timeRemain = mCreateTime - timeNow + TIME_1_MIN;
+        timeRemain += TIME_15_MIN;
+
+        Log.i(TAG, "updateTime.timeRemain: -->" + timeRemain);
+        Log.i(TAG, "updateTime.HourMin -->" + new TimeFormatU().millsToHourMin(timeRemain));
+
+        if (timeRemain > TIME_15_MIN) {
+            mCycleProgressView.setProgress(100);
+            mTextViewTime.setText(new TimeFormatU().millsToHourMin(TIME_15_MIN));
+        } else if (timeRemain < 0) {
+            mCycleProgressView.setProgress(0);
+            mCycleProgressView.setDefaultColor(getResources().getColor(R.color.colorOrange));
+            mTextViewTime.setText("00:00");
+            mTextViewTime.setTextColor(getResources().getColor(R.color.colorRed));
+        } else {
+            mTextViewTime.setText(new TimeFormatU().millsToHourMin(timeRemain));
+            mCycleProgressView.setProgress((int) (timeRemain * 100 / TIME_15_MIN));
+        }
+
+        myHandler.sendEmptyMessageDelayed(Data.MSG_3, TIME_1_SEC);
+    }
+
     private class MyHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
@@ -694,12 +730,15 @@ public class PendDetailsActivity extends Activity {
                     }
 
                     mPendDetailsAdapter.notifyDataSetChanged();
+
+                    updateTime();
                     break;
                 }
-                case Data.MSG_2: {
+                case MSG_2: {
                     //  改约成功
                     showMessageToast(mStringMessage);
                     PendDetailsActivity.this.finish();
+                    break;
                     //  刷新页面
 //                    showLoading();
 //                    if (0 == orderStatus) {
@@ -707,6 +746,10 @@ public class PendDetailsActivity extends Activity {
 //                    } else {
 //                        mNetworkManager.getPendDetails(jobNo, token, orderNo, userName, orderStatus);
 //                    }
+                }
+                case Data.MSG_3: {
+                    updateTime();
+                    break;
                 }
                 default: {
                     Log.i(TAG, "handleMessage: default-->" + msg.what);
