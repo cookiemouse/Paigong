@@ -378,6 +378,7 @@ public class PendDetailsBean {
             private int operatorType;
             private int orderId;
             private int orderStatus;
+            private int reviseStatus;
             private int type;
             private long updateTime;
             private long reviseTime;
@@ -516,6 +517,14 @@ public class PendDetailsBean {
 
             public void setReviseTime(long reviseTime) {
                 this.reviseTime = reviseTime;
+            }
+
+            public int getReviseStatus() {
+                return reviseStatus;
+            }
+
+            public void setReviseStatus(int reviseStatus) {
+                this.reviseStatus = reviseStatus;
             }
         }
 

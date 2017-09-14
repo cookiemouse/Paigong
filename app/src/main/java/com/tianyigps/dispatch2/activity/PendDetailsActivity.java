@@ -85,7 +85,7 @@ public class PendDetailsActivity extends Activity {
     private String mContact, mContactPhone, mAddress, mRemarks, mInstallType, mInstallContent = "", mInfoTitle, mInfoContent = "", mRemoveContent = "";
     private long mDoorTime, mCreateTime;
     private int mOrderStatusGet;
-    private int mNode;
+    private int mNode, mReviseStatus;
     private boolean isModify;
 
     private SharedpreferenceManager mSharedpreferenceManager;
@@ -310,22 +310,30 @@ public class PendDetailsActivity extends Activity {
                 mContactPhone = objBean.getContactPhone();
                 mOrderStatusGet = objBean.getOrderStatus();
                 mNode = nodeBean.getNode();
+                mReviseStatus = nodeBean.getReviseStatus();
 
+                Log.i(TAG, "onSuccess: mReviseStatus-->" + mReviseStatus);
                 if (Data.NODE_3 == mNode) {
-                    if (Data.STATUS_98 == mOrderStatusGet) {
+                    if (mReviseStatus == 2) {
+                        mAdapterPendDetailsDataList.add(new AdapterPendDetailsData(R.drawable.ic_modify_date_pass
+                                , "改约通过"
+                                , "" + nodeBean.getReviseTime()));
+                    } else {
                         mAdapterPendDetailsDataList.add(new AdapterPendDetailsData(R.drawable.ic_modify_date_uppass
                                 , "改约不通过"
                                 , nodeBean.getCheckFalseReason()
                                 , true));
 
-                        String reason = nodeBean.getReasonChoosed() + "，" + nodeBean.getReasonFilled();
+                        String reason;
+                        if (RegularU.isEmpty(nodeBean.getReasonChoosed())) {
+                            reason = nodeBean.getReasonFilled();
+                        } else {
+                            reason = nodeBean.getReasonChoosed() + "，" + nodeBean.getReasonFilled();
+                        }
+
                         mAdapterPendDetailsDataList.add(new AdapterPendDetailsData(R.drawable.ic_modify_date_reason
-                                , "" + nodeBean.getReviseTime()
+                                , "" + new TimeFormatU().millisToDate2(nodeBean.getReviseTime())
                                 , reason));
-                    } else {
-                        mAdapterPendDetailsDataList.add(new AdapterPendDetailsData(R.drawable.ic_modify_date_pass
-                                , "改约通过"
-                                , "" + nodeBean.getReviseTime()));
                     }
                 }
                 if (Data.NODE_11 == mNode) {
@@ -547,7 +555,7 @@ public class PendDetailsActivity extends Activity {
             value = 0;
             hour += 1;
         }
-        if (hour > 23){
+        if (hour > 23) {
             hour = 0;
             day += 1;
         }
@@ -720,6 +728,11 @@ public class PendDetailsActivity extends Activity {
                         mFrameLayoutCycle.setVisibility(View.VISIBLE);
                         mViewRight.setVisibility(View.VISIBLE);
                         mViewTop.setVisibility(View.VISIBLE);
+                        if (Data.NODE_3 == mNode) {
+                            mFrameLayoutCycle.setVisibility(View.GONE);
+                            mViewRight.setVisibility(View.GONE);
+                            mViewTop.setVisibility(View.GONE);
+                        }
                     }
 
                     mTextViewNode.setText(NodeU.getNode(mNode));
@@ -737,7 +750,8 @@ public class PendDetailsActivity extends Activity {
 
                     if (Data.NODE_1 == mNode
                             || Data.NODE_6 == mNode
-                            || Data.NODE_11 == mNode) {
+                            || Data.NODE_11 == mNode
+                            || Data.NODE_3 == mNode) {
                         mButtonPend.setVisibility(View.VISIBLE);
                     } else {
                         mButtonPend.setVisibility(View.GONE);
