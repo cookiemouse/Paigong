@@ -163,6 +163,12 @@ public class HandledFragment extends Fragment {
     }
 
     private void setEventListener() {
+        mTextViewTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mListViewHandled.smoothScrollToPosition(0);
+            }
+        });
 
         mImageViewTitleLeft.setOnClickListener(new View.OnClickListener() {
             @Override

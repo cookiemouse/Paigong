@@ -153,15 +153,6 @@ public class PendingAdapter extends BaseAdapter {
 //            viewHolder.llContact.setVisibility(View.VISIBLE);
 //        }
         viewHolder.tvStatus.setText(getOrderStatus(data.getOrderStatus()));
-        if (Data.NODE_2 == data.getNode()) {
-            viewHolder.tvStatus.setText("待审核");
-            viewHolder.llPend.setVisibility(View.GONE);
-            viewHolder.llModify.setVisibility(View.VISIBLE);
-        } else {
-            viewHolder.llPend.setVisibility(View.VISIBLE);
-            viewHolder.llModify.setVisibility(View.GONE);
-        }
-
         if (Data.STATUS_6 == data.getOrderStatus()) {
             viewHolder.rlContact.setVisibility(View.VISIBLE);
             String reason = "退回原因：" + data.getBackReason();
@@ -173,6 +164,16 @@ public class PendingAdapter extends BaseAdapter {
         } else {
             viewHolder.rlContact.setVisibility(View.GONE);
             viewHolder.tvBackReason.setVisibility(View.GONE);
+        }
+
+        if (Data.NODE_2 == data.getNode()) {
+            viewHolder.tvStatus.setText("待审核");
+            viewHolder.llPend.setVisibility(View.GONE);
+            viewHolder.tvBackReason.setVisibility(View.GONE);
+            viewHolder.llModify.setVisibility(View.VISIBLE);
+        } else {
+            viewHolder.llPend.setVisibility(View.VISIBLE);
+            viewHolder.llModify.setVisibility(View.GONE);
         }
 
         if (Data.NODE_12 == data.getNode()) {
@@ -216,7 +217,6 @@ public class PendingAdapter extends BaseAdapter {
             viewHolder.tvModifyReason.setVisibility(View.VISIBLE);
             viewHolder.tvModifyDate.setVisibility(View.VISIBLE);
 
-            viewHolder.tvBackReason.setVisibility(View.GONE);
             viewHolder.rlContact.setVisibility(View.GONE);
             viewHolder.llInstallComplete.setVisibility(View.GONE);
             viewHolder.llRemoveComplete.setVisibility(View.GONE);

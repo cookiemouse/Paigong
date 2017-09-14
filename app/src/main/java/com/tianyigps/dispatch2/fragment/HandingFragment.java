@@ -164,6 +164,13 @@ public class HandingFragment extends Fragment implements View.OnClickListener {
         mTextViewHead.setOnClickListener(this);
         mTextViewManager.setOnClickListener(this);
 
+        mTextViewTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mListViewHanding.smoothScrollToPositionFromTop(0, 0);
+            }
+        });
+
         mImageViewTitleLeft.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

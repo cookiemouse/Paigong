@@ -196,6 +196,14 @@ public class OrderFragment extends Fragment {
     }
 
     private void setEventListener() {
+
+        mTextViewTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mListView.smoothScrollToPosition(0);
+            }
+        });
+
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

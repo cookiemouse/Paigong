@@ -178,6 +178,13 @@ public class PendingFragment extends Fragment {
     }
 
     private void setEventListener() {
+        mTextViewTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mListView.smoothScrollToPosition(0);
+            }
+        });
+
         mImageViewTitleLeft.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -419,9 +426,6 @@ public class PendingFragment extends Fragment {
 
     //  显示信息Dialog
     private void showMessageDialog(String msg) {
-        if (getActivity().isFinishing()) {
-            return;
-        }
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage(msg);
         builder.setPositiveButton(R.string.ensure, new DialogInterface.OnClickListener() {
