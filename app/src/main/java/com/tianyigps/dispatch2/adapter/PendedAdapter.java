@@ -66,6 +66,7 @@ public class PendedAdapter extends BaseAdapter {
             viewHolder.tvWorker = contentView.findViewById(R.id.tv_item_pended_phone_worker_name);
             viewHolder.tvContactName = contentView.findViewById(R.id.tv_item_pended_contact);
             viewHolder.tvStatus = contentView.findViewById(R.id.tv_item_pended_order_status);
+            viewHolder.tvModify = contentView.findViewById(R.id.tv_item_pended_modify);
             viewHolder.ivPhone = contentView.findViewById(R.id.iv_item_pended_phone);
             viewHolder.ivContact = contentView.findViewById(R.id.iv_item_pended_contact);
             viewHolder.ivMap = contentView.findViewById(R.id.iv_item_pended_map);
@@ -92,6 +93,11 @@ public class PendedAdapter extends BaseAdapter {
         viewHolder.tvAddress.setText(data.getAddress());
         viewHolder.tvWorker.setText(data.getWorker());
         viewHolder.tvContactName.setText(data.getContact());
+        if (data.getReviseFlag() == 1) {
+            viewHolder.tvModify.setVisibility(View.VISIBLE);
+        } else {
+            viewHolder.tvModify.setVisibility(View.GONE);
+        }
 
         viewHolder.ivPhone.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -157,7 +163,7 @@ public class PendedAdapter extends BaseAdapter {
     }
 
     private class ViewHolder {
-        TextView tvTitle, tvTime, tvAddress, tvWorker, tvContactName, tvStatus;
+        TextView tvTitle, tvTime, tvAddress, tvWorker, tvContactName, tvStatus, tvModify;
         ImageView ivPhone, ivContact, ivMap;
         LinearLayout llWorker, llContact;
     }

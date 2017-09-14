@@ -351,7 +351,7 @@ public class PendedFragment extends Fragment {
                         mAdapterPendedDataList.add(new AdapterPendedData(objBean.getCustName()
                                 , address
                                 , objBean.getJobNo()
-                                , objBean.getEName()
+                                , objBean.getEName() + " " + objBean.getJobNo()
                                 , objBean.getPhoneNo()
                                 , objBean.getContactName()
                                 , objBean.getContactPhone()
