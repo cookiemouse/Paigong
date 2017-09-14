@@ -6,6 +6,7 @@ import android.util.Log;
 import com.tianyigps.dispatch2.data.Urls;
 import com.tianyigps.dispatch2.interfaces.OnCheckIMEIListener;
 import com.tianyigps.dispatch2.interfaces.OnCheckUserListener;
+import com.tianyigps.dispatch2.interfaces.OnCheckVersionListener;
 import com.tianyigps.dispatch2.interfaces.OnContactSiteListener;
 import com.tianyigps.dispatch2.interfaces.OnDeletePicListener;
 import com.tianyigps.dispatch2.interfaces.OnGetLastInstallerListener;
@@ -98,6 +99,9 @@ public class NetworkManager {
     private OnPendedNumListener mOnPendedNumListener;
     private OnPendDetailsListener mOnPendDetailsListener;
     private OnModifyDateListener mModifyDateListener;
+
+    //  验证版本
+    private OnCheckVersionListener mOnCheckVersionListener;
 
     public NetworkManager() {
         mOkHttpClient = new OkHttpClient();
@@ -1405,6 +1409,36 @@ public class NetworkManager {
 
     public void setOnModifyDateListener(OnModifyDateListener listener) {
         this.mModifyDateListener = listener;
+    }
+
+    //  验证版本
+    public void checkVersion() {
+        Request.Builder builder = new Request.Builder();
+        builder.url(Urls.URL_MANAGER_CHECK_VERSION);
+        mRequest = builder.build();
+        Log.i(TAG, "getQualityCount: url-->" + mRequest.url());
+        Call call = mOkHttpClient.newCall(mRequest);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                if (null == mOnCheckVersionListener) {
+                    throw new NullPointerException("OnCheckVersionListener is null");
+                }
+                mOnCheckVersionListener.onFailure();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (null == mOnCheckVersionListener) {
+                    throw new NullPointerException("OnCheckVersionListener is null");
+                }
+                mOnCheckVersionListener.onSuccess(response.body().string());
+            }
+        });
+    }
+
+    public void setOnOnCheckVersionListener(OnCheckVersionListener listener) {
+        this.mOnCheckVersionListener = listener;
     }
 
 }

@@ -42,4 +42,5 @@ public class Urls {
     public static final String URL_MANAGER_PENDED_DETAILS = IP + "/dispatch4AppController/getOrderInfoByOrderNo?";
     public static final String URL_MANAGER_PENDED_DETAILS_FOR_PUSH = IP + "/dispatch4AppController/getOrderInfoByOrderNoForPush?";
     public static final String URL_MANAGER_MODIFY_DATE = IP + "/dispatch4AppController/changeDoorDateByOrderNo?";
+    public static final String URL_MANAGER_CHECK_VERSION = IP + "/dispatch4AppController/getAppVersion";
 }
