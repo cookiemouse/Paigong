@@ -213,7 +213,6 @@ public class PendingAdapter extends BaseAdapter {
                 }
             }
         }else {
-            viewHolder.llPend.setVisibility(View.VISIBLE);
             viewHolder.tvModifyReason.setVisibility(View.VISIBLE);
             viewHolder.tvModifyDate.setVisibility(View.VISIBLE);
 
