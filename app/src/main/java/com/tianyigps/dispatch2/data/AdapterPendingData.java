@@ -25,12 +25,14 @@ public class AdapterPendingData {
     private int finishWirelessNum;
     private int remoFinWiredNum;
     private int remoFinWirelessNum;
+    private int reviseFlag;
+    private int reviseStatus;
 
     public AdapterPendingData(String order, String name, String contactName, String contactPhone
             , long time, String address, int orderType
             , int lineNumber, int linelessNumber, int orderId, int orderStatus, int node
             , String modifyTime, String modifyReason, String backReason, String eName, String phoneNumber, String jobNo
-            , int finishWiredNum, int finishWirelessNum, int remoFinWiredNum, int remoFinWirelessNum) {
+            , int finishWiredNum, int finishWirelessNum, int remoFinWiredNum, int remoFinWirelessNum, int reviseFlag, int reviseStatus) {
         this.order = order;
         this.name = name;
         this.contactName = contactName;
@@ -53,13 +55,15 @@ public class AdapterPendingData {
         this.finishWirelessNum = finishWirelessNum;
         this.remoFinWiredNum = remoFinWiredNum;
         this.remoFinWirelessNum = remoFinWirelessNum;
+        this.reviseFlag = reviseFlag;
+        this.reviseStatus = reviseStatus;
     }
 
     public AdapterPendingData(String order, String name, String contactName, String contactPhone, long time
             , String address, int orderType, int lineNumber, int linelessNumber, int wireRemove, int wirelessRemove
             , int orderId, int orderStatus, int note, String modifyTime, String modifyReason, String backReason
             , String eName, String phoneNumber, String jobNo
-            , int finishWiredNum, int finishWirelessNum, int remoFinWiredNum, int remoFinWirelessNum) {
+            , int finishWiredNum, int finishWirelessNum, int remoFinWiredNum, int remoFinWirelessNum, int reviseFlag, int reviseStatus) {
         this.order = order;
         this.name = name;
         this.contactName = contactName;
@@ -84,6 +88,8 @@ public class AdapterPendingData {
         this.finishWirelessNum = finishWirelessNum;
         this.remoFinWiredNum = remoFinWiredNum;
         this.remoFinWirelessNum = remoFinWirelessNum;
+        this.reviseFlag = reviseFlag;
+        this.reviseStatus = reviseStatus;
     }
 
     public String getOrder() {
@@ -276,5 +282,21 @@ public class AdapterPendingData {
 
     public void setRemoFinWirelessNum(int remoFinWirelessNum) {
         this.remoFinWirelessNum = remoFinWirelessNum;
+    }
+
+    public int getReviseFlag() {
+        return reviseFlag;
+    }
+
+    public void setReviseFlag(int reviseFlag) {
+        this.reviseFlag = reviseFlag;
+    }
+
+    public int getReviseStatus() {
+        return reviseStatus;
+    }
+
+    public void setReviseStatus(int reviseStatus) {
+        this.reviseStatus = reviseStatus;
     }
 }

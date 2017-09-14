@@ -91,6 +91,7 @@ public class PendingAdapter extends BaseAdapter {
             viewHolder.tvStatus = view.findViewById(R.id.tv_item_pending_order_status);
             viewHolder.tvModifyDate = view.findViewById(R.id.tv_item_pending_modify_date);
             viewHolder.tvModifyReason = view.findViewById(R.id.tv_item_pending_modify_reason);
+            viewHolder.tvModify = view.findViewById(R.id.tv_item_pending_modify);
             viewHolder.tvRed = view.findViewById(R.id.tv_item_pending_red);
             viewHolder.tvBackReason = view.findViewById(R.id.tv_item_pending_back);
             viewHolder.rlContact = view.findViewById(R.id.rl_item_pending_contact);
@@ -120,6 +121,19 @@ public class PendingAdapter extends BaseAdapter {
         viewHolder.tvWirelessC.setText("" + data.getFinishWirelessNum());
         viewHolder.tvRemoveWireC.setText("" + data.getRemoFinWiredNum());
         viewHolder.tvRemoveWirelessC.setText("" + data.getRemoFinWirelessNum());
+
+        if (data.getReviseFlag() == 1) {
+            viewHolder.tvModify.setVisibility(View.VISIBLE);
+        } else {
+            viewHolder.tvModify.setVisibility(View.GONE);
+        }
+
+        if (data.getReviseStatus() == 1) {
+            viewHolder.tvRed.setVisibility(View.VISIBLE);
+            viewHolder.tvModify.setVisibility(View.GONE);
+        } else {
+            viewHolder.tvRed.setVisibility(View.GONE);
+        }
 
         String orderType;
         switch (data.getOrderType()) {
@@ -212,7 +226,7 @@ public class PendingAdapter extends BaseAdapter {
                     Log.i(TAG, "onSuccess: orderType.default-->" + data.getOrderType());
                 }
             }
-        }else {
+        } else {
             viewHolder.tvModifyReason.setVisibility(View.VISIBLE);
             viewHolder.tvModifyDate.setVisibility(View.VISIBLE);
 
@@ -319,7 +333,7 @@ public class PendingAdapter extends BaseAdapter {
         private TextView tvOrderNo, tvName, tvTime, tvAddress, tvOrderType, tvWire, tvWireless, tvWorkerName, tvStatus;
         private TextView tvWireRemove, tvWirelessRemove;
         private TextView tvModifyDate, tvModifyReason;
-        private TextView tvRed;
+        private TextView tvModify, tvRed;
         private TextView tvRemoveTitle;
         private TextView tvBackReason;
         private TextView tvWireC, tvWirelessC, tvRemoveWireC, tvRemoveWirelessC;

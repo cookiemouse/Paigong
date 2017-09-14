@@ -107,6 +107,7 @@ public class PendingBean {
         private int removeWirelessNum;
         private String city;
         private int reviseFlag;
+        private int reviseStatus;
         private String orderNo;
         private long doorTime;
         private long reviseTime;
@@ -120,6 +121,15 @@ public class PendingBean {
         private String phoneNo;
         private String jobNo;
         private int orderId;
+
+
+        public int getReviseStatus() {
+            return reviseStatus;
+        }
+
+        public void setReviseStatus(int reviseStatus) {
+            this.reviseStatus = reviseStatus;
+        }
 
         public String getContactPhone() {
             return contactPhone;

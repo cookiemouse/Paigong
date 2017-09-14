@@ -361,7 +361,9 @@ public class PendingFragment extends Fragment {
                                 , objBean.getFinishWiredNum()
                                 , objBean.getFinishWirelessNum()
                                 , objBean.getRemoFinWiredNum()
-                                , objBean.getRemoFinWirelessNum());
+                                , objBean.getRemoFinWirelessNum()
+                                , objBean.getReviseFlag()
+                                , objBean.getReviseStatus());
                     } else {
                         data = new AdapterPendingData(objBean.getOrderNo()
                                 , custName
@@ -384,7 +386,9 @@ public class PendingFragment extends Fragment {
                                 , objBean.getFinishWiredNum()
                                 , objBean.getFinishWirelessNum()
                                 , objBean.getRemoFinWiredNum()
-                                , objBean.getRemoFinWirelessNum());
+                                , objBean.getRemoFinWirelessNum()
+                                , objBean.getReviseFlag()
+                                , objBean.getReviseStatus());
                     }
                     mAdapterPendingDataList.add(data);
                 }
