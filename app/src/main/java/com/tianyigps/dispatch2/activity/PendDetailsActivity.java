@@ -348,15 +348,30 @@ public class PendDetailsActivity extends Activity {
                     }
                     mAdapterPendDetailsDataList.add(new AdapterPendDetailsData(R.drawable.ic_modify_date_return, "退单原因", backReason));
                 }
-                if (Data.NODE_2 == mNode){
-                    String time = new TimeFormatU().millisToDate2(nodeBean.getReviseTime());
-                    String backReason;
-                    if (RegularU.isEmpty(nodeBean.getReasonFilled())) {
-                        backReason = nodeBean.getReasonChoosed();
+                if (Data.NODE_2 == mNode) {
+                    if (mOrderStatusGet == Data.STATUS_3) {
+                        String time = new TimeFormatU().millisToDate2(nodeBean.getReviseTime());
+                        String backReason;
+                        if (RegularU.isEmpty(nodeBean.getReasonFilled())) {
+                            backReason = nodeBean.getReasonChoosed();
+                        } else {
+                            backReason = nodeBean.getReasonFilled();
+                        }
+                        mAdapterPendDetailsDataList.add(new AdapterPendDetailsData(R.drawable.ic_modify_date_reason, time, backReason));
+
+                        String engineer = engineerBean.getJobNo() + " " + engineerBean.getName();
+                        String phone = engineerBean.getPhoneNo();
+                        mAdapterPendDetailsDataList.add(new AdapterPendDetailsData(R.drawable.ic_modify_date_engineer, engineer, phone));
                     } else {
-                        backReason = nodeBean.getReasonFilled();
+                        String time = new TimeFormatU().millisToDate2(nodeBean.getReviseTime());
+                        String backReason;
+                        if (RegularU.isEmpty(nodeBean.getReasonFilled())) {
+                            backReason = nodeBean.getReasonChoosed();
+                        } else {
+                            backReason = nodeBean.getReasonFilled();
+                        }
+                        mAdapterPendDetailsDataList.add(new AdapterPendDetailsData(R.drawable.ic_modify_date_pass, time, backReason));
                     }
-                    mAdapterPendDetailsDataList.add(new AdapterPendDetailsData(R.drawable.ic_modify_date_pass, time, backReason));
                 }
                 if (Data.NODE_8 == mNode || Data.NODE_9 == mNode || Data.NODE_10 == mNode
                         || Data.NODE_11 == mNode || Data.NODE_14 == mNode) {
