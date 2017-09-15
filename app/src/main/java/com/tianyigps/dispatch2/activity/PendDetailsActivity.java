@@ -72,7 +72,8 @@ public class PendDetailsActivity extends Activity {
     private CycleProgressView mCycleProgressView;
     private FrameLayout mFrameLayoutCycle;
 
-    private TextView mTextViewContact, mTextViewContactPhone, mTextViewDoorTime, mTextViewAddress, mTextViewModify, mTextViewRemarks, mTextViewInstallType, mTextViewInstallContent, mTextViewInfoTitle, mTextViewInfoContent, mTextViewRemoveContent;
+    private TextView mTextViewContact, mTextViewContactPhone, mTextViewDoorTime, mTextViewAddress, mTextViewModify, mTextViewRemarks, mTextViewInstallType, mTextViewInstallContent, mTextViewInfoTitle, mTextViewInfoContent, mTextViewRemoveContent,
+            mTextViewRemoveTitle, mTextViewRemoveModify;
 
     private RelativeLayout mRelativeLayoutRemove;
 
@@ -82,7 +83,7 @@ public class PendDetailsActivity extends Activity {
 
     private Button mButtonPend;
 
-    private String mContact, mContactPhone, mAddress, mRemarks, mInstallType, mInstallContent = "", mInfoTitle, mInfoContent = "", mRemoveContent = "";
+    private String mContact, mContactPhone, mAddress, mRemarks, mInstallType, mInstallContent = "", mInfoTitle, mInfoContent = "", mRemoveContent = "", mRemoveModifyContent = "";
     private long mDoorTime, mCreateTime;
     private int mOrderStatusGet;
     private int mNode, mReviseStatus;
@@ -210,6 +211,8 @@ public class PendDetailsActivity extends Activity {
         mTextViewInfoTitle = findViewById(R.id.tv_layout_pend_details_content_info_title);
         mTextViewRemoveContent = findViewById(R.id.tv_layout_pend_details_content_remove_content);
         mTextViewInfoContent = findViewById(R.id.tv_layout_pend_details_content_info_content);
+        mTextViewRemoveTitle = findViewById(R.id.tv_layout_pend_details_content_order_remove_title);
+        mTextViewRemoveModify = findViewById(R.id.tv_layout_pend_details_content_order_remove_content);
 
         mListView = findViewById(R.id.lv_layout_pend_content);
         mAdapterPendDetailsDataList = new ArrayList<>();
@@ -345,18 +348,42 @@ public class PendDetailsActivity extends Activity {
                     }
                     mAdapterPendDetailsDataList.add(new AdapterPendDetailsData(R.drawable.ic_modify_date_return, "退单原因", backReason));
                 }
-                if (Data.NODE_8 == mNode || Data.NODE_9 == mNode || Data.NODE_10 == mNode || Data.NODE_11 == mNode || Data.NODE_14 == mNode) {
+                if (Data.NODE_8 == mNode || Data.NODE_9 == mNode || Data.NODE_10 == mNode
+                        || Data.NODE_11 == mNode || Data.NODE_14 == mNode) {
                     String engineer = engineerBean.getJobNo() + " " + engineerBean.getName();
                     String phone = engineerBean.getPhoneNo();
                     mAdapterPendDetailsDataList.add(new AdapterPendDetailsData(R.drawable.ic_modify_date_engineer, engineer, phone));
                 }
+                if (Data.NODE_12 == mNode) {
+                    String engineer = engineerBean.getJobNo() + " " + engineerBean.getName();
+                    String phone = engineerBean.getPhoneNo();
+                    mAdapterPendDetailsDataList.add(new AdapterPendDetailsData(R.drawable.ic_modify_date_engineer, engineer, phone));
+
+                    String backReason;
+                    if (RegularU.isEmpty(nodeBean.getReasonFilled())) {
+                        backReason = nodeBean.getReasonChoosed();
+                    } else {
+                        backReason = nodeBean.getReasonFilled();
+                    }
+                    mAdapterPendDetailsDataList.add(new AdapterPendDetailsData(R.drawable.ic_modify_date_reason, "安装提交", backReason));
+                }
                 if (Data.NODE_5 == mNode) {
-                    String reason = nodeBean.getReasonChoosed() + "，" + nodeBean.getReasonFilled();
-                    mAdapterPendDetailsDataList.add(new AdapterPendDetailsData(R.drawable.ic_modify_date_reason, "取消原因", reason));
+                    String backReason;
+                    if (RegularU.isEmpty(nodeBean.getReasonFilled())) {
+                        backReason = nodeBean.getReasonChoosed();
+                    } else {
+                        backReason = nodeBean.getReasonFilled();
+                    }
+                    mAdapterPendDetailsDataList.add(new AdapterPendDetailsData(R.drawable.ic_modify_date_reason, "取消原因", backReason));
                 }
                 if (Data.NODE_13 == mNode) {
-                    String reason = nodeBean.getReasonChoosed() + "，" + nodeBean.getReasonFilled();
-                    mAdapterPendDetailsDataList.add(new AdapterPendDetailsData(R.drawable.ic_modify_date_return, "退回客户", reason));
+                    String backReason;
+                    if (RegularU.isEmpty(nodeBean.getReasonFilled())) {
+                        backReason = nodeBean.getReasonChoosed();
+                    } else {
+                        backReason = nodeBean.getReasonFilled();
+                    }
+                    mAdapterPendDetailsDataList.add(new AdapterPendDetailsData(R.drawable.ic_modify_date_return, "退回客户", backReason));
                 }
                 if (Data.STATUS_2 == mOrderStatusGet) {
                     String reason = objBean.getPartSubReason();
@@ -401,7 +428,7 @@ public class PendDetailsActivity extends Activity {
                     case 1: {
                         mInstallType = "安装";
                         mInfoTitle = "安装车辆信息";
-                        if (Data.NODE_14 == mNode) {
+                        if (Data.NODE_14 == mNode || Data.NODE_12 == mNode) {
                             mInstallContent += "派单：有线" + objBean.getWiredNum() + "个，无线" + objBean.getWirelessNum() + "个";
                             mInstallContent += "\n完成：有线" + objBean.getFinishWiredNum() + "个，无线" + objBean.getFinishWirelessNum() + "个";
                         } else {
@@ -412,7 +439,7 @@ public class PendDetailsActivity extends Activity {
                     case 2: {
                         mInstallType = "维修";
                         mInfoTitle = "维修车辆信息";
-                        if (Data.NODE_14 == mNode) {
+                        if (Data.NODE_14 == mNode || Data.NODE_12 == mNode) {
                             mInstallContent += "派单：有线" + objBean.getWiredNum() + "个，无线" + objBean.getWirelessNum() + "个";
                             mInstallContent += "\n完成：有线" + objBean.getFinishWiredNum() + "个，无线" + objBean.getFinishWirelessNum() + "个";
                         } else {
@@ -421,12 +448,12 @@ public class PendDetailsActivity extends Activity {
                         break;
                     }
                     case 3: {
-                        mInstallType = "拆改";
+                        mInstallType = "拆除";
                         mInfoTitle = "安装车辆信息";
-                        if (Data.NODE_14 == mNode) {
-                            mInstallContent += "拆除 派单：有线" + objBean.getRemoveWiredNum() + "个，无线" + objBean.getRemoveWirelessNum() + "个";
-                            mInstallContent += "\n完成：有线" + objBean.getRemoFinWiredNum() + "个，无线" + objBean.getRemoFinWirelessNum() + "个";
-                            mInstallContent += "\n安装 派单：有线" + objBean.getWiredNum() + "个，无线" + objBean.getWirelessNum() + "个";
+                        if (Data.NODE_14 == mNode || Data.NODE_12 == mNode) {
+                            mRemoveModifyContent += "派单：有线" + objBean.getRemoveWiredNum() + "个，无线" + objBean.getRemoveWirelessNum() + "个";
+                            mRemoveModifyContent += "\n完成：有线" + objBean.getRemoFinWiredNum() + "个，无线" + objBean.getRemoFinWirelessNum() + "个";
+                            mInstallContent += "派单：有线" + objBean.getWiredNum() + "个，无线" + objBean.getWirelessNum() + "个";
                             mInstallContent += "\n完成：有线" + objBean.getFinishWiredNum() + "个，无线" + objBean.getFinishWirelessNum() + "个";
                         } else {
                             mInstallContent += "拆除：有线" + objBean.getRemoveWiredNum() + "个，无线" + objBean.getRemoveWirelessNum() + "个\n";
@@ -713,7 +740,16 @@ public class PendDetailsActivity extends Activity {
                     mTextViewInstallContent.setText(mInstallContent);
                     mTextViewInfoTitle.setText(mInfoTitle);
                     mTextViewInfoContent.setText(mInfoContent);
-                    if (mInstallType.equals("拆改")) {
+                    if (mInstallType.equals("拆除")) {
+                        if (Data.NODE_12 == mNode || Data.NODE_14 == mNode) {
+                            mTextViewRemoveTitle.setVisibility(View.VISIBLE);
+                            mTextViewRemoveModify.setVisibility(View.VISIBLE);
+                            mTextViewRemoveModify.setText(mRemoveModifyContent);
+                        } else {
+                            mTextViewRemoveTitle.setVisibility(View.GONE);
+                            mTextViewRemoveModify.setVisibility(View.GONE);
+                        }
+                        mTextViewInstallType.setText("安装");
                         mRelativeLayoutRemove.setVisibility(View.VISIBLE);
                         mTextViewRemoveContent.setText(mRemoveContent);
                     } else {
@@ -739,6 +775,7 @@ public class PendDetailsActivity extends Activity {
 
                     if (Data.NODE_14 == mNode
                             || Data.NODE_13 == mNode
+                            || Data.NODE_12 == mNode
                             || Data.NODE_10 == mNode
                             || Data.NODE_9 == mNode
                             || Data.NODE_8 == mNode

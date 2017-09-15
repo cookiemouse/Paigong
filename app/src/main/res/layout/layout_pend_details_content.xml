@@ -17,8 +17,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_marginTop="@dimen/dp_8"
+        android:orientation="horizontal"
         android:paddingLeft="@dimen/dp_8"
         android:paddingRight="@dimen/dp_8">
 
@@ -195,13 +195,35 @@
                     android:src="@drawable/ic_order_details_install"/>
 
                 <TextView
-                    android:id="@+id/tv_layout_pend_details_content_order_install_title"
+                    android:id="@+id/tv_layout_pend_details_content_order_remove_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignTop="@+id/iv_layout_pend_details_install"
                     android:layout_toEndOf="@+id/iv_layout_pend_details_install"
                     android:layout_toRightOf="@+id/iv_layout_pend_details_install"
-                    android:text="拆改"
+                    android:visibility="gone"
+                    android:text="拆除"
+                    android:textColor="@color/colorBlueTheme"/>
+
+                <TextView
+                    android:id="@+id/tv_layout_pend_details_content_order_remove_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/tv_layout_pend_details_content_order_remove_title"
+                    android:layout_alignStart="@+id/tv_layout_pend_details_content_order_remove_title"
+                    android:layout_below="@+id/tv_layout_pend_details_content_order_remove_title"
+                    android:layout_marginBottom="@dimen/dp_8"
+                    android:visibility="gone"
+                    android:text="sadfasdf"/>
+
+                <TextView
+                    android:id="@+id/tv_layout_pend_details_content_order_install_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tv_layout_pend_details_content_order_remove_content"
+                    android:layout_toEndOf="@+id/iv_layout_pend_details_install"
+                    android:layout_toRightOf="@+id/iv_layout_pend_details_install"
+                    android:text="安装"
                     android:textColor="@color/colorBlueTheme"/>
 
                 <TextView
@@ -211,7 +233,7 @@
                     android:layout_alignLeft="@+id/tv_layout_pend_details_content_order_install_title"
                     android:layout_alignStart="@+id/tv_layout_pend_details_content_order_install_title"
                     android:layout_below="@+id/tv_layout_pend_details_content_order_install_title"
-                    android:text=""/>
+                    android:text="asdf"/>
             </RelativeLayout>
 
             <RelativeLayout
