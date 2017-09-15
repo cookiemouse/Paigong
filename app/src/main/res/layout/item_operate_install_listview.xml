@@ -12,7 +12,9 @@
         android:layout_margin="@dimen/dp_8"
         android:background="@drawable/bg_item"
         android:descendantFocusability="beforeDescendants"
-        android:elevation="@dimen/dp_4">
+        android:elevation="@dimen/dp_4"
+        android:paddingBottom="@dimen/dp_40">
+
         <requestFocus/>
 
         <TextView
@@ -21,6 +23,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
+            android:layout_marginBottom="@dimen/dp_16"
             android:layout_marginEnd="@dimen/dp_16"
             android:layout_marginRight="@dimen/dp_16"
             android:layout_marginTop="@dimen/dp_16"
@@ -78,9 +81,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/rl_item_operate_install_old"
+            android:layout_marginTop="@dimen/dp_16"
             android:focusable="true"
             android:focusableInTouchMode="true"
-            android:layout_marginTop="@dimen/dp_16"
             >
 
             <ImageView
@@ -109,11 +112,11 @@
                 android:layout_toEndOf="@+id/iv_item_operate_install_new"
                 android:layout_toRightOf="@+id/iv_item_operate_install_new"
                 android:background="@null"
-                android:hint="请输入设备号（至少6位）"
                 android:ellipsize="end"
-                android:singleLine="true"
+                android:hint="请输入设备号（至少6位）"
                 android:lines="1"
                 android:maxWidth="@dimen/dp_240"
+                android:singleLine="true"
                 android:textSize="@dimen/sp_14"/>
 
             <ImageView
@@ -185,11 +188,11 @@
             android:layout_toEndOf="@+id/iv_item_operate_install_position"
             android:layout_toRightOf="@+id/iv_item_operate_install_position"
             android:background="@null"
-            android:hint="@string/enter_install_place"
             android:ellipsize="end"
+            android:hint="@string/enter_install_place"
             android:singleLine="true"
             android:textSize="@dimen/sp_14">
-            <!--<requestFocus/>-->
+            <requestFocus/>
         </EditText>
 
         <ImageView
@@ -219,6 +222,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_0_5"
             android:layout_below="@+id/iv_item_operate_install_position"
+            android:layout_marginBottom="@dimen/dp_16"
             android:layout_marginLeft="@dimen/dp_40"
             android:layout_marginStart="@dimen/dp_40"
             android:layout_marginTop="@dimen/dp_4"
