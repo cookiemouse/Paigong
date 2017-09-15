@@ -320,7 +320,7 @@ public class PendDetailsActivity extends Activity {
                     if (mReviseStatus == 2) {
                         mAdapterPendDetailsDataList.add(new AdapterPendDetailsData(R.drawable.ic_modify_date_pass
                                 , "改约通过"
-                                , "" + nodeBean.getReviseTime()));
+                                , "" + new TimeFormatU().millisToDate2(nodeBean.getReviseTime())));
                     } else {
                         mAdapterPendDetailsDataList.add(new AdapterPendDetailsData(R.drawable.ic_modify_date_uppass
                                 , "改约不通过"
@@ -347,6 +347,16 @@ public class PendDetailsActivity extends Activity {
                         backReason = nodeBean.getReasonFilled();
                     }
                     mAdapterPendDetailsDataList.add(new AdapterPendDetailsData(R.drawable.ic_modify_date_return, "退单原因", backReason));
+                }
+                if (Data.NODE_2 == mNode){
+                    String time = new TimeFormatU().millisToDate2(nodeBean.getReviseTime());
+                    String backReason;
+                    if (RegularU.isEmpty(nodeBean.getReasonFilled())) {
+                        backReason = nodeBean.getReasonChoosed();
+                    } else {
+                        backReason = nodeBean.getReasonFilled();
+                    }
+                    mAdapterPendDetailsDataList.add(new AdapterPendDetailsData(R.drawable.ic_modify_date_pass, time, backReason));
                 }
                 if (Data.NODE_8 == mNode || Data.NODE_9 == mNode || Data.NODE_10 == mNode
                         || Data.NODE_11 == mNode || Data.NODE_14 == mNode) {
@@ -779,7 +789,8 @@ public class PendDetailsActivity extends Activity {
                             || Data.NODE_10 == mNode
                             || Data.NODE_9 == mNode
                             || Data.NODE_8 == mNode
-                            || Data.NODE_5 == mNode) {
+                            || Data.NODE_5 == mNode
+                            || Data.NODE_2 == mNode) {
                         mTextViewModify.setVisibility(View.GONE);
                     } else {
                         mTextViewModify.setVisibility(View.VISIBLE);
