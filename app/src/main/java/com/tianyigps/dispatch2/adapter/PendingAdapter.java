@@ -150,6 +150,7 @@ public class PendingAdapter extends BaseAdapter {
             case 3: {
                 orderType = "安装：";
                 viewHolder.llRemove.setVisibility(View.VISIBLE);
+                viewHolder.tvRemoveTitle.setText("拆除：");
                 viewHolder.tvWireRemove.setText("" + data.getWireRemove());
                 viewHolder.tvWirelessRemove.setText("" + data.getWirelessRemove());
                 break;
@@ -230,7 +231,6 @@ public class PendingAdapter extends BaseAdapter {
             viewHolder.tvModifyReason.setVisibility(View.VISIBLE);
             viewHolder.tvModifyDate.setVisibility(View.VISIBLE);
 
-            viewHolder.rlContact.setVisibility(View.GONE);
             viewHolder.llInstallComplete.setVisibility(View.GONE);
             viewHolder.llRemoveComplete.setVisibility(View.GONE);
         }
