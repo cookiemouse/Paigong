@@ -382,6 +382,7 @@ public class CustomSignActivity extends BaseActivity {
         }
         if (isNullOrder) {
             carInfoOutList.clear();
+            return "";
         }
         Gson gson = new Gson();
         String json = gson.toJson(carInfoOutList);
@@ -460,6 +461,7 @@ public class CustomSignActivity extends BaseActivity {
         }
         if (isNullOrder) {
             terminalInfoOurList.clear();
+            return "";
         }
 
         Gson gson = new Gson();
