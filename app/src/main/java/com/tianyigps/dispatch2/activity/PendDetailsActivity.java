@@ -374,10 +374,19 @@ public class PendDetailsActivity extends Activity {
                     }
                 }
                 if (Data.NODE_8 == mNode || Data.NODE_9 == mNode || Data.NODE_10 == mNode
-                        || Data.NODE_11 == mNode || Data.NODE_14 == mNode || Data.STATUS_3 == mOrderStatusGet) {
+                        || Data.NODE_11 == mNode
+                        || Data.STATUS_3 == mOrderStatusGet) {
                     String engineer = engineerBean.getJobNo() + " " + engineerBean.getName();
                     String phone = engineerBean.getPhoneNo();
                     mAdapterPendDetailsDataList.add(new AdapterPendDetailsData(R.drawable.ic_modify_date_engineer, engineer, phone));
+                }
+                //  空单
+                if (Data.NODE_14 == mNode) {
+                    if (Data.STATUS_2 != mOrderStatusGet) {
+                        String engineer = engineerBean.getJobNo() + " " + engineerBean.getName();
+                        String phone = engineerBean.getPhoneNo();
+                        mAdapterPendDetailsDataList.add(new AdapterPendDetailsData(R.drawable.ic_modify_date_engineer, engineer, phone));
+                    }
                 }
                 if (Data.NODE_12 == mNode) {
                     String engineer = engineerBean.getJobNo() + " " + engineerBean.getName();
@@ -414,7 +423,10 @@ public class PendDetailsActivity extends Activity {
                     mAdapterPendDetailsDataList.add(new AdapterPendDetailsData(R.drawable.ic_modify_date_return, "退回客户", backReason));
                 }
                 if (Data.STATUS_2 == mOrderStatusGet) {
-                    String reason = objBean.getPartSubReason();
+                    String reason = nodeBean.getReasonFilled();
+                    if (RegularU.isEmpty(reason)) {
+                        reason = "";
+                    }
                     mAdapterPendDetailsDataList.add(new AdapterPendDetailsData(R.drawable.ic_modify_date_reason, "空单原因", reason));
                 }
 
