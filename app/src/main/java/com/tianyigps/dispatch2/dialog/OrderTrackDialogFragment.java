@@ -263,8 +263,9 @@ public class OrderTrackDialogFragment extends DialogFragment {
             }
             case 13: {
                 info += "退回客户\n";       //ok
-                if (!RegularU.isEmpty(orderNodeBean.getCheckFalseReason())) {
-                    info += orderNodeBean.getCheckFalseReason();
+                if (!RegularU.isEmpty(orderNodeBean.getReasonChoosed())) {
+                    info += orderNodeBean.getReasonChoosed();
+                    info += "：";
                 }
                 info += orderNodeBean.getReasonFilled();
                 break;

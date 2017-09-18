@@ -405,9 +405,9 @@ public class PendDetailsActivity extends Activity {
                     String backReason = "";
                     if (!nodeBean.getReasonChoosed().equals(getString(R.string.other_reason))) {
                         backReason += nodeBean.getReasonChoosed();
+                        backReason += "：";
                     }
                     if (!RegularU.isEmpty(nodeBean.getReasonFilled())) {
-                        backReason += "：";
                         backReason += nodeBean.getReasonFilled();
                     }
 
