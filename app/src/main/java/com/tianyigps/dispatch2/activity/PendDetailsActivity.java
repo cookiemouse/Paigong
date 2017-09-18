@@ -74,6 +74,7 @@ public class PendDetailsActivity extends Activity {
 
     private TextView mTextViewContact, mTextViewContactPhone, mTextViewDoorTime, mTextViewAddress, mTextViewModify, mTextViewRemarks, mTextViewInstallType, mTextViewInstallContent, mTextViewInfoTitle, mTextViewInfoContent, mTextViewRemoveContent,
             mTextViewRemoveTitle, mTextViewRemoveModify;
+    private TextView mTextViewDoorTimeModify;
 
     private RelativeLayout mRelativeLayoutRemove;
 
@@ -85,7 +86,7 @@ public class PendDetailsActivity extends Activity {
 
     private String mContact, mContactPhone, mAddress, mRemarks, mInstallType, mInstallContent = "", mInfoTitle, mInfoContent = "", mRemoveContent = "", mRemoveModifyContent = "";
     private long mDoorTime, mCreateTime;
-    private int mOrderStatusGet;
+    private int mOrderStatusGet, mReviseFlag;
     private int mNode, mReviseStatus;
     private boolean isModify;
 
@@ -203,6 +204,7 @@ public class PendDetailsActivity extends Activity {
         mTextViewContact = findViewById(R.id.tv_layout_pend_details_content_contact_name);
         mTextViewContactPhone = findViewById(R.id.tv_layout_pend_details_content_contact_phone);
         mTextViewDoorTime = findViewById(R.id.tv_layout_pend_details_content_time);
+        mTextViewDoorTimeModify = findViewById(R.id.tv_layout_pend_details_content_time_modify);
         mTextViewAddress = findViewById(R.id.tv_layout_pend_details_content_order_address);
         mTextViewModify = findViewById(R.id.tv_layout_pend_details_content_modify);
         mTextViewRemarks = findViewById(R.id.tv_layout_pend_details_content_order_remarks_content);
@@ -314,8 +316,9 @@ public class PendDetailsActivity extends Activity {
                 mOrderStatusGet = objBean.getOrderStatus();
                 mNode = nodeBean.getNode();
                 mReviseStatus = nodeBean.getReviseStatus();
+                mReviseFlag = objBean.getReviseFlag();
 
-                Log.i(TAG, "onSuccess: mReviseStatus-->" + mReviseStatus);
+                Log.i(TAG, "onSuccess: mReviseFlag-->" + mReviseFlag);
                 if (Data.NODE_3 == mNode) {
                     if (mReviseStatus == 2) {
                         mAdapterPendDetailsDataList.add(new AdapterPendDetailsData(R.drawable.ic_modify_date_pass
@@ -374,8 +377,7 @@ public class PendDetailsActivity extends Activity {
                     }
                 }
                 if (Data.NODE_8 == mNode || Data.NODE_9 == mNode || Data.NODE_10 == mNode
-                        || Data.NODE_11 == mNode
-                        || Data.STATUS_3 == mOrderStatusGet) {
+                        || Data.NODE_11 == mNode) {
                     String engineer = engineerBean.getJobNo() + " " + engineerBean.getName();
                     String phone = engineerBean.getPhoneNo();
                     mAdapterPendDetailsDataList.add(new AdapterPendDetailsData(R.drawable.ic_modify_date_engineer, engineer, phone));
@@ -389,9 +391,11 @@ public class PendDetailsActivity extends Activity {
                     }
                 }
                 if (Data.NODE_12 == mNode) {
-                    String engineer = engineerBean.getJobNo() + " " + engineerBean.getName();
-                    String phone = engineerBean.getPhoneNo();
-                    mAdapterPendDetailsDataList.add(new AdapterPendDetailsData(R.drawable.ic_modify_date_engineer, engineer, phone));
+                    if (mOrderStatusGet != Data.STATUS_3) {
+                        String engineer = engineerBean.getJobNo() + " " + engineerBean.getName();
+                        String phone = engineerBean.getPhoneNo();
+                        mAdapterPendDetailsDataList.add(new AdapterPendDetailsData(R.drawable.ic_modify_date_engineer, engineer, phone));
+                    }
 
                     String backReason;
                     if (RegularU.isEmpty(nodeBean.getReasonFilled())) {
@@ -833,6 +837,13 @@ public class PendDetailsActivity extends Activity {
                         mButtonPend.setVisibility(View.VISIBLE);
                     } else {
                         mButtonPend.setVisibility(View.GONE);
+                    }
+
+                    Log.i(TAG, "handleMessage: mReviseFlag-->" + mReviseFlag);
+                    if (mReviseFlag == 1) {
+                        mTextViewDoorTimeModify.setVisibility(View.VISIBLE);
+                    } else {
+                        mTextViewDoorTimeModify.setVisibility(View.GONE);
                     }
 
                     mPendDetailsAdapter.notifyDataSetChanged();

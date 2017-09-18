@@ -137,13 +137,26 @@
                     android:textColor="@color/colorBlueTheme"/>
 
                 <TextView
+                    android:id="@+id/tv_layout_order_details_content_order_time_modify"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_4"
+                    android:layout_marginStart="@dimen/dp_4"
+                    android:layout_alignTop="@+id/tv_layout_order_details_content_order_time"
+                    android:layout_toEndOf="@+id/tv_layout_order_details_content_order_time"
+                    android:layout_toRightOf="@+id/tv_layout_order_details_content_order_time"
+                    android:visibility="gone"
+                    android:text="(改)"
+                    android:textColor="@color/colorBlueTheme"/>
+
+                <TextView
                     android:id="@+id/tv_layout_order_details_content_order_address"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignLeft="@+id/tv_layout_order_details_content_order_time"
                     android:layout_alignStart="@+id/tv_layout_order_details_content_order_time"
                     android:layout_below="@+id/tv_layout_order_details_content_order_time"
-                    android:text=""/>
+                    android:text="123"/>
             </RelativeLayout>
 
             <RelativeLayout

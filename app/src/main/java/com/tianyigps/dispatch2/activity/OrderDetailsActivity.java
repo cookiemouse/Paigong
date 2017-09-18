@@ -60,7 +60,7 @@ public class OrderDetailsActivity extends Activity {
     private TextView mTextViewOrderName, mTextViewOrderNum, mTextViewCallName, mTextViewTime;
     private TextView mTextViewAddress, mTextViewRemarks, mTextViewInstallTitle, mTextViewInstallContent;
     private TextView mTextViewInfoTitle, mTextViewInfoContent, mTextViewReturnOrder, mTextViewTimeRemain;
-    private TextView mTextViewRemove;
+    private TextView mTextViewRemove, mTextViewDoorTimeModify;
 
     private RelativeLayout mRelativeLayoutRemove;
 
@@ -150,6 +150,7 @@ public class OrderDetailsActivity extends Activity {
         mTextViewOrderNum = findViewById(R.id.tv_layout_order_details_content_order_number);
         mTextViewCallName = findViewById(R.id.tv_layout_order_details_content_order_name);
         mTextViewTime = findViewById(R.id.tv_layout_order_details_content_order_time);
+        mTextViewDoorTimeModify = findViewById(R.id.tv_layout_order_details_content_order_time_modify);
         mTextViewAddress = findViewById(R.id.tv_layout_order_details_content_order_address);
         mTextViewRemarks = findViewById(R.id.tv_layout_order_details_content_order_remarks_content);
         mTextViewInstallTitle = findViewById(R.id.tv_layout_order_details_content_order_install_title);
@@ -296,6 +297,7 @@ public class OrderDetailsActivity extends Activity {
                 mStringDetail = objBean.getRemark();
                 mIntOrderType = objBean.getOrderType();
                 mIntOrderStaus = objBean.getOrderStatus();
+                mIntReviseFlag = objBean.getReviseFlag();
 
                 mIntWireNum = objBean.getWiredNum();
                 mIntWirelessNum = objBean.getWirelessNum();
@@ -561,6 +563,12 @@ public class OrderDetailsActivity extends Activity {
                         mRelativeLayoutRemove.setVisibility(View.VISIBLE);
                     } else {
                         mRelativeLayoutRemove.setVisibility(View.GONE);
+                    }
+
+                    if (mIntReviseFlag == 1) {
+                        mTextViewDoorTimeModify.setVisibility(View.VISIBLE);
+                    } else {
+                        mTextViewDoorTimeModify.setVisibility(View.GONE);
                     }
 
                     if (isChecked) {

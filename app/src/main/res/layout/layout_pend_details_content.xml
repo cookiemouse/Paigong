@@ -123,6 +123,19 @@
                     android:textColor="@color/colorBlueTheme"/>
 
                 <TextView
+                    android:id="@+id/tv_layout_pend_details_content_time_modify"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_4"
+                    android:layout_marginStart="@dimen/dp_4"
+                    android:layout_alignTop="@+id/tv_layout_pend_details_content_time"
+                    android:layout_toEndOf="@+id/tv_layout_pend_details_content_time"
+                    android:layout_toRightOf="@+id/tv_layout_pend_details_content_time"
+                    android:text="(改)"
+                    android:visibility="gone"
+                    android:textColor="@color/colorBlueTheme"/>
+
+                <TextView
                     android:id="@+id/tv_layout_pend_details_content_modify"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

@@ -108,6 +108,7 @@ public class PendDetailsBean {
         private int removeWiredNum;
         private int removeWirelessNum;
         private int wiredNum;
+        private int reviseFlag;
         private int wirelessNum;
         private int finishWiredNum;
         private int finishWirelessNum;
@@ -281,6 +282,14 @@ public class PendDetailsBean {
 
         public void setWirelessNum(int wirelessNum) {
             this.wirelessNum = wirelessNum;
+        }
+
+        public int getReviseFlag() {
+            return reviseFlag;
+        }
+
+        public void setReviseFlag(int reviseFlag) {
+            this.reviseFlag = reviseFlag;
         }
 
         public List<OrderCarListBean> getOrderCarList() {

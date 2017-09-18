@@ -58,6 +58,7 @@ public class WorkerFragmentContentActivity extends AppCompatActivity implements 
 
     //  广播接收器
     private BroadcastReceiver mBroadcastReceiver;
+    private Intent mIntentReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,7 +90,9 @@ public class WorkerFragmentContentActivity extends AppCompatActivity implements 
         if (null != mBitmap) {
             mBitmap.recycle();
         }
-        unregisterReceiver(mBroadcastReceiver);
+        if (null != mIntentReceiver) {
+            unregisterReceiver(mBroadcastReceiver);
+        }
         super.onDestroy();
     }
 
@@ -226,7 +229,7 @@ public class WorkerFragmentContentActivity extends AppCompatActivity implements 
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(Data.BROAD_FILTER);
         intentFilter.addCategory(Data.BROAD_CATEGORY);
-        registerReceiver(mBroadcastReceiver, intentFilter);
+        mIntentReceiver = registerReceiver(mBroadcastReceiver, intentFilter);
     }
 
     //  设置事件监听

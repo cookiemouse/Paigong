@@ -63,6 +63,7 @@ public class ManagerFragmentContentActivity extends AppCompatActivity implements
 
     //  广播接收器
     private BroadcastReceiver mBroadcastReceiver;
+    private Intent mIntentReceiver;
 
     //  是否有进行中的订单
     private NetworkManager mNetworkManager;
@@ -103,7 +104,9 @@ public class ManagerFragmentContentActivity extends AppCompatActivity implements
         if (null != mBitmap) {
             mBitmap.recycle();
         }
-        unregisterReceiver(mBroadcastReceiver);
+        if (null != mIntentReceiver) {
+            unregisterReceiver(mBroadcastReceiver);
+        }
         super.onDestroy();
     }
 
@@ -217,7 +220,7 @@ public class ManagerFragmentContentActivity extends AppCompatActivity implements
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(Data.BROAD_FILTER);
         intentFilter.addCategory(Data.BROAD_CATEGORY);
-        registerReceiver(mBroadcastReceiver, intentFilter);
+        mIntentReceiver = registerReceiver(mBroadcastReceiver, intentFilter);
     }
 
     //  显示小红点
