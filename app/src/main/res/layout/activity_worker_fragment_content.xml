@@ -31,4 +31,13 @@
             android:layout_height="wrap_content"/>
     </LinearLayout>
 
+    <View
+        android:id="@+id/view_worker_red_dot"
+        android:layout_width="@dimen/dp_32"
+        android:layout_height="@dimen/dp_32"
+        android:background="@color/colorNull"
+        android:layout_marginLeft="@dimen/dp_16"
+        android:layout_marginStart="@dimen/dp_16"
+        android:layout_marginTop="@dimen/dp_20"/>
+
 </FrameLayout>

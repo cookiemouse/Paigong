@@ -149,4 +149,9 @@ public final class Data {
     public static final int NODE_12 = 12; //  部分完成
     public static final int NODE_13 = 13; //  退回客户
     public static final int NODE_14 = 14; //  完成订单
+
+    //  广播接收
+    //  极光推送
+    public static final String BROAD_FILTER = "cn.jpush.android.intent.NOTIFICATION_RECEIVED";
+    public static final String BROAD_CATEGORY = "com.tianyigps.dispatch2";
 }

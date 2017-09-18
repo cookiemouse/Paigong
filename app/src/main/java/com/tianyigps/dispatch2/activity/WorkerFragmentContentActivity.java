@@ -1,8 +1,11 @@
 package com.tianyigps.dispatch2.activity;
 
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -26,6 +29,8 @@ import com.tianyigps.dispatch2.fragment.OrderFragment;
 import com.tianyigps.dispatch2.manager.SharedpreferenceManager;
 import com.tianyigps.dispatch2.utils.BitmapU;
 
+import q.rorbin.badgeview.QBadgeView;
+
 public class WorkerFragmentContentActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "WorkerContentActivity";
@@ -34,6 +39,10 @@ public class WorkerFragmentContentActivity extends AppCompatActivity implements 
 
     private ImageView mImageViewBackground;
     private Bitmap mBitmap;
+
+    //  顶部小红点锚点
+    private View mViewRedDot;
+    private QBadgeView mQBadgeView;
 
     //  底部控件
     private LinearLayout mLinearLayoutOrder, mLinearLayoutHandling, mLinearLayoutHistory, mLinearLayoutMine;
@@ -46,6 +55,9 @@ public class WorkerFragmentContentActivity extends AppCompatActivity implements 
     private HandingFragment mHandingFragment;
     private HandledFragment mHandledFragment;
     private MineFragment mMineFragment;
+
+    //  广播接收器
+    private BroadcastReceiver mBroadcastReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +89,7 @@ public class WorkerFragmentContentActivity extends AppCompatActivity implements 
         if (null != mBitmap) {
             mBitmap.recycle();
         }
+        unregisterReceiver(mBroadcastReceiver);
         super.onDestroy();
     }
 
@@ -150,6 +163,8 @@ public class WorkerFragmentContentActivity extends AppCompatActivity implements 
         mLinearLayoutHistory = (LinearLayout) findViewById(R.id.ll_fragment_content_bottom_history);
         mLinearLayoutMine = (LinearLayout) findViewById(R.id.ll_fragment_content_bottom_mine);
 
+        mViewRedDot = findViewById(R.id.view_worker_red_dot);
+
         mImageViewBackground = (ImageView) findViewById(R.id.iv_activity_worker_fragment_content);
         mBitmap = BitmapU.getBitmap(this, R.drawable.bg_content);
         mImageViewBackground.setImageBitmap(mBitmap);
@@ -172,24 +187,24 @@ public class WorkerFragmentContentActivity extends AppCompatActivity implements 
         mMineFragment = new MineFragment();
 
         Intent intent = getIntent();
-        int showFragment  = intent.getIntExtra(Data.DATA_INTENT_WORKER_FRAGMENT, 0);
-        switch (showFragment){
-            case 0:{
+        int showFragment = intent.getIntExtra(Data.DATA_INTENT_WORKER_FRAGMENT, 0);
+        switch (showFragment) {
+            case 0: {
                 break;
             }
-            case Data.DATA_INTENT_WORKER_FRAGMENT_HANDING:{
+            case Data.DATA_INTENT_WORKER_FRAGMENT_HANDING: {
                 showHandingFragment();
                 return;
             }
-            case Data.DATA_INTENT_WORKER_FRAGMENT_HANDED:{
+            case Data.DATA_INTENT_WORKER_FRAGMENT_HANDED: {
                 showHandFragment();
                 return;
             }
-            case 3:{
+            case 3: {
                 //  mine fragment
                 return;
             }
-            default:{
+            default: {
                 Log.i(TAG, "init: default-->" + showFragment);
             }
         }
@@ -198,6 +213,20 @@ public class WorkerFragmentContentActivity extends AppCompatActivity implements 
         mImageViewOrder.setImageResource(R.drawable.ic_tab_task_selected);
         mTextViewOrder.setTextColor(getResources().getColor(R.color.colorTextSelect));
         showFragment(mOrderFragment);
+
+        mQBadgeView = new QBadgeView(this);
+        mBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                Log.i(TAG, "onReceive: ");
+                showRedDot();
+            }
+        };
+
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(Data.BROAD_FILTER);
+        intentFilter.addCategory(Data.BROAD_CATEGORY);
+        registerReceiver(mBroadcastReceiver, intentFilter);
     }
 
     //  设置事件监听
@@ -206,6 +235,11 @@ public class WorkerFragmentContentActivity extends AppCompatActivity implements 
         mLinearLayoutHandling.setOnClickListener(this);
         mLinearLayoutHistory.setOnClickListener(this);
         mLinearLayoutMine.setOnClickListener(this);
+    }
+
+    //  显示小红点
+    private void showRedDot() {
+        mQBadgeView.bindTarget(mViewRedDot).setBadgeNumber(-1);
     }
 
     //  底部按钮复位
@@ -246,7 +280,7 @@ public class WorkerFragmentContentActivity extends AppCompatActivity implements 
     }
 
     //  显示完成订单Fragment
-    public void showHandFragment(){
+    public void showHandFragment() {
         resetBottomView();
         mImageViewHistory.setImageResource(R.drawable.ic_tab_history_selected);
         mTextViewHistory.setTextColor(getResources().getColor(R.color.colorTextSelect));

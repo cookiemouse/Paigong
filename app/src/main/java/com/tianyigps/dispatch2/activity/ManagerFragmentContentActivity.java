@@ -1,9 +1,15 @@
 package com.tianyigps.dispatch2.activity;
 
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -16,13 +22,19 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.tianyigps.dispatch2.R;
+import com.tianyigps.dispatch2.bean.WorkerHandingBean;
 import com.tianyigps.dispatch2.data.Data;
 import com.tianyigps.dispatch2.fragment.MineFragment;
 import com.tianyigps.dispatch2.fragment.PendedFragment;
 import com.tianyigps.dispatch2.fragment.PendingFragment;
+import com.tianyigps.dispatch2.interfaces.OnGetWorkerOrderHandingListener;
+import com.tianyigps.dispatch2.manager.NetworkManager;
 import com.tianyigps.dispatch2.manager.SharedpreferenceManager;
 import com.tianyigps.dispatch2.utils.BitmapU;
+
+import q.rorbin.badgeview.QBadgeView;
 
 public class ManagerFragmentContentActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -32,6 +44,10 @@ public class ManagerFragmentContentActivity extends AppCompatActivity implements
 
     private ImageView mImageViewBackground;
     private Bitmap mBitmap;
+
+    //  顶部小红点锚点
+    private View mViewRedDot;
+    private QBadgeView mQBadgeView;
 
     //  底部控件
     private LinearLayout mLinearLayoutPending, mLinearLayoutHandled, mLinearLayoutMine;
@@ -44,6 +60,17 @@ public class ManagerFragmentContentActivity extends AppCompatActivity implements
     private PendingFragment mPendingFragment;
     private PendedFragment mPendedFragment;
     private MineFragment mMineFragment;
+
+    //  广播接收器
+    private BroadcastReceiver mBroadcastReceiver;
+
+    //  是否有进行中的订单
+    private NetworkManager mNetworkManager;
+    private int mEid;
+    private String mToken, mUserName;
+    private int mHandingCount = 0;
+
+    private MyHandler myHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +94,7 @@ public class ManagerFragmentContentActivity extends AppCompatActivity implements
     protected void onResume() {
         super.onResume();
         mSharedpreferenceManager.saveUiMode(Data.DATA_LAUNCH_MODE_MANAGER);
+        mNetworkManager.getWorkerOrderHanding(mEid, mToken, mUserName);
     }
 
     @Override
@@ -75,6 +103,7 @@ public class ManagerFragmentContentActivity extends AppCompatActivity implements
         if (null != mBitmap) {
             mBitmap.recycle();
         }
+        unregisterReceiver(mBroadcastReceiver);
         super.onDestroy();
     }
 
@@ -138,6 +167,10 @@ public class ManagerFragmentContentActivity extends AppCompatActivity implements
     private void init() {
         mFrameLayout = (FrameLayout) findViewById(R.id.fl_activity_manager_content);
 
+        mViewRedDot = findViewById(R.id.view_manager_red_dot);
+        mQBadgeView = new QBadgeView(this);
+        mQBadgeView.bindTarget(mViewRedDot);
+
         mImageViewBackground = (ImageView) findViewById(R.id.iv_activity_manager_fragment_content);
         mBitmap = BitmapU.getBitmap(this, R.drawable.bg_content);
         mImageViewBackground.setImageBitmap(mBitmap);
@@ -164,6 +197,32 @@ public class ManagerFragmentContentActivity extends AppCompatActivity implements
         mPendedFragment = new PendedFragment();
         mMineFragment = new MineFragment();
         showFragment(mPendingFragment);
+
+        mSharedpreferenceManager = new SharedpreferenceManager(this);
+        mNetworkManager = new NetworkManager();
+        mEid = mSharedpreferenceManager.getEid();
+        mToken = mSharedpreferenceManager.getToken();
+        mUserName = mSharedpreferenceManager.getAccount();
+
+        myHandler = new MyHandler();
+
+        mBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                Log.i(TAG, "onReceive: ");
+                showRedDot();
+            }
+        };
+
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(Data.BROAD_FILTER);
+        intentFilter.addCategory(Data.BROAD_CATEGORY);
+        registerReceiver(mBroadcastReceiver, intentFilter);
+    }
+
+    //  显示小红点
+    private void showRedDot() {
+        mQBadgeView.setBadgeNumber(-1);
     }
 
     //  设置事件监听
@@ -171,6 +230,25 @@ public class ManagerFragmentContentActivity extends AppCompatActivity implements
         mLinearLayoutPending.setOnClickListener(this);
         mLinearLayoutHandled.setOnClickListener(this);
         mLinearLayoutMine.setOnClickListener(this);
+
+        mNetworkManager.setGetWorkerOrderHandingListener(new OnGetWorkerOrderHandingListener() {
+            @Override
+            public void onFailure() {
+                // do nothing
+            }
+
+            @Override
+            public void onSuccess(String result) {
+                Gson gson = new Gson();
+                WorkerHandingBean workerHandingBean = gson.fromJson(result, WorkerHandingBean.class);
+                if (!workerHandingBean.isSuccess()) {
+                    return;
+                }
+                mHandingCount = workerHandingBean.getObj().size();
+
+                myHandler.sendEmptyMessage(Data.MSG_1);
+            }
+        });
     }
 
     //  底部按钮复位
@@ -197,5 +275,20 @@ public class ManagerFragmentContentActivity extends AppCompatActivity implements
             fragmentTransaction.add(R.id.fl_activity_manager_content, frag);
         }
         fragmentTransaction.commit();
+    }
+
+    private class MyHandler extends Handler {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case Data.MSG_1: {
+                    if (mHandingCount > 0) {
+                        showRedDot();
+                    }
+                    break;
+                }
+            }
+        }
     }
 }

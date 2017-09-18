@@ -201,7 +201,7 @@ public class OrderTrackDialogFragment extends DialogFragment {
                 info += "审核改约：";    //ok
                 if (orderNodeBean.getReviseStatus() == 1) {
                     info += "不通过\n";
-                    info += orderNodeBean.getReasonFilled();
+                    info += orderNodeBean.getCheckFalseReason();
                 } else {
                     info += "通过";
                 }

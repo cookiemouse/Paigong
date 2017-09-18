@@ -402,12 +402,15 @@ public class PendDetailsActivity extends Activity {
                     mAdapterPendDetailsDataList.add(new AdapterPendDetailsData(R.drawable.ic_modify_date_reason, "取消原因", backReason));
                 }
                 if (Data.NODE_13 == mNode) {
-                    String backReason;
-                    if (RegularU.isEmpty(nodeBean.getReasonFilled())) {
-                        backReason = nodeBean.getReasonChoosed();
-                    } else {
-                        backReason = nodeBean.getReasonFilled();
+                    String backReason = "";
+                    if (!nodeBean.getReasonChoosed().equals(getString(R.string.other_reason))){
+                        backReason += nodeBean.getReasonChoosed();
                     }
+                    if (!RegularU.isEmpty(nodeBean.getReasonFilled())) {
+                        backReason += "：";
+                        backReason += nodeBean.getReasonFilled();
+                    }
+
                     mAdapterPendDetailsDataList.add(new AdapterPendDetailsData(R.drawable.ic_modify_date_return, "退回客户", backReason));
                 }
                 if (Data.STATUS_2 == mOrderStatusGet) {
