@@ -374,7 +374,7 @@ public class PendDetailsActivity extends Activity {
                     }
                 }
                 if (Data.NODE_8 == mNode || Data.NODE_9 == mNode || Data.NODE_10 == mNode
-                        || Data.NODE_11 == mNode || Data.NODE_14 == mNode) {
+                        || Data.NODE_11 == mNode || Data.NODE_14 == mNode || Data.STATUS_3 == mOrderStatusGet) {
                     String engineer = engineerBean.getJobNo() + " " + engineerBean.getName();
                     String phone = engineerBean.getPhoneNo();
                     mAdapterPendDetailsDataList.add(new AdapterPendDetailsData(R.drawable.ic_modify_date_engineer, engineer, phone));
@@ -403,7 +403,7 @@ public class PendDetailsActivity extends Activity {
                 }
                 if (Data.NODE_13 == mNode) {
                     String backReason = "";
-                    if (!nodeBean.getReasonChoosed().equals(getString(R.string.other_reason))){
+                    if (!nodeBean.getReasonChoosed().equals(getString(R.string.other_reason))) {
                         backReason += nodeBean.getReasonChoosed();
                     }
                     if (!RegularU.isEmpty(nodeBean.getReasonFilled())) {
