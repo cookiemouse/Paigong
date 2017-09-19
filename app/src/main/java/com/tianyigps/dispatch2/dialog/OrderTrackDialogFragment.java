@@ -222,7 +222,11 @@ public class OrderTrackDialogFragment extends DialogFragment {
             }
             case 5: {
                 info += "取消订单\n";       //ok
-                info += orderNodeBean.getReasonChoosed() + "\n" + orderNodeBean.getReasonFilled();
+                if (orderNodeBean.getReasonChoosed().equals(getString(R.string.other_reason))) {
+                    info += orderNodeBean.getReasonFilled();
+                } else {
+                    info += orderNodeBean.getReasonChoosed() + "\n" + orderNodeBean.getReasonFilled();
+                }
                 break;
             }
             case 6: {
