@@ -863,6 +863,7 @@ public class OperateRepairActivity extends BaseActivity {
         if (null == imgUrl) {
             imgUrl = "";
         }
+        final String localPath = path;
         mTempType = type;
         mTempImgUrl = imgUrl;
         showLoading();
@@ -873,8 +874,13 @@ public class OperateRepairActivity extends BaseActivity {
                 if (isSuccess) {
                     new UploadPicU(mNetworkManager).uploadPic(eid, token, orderNo, carId, tId, mTempType, mOrderTerType, mTempImgUrl, outfile, userName);
                 } else {
-                    mStringMessage = "选择图片出错，请重新上传！";
-                    myHandler.sendEmptyMessage(Data.MSG_3);
+                    FileManager fileManager = new FileManager(localPath, true);
+                    if (fileManager.getFileSize() > 5) {
+                        mStringMessage = "选择图片过大，请重新上传！";
+                        myHandler.sendEmptyMessage(Data.MSG_3);
+                    } else {
+                        new UploadPicU(mNetworkManager).uploadPic(eid, token, orderNo, carId, tId, mTempType, mOrderTerType, mTempImgUrl, localPath, userName);
+                    }
                 }
             }
         });

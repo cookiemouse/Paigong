@@ -3,6 +3,7 @@ package com.tianyigps.dispatch2.utils;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.os.Build;
 
 /**
  * Created by cookiemouse on 2017/9/6.
@@ -46,5 +47,12 @@ public class VersionU {
             e.printStackTrace();
         }
         return versionName;
+    }
+
+    /**
+     * 获取系统api版本
+     * */
+    public static int getSystemVersion(){
+        return Build.VERSION.SDK_INT;
     }
 }

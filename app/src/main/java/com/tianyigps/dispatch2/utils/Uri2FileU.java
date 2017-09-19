@@ -8,12 +8,15 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.util.Log;
 
 /**
  * Created by cookiemouse on 2017/7/27.
  */
 
 public class Uri2FileU {
+
+    private static final String TAG = "Uri2FileU";
 
     private Context context;
 
@@ -24,7 +27,7 @@ public class Uri2FileU {
     /**
      * 根据Uri获取图片的绝对路径
      *
-     * @param uri     图片的Uri
+     * @param uri 图片的Uri
      * @return 如果Uri对应的图片存在, 那么返回该图片的绝对路径, 否则返回null
      */
     public String getRealPathFromUri(Uri uri) {
@@ -39,7 +42,7 @@ public class Uri2FileU {
     /**
      * 适配api19以下(不包括api19),根据uri获取图片的绝对路径
      *
-     * @param uri     图片的Uri
+     * @param uri 图片的Uri
      * @return 如果Uri对应的图片存在, 那么返回该图片的绝对路径, 否则返回null
      */
     private String getRealPathFromUriBelowAPI19(Uri uri) {
@@ -49,7 +52,7 @@ public class Uri2FileU {
     /**
      * 适配api19及以上,根据uri获取图片的绝对路径
      *
-     * @param uri     图片的Uri
+     * @param uri 图片的Uri
      * @return 如果Uri对应的图片存在, 那么返回该图片的绝对路径, 否则返回null
      */
     @SuppressLint("NewApi")
@@ -69,7 +72,7 @@ public class Uri2FileU {
                 Uri contentUri = ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"), Long.valueOf(documentId));
                 filePath = getDataColumn(context, contentUri, null, null);
             }
-        } else if ("content".equalsIgnoreCase(uri.getScheme())){
+        } else if ("content".equalsIgnoreCase(uri.getScheme())) {
             // 如果是 content 类型的 Uri
             filePath = getDataColumn(context, uri, null, null);
         } else if ("file".equals(uri.getScheme())) {
@@ -81,6 +84,7 @@ public class Uri2FileU {
 
     /**
      * 获取数据库表中的 _data 列，即返回Uri对应的文件路径
+     *
      * @return
      */
     private static String getDataColumn(Context context, Uri uri, String selection, String[] selectionArgs) {
@@ -95,6 +99,8 @@ public class Uri2FileU {
                 path = cursor.getString(columnIndex);
             }
         } catch (Exception e) {
+            Log.i(TAG, "getDataColumn: Exception-->" + e);
+        } finally {
             if (cursor != null) {
                 cursor.close();
             }

@@ -5,6 +5,7 @@ import android.os.Environment;
 import android.util.Log;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -58,6 +59,10 @@ public class FileManager {
         mFile = new File(path);
     }
 
+    public FileManager(String path, boolean abs){
+        mFile = new File(path);
+    }
+
 
     public boolean isExists() {
         return mFile.exists();
@@ -96,6 +101,53 @@ public class FileManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * 保存文本
+     */
+    public void saveText(String log) {
+        FileOutputStream fileOutputStream = null;
+        try {
+            fileOutputStream = new FileOutputStream(mFile);
+            fileOutputStream.write(log.getBytes());
+            fileOutputStream.flush();
+            fileOutputStream.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 获取文件大小(M)
+     */
+    public long getFileSize() {
+        long size = 0;
+        FileInputStream fis = null;
+        try {
+            if (isExists()) {
+                fis = new FileInputStream(mFile);
+                size = fis.available();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (null != fis){
+                try {
+                    fis.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        Log.i(TAG, "getFileSize: mFile.isExists-->" + isExists());
+        Log.i(TAG, "getFileSize: mFile.path-->" + getPath());
+        Log.i(TAG, "getFileSize: 1-->" + size);
+        size /= 1048576;
+        Log.i(TAG, "getFileSize: 2-->" + size);
+        return size;
     }
 
     public String getPath() {

@@ -1316,6 +1316,7 @@ public class OperateInstallActivity extends BaseActivity {
         if (null == imgUrl) {
             imgUrl = "";
         }
+        final String localPath = path;
         mTempType = type;
         mTempImgUrl = imgUrl;
         showLoading();
@@ -1326,8 +1327,13 @@ public class OperateInstallActivity extends BaseActivity {
                 if (isSuccess) {
                     new UploadPicU(mNetworkManager).uploadCarPic(eid, token, orderNo, carId, mTempType, mTempImgUrl, outfile, userName);
                 } else {
-                    mStringMessage = "选择图片出错，请重新上传！";
-                    myHandler.sendEmptyMessage(Data.MSG_ERO);
+                    FileManager fileManager = new FileManager(localPath, true);
+                    if (fileManager.getFileSize() > 5) {
+                        mStringMessage = "选择图片过大，请重新上传！";
+                        myHandler.sendEmptyMessage(Data.MSG_ERO);
+                    } else {
+                        new UploadPicU(mNetworkManager).uploadCarPic(eid, token, orderNo, carId, mTempType, mTempImgUrl, localPath, userName);
+                    }
                 }
             }
         });
@@ -1339,6 +1345,7 @@ public class OperateInstallActivity extends BaseActivity {
         if (null == imgUrl) {
             imgUrl = "";
         }
+        final String localPath = path;
         mTempType = type;
         if (mAdapterOperateInstallListDataList.get(itemPosition).isWire()) {
             mTempModel = 1;
@@ -1352,7 +1359,17 @@ public class OperateInstallActivity extends BaseActivity {
             @Override
             public void callback(boolean isSuccess, String outfile) {
                 //  上传
-                new UploadPicU(mNetworkManager).uploadPic(eid, token, orderNo, carId, mTempId, mTempType, mTempModel, mTempImgUrl, outfile, userName);
+                if (isSuccess) {
+                    new UploadPicU(mNetworkManager).uploadPic(eid, token, orderNo, carId, mTempId, mTempType, mTempModel, mTempImgUrl, outfile, userName);
+                } else {
+                    FileManager fileManager = new FileManager(localPath, true);
+                    if (fileManager.getFileSize() > 5) {
+                        mStringMessage = "选择图片过大，请重新上传！";
+                        myHandler.sendEmptyMessage(Data.MSG_ERO);
+                    } else {
+                        new UploadPicU(mNetworkManager).uploadPic(eid, token, orderNo, carId, mTempId, mTempType, mTempModel, mTempImgUrl, localPath, userName);
+                    }
+                }
             }
         });
     }
