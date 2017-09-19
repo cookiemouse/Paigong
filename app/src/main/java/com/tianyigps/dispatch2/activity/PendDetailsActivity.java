@@ -816,6 +816,9 @@ public class PendDetailsActivity extends Activity {
                     }
 
                     mTextViewNode.setText(NodeU.getNode(mNode));
+                    if (Data.STATUS_2 == mOrderStatusGet){
+                        mTextViewNode.setText("空单");
+                    }
 
                     if (Data.NODE_14 == mNode
                             || Data.NODE_13 == mNode
