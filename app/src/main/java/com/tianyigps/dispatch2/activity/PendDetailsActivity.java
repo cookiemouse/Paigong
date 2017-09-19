@@ -377,7 +377,7 @@ public class PendDetailsActivity extends Activity {
                     }
                 }
                 if (Data.NODE_8 == mNode || Data.NODE_9 == mNode || Data.NODE_10 == mNode
-                        || Data.NODE_11 == mNode) {
+                        || Data.NODE_11 == mNode || Data.NODE_4 == mNode) {
                     String engineer = engineerBean.getJobNo() + " " + engineerBean.getName();
                     String phone = engineerBean.getPhoneNo();
                     mAdapterPendDetailsDataList.add(new AdapterPendDetailsData(R.drawable.ic_modify_date_engineer, engineer, phone));
