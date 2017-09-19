@@ -275,7 +275,7 @@ public class OrderTrackDialogFragment extends DialogFragment {
                 break;
             }
             case 14: {
-                info += "完成订单"; //ok
+                info += "完成订单\n"; //ok
                 info += orderNodeBean.getSubmitAddress();
                 break;
             }
