@@ -427,11 +427,13 @@ public class PendDetailsActivity extends Activity {
                     mAdapterPendDetailsDataList.add(new AdapterPendDetailsData(R.drawable.ic_modify_date_return, "退回客户", backReason));
                 }
                 if (Data.STATUS_2 == mOrderStatusGet) {
-                    String reason = nodeBean.getReasonFilled();
-                    if (RegularU.isEmpty(reason)) {
-                        reason = "";
+                    if (Data.NODE_5 != mNode) {
+                        String reason = nodeBean.getReasonFilled();
+                        if (RegularU.isEmpty(reason)) {
+                            reason = "";
+                        }
+                        mAdapterPendDetailsDataList.add(new AdapterPendDetailsData(R.drawable.ic_modify_date_reason, "空单原因", reason));
                     }
-                    mAdapterPendDetailsDataList.add(new AdapterPendDetailsData(R.drawable.ic_modify_date_reason, "空单原因", reason));
                 }
 
                 for (PendDetailsBean.ObjBean.OrderCarListBean carListBean : objBean.getOrderCarList()) {
