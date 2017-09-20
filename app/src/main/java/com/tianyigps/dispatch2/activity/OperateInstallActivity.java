@@ -1644,6 +1644,8 @@ public class OperateInstallActivity extends BaseActivity {
             }
         }
 
+        int tId2 = mAdapterOperateInstallListDataList.get(itemPosition).gettId();
+
         Cursor cursor = mDatabaseManager.getOrder(orderNo);
         if (null != cursor) {
             if (cursor.moveToFirst()) {
@@ -1656,7 +1658,8 @@ public class OperateInstallActivity extends BaseActivity {
                             do {
                                 String tNoOld = cursorTer.getString(1);
                                 String tNoNew = cursorTer.getString(2);
-                                int tId2 = cursorTer.getInt(9);
+                                Log.i(TAG, "isExistImei: tId-->" + tId);
+                                Log.i(TAG, "isExistImei: tId2-->" + tId2);
 
                                 if (imei.equals(tNoNew) && tId != tId2) {
                                     return true;
