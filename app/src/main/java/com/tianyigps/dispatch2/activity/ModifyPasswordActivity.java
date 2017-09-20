@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.Snackbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -30,6 +32,7 @@ import com.tianyigps.dispatch2.utils.MD5U;
 import com.tianyigps.dispatch2.utils.SnackbarU;
 
 import static com.tianyigps.dispatch2.data.Data.MSG_1;
+import static com.tianyigps.dispatch2.data.Data.MSG_2;
 import static com.tianyigps.dispatch2.data.Data.MSG_ERO;
 
 public class ModifyPasswordActivity extends BaseActivity {
@@ -86,12 +89,37 @@ public class ModifyPasswordActivity extends BaseActivity {
                 oldPsd = MD5U.getMd5(oldPsd);
 
                 if (!newPsd.equals(ensurePsd)) {
-                    mStringMessage = "两次密码输入不同，请检查后提交！";
+                    mStringMessage = "两次密码输入不一致！";
+                    showToast(mStringMessage);
+                    return;
+                }
+                if (newPsd.length() < 8) {
+                    mStringMessage = "密码至少8个字符！";
+                    showToast(mStringMessage);
+                    return;
+                }
+                if (newPsd.length() > 20){
+                    mStringMessage = "密码超过20位！";
                     showToast(mStringMessage);
                     return;
                 }
                 showLoading();
                 mNetworkManager.modifyPassword(userName, token, oldPsd, newPsd);
+            }
+        });
+
+        mEditTextOld.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                mEditTextOld.setTextColor(getResources().getColor(R.color.colorText));
             }
         });
 
@@ -109,7 +137,7 @@ public class ModifyPasswordActivity extends BaseActivity {
                 ModifyPasswordBean modifyPasswordBean = gson.fromJson(result, ModifyPasswordBean.class);
                 if (!modifyPasswordBean.isSuccess()) {
                     mStringMessage = modifyPasswordBean.getMsg();
-                    myHandler.sendEmptyMessage(MSG_ERO);
+                    myHandler.sendEmptyMessage(MSG_2);
                     return;
                 }
                 myHandler.sendEmptyMessage(MSG_1);
@@ -188,7 +216,14 @@ public class ModifyPasswordActivity extends BaseActivity {
                     break;
                 }
                 case Data.MSG_1: {
+                    //  修改成功，重新登陆
                     showLoginDialog();
+                    break;
+                }
+                case MSG_2: {
+                    //  原密码错误
+                    showToast(mStringMessage);
+                    mEditTextOld.setTextColor(getResources().getColor(R.color.colorOrange));
                     break;
                 }
                 default: {
