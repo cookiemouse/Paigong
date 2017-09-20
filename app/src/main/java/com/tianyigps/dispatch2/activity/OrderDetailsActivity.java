@@ -412,6 +412,7 @@ public class OrderDetailsActivity extends Activity {
                 Gson gson = new Gson();
                 SignWorkerBean signWorkerBean = gson.fromJson(result, SignWorkerBean.class);
                 if (!signWorkerBean.isSuccess()) {
+                    mStringMessage = signWorkerBean.getMsg();
                     myHandler.sendEmptyMessage(Data.MSG_6);
                     return;
                 }
@@ -513,7 +514,7 @@ public class OrderDetailsActivity extends Activity {
         final AlertDialog dialog = builder.create();
         TextView textView = viewDialog.findViewById(R.id.tv_dialog_message_message);
         Button buttonCancel = viewDialog.findViewById(R.id.btn_dialog_message_cancel);
-        textView.setText(getString(R.string.order_canceled));
+        textView.setText(mStringMessage);
         buttonCancel.setText(getString(R.string.known));
         buttonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -616,12 +617,6 @@ public class OrderDetailsActivity extends Activity {
                 case Data.MSG_6: {
                     //  签到失败，
                     showNotPerfectDialog();
-                    myHandler.sendEmptyMessageDelayed(Data.MSG_7, 5000);
-                    break;
-                }
-                case Data.MSG_7:{
-                    //  签到失败5秒后退出
-                    OrderDetailsActivity.this.finish();
                     break;
                 }
                 default: {

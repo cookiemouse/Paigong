@@ -1656,8 +1656,9 @@ public class OperateInstallActivity extends BaseActivity {
                             do {
                                 String tNoOld = cursorTer.getString(1);
                                 String tNoNew = cursorTer.getString(2);
+                                int tId2 = cursorTer.getInt(9);
 
-                                if (imei.equals(tNoNew)) {
+                                if (imei.equals(tNoNew) && tId != tId2) {
                                     return true;
                                 }
                             } while (cursorTer.moveToNext());
