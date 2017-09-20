@@ -192,7 +192,7 @@
             android:hint="@string/enter_install_place"
             android:singleLine="true"
             android:textSize="@dimen/sp_14">
-            <requestFocus/>
+            <!--<requestFocus/>-->
         </EditText>
 
         <ImageView

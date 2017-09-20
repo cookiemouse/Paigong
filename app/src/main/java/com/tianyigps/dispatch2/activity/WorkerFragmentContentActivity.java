@@ -42,7 +42,7 @@ public class WorkerFragmentContentActivity extends AppCompatActivity implements 
 
     //  顶部小红点锚点
     private View mViewRedDot;
-    private QBadgeView mQBadgeView;
+    private QBadgeView mQBadgeView, mQBadgeViewOrder, mQBadgeViewHanding;
 
     //  底部控件
     private LinearLayout mLinearLayoutOrder, mLinearLayoutHandling, mLinearLayoutHistory, mLinearLayoutMine;
@@ -218,6 +218,8 @@ public class WorkerFragmentContentActivity extends AppCompatActivity implements 
         showFragment(mOrderFragment);
 
         mQBadgeView = new QBadgeView(this);
+        mQBadgeViewOrder = new QBadgeView(this);
+        mQBadgeViewHanding = new QBadgeView(this);
         mBroadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -243,6 +245,24 @@ public class WorkerFragmentContentActivity extends AppCompatActivity implements 
     //  显示小红点
     private void showRedDot() {
         mQBadgeView.bindTarget(mViewRedDot).setBadgeNumber(-1);
+    }
+
+    //  显示小红点
+    private void showRedDotOnOrder(boolean show) {
+        if (show) {
+            mQBadgeViewOrder.bindTarget(mImageViewOrder).setBadgeNumber(-1);
+        } else {
+            mQBadgeViewOrder.bindTarget(mImageViewOrder).setBadgeNumber(0);
+        }
+    }
+
+    //  显示小红点
+    private void showRedDotOnHanding(boolean show) {
+        if (show) {
+            mQBadgeViewOrder.bindTarget(mImageViewHandling).setBadgeNumber(-1);
+        } else {
+            mQBadgeViewOrder.bindTarget(mImageViewHandling).setBadgeNumber(0);
+        }
     }
 
     //  底部按钮复位
