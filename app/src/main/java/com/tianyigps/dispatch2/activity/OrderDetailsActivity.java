@@ -518,6 +518,7 @@ public class OrderDetailsActivity extends Activity {
         buttonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                OrderDetailsActivity.this.finish();
                 dialog.dismiss();
             }
         });
@@ -615,6 +616,13 @@ public class OrderDetailsActivity extends Activity {
                 case Data.MSG_6: {
                     //  签到失败，
                     showNotPerfectDialog();
+                    myHandler.sendEmptyMessageDelayed(Data.MSG_7, 5000);
+                    break;
+                }
+                case Data.MSG_7:{
+                    //  签到失败5秒后退出
+                    OrderDetailsActivity.this.finish();
+                    break;
                 }
                 default: {
                     Log.i(TAG, "handleMessage: default");
