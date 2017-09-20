@@ -289,11 +289,17 @@ public class WorkerFragmentContentActivity extends AppCompatActivity implements 
 
     //  显示小红点
     private void showRedDot() {
+        if (null == mQBadgeView){
+            mQBadgeView = new QBadgeView(this);
+        }
         mQBadgeView.bindTarget(mViewRedDot).setBadgeNumber(-1);
     }
 
     //  显示小红点
     public void showRedDotOnOrder(boolean show) {
+        if (null == mQBadgeViewOrder){
+            mQBadgeViewOrder = new QBadgeView(this);
+        }
         if (show) {
             mQBadgeViewOrder.bindTarget(mViewRedDotOrder).setBadgeNumber(-1);
         } else {
@@ -303,6 +309,9 @@ public class WorkerFragmentContentActivity extends AppCompatActivity implements 
 
     //  显示小红点
     private void showRedDotOnHanding(boolean show) {
+        if (null == mQBadgeViewHanding){
+            mQBadgeViewHanding = new QBadgeView(this);
+        }
         if (show) {
             mQBadgeViewHanding.bindTarget(mViewRedDotHanding).setBadgeNumber(-1);
         } else {
