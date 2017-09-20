@@ -56,6 +56,7 @@ public class WorkerFragmentContentActivity extends AppCompatActivity implements 
     private TextView mTextViewOrder, mTextViewHandling, mTextViewHistory, mTextViewMine;
 
     private SharedpreferenceManager mSharedpreferenceManager;
+    private int launchMode;
 
     private OrderFragment mOrderFragment;
     private HandingFragment mHandingFragment;
@@ -201,6 +202,7 @@ public class WorkerFragmentContentActivity extends AppCompatActivity implements 
         mToken = mSharedpreferenceManager.getToken();
         mUserName = mSharedpreferenceManager.getAccount();
         mEid = mSharedpreferenceManager.getEid();
+        launchMode = mSharedpreferenceManager.getLaunchMode();
 
         mNetworkManager = new NetworkManager();
 
@@ -246,7 +248,9 @@ public class WorkerFragmentContentActivity extends AppCompatActivity implements 
             @Override
             public void onReceive(Context context, Intent intent) {
                 Log.i(TAG, "onReceive: ");
-                showRedDot();
+                if (launchMode != Data.DATA_LAUNCH_MODE_WORKER) {
+                    showRedDot();
+                }
                 showRedDotOnOrder(true);
             }
         };
