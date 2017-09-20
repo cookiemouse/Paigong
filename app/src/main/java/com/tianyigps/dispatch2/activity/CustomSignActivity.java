@@ -373,10 +373,12 @@ public class CustomSignActivity extends BaseActivity {
         boolean isNullOrder = true;
         for (CarInfoOut carInfoOut : carInfoOutList) {
             for (TerminalInfo terminalInfo : carInfoOut.getCarInfo().getTerminalInfo()) {
-                if (terminalInfo.getModel() != 0
-                        || !RegularU.isEmpty(terminalInfo.getNewImei())
-                        || !RegularU.isEmpty(terminalInfo.getNewInstallPosition())) {
-                    isNullOrder = false;
+                if (null != terminalInfo) {
+                    if (terminalInfo.getModel() != 0
+                            || !RegularU.isEmpty(terminalInfo.getNewImei())
+                            || !RegularU.isEmpty(terminalInfo.getNewInstallPosition())) {
+                        isNullOrder = false;
+                    }
                 }
             }
         }
