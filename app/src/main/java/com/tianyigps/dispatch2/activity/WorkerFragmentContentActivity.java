@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -20,12 +22,16 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.tianyigps.dispatch2.R;
+import com.tianyigps.dispatch2.bean.WorkerHandingBean;
 import com.tianyigps.dispatch2.data.Data;
 import com.tianyigps.dispatch2.fragment.HandingFragment;
 import com.tianyigps.dispatch2.fragment.HandledFragment;
 import com.tianyigps.dispatch2.fragment.MineFragment;
 import com.tianyigps.dispatch2.fragment.OrderFragment;
+import com.tianyigps.dispatch2.interfaces.OnGetWorkerOrderHandingListener;
+import com.tianyigps.dispatch2.manager.NetworkManager;
 import com.tianyigps.dispatch2.manager.SharedpreferenceManager;
 import com.tianyigps.dispatch2.utils.BitmapU;
 
@@ -41,7 +47,7 @@ public class WorkerFragmentContentActivity extends AppCompatActivity implements 
     private Bitmap mBitmap;
 
     //  顶部小红点锚点
-    private View mViewRedDot;
+    private View mViewRedDot, mViewRedDotOrder, mViewRedDotHanding;
     private QBadgeView mQBadgeView, mQBadgeViewOrder, mQBadgeViewHanding;
 
     //  底部控件
@@ -59,6 +65,12 @@ public class WorkerFragmentContentActivity extends AppCompatActivity implements 
     //  广播接收器
     private BroadcastReceiver mBroadcastReceiver;
     private Intent mIntentReceiver;
+
+    //  NetWorkerManager
+    private NetworkManager mNetworkManager;
+    private String mToken, mUserName;
+    private int mEid, mCount = 0;
+    private MyHandler myHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +94,7 @@ public class WorkerFragmentContentActivity extends AppCompatActivity implements 
     protected void onResume() {
         super.onResume();
         mSharedpreferenceManager.saveUiMode(Data.DATA_LAUNCH_MODE_WORKER);
+        mNetworkManager.getWorkerOrderHanding(mEid, mToken, mUserName);
     }
 
     @Override
@@ -167,6 +180,8 @@ public class WorkerFragmentContentActivity extends AppCompatActivity implements 
         mLinearLayoutMine = (LinearLayout) findViewById(R.id.ll_fragment_content_bottom_mine);
 
         mViewRedDot = findViewById(R.id.view_worker_red_dot);
+        mViewRedDotOrder = findViewById(R.id.view_worker_red_dot_order);
+        mViewRedDotHanding = findViewById(R.id.view_worker_red_dot_handing);
 
         mImageViewBackground = (ImageView) findViewById(R.id.iv_activity_worker_fragment_content);
         mBitmap = BitmapU.getBitmap(this, R.drawable.bg_content);
@@ -183,6 +198,13 @@ public class WorkerFragmentContentActivity extends AppCompatActivity implements 
         mTextViewMine = (TextView) findViewById(R.id.tv_fragment_content_bottom_mine);
 
         mSharedpreferenceManager = new SharedpreferenceManager(this);
+        mToken = mSharedpreferenceManager.getToken();
+        mUserName = mSharedpreferenceManager.getAccount();
+        mEid = mSharedpreferenceManager.getEid();
+
+        mNetworkManager = new NetworkManager();
+
+        myHandler = new MyHandler();
 
         mOrderFragment = new OrderFragment();
         mHandingFragment = new HandingFragment();
@@ -225,6 +247,7 @@ public class WorkerFragmentContentActivity extends AppCompatActivity implements 
             public void onReceive(Context context, Intent intent) {
                 Log.i(TAG, "onReceive: ");
                 showRedDot();
+                showRedDotOnOrder(true);
             }
         };
 
@@ -240,6 +263,24 @@ public class WorkerFragmentContentActivity extends AppCompatActivity implements 
         mLinearLayoutHandling.setOnClickListener(this);
         mLinearLayoutHistory.setOnClickListener(this);
         mLinearLayoutMine.setOnClickListener(this);
+
+        mNetworkManager.setGetWorkerOrderHandingListener(new OnGetWorkerOrderHandingListener() {
+            @Override
+            public void onFailure() {
+                //  do nothing
+            }
+
+            @Override
+            public void onSuccess(String result) {
+                Gson gson = new Gson();
+                WorkerHandingBean workerHandingBean = gson.fromJson(result, WorkerHandingBean.class);
+                if (!workerHandingBean.isSuccess()) {
+                    return;
+                }
+                mCount = workerHandingBean.getObj().size();
+                myHandler.sendEmptyMessage(Data.MSG_1);
+            }
+        });
     }
 
     //  显示小红点
@@ -248,20 +289,20 @@ public class WorkerFragmentContentActivity extends AppCompatActivity implements 
     }
 
     //  显示小红点
-    private void showRedDotOnOrder(boolean show) {
+    public void showRedDotOnOrder(boolean show) {
         if (show) {
-            mQBadgeViewOrder.bindTarget(mImageViewOrder).setBadgeNumber(-1);
+            mQBadgeViewOrder.bindTarget(mViewRedDotOrder).setBadgeNumber(-1);
         } else {
-            mQBadgeViewOrder.bindTarget(mImageViewOrder).setBadgeNumber(0);
+            mQBadgeViewOrder.bindTarget(mViewRedDotOrder).setBadgeNumber(0);
         }
     }
 
     //  显示小红点
     private void showRedDotOnHanding(boolean show) {
         if (show) {
-            mQBadgeViewOrder.bindTarget(mImageViewHandling).setBadgeNumber(-1);
+            mQBadgeViewHanding.bindTarget(mViewRedDotHanding).setBadgeNumber(-1);
         } else {
-            mQBadgeViewOrder.bindTarget(mImageViewHandling).setBadgeNumber(0);
+            mQBadgeViewHanding.bindTarget(mViewRedDotHanding).setBadgeNumber(0);
         }
     }
 
@@ -309,5 +350,22 @@ public class WorkerFragmentContentActivity extends AppCompatActivity implements 
         mTextViewHistory.setTextColor(getResources().getColor(R.color.colorTextSelect));
 
         showFragment(mHandledFragment);
+    }
+
+    private class MyHandler extends Handler {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case Data.MSG_1: {
+                    if (mCount > 0) {
+                        showRedDotOnHanding(true);
+                    } else {
+                        showRedDotOnHanding(false);
+                    }
+                    break;
+                }
+            }
+        }
     }
 }

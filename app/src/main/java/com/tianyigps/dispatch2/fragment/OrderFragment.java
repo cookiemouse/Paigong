@@ -99,6 +99,8 @@ public class OrderFragment extends Fragment {
     //  搜索
     private String mKey;
 
+    private WorkerFragmentContentActivity mActivity;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -168,6 +170,8 @@ public class OrderFragment extends Fragment {
         mOrderAdapter = new OrderAdapter(getContext(), mAdapterOrderDataList);
 
         mListView.setAdapter(mOrderAdapter);
+
+        mActivity = (WorkerFragmentContentActivity) getActivity();
 
         mNetworkManager = new NetworkManager();
 
@@ -506,6 +510,8 @@ public class OrderFragment extends Fragment {
                         mTextViewSearchNull.setVisibility(View.GONE);
                     }
                     mOrderAdapter.notifyDataSetChanged();
+
+                    mActivity.showRedDotOnOrder(false);
                     break;
                 }
                 case MSG_2: {
@@ -517,8 +523,7 @@ public class OrderFragment extends Fragment {
                     break;
                 }
                 case MSG_3: {
-                    WorkerFragmentContentActivity activity = (WorkerFragmentContentActivity) getActivity();
-                    activity.showHandingFragment();
+                    mActivity.showHandingFragment();
                     break;
                 }
                 case MSG_4: {
