@@ -324,6 +324,7 @@ public class PendDetailsActivity extends Activity {
                         mAdapterPendDetailsDataList.add(new AdapterPendDetailsData(R.drawable.ic_modify_date_pass
                                 , "改约通过"
                                 , "" + new TimeFormatU().millisToDate2(nodeBean.getReviseTime())));
+                        mCreateTime = nodeBean.getUpdateTime();
                     } else {
                         mAdapterPendDetailsDataList.add(new AdapterPendDetailsData(R.drawable.ic_modify_date_uppass
                                 , "改约不通过"
@@ -795,7 +796,7 @@ public class PendDetailsActivity extends Activity {
                             mTextViewRemoveTitle.setVisibility(View.GONE);
                             mTextViewRemoveModify.setVisibility(View.GONE);
                         }
-                        mTextViewInstallType.setText("安装");
+                        mTextViewInstallType.setText("拆改");
                         mRelativeLayoutRemove.setVisibility(View.VISIBLE);
                         mTextViewRemoveContent.setText(mRemoveContent);
                     } else {
@@ -810,7 +811,7 @@ public class PendDetailsActivity extends Activity {
                         mFrameLayoutCycle.setVisibility(View.VISIBLE);
                         mViewRight.setVisibility(View.VISIBLE);
                         mViewTop.setVisibility(View.VISIBLE);
-                        if (Data.NODE_3 == mNode) {
+                        if (Data.NODE_3 == mNode && mReviseStatus != 2) {
                             mFrameLayoutCycle.setVisibility(View.GONE);
                             mViewRight.setVisibility(View.GONE);
                             mViewTop.setVisibility(View.GONE);
