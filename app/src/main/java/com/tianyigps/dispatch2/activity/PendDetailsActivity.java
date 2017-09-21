@@ -448,7 +448,13 @@ public class PendDetailsActivity extends Activity {
                         } else if (null != carNo && !"".equals(carNo)) {
                             mRemoveContent += carNo;
                         }
-                        if (!"".equals(mRemoveContent)) {
+                        if ("".equals(mRemoveContent)) {
+                            if (!RegularU.isEmpty(carBrand)) {
+                                mRemoveContent += (carBrand + "\n");
+                            } else {
+                                mRemoveContent += "\n";
+                            }
+                        } else {
                             if (!RegularU.isEmpty(carBrand)) {
                                 mRemoveContent += ("，" + carBrand + "\n");
                             } else {
@@ -461,7 +467,13 @@ public class PendDetailsActivity extends Activity {
                         } else if (null != carNo && !"".equals(carNo)) {
                             mInfoContent += carNo;
                         }
-                        if (!"".equals(mInfoContent)) {
+                        if ("".equals(mInfoContent)) {
+                            if (!RegularU.isEmpty(carBrand)) {
+                                mInfoContent += (carBrand + "\n");
+                            } else {
+                                mInfoContent += "\n";
+                            }
+                        } else {
                             if (!RegularU.isEmpty(carBrand)) {
                                 mInfoContent += ("，" + carBrand + "\n");
                             } else {
