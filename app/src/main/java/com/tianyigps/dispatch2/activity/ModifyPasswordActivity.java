@@ -31,7 +31,6 @@ import com.tianyigps.dispatch2.manager.SharedpreferenceManager;
 import com.tianyigps.dispatch2.utils.MD5U;
 import com.tianyigps.dispatch2.utils.SnackbarU;
 
-import static com.tianyigps.dispatch2.data.Data.MSG_1;
 import static com.tianyigps.dispatch2.data.Data.MSG_2;
 import static com.tianyigps.dispatch2.data.Data.MSG_ERO;
 
@@ -128,7 +127,7 @@ public class ModifyPasswordActivity extends BaseActivity {
             public void onFailure() {
                 Log.i(TAG, "onFailure: ");
                 mStringMessage = Data.DEFAULT_MESSAGE;
-                myHandler.sendEmptyMessage(MSG_ERO);
+                myHandler.sendEmptyMessage(Data.MSG_ERO);
             }
 
             @Override
@@ -136,11 +135,11 @@ public class ModifyPasswordActivity extends BaseActivity {
                 Gson gson = new Gson();
                 ModifyPasswordBean modifyPasswordBean = gson.fromJson(result, ModifyPasswordBean.class);
                 if (!modifyPasswordBean.isSuccess()) {
-                    mStringMessage = modifyPasswordBean.getMsg();
-                    myHandler.sendEmptyMessage(MSG_2);
+                    mStringMessage = "原密码输入错误";
+                    myHandler.sendEmptyMessage(Data.MSG_2);
                     return;
                 }
-                myHandler.sendEmptyMessage(MSG_1);
+                myHandler.sendEmptyMessage(Data.MSG_1);
             }
         });
     }

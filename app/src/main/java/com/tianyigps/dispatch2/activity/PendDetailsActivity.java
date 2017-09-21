@@ -324,7 +324,7 @@ public class PendDetailsActivity extends Activity {
                         mAdapterPendDetailsDataList.add(new AdapterPendDetailsData(R.drawable.ic_modify_date_pass
                                 , "改约通过"
                                 , "" + new TimeFormatU().millisToDate2(nodeBean.getReviseTime())));
-                        mCreateTime = nodeBean.getUpdateTime();
+                        mCreateTime = nodeBean.getCreateTime();
                     } else {
                         mAdapterPendDetailsDataList.add(new AdapterPendDetailsData(R.drawable.ic_modify_date_uppass
                                 , "改约不通过"
@@ -746,19 +746,19 @@ public class PendDetailsActivity extends Activity {
     //  倒计时
     private void updateTime() {
         long timeNow = System.currentTimeMillis();
-        long timeRemain = mCreateTime - timeNow + TIME_1_MIN;
+        long timeRemain = mCreateTime - timeNow;
         timeRemain += TIME_15_MIN;
 
         if (timeRemain > TIME_15_MIN) {
             mCycleProgressView.setProgress(100);
-            mTextViewTime.setText(new TimeFormatU().millsToHourMin(TIME_15_MIN));
+            mTextViewTime.setText(new TimeFormatU().millisToColock(TIME_15_MIN));
         } else if (timeRemain < 0) {
             mCycleProgressView.setProgress(0);
             mCycleProgressView.setDefaultColor(getResources().getColor(R.color.colorOrange));
             mTextViewTime.setText("00:00");
             mTextViewTime.setTextColor(getResources().getColor(R.color.colorRed));
         } else {
-            mTextViewTime.setText(new TimeFormatU().millsToHourMin(timeRemain));
+            mTextViewTime.setText(new TimeFormatU().millisToColock(timeRemain));
             mCycleProgressView.setProgress((int) (timeRemain * 100 / TIME_15_MIN));
         }
 
