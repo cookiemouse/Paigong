@@ -324,7 +324,7 @@ public class PendDetailsActivity extends Activity {
                         mAdapterPendDetailsDataList.add(new AdapterPendDetailsData(R.drawable.ic_modify_date_pass
                                 , "改约通过"
                                 , "" + new TimeFormatU().millisToDate2(nodeBean.getReviseTime())));
-                        mCreateTime = nodeBean.getCreateTime();
+                        mCreateTime = objBean.getCreateTime();
                     } else {
                         mAdapterPendDetailsDataList.add(new AdapterPendDetailsData(R.drawable.ic_modify_date_uppass
                                 , "改约不通过"
