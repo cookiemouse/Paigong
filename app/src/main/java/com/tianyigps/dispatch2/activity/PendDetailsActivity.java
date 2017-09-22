@@ -87,7 +87,7 @@ public class PendDetailsActivity extends Activity {
     private String mContact, mContactPhone, mAddress, mRemarks, mInstallType, mInstallContent = "", mInfoTitle, mInfoContent = "", mRemoveContent = "", mRemoveModifyContent = "";
     private long mDoorTime, mCreateTime;
     private int mOrderStatusGet, mReviseFlag;
-    private int mNode, mReviseStatus;
+    private int mNode, mReviseStatus = 0;
     private boolean isModify;
 
     private SharedpreferenceManager mSharedpreferenceManager;
@@ -823,7 +823,7 @@ public class PendDetailsActivity extends Activity {
                         mFrameLayoutCycle.setVisibility(View.VISIBLE);
                         mViewRight.setVisibility(View.VISIBLE);
                         mViewTop.setVisibility(View.VISIBLE);
-                        if (Data.NODE_3 == mNode && mReviseStatus != 2) {
+                        if (Data.NODE_3 == mNode && mReviseStatus == 0) {
                             mFrameLayoutCycle.setVisibility(View.GONE);
                             mViewRight.setVisibility(View.GONE);
                             mViewTop.setVisibility(View.GONE);
