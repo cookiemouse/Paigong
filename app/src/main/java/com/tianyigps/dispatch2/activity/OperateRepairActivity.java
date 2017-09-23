@@ -108,6 +108,7 @@ public class OperateRepairActivity extends BaseActivity {
     private int mOrderTerType;
     private String mImeiOld;
     private String mLastInstaller, mLastPhoneNo;
+    private String mRepaireDesc;
 
     //  LoadingFragment
     private LoadingDialogFragment mLoadingDialogFragment;
@@ -578,6 +579,7 @@ public class OperateRepairActivity extends BaseActivity {
 //                            installNameG = objBean.getDispatchContactName();
 //                            installPhoneG = objBean.getDispatchContactPhone();
                             mDescribe = carTerminalListBean.getMalDesc();
+                            mRepaireDesc = carTerminalListBean.getRepaireDesc();
 
                             mPositionNew = carTerminalListBean.getNewInstallLocation();
 
@@ -825,8 +827,8 @@ public class OperateRepairActivity extends BaseActivity {
     private void loadSavedData() {
         Cursor cursor = mDatabaseManager.getRepair(tId);
         if (null != cursor && cursor.moveToFirst()) {
-            mPositionNew = cursor.getString(2);
-            mExplainNew = cursor.getString(5);
+            String positionNew = cursor.getString(2);
+            String explainNew = cursor.getString(5);
             mImeiNew = cursor.getString(6);
             int replace = cursor.getInt(12);
             wholeImei = mImeiNew;
@@ -837,8 +839,16 @@ public class OperateRepairActivity extends BaseActivity {
             Log.i(TAG, "loadSavedData: mStringNewImei-->" + mImeiNew);
             Log.i(TAG, "loadSavedData: replace-->" + replace);
 
-            mEditTextPosition.setText(mPositionNew);
-            mEditTextExplain.setText(mExplainNew);
+            if (!RegularU.isEmpty(explainNew)) {
+                mEditTextExplain.setText(explainNew);
+            } else {
+                mEditTextExplain.setText(mRepaireDesc);
+            }
+            if (!RegularU.isEmpty(positionNew)) {
+                mEditTextPosition.setText(positionNew);
+            } else {
+                mEditTextPosition.setText(mPositionNew);
+            }
 
             if (0 == replace) {
                 mRelativeLayoutReplace.setVisibility(View.GONE);

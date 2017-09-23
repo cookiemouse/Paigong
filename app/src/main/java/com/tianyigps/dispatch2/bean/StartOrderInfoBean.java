@@ -855,6 +855,7 @@ public class StartOrderInfoBean {
                 private int repaireStatus;
                 private String solution;
                 private String tNo;
+                private String repaireDesc;
                 private int terminalType;
 
                 public int getRemoveStatus() {
@@ -1047,6 +1048,14 @@ public class StartOrderInfoBean {
 
                 public void setRepaireStatus(int repaireStatus) {
                     this.repaireStatus = repaireStatus;
+                }
+
+                public String getRepaireDesc() {
+                    return repaireDesc;
+                }
+
+                public void setRepaireDesc(String repaireDesc) {
+                    this.repaireDesc = repaireDesc;
                 }
             }
         }
