@@ -407,7 +407,8 @@ public class InstallingActivity extends BaseActivity {
                                         , terminalName
                                         , carNo
                                         , frameNo
-                                        , carId));
+                                        , carId
+                                        , carTerminalListBean.getRepaireStatus()));
                             }
                         }
 
@@ -756,7 +757,9 @@ public class InstallingActivity extends BaseActivity {
                 if (isComplete) {
                     data.setComplete(1);
                 } else {
-                    data.setComplete(0);
+                    if (data.getComplete() == 0) {
+                        data.setComplete(0);
+                    }
                 }
 
             }

@@ -14,14 +14,14 @@ public class AdapterRepairData {
     private int complete;
     private int carId;
 
-    public AdapterRepairData(int tId, int type, String id, String name, String carNo, String frameNo, int carId) {
+    public AdapterRepairData(int tId, int type, String id, String name, String carNo, String frameNo, int carId, int complete) {
         this.tId = tId;
         this.type = type;
         this.id = id;
         this.name = name;
         this.carNo = carNo;
         this.frameNo = frameNo;
-        this.complete = 0;
+        this.complete = complete;
         this.carId = carId;
     }
 
