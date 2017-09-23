@@ -96,13 +96,19 @@ public class WorkerFragmentContentActivity extends AppCompatActivity implements 
         super.onResume();
         mSharedpreferenceManager.saveUiMode(Data.DATA_LAUNCH_MODE_WORKER);
         mNetworkManager.getWorkerOrderHanding(mEid, mToken, mUserName);
+
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(Data.BROAD_FILTER);
+        intentFilter.addCategory(Data.BROAD_CATEGORY);
+        mIntentReceiver = registerReceiver(mBroadcastReceiver, intentFilter);
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onPause() {
+        super.onPause();
         if (null != mIntentReceiver) {
             unregisterReceiver(mBroadcastReceiver);
+            mIntentReceiver = null;
         }
     }
 
@@ -259,14 +265,6 @@ public class WorkerFragmentContentActivity extends AppCompatActivity implements 
                 showRedDotOnOrder(true);
             }
         };
-
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(Data.BROAD_FILTER);
-        intentFilter.addCategory(Data.BROAD_CATEGORY);
-        if (null != mIntentReceiver) {
-            unregisterReceiver(mBroadcastReceiver);
-        }
-        mIntentReceiver = registerReceiver(mBroadcastReceiver, intentFilter);
     }
 
     //  设置事件监听

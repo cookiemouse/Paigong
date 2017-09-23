@@ -508,7 +508,7 @@ public class InstallingActivity extends BaseActivity {
                                 if (null == cursor || !cursor.moveToFirst()) {
                                     mDatabaseManager.addRepair(tId
                                             , carTerminalListBean.getTNo()
-                                            , carTerminalListBean.getInstallLocation()
+                                            , carTerminalListBean.getNewInstallLocation()
                                             , mBaseImg + carTerminalListBean.getNewInstallLocationPic()
                                             , mBaseImg + carTerminalListBean.getNewWiringDiagramPic()
                                             , carTerminalListBean.getRepaireDesc()

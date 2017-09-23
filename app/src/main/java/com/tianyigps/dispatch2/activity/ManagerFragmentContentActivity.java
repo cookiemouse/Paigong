@@ -96,13 +96,19 @@ public class ManagerFragmentContentActivity extends AppCompatActivity implements
         super.onResume();
         mSharedpreferenceManager.saveUiMode(Data.DATA_LAUNCH_MODE_MANAGER);
         mNetworkManager.getWorkerOrderHanding(mEid, mToken, mUserName);
+
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(Data.BROAD_FILTER);
+        intentFilter.addCategory(Data.BROAD_CATEGORY);
+        mIntentReceiver = registerReceiver(mBroadcastReceiver, intentFilter);
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onPause() {
+        super.onPause();
         if (null != mIntentReceiver) {
             unregisterReceiver(mBroadcastReceiver);
+            mIntentReceiver = null;
         }
     }
 
@@ -222,14 +228,6 @@ public class ManagerFragmentContentActivity extends AppCompatActivity implements
                 showRedDot();
             }
         };
-
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(Data.BROAD_FILTER);
-        intentFilter.addCategory(Data.BROAD_CATEGORY);
-        if (null != mIntentReceiver) {
-            unregisterReceiver(mBroadcastReceiver);
-        }
-        mIntentReceiver = registerReceiver(mBroadcastReceiver, intentFilter);
     }
 
     //  显示小红点
