@@ -77,6 +77,8 @@ public class InstallingActivity extends BaseActivity {
     private String userName;
     private String orderNo;
     private SharedpreferenceManager mSharedpreferenceManager;
+    private String mBaseImg;
+    private String ID_MAIN_TERMINAL;
 
     private String mStringRemarks;
     private String mStringMsg = "数据请求失败，请检查网络";
@@ -146,6 +148,7 @@ public class InstallingActivity extends BaseActivity {
         eid = mSharedpreferenceManager.getEid();
         token = mSharedpreferenceManager.getToken();
         userName = mSharedpreferenceManager.getAccount();
+        mBaseImg = mSharedpreferenceManager.getImageBaseUrl();
 
         Intent intent = getIntent();
         orderNo = intent.getStringExtra(Data.DATA_INTENT_ORDER_NO);
@@ -296,20 +299,72 @@ public class InstallingActivity extends BaseActivity {
                             mDatabaseManager.addOrder(orderNo, cid, tid);
                         }
                     }
+                    String carNo;
+                    if (RegularU.isEmpty(carListBean.getNewCarNo())) {
+                        carNo = carListBean.getCarNo();
+                    } else {
+                        carNo = carListBean.getNewCarNo();
+                    }
+                    String carBrand;
+                    if (RegularU.isEmpty(carListBean.getNewCarBrand())) {
+                        carBrand = carListBean.getCarBrand();
+                    } else {
+                        carBrand = carListBean.getNewCarBrand();
+                    }
+                    Cursor cursor = mDatabaseManager.getCar(carListBean.getId());
+                    if (null == cursor || !cursor.moveToFirst()) {
+                        mDatabaseManager.addCarInfo(carListBean.getId(), carNo, carListBean.getCarVin(), carBrand);
+                        mDatabaseManager.addCarFrameNoPic(carListBean.getId()
+                                , mBaseImg + carListBean.getCarVinPic()
+                                , carListBean.getCarVinPic());
+                        mDatabaseManager.addCarNoPic(carListBean.getId(), mBaseImg + carListBean.getCarNoPic()
+                                , carListBean.getCarNoPic());
+                    }
                 }
 
                 switch (mAdapterType) {
                     case TYPE_INSTALL: {
                         for (StartOrderInfoBean.ObjBean.CarListBean carListBean : objBean.getCarList()) {
                             int countWire = 0, contWireless = 0;
+                            ID_MAIN_TERMINAL = carListBean.getId() + "T";
+                            int i = 0;
                             for (StartOrderInfoBean.ObjBean.CarListBean.CarTerminalListBean carTerminalListBean
                                     : carListBean.getCarTerminalList()) {
                                 mTids.add(carTerminalListBean.getId());
-                                if (carTerminalListBean.getTerminalType() == 1) {
+                                if (carTerminalListBean.getTerminalType() == 1
+                                        && !RegularU.isEmpty(carTerminalListBean.getNewInstallLocation())) {
                                     countWire++;
-                                } else if (carTerminalListBean.getTerminalType() == 2) {
+                                } else if (carTerminalListBean.getTerminalType() == 2
+                                        && !RegularU.isEmpty(carTerminalListBean.getNewInstallLocation())) {
                                     contWireless++;
                                 }
+
+                                Cursor cursor = mDatabaseManager.getTer(carTerminalListBean.getId());
+                                Log.i(TAG, "onSuccess: cursor-->" + cursor);
+                                Log.i(TAG, "onSuccess: cursor-->" + cursor.moveToFirst());
+                                if (null == cursor || !cursor.moveToFirst()) {
+                                    String tno, newtno;
+                                    if (RegularU.isEmpty(carTerminalListBean.getNewTNo())) {
+                                        tno = "";
+                                        newtno = carTerminalListBean.getTNo();
+                                    } else {
+                                        tno = carTerminalListBean.getTNo();
+                                        newtno = carTerminalListBean.getNewTNo();
+                                    }
+                                    mDatabaseManager.addTer(ID_MAIN_TERMINAL + i
+                                            , tno
+                                            , newtno
+                                            , carTerminalListBean.getNewInstallLocation()
+                                            , mBaseImg + carTerminalListBean.getInstallLocationPic()
+                                            , mBaseImg + carTerminalListBean.getNewWiringDiagramPic()
+                                            , carTerminalListBean.getInstallLocationPic()
+                                            , carTerminalListBean.getNewWiringDiagramPic()
+                                            , carListBean.getId()
+                                            , carTerminalListBean.getTerminalType());
+                                    mDatabaseManager.addTerModel(ID_MAIN_TERMINAL + i
+                                            , carTerminalListBean.getTerminalType());
+                                }
+                                i++;
                             }
                             if (carListBean.getRemoveFlag() == 0) {
                                 mAdapterInstallingDataList.add(new AdapterInstallingData(carListBean.getId()

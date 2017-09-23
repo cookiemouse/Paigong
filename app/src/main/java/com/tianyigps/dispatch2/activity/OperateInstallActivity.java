@@ -1033,10 +1033,12 @@ public class OperateInstallActivity extends BaseActivity {
             String carNo = cursor.getString(1);
             String carType = cursor.getString(3);
 
-            if (null != carNo && !"".equals(carNo)) {
+            Log.i(TAG, "loadCarData: carNo-->" + mCarNo);
+            Log.i(TAG, "loadCarData: mCarBrand-->" + mCarBrand);
+            if (!RegularU.isEmpty(carNo)) {
                 mCarNo = carNo;
             }
-            if (null != carType && !"".equals(carType)) {
+            if (!RegularU.isEmpty(carType)) {
                 mCarBrand = carType;
             }
 
