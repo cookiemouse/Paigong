@@ -739,9 +739,17 @@ public class OperateInstallActivity extends BaseActivity {
 //                StartOrderInfoBean.ObjBean.CarListBean carListBean = objBean.getCarList().get(0);
                 for (StartOrderInfoBean.ObjBean.CarListBean carListBean : objBean.getCarList()) {
                     if (carListBean.getId() == carId) {
-                        mCarNo = carListBean.getCarNo();
+                        if (RegularU.isEmpty(carListBean.getNewCarNo())) {
+                            mCarNo = carListBean.getCarNo();
+                        } else {
+                            mCarNo = carListBean.getNewCarNo();
+                        }
+                        if (RegularU.isEmpty(carListBean.getNewCarBrand())) {
+                            mCarBrand = carListBean.getCarBrand();
+                        } else {
+                            mCarBrand = carListBean.getNewCarBrand();
+                        }
                         mCarFrameNo = carListBean.getCarVin();
-                        mCarBrand = carListBean.getCarBrand();
                         mCarNoPicUrl = carListBean.getCarNoPic();
                         mCarFramePicUrl = carListBean.getCarVinPic();
                         mCarNoPic = mBaseImg + mCarNoPicUrl;
@@ -1092,10 +1100,19 @@ public class OperateInstallActivity extends BaseActivity {
 
                 AdapterOperateInstallListData data = mAdapterOperateInstallListDataList.get(i);
                 if (data.gettId() == tid) {
-                    data.settNoNew(tNoNew);
-                    data.settNoOld(tNoOld);
-                    data.setPosition(position);
-                    data.setModel(model);
+                    if (!RegularU.isEmpty(tNoNew)) {
+                        data.settNoNew(tNoNew);
+                    }
+                    if (!RegularU.isEmpty(tNoOld)) {
+                        data.settNoOld(tNoOld);
+                    }
+                    if (!RegularU.isEmpty(position)) {
+                        data.setPosition(position);
+                    }
+
+                    if (!RegularU.isEmpty(position)) {
+                        data.setModel(model);
+                    }
                 }
 
                 Log.i(TAG, "loadTerminalData: positionPic-->" + data.getPositionPic());
