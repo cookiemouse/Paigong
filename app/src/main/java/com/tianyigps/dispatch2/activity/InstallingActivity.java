@@ -113,6 +113,7 @@ public class InstallingActivity extends BaseActivity {
         //将背景色复原
         mSwipeRefreshLayout.setRefreshing(true);
         mNetworkManager.getWorkerOrderInfoStart(eid, token, orderNo, userName);
+        mTids.clear();
 //        resetRepairList();
     }
 
@@ -617,7 +618,14 @@ public class InstallingActivity extends BaseActivity {
                                     && (!RegularU.isEmpty(position))
                                     && !RegularU.isEmpty(positionUrl);
                             if (terComplete) {
-                                if (!mTids.contains(tId)) {
+                                boolean contain = false;
+                                for (int tid : mTids){
+                                    if (tid == tId){
+                                        contain = true;
+                                        break;
+                                    }
+                                }
+                                if (!contain) {
                                     wirelessComplete++;
                                 }
                             }
@@ -627,7 +635,14 @@ public class InstallingActivity extends BaseActivity {
                                     && !RegularU.isEmpty(positionUrl)
                                     && !RegularU.isEmpty(installUrl);
                             if (terComplete) {
-                                if (!mTids.contains(tId)) {
+                                boolean contain = false;
+                                for (int tid : mTids){
+                                    if (tid == tId){
+                                        contain = true;
+                                        break;
+                                    }
+                                }
+                                if (!contain) {
                                     wireComplete++;
                                 }
                             }
