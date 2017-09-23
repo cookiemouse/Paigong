@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -60,9 +61,9 @@ public class OrderDetailsActivity extends Activity {
     private TextView mTextViewOrderName, mTextViewOrderNum, mTextViewCallName, mTextViewTime;
     private TextView mTextViewAddress, mTextViewRemarks, mTextViewInstallTitle, mTextViewInstallContent;
     private TextView mTextViewInfoTitle, mTextViewInfoContent, mTextViewReturnOrder, mTextViewTimeRemain;
-    private TextView mTextViewRemove, mTextViewDoorTimeModify;
+    private TextView mTextViewRemove, mTextViewDoorTimeModify, mTextViewCaigai;
 
-    private RelativeLayout mRelativeLayoutRemove;
+    private RelativeLayout mRelativeLayoutRemove, mRelativeLayoutCaigai;
 
     private ImageView mImageViewCall;
     private Button mButtonSign;
@@ -70,6 +71,10 @@ public class OrderDetailsActivity extends Activity {
     private boolean isChecked = false;
 
     private CycleProgressView mCycleProgressView;
+    private FrameLayout mFrameLayoutCycle;
+    private TextView mTextViewCycleTitle;
+    private String mStringCaigai = "";
+    private ImageView mImageViewInstall;
 
     private NetworkManager mNetworkManager;
     private MyHandler myHandler;
@@ -89,9 +94,10 @@ public class OrderDetailsActivity extends Activity {
 
     private String mStringContactPhone, mStringDetail, mStringCity, mStringOrderNum,
             mStringContactName, mStringProvince, mStringCustName, mStringDistrict, mStringTypeTitle,
-            mStringTypeContent, mStringInfoTitle, mStringInstallInfo = "", mStringTno;
+            mStringTypeContent = "", mStringInfoTitle, mStringInstallInfo = "", mStringTno;
     private String mStringRemoveContent = "";
     private int mIntOrderType, mIntWirelessNum, mIntRemoveWireNum, mIntWireNum, mIntOrderStaus, mIntRemoveWirelessNum, mIntReviseFlag, mIntOrderId;
+    private int mIntWireFinish, mIntWirelessFinish, mIntRemoveWireFinish, mIntRemoveWirelessFinish;
     private long mLongDoorTime;
 
     //  退单对话框
@@ -160,13 +166,18 @@ public class OrderDetailsActivity extends Activity {
         mTextViewReturnOrder = findViewById(R.id.tv_layout_order_details_return_order);
         mTextViewTimeRemain = findViewById(R.id.tv_activity_order_details_time);
         mRelativeLayoutRemove = findViewById(R.id.rl_layout_order_details_content_remove);
+        mRelativeLayoutCaigai = findViewById(R.id.rl_layout_order_details_content_caigai);
         mTextViewRemove = findViewById(R.id.tv_layout_order_details_content_remove_content);
+        mTextViewCaigai = findViewById(R.id.tv_layout_order_details_content_order_caigai_content);
+        mImageViewInstall = findViewById(R.id.iv_layout_order_details_install);
 
         mButtonSign = findViewById(R.id.btn_layout_order_details_sign);
 
         mImageViewCall = findViewById(R.id.iv_layout_order_details_content_call);
 
         mCycleProgressView = findViewById(R.id.cpv_activity_order_details);
+        mFrameLayoutCycle = findViewById(R.id.fl_activity_order_details_cycle);
+        mTextViewCycleTitle = findViewById(R.id.tv_activity_order_details_cycle_title);
 
         mCycleProgressView.setStrokWidth(10);
         mCycleProgressView.setDefaultColor(getResources().getColor(R.color.colorCycleGray));
@@ -304,6 +315,11 @@ public class OrderDetailsActivity extends Activity {
                 mIntRemoveWireNum = objBean.getRemoveWiredNum();
                 mIntRemoveWirelessNum = objBean.getRemoveWirelessNum();
 
+                mIntWireFinish = objBean.getFinishWiredNum();
+                mIntWirelessFinish = objBean.getFinishWirelessNum();
+                mIntRemoveWireFinish = objBean.getRemoveFinishWiredNum();
+                mIntRemoveWirelessFinish = objBean.getRemoveFinishWirelessNum();
+
                 long checkTime = objBean.getCheckInTime();
                 Log.i(TAG, "onSuccess: checkTime-->" + checkTime);
                 isChecked = (0 != checkTime);
@@ -315,6 +331,10 @@ public class OrderDetailsActivity extends Activity {
                         mStringInfoTitle = mStringTypeTitle + "车辆信息";
                         mStringTypeContent = "安装：有线" + mIntWireNum + "个" +
                                 "，无线" + mIntWirelessNum + "个";
+                        if (mIntWireFinish > 0 || mIntWirelessFinish > 0) {
+                            mStringTypeContent += "\n完成：有线" + mIntWireFinish + "个"
+                                    + "，无线" + mIntWirelessFinish + "个";
+                        }
                         break;
                     }
                     case 2: {
@@ -323,15 +343,29 @@ public class OrderDetailsActivity extends Activity {
                         mStringInfoTitle = mStringTypeTitle + "车辆信息";
                         mStringTypeContent = "维修：有线" + mIntWireNum + "个" +
                                 "，无线" + mIntWirelessNum + "个";
+                        if (mIntWireFinish > 0 || mIntWirelessFinish > 0) {
+                            mStringTypeContent += "\n完成：有线" + mIntWireFinish + "个"
+                                    + "，无线" + mIntWirelessFinish + "个";
+                        }
                         break;
                     }
                     case 3: {
                         //  拆改
                         mStringTypeTitle = "安装";
                         mStringInfoTitle = mStringTypeTitle + "车辆信息";
-                        mStringTypeContent = "拆除：有线" + mIntRemoveWireNum + "个" +
+                        mStringCaigai = "拆除：有线" + mIntRemoveWireNum + "个" +
                                 "，无线" + mIntRemoveWirelessNum + "个\n";
+                        if (mIntRemoveWireFinish > 0 || mIntRemoveWirelessFinish > 0
+                                || mIntWireFinish > 0 || mIntWirelessFinish > 0) {
+                            mStringCaigai += "完成：有线" + mIntRemoveWireFinish + "个" +
+                                    "，无线" + mIntRemoveWirelessFinish + "个";
+                        }
                         mStringTypeContent += "安装：有线" + mIntWireNum + "个" + "， 无线" + mIntWirelessNum + "个";
+                        if (mIntRemoveWireFinish > 0 || mIntRemoveWirelessFinish > 0
+                                || mIntWireFinish > 0 || mIntWirelessFinish > 0) {
+                            mStringTypeContent += "\n完成：有线" + mIntWireFinish + "个" +
+                                    "，无线" + mIntWirelessFinish + "个";
+                        }
                         break;
                     }
                     default: {
@@ -563,8 +597,12 @@ public class OrderDetailsActivity extends Activity {
 
                     if (mIntOrderType == 3) {
                         mRelativeLayoutRemove.setVisibility(View.VISIBLE);
+                        mRelativeLayoutCaigai.setVisibility(View.VISIBLE);
+                        mTextViewCaigai.setText(mStringCaigai);
+                        mImageViewInstall.setVisibility(View.INVISIBLE);
                     } else {
                         mRelativeLayoutRemove.setVisibility(View.GONE);
+                        mRelativeLayoutCaigai.setVisibility(View.GONE);
                     }
 
                     if (mIntReviseFlag == 1) {
@@ -577,6 +615,9 @@ public class OrderDetailsActivity extends Activity {
                         isChecked = true;
                         mButtonSign.setText("开始");
                         mTextViewReturnOrder.setVisibility(View.GONE);
+
+                        mFrameLayoutCycle.setVisibility(View.GONE);
+                        mTextViewCycleTitle.setVisibility(View.VISIBLE);
                     } else {
                         mButtonSign.setText("签到");
                         mTextViewReturnOrder.setVisibility(View.VISIBLE);
