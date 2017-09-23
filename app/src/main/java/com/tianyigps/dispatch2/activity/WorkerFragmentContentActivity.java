@@ -99,13 +99,18 @@ public class WorkerFragmentContentActivity extends AppCompatActivity implements 
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+        if (null != mIntentReceiver) {
+            unregisterReceiver(mBroadcastReceiver);
+        }
+    }
+
+    @Override
     protected void onDestroy() {
         Log.i(TAG, "onDestroy: ");
         if (null != mBitmap) {
             mBitmap.recycle();
-        }
-        if (null != mIntentReceiver) {
-            unregisterReceiver(mBroadcastReceiver);
         }
         super.onDestroy();
     }
@@ -258,6 +263,9 @@ public class WorkerFragmentContentActivity extends AppCompatActivity implements 
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(Data.BROAD_FILTER);
         intentFilter.addCategory(Data.BROAD_CATEGORY);
+        if (null != mIntentReceiver) {
+            unregisterReceiver(mBroadcastReceiver);
+        }
         mIntentReceiver = registerReceiver(mBroadcastReceiver, intentFilter);
     }
 
@@ -289,7 +297,7 @@ public class WorkerFragmentContentActivity extends AppCompatActivity implements 
 
     //  显示小红点
     private void showRedDot() {
-        if (null == mQBadgeView){
+        if (null == mQBadgeView) {
             mQBadgeView = new QBadgeView(this);
         }
         mQBadgeView.bindTarget(mViewRedDot).setBadgeNumber(-1);
@@ -297,7 +305,7 @@ public class WorkerFragmentContentActivity extends AppCompatActivity implements 
 
     //  显示小红点
     public void showRedDotOnOrder(boolean show) {
-        if (null == mQBadgeViewOrder){
+        if (null == mQBadgeViewOrder) {
             mQBadgeViewOrder = new QBadgeView(this);
         }
         if (show) {
@@ -309,7 +317,7 @@ public class WorkerFragmentContentActivity extends AppCompatActivity implements 
 
     //  显示小红点
     private void showRedDotOnHanding(boolean show) {
-        if (null == mQBadgeViewHanding){
+        if (null == mQBadgeViewHanding) {
             mQBadgeViewHanding = new QBadgeView(this);
         }
         if (show) {

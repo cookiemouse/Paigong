@@ -99,14 +99,20 @@ public class ManagerFragmentContentActivity extends AppCompatActivity implements
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+        if (null != mIntentReceiver) {
+            unregisterReceiver(mBroadcastReceiver);
+        }
+    }
+
+    @Override
     protected void onDestroy() {
         Log.i(TAG, "onDestroy: ");
         if (null != mBitmap) {
             mBitmap.recycle();
         }
-        if (null != mIntentReceiver) {
-            unregisterReceiver(mBroadcastReceiver);
-        }
+
         super.onDestroy();
     }
 
@@ -220,6 +226,9 @@ public class ManagerFragmentContentActivity extends AppCompatActivity implements
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(Data.BROAD_FILTER);
         intentFilter.addCategory(Data.BROAD_CATEGORY);
+        if (null != mIntentReceiver) {
+            unregisterReceiver(mBroadcastReceiver);
+        }
         mIntentReceiver = registerReceiver(mBroadcastReceiver, intentFilter);
     }
 

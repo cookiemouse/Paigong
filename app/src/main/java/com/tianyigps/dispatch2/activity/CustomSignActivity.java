@@ -210,29 +210,29 @@ public class CustomSignActivity extends BaseActivity {
                 Log.i(TAG, "onReceive: latitude-->" + latLng.latitude);
                 Log.i(TAG, "onReceive: longitude-->" + latLng.longitude);
                 mLocateManager.stopLocate();
-//                if (latLng.latitude == 4.9E-324 || latLng.longitude == 4.9E-324) {
-//                    mNetworkManager.saveOrderInfo(eid
-//                            , token
-//                            , mOrderNo
-//                            , mJson
-//                            , mPartReason
-//                            , mSignature
-//                            , "0"
-//                            , "0"
-//                            , Data.LOCATE_TYPE_BAIDU
-//                            , userName);
-//                } else {
-//                    mNetworkManager.saveOrderInfo(eid
-//                            , token
-//                            , mOrderNo
-//                            , mJson
-//                            , mPartReason
-//                            , mSignature
-//                            , "" + latLng.latitude
-//                            , "" + latLng.longitude
-//                            , Data.LOCATE_TYPE_BAIDU
-//                            , userName);
-//                }
+                if (latLng.latitude == 4.9E-324 || latLng.longitude == 4.9E-324) {
+                    mNetworkManager.saveOrderInfo(eid
+                            , token
+                            , mOrderNo
+                            , mJson
+                            , mPartReason
+                            , mSignature
+                            , "0"
+                            , "0"
+                            , Data.LOCATE_TYPE_BAIDU
+                            , userName);
+                } else {
+                    mNetworkManager.saveOrderInfo(eid
+                            , token
+                            , mOrderNo
+                            , mJson
+                            , mPartReason
+                            , mSignature
+                            , "" + latLng.latitude
+                            , "" + latLng.longitude
+                            , Data.LOCATE_TYPE_BAIDU
+                            , userName);
+                }
             }
         });
 

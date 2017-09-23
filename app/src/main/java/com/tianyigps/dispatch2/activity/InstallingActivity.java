@@ -411,7 +411,7 @@ public class InstallingActivity extends BaseActivity {
                                             }
                                         }
                                     }
-                                }else {
+                                } else {
                                     ID_MAIN_TERMINAL = carListBean.getId() + "T";
                                     int i = 0;
                                     for (StartOrderInfoBean.ObjBean.CarListBean.CarTerminalListBean carTerminalListBean
@@ -496,6 +496,29 @@ public class InstallingActivity extends BaseActivity {
                             for (StartOrderInfoBean.ObjBean.CarListBean.CarTerminalListBean carTerminalListBean
                                     : carListBean.getCarTerminalList()) {
 
+                                int tId = carTerminalListBean.getId();
+
+                                Cursor cursor = mDatabaseManager.getRepair(tId);
+                                int wire;
+                                if (carTerminalListBean.getTerminalType() == 2) {
+                                    wire = 0;
+                                } else {
+                                    wire = 1;
+                                }
+                                if (null == cursor || !cursor.moveToFirst()) {
+                                    mDatabaseManager.addRepair(tId
+                                            , carTerminalListBean.getTNo()
+                                            , carTerminalListBean.getInstallLocation()
+                                            , mBaseImg + carTerminalListBean.getNewInstallLocationPic()
+                                            , mBaseImg + carTerminalListBean.getNewWiringDiagramPic()
+                                            , carTerminalListBean.getRepaireDesc()
+                                            , carTerminalListBean.getNewTNo()
+                                            , carTerminalListBean.getNewInstallLocationPic()
+                                            , carTerminalListBean.getNewWiringDiagramPic()
+                                            , carTerminalListBean.getTerminalType()
+                                            , wire);
+                                }
+
                                 int type = carTerminalListBean.getTerminalType();
 
                                 String terminalName = carTerminalListBean.getTerminalName();
@@ -503,7 +526,6 @@ public class InstallingActivity extends BaseActivity {
                                     terminalName = "";
                                 }
 
-                                int tId = carTerminalListBean.getId();
                                 String tNo = carTerminalListBean.getTNo();
 
                                 mDatabaseManager.addRepair(tId, tNo);
