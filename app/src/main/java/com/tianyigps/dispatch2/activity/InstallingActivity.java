@@ -94,6 +94,9 @@ public class InstallingActivity extends BaseActivity {
     //  卡片中是否已有填写内容
     private boolean isFilled = false;
 
+    //  已安装过的tid
+    private ArrayList<Integer> mTids = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -297,11 +300,17 @@ public class InstallingActivity extends BaseActivity {
                 switch (mAdapterType) {
                     case TYPE_INSTALL: {
                         for (StartOrderInfoBean.ObjBean.CarListBean carListBean : objBean.getCarList()) {
+                            for (StartOrderInfoBean.ObjBean.CarListBean.CarTerminalListBean carTerminalListBean
+                                    : carListBean.getCarTerminalList()) {
+                                mTids.add(carTerminalListBean.getId());
+                            }
                             if (carListBean.getRemoveFlag() == 0) {
                                 mAdapterInstallingDataList.add(new AdapterInstallingData(carListBean.getId()
                                         , carListBean.getCarVin()
                                         , carListBean.getWiredNum()
-                                        , carListBean.getWirelessNum()));
+                                        , carListBean.getWirelessNum()
+                                        , objBean.getFinishWiredNum()
+                                        , objBean.getFinishWirelessNum()));
                             }
                         }
 
@@ -591,6 +600,7 @@ public class InstallingActivity extends BaseActivity {
                         String position = cursorTer.getString(3);
                         String positionUrl = cursorTer.getString(6);
                         String installUrl = cursorTer.getString(7);
+                        int tId = cursorTer.getInt(9);
                         int wire = cursorTer.getInt(12);
 
                         Log.i(TAG, "updateInstallComplete: idMainTer-->" + idMainTer);
@@ -599,13 +609,16 @@ public class InstallingActivity extends BaseActivity {
                         Log.i(TAG, "updateInstallComplete: positionUrl-->" + positionUrl);
                         Log.i(TAG, "updateInstallComplete: installUrl-->" + installUrl);
                         Log.i(TAG, "updateInstallComplete: wire-->" + wire);
+                        Log.i(TAG, "updateInstallComplete: tId-->" + tId);
 
                         if (0 == wire) {
                             terComplete = (!RegularU.isEmpty(tNoNew))
                                     && (!RegularU.isEmpty(position))
                                     && !RegularU.isEmpty(positionUrl);
                             if (terComplete) {
-                                wirelessComplete++;
+                                if (!mTids.contains(tId)) {
+                                    wirelessComplete++;
+                                }
                             }
                         } else {
                             terComplete = (!RegularU.isEmpty(tNoNew))
@@ -613,7 +626,9 @@ public class InstallingActivity extends BaseActivity {
                                     && !RegularU.isEmpty(positionUrl)
                                     && !RegularU.isEmpty(installUrl);
                             if (terComplete) {
-                                wireComplete++;
+                                if (!mTids.contains(tId)) {
+                                    wireComplete++;
+                                }
                             }
                         }
                     } while (cursorTer.moveToNext());
@@ -623,8 +638,10 @@ public class InstallingActivity extends BaseActivity {
                     Log.i(TAG, "updateInstallComplete: cursorTer is null");
                 }
 
-                data.setCompleteLine(wireComplete);
-                data.setCompleteOffline(wirelessComplete);
+                int wire = data.getCompleteLine();
+                int wireless = data.getCompleteOffline();
+                data.setCompleteLine(wire + wireComplete);
+                data.setCompleteOffline(wireless + wirelessComplete);
             }
         }
     }
