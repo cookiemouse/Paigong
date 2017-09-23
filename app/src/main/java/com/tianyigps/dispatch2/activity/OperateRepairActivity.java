@@ -1094,7 +1094,9 @@ public class OperateRepairActivity extends BaseActivity {
 
     //  显示LoadingFragment
     private void showLoading() {
-        mLoadingDialogFragment.show(getFragmentManager(), "LoadingFragment");
+        if (!mLoadingDialogFragment.isAdded()) {
+            mLoadingDialogFragment.show(getFragmentManager(), "LoadingFragment");
+        }
     }
 
     //  校验该订单中是否填有该imei
