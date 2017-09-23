@@ -96,9 +96,6 @@ public class InstallingActivity extends BaseActivity {
     //  卡片中是否已有填写内容
     private boolean isFilled = false;
 
-    //  已安装过的tid
-    private ArrayList<Integer> mTids = new ArrayList<>();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -115,7 +112,6 @@ public class InstallingActivity extends BaseActivity {
         //将背景色复原
         mSwipeRefreshLayout.setRefreshing(true);
         mNetworkManager.getWorkerOrderInfoStart(eid, token, orderNo, userName);
-        mTids.clear();
 //        resetRepairList();
     }
 
@@ -325,23 +321,12 @@ public class InstallingActivity extends BaseActivity {
                 switch (mAdapterType) {
                     case TYPE_INSTALL: {
                         for (StartOrderInfoBean.ObjBean.CarListBean carListBean : objBean.getCarList()) {
-                            int countWire = 0, contWireless = 0;
                             ID_MAIN_TERMINAL = carListBean.getId() + "T";
                             int i = 0;
                             for (StartOrderInfoBean.ObjBean.CarListBean.CarTerminalListBean carTerminalListBean
                                     : carListBean.getCarTerminalList()) {
-                                mTids.add(carTerminalListBean.getId());
-                                if (carTerminalListBean.getTerminalType() == 1
-                                        && !RegularU.isEmpty(carTerminalListBean.getNewInstallLocation())) {
-                                    countWire++;
-                                } else if (carTerminalListBean.getTerminalType() == 2
-                                        && !RegularU.isEmpty(carTerminalListBean.getNewInstallLocation())) {
-                                    contWireless++;
-                                }
 
                                 Cursor cursor = mDatabaseManager.getTer(carTerminalListBean.getId());
-                                Log.i(TAG, "onSuccess: cursor-->" + cursor);
-                                Log.i(TAG, "onSuccess: cursor-->" + cursor.moveToFirst());
                                 if (null == cursor || !cursor.moveToFirst()) {
                                     String tno, newtno;
                                     if (RegularU.isEmpty(carTerminalListBean.getNewTNo())) {
@@ -351,18 +336,34 @@ public class InstallingActivity extends BaseActivity {
                                         tno = carTerminalListBean.getTNo();
                                         newtno = carTerminalListBean.getNewTNo();
                                     }
+                                    Log.i(TAG, "onSuccess: tno-->" + tno);
+                                    Log.i(TAG, "onSuccess: newtno-->" + newtno);
+                                    Log.i(TAG, "onSuccess: position-->" + carTerminalListBean.getNewInstallLocation());
+                                    Log.i(TAG, "onSuccess: positionurl-->" + carTerminalListBean.getNewInstallLocationPic());
+                                    Log.i(TAG, "onSuccess: installurl-->" + carTerminalListBean.getNewWiringDiagramPic());
+                                    Log.i(TAG, "onSuccess: tid-->" + carTerminalListBean.getId());
+                                    Log.i(TAG, "onSuccess: terminalType-->" + carTerminalListBean.getTerminalType());
+                                    int wire;
+                                    if (carTerminalListBean.getTerminalType() == 2) {
+                                        wire = 0;
+                                    } else {
+                                        wire = 1;
+                                    }
                                     mDatabaseManager.addTer(ID_MAIN_TERMINAL + i
                                             , tno
                                             , newtno
                                             , carTerminalListBean.getNewInstallLocation()
-                                            , mBaseImg + carTerminalListBean.getInstallLocationPic()
+                                            , mBaseImg + carTerminalListBean.getNewInstallLocationPic()
                                             , mBaseImg + carTerminalListBean.getNewWiringDiagramPic()
-                                            , carTerminalListBean.getInstallLocationPic()
+                                            , carTerminalListBean.getNewInstallLocationPic()
                                             , carTerminalListBean.getNewWiringDiagramPic()
                                             , carListBean.getId()
-                                            , carTerminalListBean.getTerminalType());
+                                            , wire);
                                     mDatabaseManager.addTerModel(ID_MAIN_TERMINAL + i
                                             , carTerminalListBean.getTerminalType());
+                                    mDatabaseManager.addTerId(ID_MAIN_TERMINAL + i
+                                            , carTerminalListBean.getId()
+                                            , carListBean.getId());
                                 }
                                 i++;
                             }
@@ -370,9 +371,7 @@ public class InstallingActivity extends BaseActivity {
                                 mAdapterInstallingDataList.add(new AdapterInstallingData(carListBean.getId()
                                         , carListBean.getCarVin()
                                         , carListBean.getWiredNum()
-                                        , carListBean.getWirelessNum()
-                                        , countWire
-                                        , contWireless));
+                                        , carListBean.getWirelessNum()));
                             }
                         }
 
@@ -411,6 +410,53 @@ public class InstallingActivity extends BaseActivity {
                                                 Log.i(TAG, "onSuccess: default.TerminalType-->" + carTerminalListBean.getTerminalType());
                                             }
                                         }
+                                    }
+                                }else {
+                                    ID_MAIN_TERMINAL = carListBean.getId() + "T";
+                                    int i = 0;
+                                    for (StartOrderInfoBean.ObjBean.CarListBean.CarTerminalListBean carTerminalListBean
+                                            : carListBean.getCarTerminalList()) {
+
+                                        Cursor cursor = mDatabaseManager.getTer(carTerminalListBean.getId());
+                                        if (null == cursor || !cursor.moveToFirst()) {
+                                            String tno, newtno;
+                                            if (RegularU.isEmpty(carTerminalListBean.getNewTNo())) {
+                                                tno = "";
+                                                newtno = carTerminalListBean.getTNo();
+                                            } else {
+                                                tno = carTerminalListBean.getTNo();
+                                                newtno = carTerminalListBean.getNewTNo();
+                                            }
+                                            Log.i(TAG, "onSuccess: tno-->" + tno);
+                                            Log.i(TAG, "onSuccess: newtno-->" + newtno);
+                                            Log.i(TAG, "onSuccess: position-->" + carTerminalListBean.getNewInstallLocation());
+                                            Log.i(TAG, "onSuccess: positionurl-->" + carTerminalListBean.getNewInstallLocationPic());
+                                            Log.i(TAG, "onSuccess: installurl-->" + carTerminalListBean.getNewWiringDiagramPic());
+                                            Log.i(TAG, "onSuccess: tid-->" + carTerminalListBean.getId());
+                                            Log.i(TAG, "onSuccess: terminalType-->" + carTerminalListBean.getTerminalType());
+                                            int wire;
+                                            if (carTerminalListBean.getTerminalType() == 2) {
+                                                wire = 0;
+                                            } else {
+                                                wire = 1;
+                                            }
+                                            mDatabaseManager.addTer(ID_MAIN_TERMINAL + i
+                                                    , tno
+                                                    , newtno
+                                                    , carTerminalListBean.getNewInstallLocation()
+                                                    , mBaseImg + carTerminalListBean.getNewInstallLocationPic()
+                                                    , mBaseImg + carTerminalListBean.getNewWiringDiagramPic()
+                                                    , carTerminalListBean.getNewInstallLocationPic()
+                                                    , carTerminalListBean.getNewWiringDiagramPic()
+                                                    , carListBean.getId()
+                                                    , wire);
+                                            mDatabaseManager.addTerModel(ID_MAIN_TERMINAL + i
+                                                    , carTerminalListBean.getTerminalType());
+                                            mDatabaseManager.addTerId(ID_MAIN_TERMINAL + i
+                                                    , carTerminalListBean.getId()
+                                                    , carListBean.getId());
+                                        }
+                                        i++;
                                     }
                                 }
                             }
@@ -679,20 +725,7 @@ public class InstallingActivity extends BaseActivity {
                                     && (!RegularU.isEmpty(position))
                                     && !RegularU.isEmpty(positionUrl);
                             if (terComplete) {
-                                if (data.getCompleteOffline() > 0) {
-                                    boolean contain = false;
-                                    for (int tid : mTids) {
-                                        if (tid == tId) {
-                                            contain = true;
-                                            break;
-                                        }
-                                    }
-                                    if (!contain) {
-                                        wirelessComplete++;
-                                    }
-                                } else {
-                                    wirelessComplete++;
-                                }
+                                wirelessComplete++;
                             }
                         } else {
                             terComplete = (!RegularU.isEmpty(tNoNew))
@@ -700,20 +733,7 @@ public class InstallingActivity extends BaseActivity {
                                     && !RegularU.isEmpty(positionUrl)
                                     && !RegularU.isEmpty(installUrl);
                             if (terComplete) {
-                                if (data.getCompleteLine() > 0) {
-                                    boolean contain = false;
-                                    for (int tid : mTids) {
-                                        if (tid == tId) {
-                                            contain = true;
-                                            break;
-                                        }
-                                    }
-                                    if (!contain) {
-                                        wireComplete++;
-                                    }
-                                } else {
-                                    wireComplete++;
-                                }
+                                wireComplete++;
                             }
                         }
                     } while (cursorTer.moveToNext());
@@ -723,12 +743,8 @@ public class InstallingActivity extends BaseActivity {
                     Log.i(TAG, "updateInstallComplete: cursorTer is null");
                 }
 
-                int wire = data.getCompleteLine();
-                int wireless = data.getCompleteOffline();
-                data.setCompleteLine(wire + wireComplete);
-                data.setCompleteOffline(wireless + wirelessComplete);
-//                data.setCompleteLine(wireComplete);
-//                data.setCompleteOffline(wirelessComplete);
+                data.setCompleteLine(wireComplete);
+                data.setCompleteOffline(wirelessComplete);
             }
         }
     }
