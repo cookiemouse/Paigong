@@ -301,17 +301,23 @@ public class InstallingActivity extends BaseActivity {
                 switch (mAdapterType) {
                     case TYPE_INSTALL: {
                         for (StartOrderInfoBean.ObjBean.CarListBean carListBean : objBean.getCarList()) {
+                            int countWire = 0, contWireless = 0;
                             for (StartOrderInfoBean.ObjBean.CarListBean.CarTerminalListBean carTerminalListBean
                                     : carListBean.getCarTerminalList()) {
                                 mTids.add(carTerminalListBean.getId());
+                                if (carTerminalListBean.getTerminalType() == 1) {
+                                    countWire++;
+                                } else if (carTerminalListBean.getTerminalType() == 2) {
+                                    contWireless++;
+                                }
                             }
                             if (carListBean.getRemoveFlag() == 0) {
                                 mAdapterInstallingDataList.add(new AdapterInstallingData(carListBean.getId()
                                         , carListBean.getCarVin()
                                         , carListBean.getWiredNum()
                                         , carListBean.getWirelessNum()
-                                        , objBean.getFinishWiredNum()
-                                        , objBean.getFinishWirelessNum()));
+                                        , countWire
+                                        , contWireless));
                             }
                         }
 
