@@ -307,7 +307,10 @@ public class PendDetailsActivity extends Activity {
 
                 mOrderId = nodeBean.getOrderId();
 
-                mRemarks = objBean.getRemark();
+                if (!RegularU.isEmpty(objBean.getInstallDemand())){
+                    mRemarks = "【" + objBean.getInstallDemand() + "】";
+                }
+                mRemarks += objBean.getRemark();
                 mDoorTime = objBean.getDoorTime();
                 mCreateTime = objBean.getCreateTime();
                 mAddress = objBean.getAddress();

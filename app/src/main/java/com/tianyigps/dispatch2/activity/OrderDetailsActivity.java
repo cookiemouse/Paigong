@@ -305,7 +305,10 @@ public class OrderDetailsActivity extends Activity {
                 mStringProvince = objBean.getProvince();
                 mStringCity = objBean.getCity();
                 mStringDistrict = objBean.getDistrict() + objBean.getDetail();
-                mStringDetail = objBean.getRemark();
+                if (!RegularU.isEmpty(objBean.getInstallDemand())){
+                    mStringDetail = "【" + objBean.getInstallDemand() + "】";
+                }
+                mStringDetail += objBean.getRemark();
                 mIntOrderType = objBean.getOrderType();
                 mIntOrderStaus = objBean.getOrderStatus();
                 mIntReviseFlag = objBean.getReviseFlag();

@@ -618,14 +618,18 @@ public class InstallingActivity extends BaseActivity {
                                     && (!RegularU.isEmpty(position))
                                     && !RegularU.isEmpty(positionUrl);
                             if (terComplete) {
-                                boolean contain = false;
-                                for (int tid : mTids){
-                                    if (tid == tId){
-                                        contain = true;
-                                        break;
+                                if (data.getCompleteOffline() > 0) {
+                                    boolean contain = false;
+                                    for (int tid : mTids) {
+                                        if (tid == tId) {
+                                            contain = true;
+                                            break;
+                                        }
                                     }
-                                }
-                                if (!contain) {
+                                    if (!contain) {
+                                        wirelessComplete++;
+                                    }
+                                } else {
                                     wirelessComplete++;
                                 }
                             }
@@ -635,14 +639,18 @@ public class InstallingActivity extends BaseActivity {
                                     && !RegularU.isEmpty(positionUrl)
                                     && !RegularU.isEmpty(installUrl);
                             if (terComplete) {
-                                boolean contain = false;
-                                for (int tid : mTids){
-                                    if (tid == tId){
-                                        contain = true;
-                                        break;
+                                if (data.getCompleteLine() > 0) {
+                                    boolean contain = false;
+                                    for (int tid : mTids) {
+                                        if (tid == tId) {
+                                            contain = true;
+                                            break;
+                                        }
                                     }
-                                }
-                                if (!contain) {
+                                    if (!contain) {
+                                        wireComplete++;
+                                    }
+                                } else {
                                     wireComplete++;
                                 }
                             }
@@ -658,6 +666,8 @@ public class InstallingActivity extends BaseActivity {
                 int wireless = data.getCompleteOffline();
                 data.setCompleteLine(wire + wireComplete);
                 data.setCompleteOffline(wireless + wirelessComplete);
+//                data.setCompleteLine(wireComplete);
+//                data.setCompleteOffline(wirelessComplete);
             }
         }
     }

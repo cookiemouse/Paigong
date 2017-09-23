@@ -104,6 +104,7 @@ public class PendDetailsBean {
         private int orderStatus;
         private int orderType;
         private String remark;
+        private String installDemand;
         private String partSubReason;
         private int removeWiredNum;
         private int removeWirelessNum;
@@ -290,6 +291,14 @@ public class PendDetailsBean {
 
         public void setReviseFlag(int reviseFlag) {
             this.reviseFlag = reviseFlag;
+        }
+
+        public String getInstallDemand() {
+            return installDemand;
+        }
+
+        public void setInstallDemand(String installDemand) {
+            this.installDemand = installDemand;
         }
 
         public List<OrderCarListBean> getOrderCarList() {
