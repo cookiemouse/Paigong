@@ -97,6 +97,8 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
     private Intent mIntent;
     private boolean mIsShow = false;
 
+    private long mNow = System.currentTimeMillis();
+
     //  LoadingFragment
     private LoadingDialogFragment mLoadingDialogFragment;
 
@@ -352,6 +354,7 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
 
                 TerminalInfoBean.ObjBean objBean = terminalInfoBean.getObj();
                 mStringTitle = objBean.getName();
+                mNow = terminalInfoBean.getTime();
 
                 TerminalInfoBean.ObjBean.RedisObjBean redisObjBean = objBean.getRedisObj();
                 String type;
@@ -486,11 +489,10 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
         if (null == gps) {
             gps = "";
         }
-        long now = System.currentTimeMillis();
         switch (locateType) {
             case 0: {
                 long mm = timeFormatU.dateToMillis2(lbs);
-                if (now - mm <= MIN_10) {
+                if (mNow - mm <= MIN_10) {
                     locateType = 2;
                 } else {
                     locateType = 3;
@@ -499,7 +501,7 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
             }
             case 1: {
                 long mm = timeFormatU.dateToMillis2(gps);
-                if (now - mm <= MIN_10) {
+                if (mNow - mm <= MIN_10) {
                     locateType = 1;
                 } else {
                     locateType = 3;
