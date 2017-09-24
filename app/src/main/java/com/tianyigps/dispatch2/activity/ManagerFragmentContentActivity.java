@@ -63,7 +63,8 @@ public class ManagerFragmentContentActivity extends AppCompatActivity implements
 
     //  广播接收器
     private BroadcastReceiver mBroadcastReceiver;
-    private Intent mIntentReceiver;
+    private Intent mIntenteceiver;
+    private boolean isReceiver = false;
 
     //  是否有进行中的订单
     private NetworkManager mNetworkManager;
@@ -96,29 +97,30 @@ public class ManagerFragmentContentActivity extends AppCompatActivity implements
         super.onResume();
         mSharedpreferenceManager.saveUiMode(Data.DATA_LAUNCH_MODE_MANAGER);
         mNetworkManager.getWorkerOrderHanding(mEid, mToken, mUserName);
-
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(Data.BROAD_FILTER);
-        intentFilter.addCategory(Data.BROAD_CATEGORY);
-        mIntentReceiver = registerReceiver(mBroadcastReceiver, intentFilter);
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        if (null != mIntentReceiver) {
-            unregisterReceiver(mBroadcastReceiver);
-            mIntentReceiver = null;
-        }
+    protected void onStop() {
+        super.onStop();
+//        if (null != mIntenteceiver) {
+//            unregisterReceiver(mBroadcastReceiver);
+//        } else {
+//            if (null != mBroadcastReceiver) {
+//                unregisterReceiver(mBroadcastReceiver);
+//            }
+//        }
     }
 
     @Override
     protected void onDestroy() {
         Log.i(TAG, "onDestroy: ");
+        if (isReceiver) {
+            unregisterReceiver(mBroadcastReceiver);
+            isReceiver = false;
+        }
         if (null != mBitmap) {
             mBitmap.recycle();
         }
-
         super.onDestroy();
     }
 
@@ -228,6 +230,14 @@ public class ManagerFragmentContentActivity extends AppCompatActivity implements
                 showRedDot();
             }
         };
+
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(Data.BROAD_FILTER);
+        intentFilter.addCategory(Data.BROAD_CATEGORY);
+        if (!isReceiver) {
+            isReceiver = true;
+            mIntenteceiver = registerReceiver(mBroadcastReceiver, intentFilter);
+        }
     }
 
     //  显示小红点

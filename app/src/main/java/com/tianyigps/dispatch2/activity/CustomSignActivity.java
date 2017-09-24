@@ -643,6 +643,7 @@ public class CustomSignActivity extends BaseActivity {
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.putExtra(Data.DATA_INTENT_WORKER_FRAGMENT, Data.DATA_INTENT_WORKER_FRAGMENT_HANDED);
                     startActivity(intent);
+                    finish();
                     break;
                 }
                 case Data.MSG_2: {

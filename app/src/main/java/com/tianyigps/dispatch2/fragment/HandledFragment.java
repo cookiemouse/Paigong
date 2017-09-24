@@ -63,9 +63,9 @@ public class HandledFragment extends Fragment {
     private LinearLayout mLinearLayoutDefault;
 
     //  加载更多
-    private View mViewMore;
-    private TextView mTextViewMore;
-    private ProgressBar mProgressBarMore;
+//    private View mViewMore;
+//    private TextView mTextViewMore;
+//    private ProgressBar mProgressBarMore;
     private boolean addAble = true, isLast = false;
 
     //  标题栏
@@ -97,6 +97,13 @@ public class HandledFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        mSwipeRefreshLayout.setRefreshing(true);
+        mNetworkManager.getWorkerOrderHanded(eid, token, "", "", userName);
+    }
+
+    @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if (!hidden) {
@@ -123,9 +130,9 @@ public class HandledFragment extends Fragment {
         mLinearLayoutDefault = view.findViewById(R.id.ll_fragment_handed_default);
         mTextViewSearchNull = view.findViewById(R.id.tv_fragment_handed_default);
 
-        mViewMore = LayoutInflater.from(getContext()).inflate(R.layout.layout_load_more, null);
-        mTextViewMore = mViewMore.findViewById(R.id.tv_layout_load_more);
-        mProgressBarMore = mViewMore.findViewById(R.id.pb_layout_load_more);
+//        mViewMore = LayoutInflater.from(getContext()).inflate(R.layout.layout_load_more, null);
+//        mTextViewMore = mViewMore.findViewById(R.id.tv_layout_load_more);
+//        mProgressBarMore = mViewMore.findViewById(R.id.pb_layout_load_more);
 
         mEditTextSearch.clearFocus();
 
@@ -134,9 +141,9 @@ public class HandledFragment extends Fragment {
         mAdapterHandledDataList = new ArrayList<>();
         mHandledAdapter = new HandledAdapter(getContext(), mAdapterHandledDataList);
 
-        mListViewHandled.setAdapter(mHandledAdapter);
+//        mListViewHandled.addFooterView(mViewMore);
 
-        mListViewHandled.addFooterView(mViewMore);
+        mListViewHandled.setAdapter(mHandledAdapter);
 
         mNetworkManager = new NetworkManager();
         myHandler = new MyHandler();
@@ -151,9 +158,6 @@ public class HandledFragment extends Fragment {
         } else {
             mImageViewTitleLeft.setVisibility(View.VISIBLE);
         }
-
-        mSwipeRefreshLayout.setRefreshing(true);
-        mNetworkManager.getWorkerOrderHanded(eid, token, "", "", userName);
     }
 
     private void initTitle() {
@@ -221,15 +225,15 @@ public class HandledFragment extends Fragment {
                     if (addAble && !mSwipeRefreshLayout.isRefreshing()) {
                         addAble = false;
                         if (isLast) {
-                            mProgressBarMore.setVisibility(View.GONE);
-                            mTextViewMore.setVisibility(View.VISIBLE);
-                            mTextViewMore.setText("我是有底线的!");
+//                            mProgressBarMore.setVisibility(View.GONE);
+//                            mTextViewMore.setVisibility(View.VISIBLE);
+//                            mTextViewMore.setText("我是有底线的!");
                             myHandler.sendEmptyMessageDelayed(Data.MSG_2, DELAY_LAST);
                             return;
                         }
-                        mProgressBarMore.setVisibility(View.VISIBLE);
-                        mTextViewMore.setVisibility(View.VISIBLE);
-                        mTextViewMore.setText("正在加载...");
+//                        mProgressBarMore.setVisibility(View.VISIBLE);
+//                        mTextViewMore.setVisibility(View.VISIBLE);
+//                        mTextViewMore.setText("正在加载...");
                         // TODO: 17-8-2 加载下面数据
                         mNetworkManager.getWorkerOrderHanded(eid
                                 , token
@@ -380,16 +384,16 @@ public class HandledFragment extends Fragment {
                 case Data.MSG_2: {
                     //  加载更多完成
                     if (!isLast) {
-                        mTextViewMore.setText("加载完成");
+//                        mTextViewMore.setText("加载完成");
                     }
-                    mProgressBarMore.setVisibility(View.GONE);
+//                    mProgressBarMore.setVisibility(View.GONE);
                     myHandler.sendEmptyMessageDelayed(Data.MSG_3, DELAY_GONE);
                     break;
                 }
                 case Data.MSG_3: {
                     //  加载完成，隐藏footer，并归零
-                    mProgressBarMore.setVisibility(View.GONE);
-                    mTextViewMore.setVisibility(View.GONE);
+//                    mProgressBarMore.setVisibility(View.GONE);
+//                    mTextViewMore.setVisibility(View.GONE);
 
                     myHandler.sendEmptyMessageDelayed(Data.MSG_4, 200);
                     break;

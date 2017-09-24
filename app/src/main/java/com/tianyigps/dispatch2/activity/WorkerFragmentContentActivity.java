@@ -43,9 +43,6 @@ public class WorkerFragmentContentActivity extends AppCompatActivity implements 
 
     private FrameLayout mFrameLayoutContent;
 
-    private ImageView mImageViewBackground;
-    private Bitmap mBitmap;
-
     //  顶部小红点锚点
     private View mViewRedDot, mViewRedDotOrder, mViewRedDotHanding;
     private QBadgeView mQBadgeView, mQBadgeViewOrder, mQBadgeViewHanding;
@@ -66,6 +63,7 @@ public class WorkerFragmentContentActivity extends AppCompatActivity implements 
     //  广播接收器
     private BroadcastReceiver mBroadcastReceiver;
     private Intent mIntentReceiver;
+    private boolean isReceiver = false;
 
     //  NetWorkerManager
     private NetworkManager mNetworkManager;
@@ -95,28 +93,33 @@ public class WorkerFragmentContentActivity extends AppCompatActivity implements 
     protected void onResume() {
         super.onResume();
         mSharedpreferenceManager.saveUiMode(Data.DATA_LAUNCH_MODE_WORKER);
-        mNetworkManager.getWorkerOrderHanding(mEid, mToken, mUserName);
-
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(Data.BROAD_FILTER);
-        intentFilter.addCategory(Data.BROAD_CATEGORY);
-        mIntentReceiver = registerReceiver(mBroadcastReceiver, intentFilter);
+        myHandler.sendEmptyMessageDelayed(Data.MSG_2, 2000);
+//        mBitmap = BitmapU.getBitmap(this, R.drawable.bg_content);
+//        mImageViewBackground.setImageBitmap(mBitmap);
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        if (null != mIntentReceiver) {
-            unregisterReceiver(mBroadcastReceiver);
-            mIntentReceiver = null;
-        }
+    protected void onStop() {
+        super.onStop();
+        Log.i(TAG, "onStop: 1");
+//        if (null != mIntentReceiver) {
+//            Log.i(TAG, "onStop: 1.1");
+//            unregisterReceiver(mBroadcastReceiver);
+//            mIntentReceiver = null;
+//            Log.i(TAG, "onStop: 1.2");
+//        } else {
+//            if (null != mBroadcastReceiver) {
+//                unregisterReceiver(mBroadcastReceiver);
+//            }
+//        }
     }
 
     @Override
     protected void onDestroy() {
         Log.i(TAG, "onDestroy: ");
-        if (null != mBitmap) {
-            mBitmap.recycle();
+        if (isReceiver) {
+            unregisterReceiver(mBroadcastReceiver);
+            isReceiver = false;
         }
         super.onDestroy();
     }
@@ -195,10 +198,6 @@ public class WorkerFragmentContentActivity extends AppCompatActivity implements 
         mViewRedDotOrder = findViewById(R.id.view_worker_red_dot_order);
         mViewRedDotHanding = findViewById(R.id.view_worker_red_dot_handing);
 
-        mImageViewBackground = (ImageView) findViewById(R.id.iv_activity_worker_fragment_content);
-        mBitmap = BitmapU.getBitmap(this, R.drawable.bg_content);
-        mImageViewBackground.setImageBitmap(mBitmap);
-
         mImageViewOrder = (ImageView) findViewById(R.id.iv_fragment_content_bottom_order);
         mImageViewHandling = (ImageView) findViewById(R.id.iv_fragment_content_bottom_handling);
         mImageViewHistory = (ImageView) findViewById(R.id.iv_fragment_content_bottom_history);
@@ -265,6 +264,17 @@ public class WorkerFragmentContentActivity extends AppCompatActivity implements 
                 showRedDotOnOrder(true);
             }
         };
+
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(Data.BROAD_FILTER);
+        intentFilter.addCategory(Data.BROAD_CATEGORY);
+        Log.i(TAG, "init: 1");
+        if (!isReceiver) {
+            mIntentReceiver = registerReceiver(mBroadcastReceiver, intentFilter);
+            isReceiver = true;
+        }
+        Log.i(TAG, "init: mIntentReceiver-->" + mIntentReceiver);
+        Log.i(TAG, "init: 2");
     }
 
     //  设置事件监听
@@ -382,6 +392,10 @@ public class WorkerFragmentContentActivity extends AppCompatActivity implements 
                     } else {
                         showRedDotOnHanding(false);
                     }
+                    break;
+                }
+                case Data.MSG_2: {
+                    mNetworkManager.getWorkerOrderHanding(mEid, mToken, mUserName);
                     break;
                 }
             }

@@ -109,6 +109,7 @@ public class OperateRepairActivity extends BaseActivity {
     private String mImeiOld;
     private String mLastInstaller, mLastPhoneNo;
     private String mRepaireDesc;
+    private String mChangeFlag = "0";
 
     //  LoadingFragment
     private LoadingDialogFragment mLoadingDialogFragment;
@@ -621,6 +622,11 @@ public class OperateRepairActivity extends BaseActivity {
                 }
                 mLastInstaller = objBean.getName();
                 mLastPhoneNo = objBean.getPhoneNo();
+                if (RegularU.isEmpty(objBean.getEndDate())) {
+                    mChangeFlag = "1";
+                } else {
+                    mChangeFlag = "0";
+                }
 
                 myHandler.sendEmptyMessage(Data.MSG_4);
             }
@@ -671,6 +677,7 @@ public class OperateRepairActivity extends BaseActivity {
                     myHandler.sendEmptyMessage(Data.MSG_3);
                     return;
                 }
+                mChangeFlag = objBean.getChangeFlag();
                 wholeImei = objBean.getImei();
                 myHandler.sendEmptyMessage(Data.MSG_2);
             }
@@ -1211,6 +1218,7 @@ public class OperateRepairActivity extends BaseActivity {
                 case Data.MSG_2: {
                     //  check whole imei 成功
                     Log.i(TAG, "handleMessage: wholeImei-->" + wholeImei);
+
                     boolean exist = isExistImei(wholeImei);
                     Log.i(TAG, "handleMessage: exist-->" + exist);
                     if (exist) {
@@ -1234,6 +1242,16 @@ public class OperateRepairActivity extends BaseActivity {
                     //  历史安装人
                     mTextViewInstallName.setText(mLastInstaller);
                     mTextViewInstallPhone.setText(mLastPhoneNo);
+
+                    if (mChangeFlag.equals("0")) {
+//                        mRelativeLayoutReplace.setVisibility(View.VISIBLE);
+                        mTextViewState.setText(R.string.repair_replace);
+                        mTextViewState.setEnabled(true);
+                    } else {
+//                        mRelativeLayoutReplace.setVisibility(View.GONE);
+                        mTextViewState.setText(R.string.repair_replace);
+                        mTextViewState.setEnabled(false);
+                    }
                     break;
                 }
                 case Data.MSG_5: {

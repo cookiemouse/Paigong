@@ -154,9 +154,9 @@ public class PendedFragment extends Fragment {
 
         mPendedAdapter = new PendedAdapter(getContext(), mAdapterPendedDataList);
 
-        mListView.setAdapter(mPendedAdapter);
-
         mListView.addFooterView(mViewMore);
+
+        mListView.setAdapter(mPendedAdapter);
 
         mSwipeRefreshLayout.setRefreshing(true);
         mNetworkManager.getPended(jobNo, token, "", "", "", userName);
