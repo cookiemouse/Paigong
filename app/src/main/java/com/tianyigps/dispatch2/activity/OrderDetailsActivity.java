@@ -92,7 +92,7 @@ public class OrderDetailsActivity extends Activity {
     private LocateManager mLocateManager;
     private LatLng mLatLngLocate;
 
-    private String mStringContactPhone, mStringDetail, mStringCity, mStringOrderNum,
+    private String mStringContactPhone, mStringDetail = "", mStringCity, mStringOrderNum,
             mStringContactName, mStringProvince, mStringCustName, mStringDistrict, mStringTypeTitle,
             mStringTypeContent = "", mStringInfoTitle, mStringInstallInfo = "", mStringTno;
     private String mStringRemoveContent = "";

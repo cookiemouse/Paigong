@@ -84,7 +84,8 @@ public class PendDetailsActivity extends Activity {
 
     private Button mButtonPend;
 
-    private String mContact, mContactPhone, mAddress, mRemarks, mInstallType, mInstallContent = "", mInfoTitle, mInfoContent = "", mRemoveContent = "", mRemoveModifyContent = "";
+    private String mContact, mContactPhone, mAddress, mRemarks = "", mInstallType, mInstallContent = "", mInfoTitle, mInfoContent = ""
+            , mRemoveContent = "", mRemoveModifyContent = "";
     private long mDoorTime, mCreateTime;
     private int mOrderStatusGet, mReviseFlag;
     private int mNode, mReviseStatus = 0;
