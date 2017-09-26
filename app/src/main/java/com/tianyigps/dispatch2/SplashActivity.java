@@ -31,6 +31,7 @@ import com.tianyigps.dispatch2.manager.SharedpreferenceManager;
 import com.tianyigps.dispatch2.utils.BitmapU;
 import com.tianyigps.dispatch2.utils.RegularU;
 import com.tianyigps.dispatch2.utils.VersionU;
+import com.xsj.crasheye.Crasheye;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.PermissionListener;
 import com.yanzhenjie.permission.Rationale;
@@ -75,6 +76,9 @@ public class SplashActivity extends Activity {
         //极光推送
 //        JPushInterface.setDebugMode(true);
         JPushInterface.init(this);
+
+        //  西山居日志
+        Crasheye.init(this, "0ebc0220");
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);

@@ -64,4 +64,5 @@ dependencies {
     compile 'cn.bingoogolapple:bga-qrcodecore:1.1.7@aar'
     compile 'cn.bingoogolapple:bga-zxing:1.1.7@aar'
     testCompile 'junit:junit:4.12'
+    compile files('libs/crasheye_2.2.2.jar')
 }
