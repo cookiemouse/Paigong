@@ -127,6 +127,7 @@ public class OperateRepairActivity extends BaseActivity {
     //  imei号是否校验过
     private boolean isCheckedImei = true;
     private boolean isToLocate = false;
+    private boolean isImeiEdit = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -163,6 +164,11 @@ public class OperateRepairActivity extends BaseActivity {
             Log.i(TAG, "onActivityResult: model-->" + model);
             mDatabaseManager.addRepairLocateType(tId, locateType);
             mDatabaseManager.addRepair(tId, model);
+
+            if (mTextViewTip0.getText().toString().equals(getString(R.string.tip_locate))) {
+                mTextViewTip0.setVisibility(View.GONE);
+                mImageViewReplaceLocate.setBackgroundResource(R.color.colorNull);
+            }
         }
 
         if (RESULT_OK != resultCode) {
@@ -471,6 +477,7 @@ public class OperateRepairActivity extends BaseActivity {
         mEditTextNewImei.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean focus) {
+                isImeiEdit = true;
                 if (!focus) {
                     //  丢失焦点
                     String imei = mEditTextNewImei.getText().toString();
@@ -998,17 +1005,22 @@ public class OperateRepairActivity extends BaseActivity {
             }
 
             if (mRelativeLayoutReplace.getVisibility() == View.VISIBLE) {
-                if (null == newTNo || "".equals(newTNo)) {
+                if (RegularU.isEmpty(newTNo)) {
                     complete = false;
+                    mTextViewTip0.setText(getString(R.string.tip_imei));
                     mTextViewTip0.setVisibility(View.VISIBLE);
                 } else {
                     mTextViewTip0.setVisibility(View.GONE);
-                }
-                if (0 == model) {
-                    complete = false;
-                    mImageViewReplaceLocate.setBackgroundResource(R.drawable.bg_edit_orange);
-                } else {
-                    mImageViewReplaceLocate.setBackgroundResource(R.color.colorNull);
+
+                    if (0 == model) {
+                        complete = false;
+                        mImageViewReplaceLocate.setBackgroundResource(R.drawable.bg_edit_orange);
+                        mTextViewTip0.setText(getString(R.string.tip_locate));
+                        mTextViewTip0.setVisibility(View.VISIBLE);
+                    } else {
+                        mImageViewReplaceLocate.setBackgroundResource(R.color.colorNull);
+                        mTextViewTip0.setVisibility(View.GONE);
+                    }
                 }
                 if (null == position || "".equals(position)) {
                     complete = false;
@@ -1318,6 +1330,9 @@ public class OperateRepairActivity extends BaseActivity {
                 case Data.MSG_11: {
                     //  EditTextNewImei TextChangedListener
                     isCheckedImei = false;
+                    if (isImeiEdit) {
+                        mDatabaseManager.addRepair(tId, 0);
+                    }
                     break;
                 }
                 case Data.MSG_12: {

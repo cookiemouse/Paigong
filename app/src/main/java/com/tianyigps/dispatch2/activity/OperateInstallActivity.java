@@ -200,6 +200,7 @@ public class OperateInstallActivity extends BaseActivity {
             AdapterOperateInstallListData listData = mAdapterOperateInstallListDataList.get(itemPosition);
             mDatabaseManager.addTerLocateType(idMainTerminal, locateType);
             listData.setModel(model);
+            mOperateInstallListAdapter.notifyDataSetChanged();
         }
 
         if (RESULT_OK != resultCode) {
