@@ -120,6 +120,7 @@ public class HandingAdapter extends BaseAdapter {
                 viewHolder.textViewStatue.setVisibility(View.VISIBLE);
                 viewHolder.textViewStatue.setText(R.string.pending_audit);
                 viewHolder.imageViewCall.setEnabled(false);
+                viewHolder.llCall.setEnabled(false);
                 viewHolder.imageViewStart.setEnabled(false);
                 break;
             }
@@ -127,6 +128,7 @@ public class HandingAdapter extends BaseAdapter {
                 viewHolder.textViewStatue.setVisibility(View.VISIBLE);
                 viewHolder.textViewStatue.setText(R.string.audit_fault);
                 viewHolder.imageViewCall.setEnabled(true);
+                viewHolder.llCall.setEnabled(true);
                 viewHolder.imageViewStart.setEnabled(true);
                 break;
             }
@@ -134,6 +136,7 @@ public class HandingAdapter extends BaseAdapter {
                 viewHolder.textViewStatue.setVisibility(View.GONE);
                 viewHolder.textViewStatue.setText("");
                 viewHolder.imageViewCall.setEnabled(true);
+                viewHolder.llCall.setEnabled(true);
                 viewHolder.imageViewStart.setEnabled(true);
                 break;
             }
@@ -141,6 +144,7 @@ public class HandingAdapter extends BaseAdapter {
                 viewHolder.textViewStatue.setVisibility(View.GONE);
                 viewHolder.textViewStatue.setText("");
                 viewHolder.imageViewCall.setEnabled(true);
+                viewHolder.llCall.setEnabled(true);
                 viewHolder.imageViewStart.setEnabled(true);
                 Log.i(TAG, "getView: default" + data.getCheckStatus());
             }

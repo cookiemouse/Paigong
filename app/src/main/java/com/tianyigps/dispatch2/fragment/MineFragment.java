@@ -65,6 +65,23 @@ public class MineFragment extends Fragment {
         return viewRoot;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        mAdapterMineDataList = new ArrayList<>();
+        if (Data.DATA_LAUNCH_MODE_WORKER == uiMode) {
+            mAdapterMineDataList.add(new AdapterMineData(R.drawable.ic_statistics, "质量统计"));
+        } else {
+            mAdapterMineDataList.add(new AdapterMineData(R.drawable.ic_statistics, "安装数量统计"));
+        }
+        mAdapterMineDataList.add(new AdapterMineData(R.drawable.ic_modify_password, "修改密码"));
+//        mAdapterMineDataList.add(new AdapterMineData(R.drawable.ic_modify_password, "测试"));
+
+        mMineAdapter = new MineAdapter(getActivity(), mAdapterMineDataList);
+
+        mListViewMine.setAdapter(mMineAdapter);
+    }
+
     private void init(View view) {
         mLinearLayoutTitle = view.findViewById(R.id.ll_layout_title_base_all);
         mImageViewTitleLeft = view.findViewById(R.id.iv_layout_title_base_left);
@@ -74,15 +91,6 @@ public class MineFragment extends Fragment {
 
         mListViewMine = view.findViewById(R.id.lv_fragment_mine);
         mTextViewExit = view.findViewById(R.id.tv_fragment_mine);
-
-        mAdapterMineDataList = new ArrayList<>();
-        mAdapterMineDataList.add(new AdapterMineData(R.drawable.ic_statistics, "质量统计"));
-        mAdapterMineDataList.add(new AdapterMineData(R.drawable.ic_modify_password, "修改密码"));
-//        mAdapterMineDataList.add(new AdapterMineData(R.drawable.ic_modify_password, "测试"));
-
-        mMineAdapter = new MineAdapter(getActivity(), mAdapterMineDataList);
-
-        mListViewMine.setAdapter(mMineAdapter);
 
         mSharedpreferenceManager = new SharedpreferenceManager(getActivity());
         uiMode = mSharedpreferenceManager.getUiMode();

@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.tianyigps.dispatch2.R;
 import com.tianyigps.dispatch2.data.AdapterRemoveData;
+import com.tianyigps.dispatch2.utils.RegularU;
 
 import java.util.List;
 
@@ -53,7 +54,11 @@ public class RemoveAdapter extends BaseAdapter {
     @Override
     public int getItemViewType(int position) {
 //        return super.getItemViewType(position);
-        return mDataList.get(position).getType();
+        if (position < mDataList.size()) {
+            return mDataList.get(position).getType();
+        } else {
+            return TYPE_TITLE;
+        }
     }
 
     @Override
@@ -89,7 +94,11 @@ public class RemoveAdapter extends BaseAdapter {
                     viewHolderTitle = (ViewHolderTitle) contentView.getTag();
                 }
 
-                viewHolderTitle.textViewTitle.setText(data.getTypeName());
+                if (RegularU.isEmpty(data.getTypeName())) {
+                    viewHolderTitle.textViewTitle.setText("");
+                } else {
+                    viewHolderTitle.textViewTitle.setText(data.getTypeName());
+                }
                 break;
             }
             case TYPE_REMOVE: {

@@ -89,8 +89,6 @@ public class StatisticsActivity extends BaseActivity {
     }
 
     private void init() {
-        this.setTitleText(R.string.statistics);
-
         mSharedpreferenceManager = new SharedpreferenceManager(StatisticsActivity.this);
         eid = mSharedpreferenceManager.getEid();
         jobNo = mSharedpreferenceManager.getJobNo();
@@ -132,8 +130,10 @@ public class StatisticsActivity extends BaseActivity {
         showLoading();
         if (Data.DATA_LAUNCH_MODE_WORKER == uiMode) {
             showWorkerList();
+            this.setTitleText(R.string.statistics);
         } else {
             showManagerList();
+            this.setTitleText("安装数量");
         }
     }
 
