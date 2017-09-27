@@ -151,9 +151,9 @@ public class OperateRemoveActivity extends BaseActivity {
                                 , location
                                 , mBaseUrl + carTerminalListBean.getInstallLocationPic()
                                 , mBaseUrl + carTerminalListBean.getWiringDiagramPic()
-                                , new TimeFormatU().millisToDate2(carListBean.getWiredAnnual())
-                                , objBean.getDispatchContactName()
-                                , objBean.getDispatchContactPhone()
+                                , ""
+                                , ""
+                                , ""
                                 , carTerminalListBean.getRemoveStatus()));
 
                         mNetworkManager.getLastInstaller(eid, token, carTerminalListBean.getTNo(), userName);
