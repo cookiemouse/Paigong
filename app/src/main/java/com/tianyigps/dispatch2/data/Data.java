@@ -77,6 +77,11 @@ public final class Data {
     public final static String DATA_JSON_HEAD_PHONE = DATA_JSON + "head_phone";
     public final static String DATA_JSON_IMG_BASE_URL = DATA_JSON + "img_base_url";
 
+    public final static String DATA_WITCH_MAP = "witch_map";
+
+    public final static String MAP_BAIDU = "map_baidu";
+    public final static String MAP_GAODE = "map_gaode";
+
     //  default
     public final static String DEFAULT_TOKEN = "";
     public final static String DEFAULT_MESSAGE = "请求数据失败，请检网络！";

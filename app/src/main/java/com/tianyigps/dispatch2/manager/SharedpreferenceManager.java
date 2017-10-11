@@ -109,7 +109,7 @@ public class SharedpreferenceManager {
     }
 
     //  获取服务主任号码
-    public String getManagerPhone(){
+    public String getManagerPhone() {
         return mSharedPreferences.getString(Data.DATA_JSON_PHONE_NO, "");
     }
 
@@ -152,5 +152,16 @@ public class SharedpreferenceManager {
 
     public String getImageBaseUrl() {
         return mSharedPreferences.getString(DATA_JSON_IMG_BASE_URL, "http://121.43.178.183/file/pic/");
+    }
+
+    //  跳转地图
+    public void saveWitchMap(String map) {
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putString(Data.DATA_WITCH_MAP, map);
+        editor.apply();
+    }
+
+    public String getWitchMap() {
+        return mSharedPreferences.getString(Data.DATA_WITCH_MAP, "");
     }
 }

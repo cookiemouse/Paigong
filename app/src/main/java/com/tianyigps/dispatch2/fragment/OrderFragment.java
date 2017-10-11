@@ -40,6 +40,7 @@ import com.tianyigps.dispatch2.interfaces.OnSignedWorkerListener;
 import com.tianyigps.dispatch2.manager.LocateManager;
 import com.tianyigps.dispatch2.manager.NetworkManager;
 import com.tianyigps.dispatch2.manager.SharedpreferenceManager;
+import com.tianyigps.dispatch2.utils.ChoiceMapU;
 import com.tianyigps.dispatch2.utils.RegularU;
 
 import java.util.ArrayList;
@@ -276,10 +277,13 @@ public class OrderFragment extends Fragment {
 
             @Override
             public void onMapClick(int position) {
-                Bundle bundle = new Bundle();
-                bundle.putString(DATA_INTENT_ADDRESS, mAdapterOrderDataList.get(position).getAddress());
-                mChoiceMapDialogFragment.setArguments(bundle);
-                mChoiceMapDialogFragment.show(getChildFragmentManager(), "ChoiceMapDialog");
+                String address = mAdapterOrderDataList.get(position).getAddress();
+                if (!ChoiceMapU.toMap(getContext(), address)) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString(DATA_INTENT_ADDRESS, mAdapterOrderDataList.get(position).getAddress());
+                    mChoiceMapDialogFragment.setArguments(bundle);
+                    mChoiceMapDialogFragment.show(getChildFragmentManager(), "ChoiceMapDialog");
+                }
             }
 
             @Override

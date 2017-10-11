@@ -2,10 +2,8 @@ package com.tianyigps.dispatch2.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
@@ -18,6 +16,9 @@ import android.widget.TextView;
 
 import com.baidu.mapapi.model.LatLng;
 import com.tianyigps.dispatch2.R;
+import com.tianyigps.dispatch2.data.Data;
+import com.tianyigps.dispatch2.manager.SharedpreferenceManager;
+import com.tianyigps.dispatch2.utils.ChoiceMapU;
 import com.tianyigps.dispatch2.utils.GeoCoderU;
 
 import java.util.ArrayList;
@@ -38,6 +39,8 @@ public class ChoiceMapDialogFragment extends DialogFragment {
     private static final String PN_BAIDU = "com.baidu.BaiduMap";
     private static final String PN_GAODE = "com.autonavi.minimap";
 
+    private SharedpreferenceManager mSharedpreferenceManager;
+
     private String address;
     private double mLat, mLng;
     private GeoCoderU mGeoCoderU;
@@ -48,6 +51,8 @@ public class ChoiceMapDialogFragment extends DialogFragment {
         Bundle bundle = getArguments();
         address = bundle.getString(DATA_INTENT_ADDRESS);
         Log.i(TAG, "onCreate: address-->" + address);
+
+        mSharedpreferenceManager = new SharedpreferenceManager(getContext());
 
         mGeoCoderU = new GeoCoderU();
         mGeoCoderU.setOnGetGeoGodeListener(new GeoCoderU.OnGetGeoCodeListener() {
@@ -132,19 +137,23 @@ public class ChoiceMapDialogFragment extends DialogFragment {
     }
 
     private void toGaodeMap(String address) {
-        Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_VIEW);
-        intent.addCategory(Intent.CATEGORY_DEFAULT);
-        String url = "androidamap://keywordNavi?sourceApplication=amap&keyword=" + address + "&style=2";
-        intent.setData(Uri.parse(url));
-        intent.setPackage("com.autonavi.minimap");
-        startActivity(intent);
+        ChoiceMapU.toGaodeMap(getContext(), address);
+        mSharedpreferenceManager.saveWitchMap(Data.MAP_GAODE);
+//        Intent intent = new Intent();
+//        intent.setAction(Intent.ACTION_VIEW);
+//        intent.addCategory(Intent.CATEGORY_DEFAULT);
+//        String url = "androidamap://keywordNavi?sourceApplication=amap&keyword=" + address + "&style=2";
+//        intent.setData(Uri.parse(url));
+//        intent.setPackage("com.autonavi.minimap");
+//        startActivity(intent);
     }
 
     private void toBaiduMap(String address) {
-        Intent intent = new Intent();
-        intent.setData(Uri.parse("baidumap://map/navi?query=" + address));
-        startActivity(intent);
+        ChoiceMapU.toBaiduMap(getContext(), address);
+        mSharedpreferenceManager.saveWitchMap(Data.MAP_BAIDU);
+//        Intent intent = new Intent();
+//        intent.setData(Uri.parse("baidumap://map/navi?query=" + address));
+//        startActivity(intent);
     }
 
     //  百度坐标系转高德

@@ -37,6 +37,7 @@
     <dimen name="dp_8_n">-8dp</dimen>
     <dimen name="dp_14_n">-14dp</dimen>
     <dimen name="dp_16_n">-16dp</dimen>
+    <dimen name="dp_24_n">-24dp</dimen>
 
     <dimen name="px_1">1px</dimen>
     <dimen name="px_2">2px</dimen>
@@ -47,4 +48,5 @@
     <dimen name="sp_16">16sp</dimen>
     <dimen name="sp_18">18sp</dimen>
     <dimen name="sp_20">20sp</dimen>
+    <dimen name="sp_40">100sp</dimen>
 </resources>

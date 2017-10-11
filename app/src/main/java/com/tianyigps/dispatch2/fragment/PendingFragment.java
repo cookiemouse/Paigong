@@ -41,6 +41,7 @@ import com.tianyigps.dispatch2.interfaces.OnPendingNumListener;
 import com.tianyigps.dispatch2.interfaces.OnPendingOrderListener;
 import com.tianyigps.dispatch2.manager.NetworkManager;
 import com.tianyigps.dispatch2.manager.SharedpreferenceManager;
+import com.tianyigps.dispatch2.utils.ChoiceMapU;
 import com.tianyigps.dispatch2.utils.RegularU;
 import com.tianyigps.dispatch2.utils.TimeFormatU;
 
@@ -252,11 +253,14 @@ public class PendingFragment extends Fragment {
             @Override
             public void onMap(int position) {
                 Log.i(TAG, "onMap: position-->" + position);
-                ChoiceMapDialogFragment mChoiceMapDialogFragment = new ChoiceMapDialogFragment();
-                Bundle bundle = new Bundle();
-                bundle.putString(Data.DATA_INTENT_ADDRESS, mAdapterPendingDataList.get(position).getAddress());
-                mChoiceMapDialogFragment.setArguments(bundle);
-                mChoiceMapDialogFragment.show(getChildFragmentManager(), "ChoiceMapDialog");
+                String address = mAdapterPendingDataList.get(position).getAddress();
+                if (!ChoiceMapU.toMap(getContext(), address)) {
+                    ChoiceMapDialogFragment mChoiceMapDialogFragment = new ChoiceMapDialogFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putString(Data.DATA_INTENT_ADDRESS, mAdapterPendingDataList.get(position).getAddress());
+                    mChoiceMapDialogFragment.setArguments(bundle);
+                    mChoiceMapDialogFragment.show(getChildFragmentManager(), "ChoiceMapDialog");
+                }
             }
 
             @Override

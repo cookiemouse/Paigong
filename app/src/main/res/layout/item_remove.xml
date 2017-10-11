@@ -6,11 +6,19 @@
              android:layout_height="wrap_content"
              android:background="@drawable/bg_item_installing_blue">
 
-    <ImageView
-        android:layout_width="@dimen/dp_120"
-        android:layout_height="@dimen/dp_64"
+    <TextView
+        android:id="@+id/tv_item_remove_position"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:src="@drawable/ic_item_car"/>
+        android:layout_marginBottom="-27sp"
+        android:gravity="bottom|center_horizontal"
+        android:layout_marginRight="@dimen/dp_12"
+        android:layout_marginEnd="@dimen/dp_12"
+        android:textColor="@color/colorWhite"
+        android:textSize="@dimen/sp_40"
+        android:alpha="0.4"
+        android:text="1"/>
 
     <ImageView
         android:id="@+id/iv_item_remove_go"
