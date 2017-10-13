@@ -173,10 +173,10 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(mEditTextImei.getWindowToken(), 0);
                 String imei = mEditTextImei.getText().toString();
-                if (imei.length() > 5) {
+                if (imei.length() > 7) {
                     getWholeImei(imei);
                 } else {
-                    showToast("请至少输入IMEI号后6位数");
+                    showToast("请至少输入IMEI号后8位数");
                 }
                 break;
             }
@@ -205,10 +205,10 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
                     return;
                 }
                 String imei = mEditTextImei.getText().toString();
-                if (imei.length() > 5) {
+                if (imei.length() > 7) {
                     getWholeImei(imei);
                 } else {
-                    showToast("请至少输入IMEI号后6位数");
+                    showToast("请至少输入IMEI号后8位数");
                 }
                 break;
             }

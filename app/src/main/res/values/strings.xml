@@ -86,7 +86,7 @@
 
 
     <string name="tip_pic">提示:请上传照片！</string>
-    <string name="tip_imei">提示:请输入6位以上设备号！</string>
+    <string name="tip_imei">提示:请输入8位以上设备号！</string>
     <string name="tip_locate">提示:未查看设备定位！</string>
     <string name="tip_explain">提示:请输入故障说明</string>
     <string name="tip_position">提示:安装位置不能为空！</string>
