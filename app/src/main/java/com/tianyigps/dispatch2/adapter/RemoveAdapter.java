@@ -113,7 +113,6 @@ public class RemoveAdapter extends BaseAdapter {
                     viewHolderRomeve.tvGo = contentView.findViewById(R.id.tv_item_remove_go);
                     viewHolderRomeve.ivGo = contentView.findViewById(R.id.iv_item_remove_go);
                     viewHolderRomeve.frameLayout = contentView.findViewById(R.id.fl_item_remove);
-                    viewHolderRomeve.tvPosition = contentView.findViewById(R.id.tv_item_remove_position);
 
                     contentView.setTag(viewHolderRomeve);
                 } else {
@@ -126,7 +125,6 @@ public class RemoveAdapter extends BaseAdapter {
                 int wirelessComplete = data.getOfflineComplete();
 
                 viewHolderRomeve.textViewOnlineR.setText("" + wire);
-                viewHolderRomeve.tvPosition.setText("" + position);
                 viewHolderRomeve.textViewOfflineR.setText("" + wireless);
                 viewHolderRomeve.textViewOnlineRC.setText("" + wireComplete);
                 viewHolderRomeve.textViewOfflineRC.setText("" + wirelessComplete);
@@ -174,7 +172,7 @@ public class RemoveAdapter extends BaseAdapter {
                 int wirelessComplete = data.getOfflineComplete();
 
                 viewHolderInstall.textViewFrameNo.setText(data.getFrameNo());
-                viewHolderInstall.tvPosition.setText("" + (position - 1));
+                viewHolderInstall.tvPosition.setText("" + (position - 2));
                 viewHolderInstall.textViewOnlineP.setText("" + wire);
                 viewHolderInstall.textViewOfflineP.setText("" + wireless);
                 viewHolderInstall.textViewOnlinePC.setText("" + wireComplete);
@@ -218,7 +216,6 @@ public class RemoveAdapter extends BaseAdapter {
         private TextView textViewOnlineR, textViewOfflineR, textViewOnlineRC, textViewOfflineRC;
         private ImageView ivGo;
         private TextView tvGo;
-        private TextView tvPosition;
         private FrameLayout frameLayout;
     }
 

@@ -113,7 +113,7 @@
                 android:layout_toRightOf="@+id/iv_item_operate_install_new"
                 android:background="@null"
                 android:ellipsize="end"
-                android:hint="请输入设备号（至少6位）"
+                android:hint="请输入设备号（至少8位）"
                 android:lines="1"
                 android:maxWidth="@dimen/dp_240"
                 android:singleLine="true"
