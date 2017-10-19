@@ -40,11 +40,6 @@ import com.tianyigps.dispatch2.utils.RegularU;
 import com.tianyigps.dispatch2.utils.TimeFormatU;
 import com.tianyigps.dispatch2.utils.ToastU;
 
-import static com.tianyigps.dispatch2.data.Data.DATA_INTENT_ORDER_NO;
-import static com.tianyigps.dispatch2.data.Data.MSG_1;
-import static com.tianyigps.dispatch2.data.Data.MSG_2;
-import static com.tianyigps.dispatch2.data.Data.MSG_ERO;
-
 public class OrderDetailsActivity extends Activity {
 
     private static final String TAG = "OrderDetailsActivity";
@@ -148,7 +143,7 @@ public class OrderDetailsActivity extends Activity {
         mLoadingDialogFragment = new LoadingDialogFragment();
 
         Intent intent = getIntent();
-        orderNo = intent.getStringExtra(DATA_INTENT_ORDER_NO);
+        orderNo = intent.getStringExtra(Data.DATA_INTENT_ORDER_NO);
 
 
         //  内容
@@ -283,7 +278,7 @@ public class OrderDetailsActivity extends Activity {
             @Override
             public void onFailure() {
                 Log.i(TAG, "onFailure: ");
-                myHandler.sendEmptyMessage(MSG_ERO);
+                myHandler.sendEmptyMessage(Data.MSG_ERO);
             }
 
             @Override
@@ -414,7 +409,7 @@ public class OrderDetailsActivity extends Activity {
                     }
                 }
 
-                myHandler.sendEmptyMessage(MSG_1);
+                myHandler.sendEmptyMessage(Data.MSG_1);
             }
         });
 
@@ -487,7 +482,7 @@ public class OrderDetailsActivity extends Activity {
             mCycleProgressView.setProgress((int) (timeRemain * 100 / TIME_2_HOUR));
         }
 
-        myHandler.sendEmptyMessageDelayed(MSG_2, TIME_1_SEC);
+        myHandler.sendEmptyMessageDelayed(Data.MSG_2, TIME_1_SEC);
     }
 
     //  显示信息Dialog
@@ -510,7 +505,7 @@ public class OrderDetailsActivity extends Activity {
     //  显示退单对话框
     private void showReturnOrderDialog() {
         Bundle bundle = new Bundle();
-        bundle.putString(DATA_INTENT_ORDER_NO, orderNo);
+        bundle.putString(Data.DATA_INTENT_ORDER_NO, orderNo);
         mReturnOrderDialogFragment.setArguments(bundle);
         mReturnOrderDialogFragment.show(getFragmentManager(), "ReturnOrder");
     }
@@ -568,6 +563,12 @@ public class OrderDetailsActivity extends Activity {
     //  显示LoadingFragment
     private void showLoading() {
         mLoadingDialogFragment.show(getFragmentManager(), "LoadingFragment");
+
+        /*
+        FragmentTransaction ft = this.getFragmentManager().beginTransaction();
+        ft.add(mLoadingDialogFragment, this.getClass().getSimpleName());
+        ft.commitAllowingStateLoss();
+        */
     }
 
     //  Handler
@@ -575,7 +576,8 @@ public class OrderDetailsActivity extends Activity {
         @Override
         public void handleMessage(Message msg) {
             Log.i(TAG, "handleMessage: ");
-            if (mLoadingDialogFragment.isAdded()) {
+
+            if (mLoadingDialogFragment.isAdded() && msg.what != Data.MSG_2) {
                 mLoadingDialogFragment.dismiss();
             }
 
