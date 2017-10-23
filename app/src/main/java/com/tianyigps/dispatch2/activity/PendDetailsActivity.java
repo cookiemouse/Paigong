@@ -84,8 +84,7 @@ public class PendDetailsActivity extends Activity {
 
     private Button mButtonPend;
 
-    private String mContact, mContactPhone, mAddress, mRemarks = "", mInstallType, mInstallContent = "", mInfoTitle, mInfoContent = ""
-            , mRemoveContent = "", mRemoveModifyContent = "";
+    private String mContact, mContactPhone, mAddress, mRemarks = "", mInstallType, mInstallContent = "", mInfoTitle, mInfoContent = "", mRemoveContent = "", mRemoveModifyContent = "";
     private long mDoorTime, mCreateTime;
     private int mOrderStatusGet, mReviseFlag;
     private int mNode, mReviseStatus = 0;
@@ -308,7 +307,7 @@ public class PendDetailsActivity extends Activity {
 
                 mOrderId = nodeBean.getOrderId();
 
-                if (!RegularU.isEmpty(objBean.getInstallDemand())){
+                if (!RegularU.isEmpty(objBean.getInstallDemand())) {
                     mRemarks = "【" + objBean.getInstallDemand() + "】";
                 }
                 if (!RegularU.isEmpty(objBean.getRemark())) {
@@ -787,7 +786,7 @@ public class PendDetailsActivity extends Activity {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            if (mLoadingDialogFragment.isAdded()) {
+            if (mLoadingDialogFragment.isAdded() && msg.what != Data.MSG_3) {
                 mLoadingDialogFragment.dismiss();
             }
             switch (msg.what) {
