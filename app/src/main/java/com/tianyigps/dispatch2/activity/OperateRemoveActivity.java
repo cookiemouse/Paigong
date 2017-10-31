@@ -27,7 +27,6 @@ import com.tianyigps.dispatch2.interfaces.OnGetWorkerOrderInfoStartListener;
 import com.tianyigps.dispatch2.interfaces.OnRemoveTerminalListener;
 import com.tianyigps.dispatch2.manager.NetworkManager;
 import com.tianyigps.dispatch2.manager.SharedpreferenceManager;
-import com.tianyigps.dispatch2.utils.TimeFormatU;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,7 +58,7 @@ public class OperateRemoveActivity extends BaseActivity {
     private int positionNow;
     private AlertDialog dialogRemove;
 
-    private String mStringMessage;
+    private String mStringMessage = "";
 
     //  LoadingFragment
     private LoadingDialogFragment mLoadingDialogFragment;
@@ -283,7 +282,7 @@ public class OperateRemoveActivity extends BaseActivity {
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             if (mLoadingDialogFragment.isAdded()) {
-                mLoadingDialogFragment.dismiss();
+                mLoadingDialogFragment.dismissAllowingStateLoss();
             }
 
             switch (msg.what) {

@@ -363,7 +363,7 @@ public class HandingFragment extends Fragment implements View.OnClickListener {
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             if (mLoadingDialogFragment.isAdded()) {
-                mLoadingDialogFragment.dismiss();
+                mLoadingDialogFragment.dismissAllowingStateLoss();
             }
             mSwipeRefreshLayout.setRefreshing(false);
             switch (msg.what) {

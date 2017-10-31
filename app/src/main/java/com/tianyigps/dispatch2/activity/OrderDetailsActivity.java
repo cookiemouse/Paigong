@@ -80,7 +80,7 @@ public class OrderDetailsActivity extends Activity {
     private String eName;
     private String orderNo;
 
-    private String mStringMessage;
+    private String mStringMessage = "";
 
     //  签到定位
     private static final String MAP_TYPE = "bd";
@@ -578,7 +578,7 @@ public class OrderDetailsActivity extends Activity {
             Log.i(TAG, "handleMessage: ");
 
             if (mLoadingDialogFragment.isAdded() && msg.what != Data.MSG_2) {
-                mLoadingDialogFragment.dismiss();
+                mLoadingDialogFragment.dismissAllowingStateLoss();
             }
 
             super.handleMessage(msg);

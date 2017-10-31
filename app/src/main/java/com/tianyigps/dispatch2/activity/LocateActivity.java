@@ -537,7 +537,7 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             if (mLoadingDialogFragment.isAdded()) {
-                mLoadingDialogFragment.dismiss();
+                mLoadingDialogFragment.dismissAllowingStateLoss();
             }
 
             switch (msg.what) {

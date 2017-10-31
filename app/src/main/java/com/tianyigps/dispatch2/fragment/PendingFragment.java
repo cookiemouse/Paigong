@@ -78,7 +78,7 @@ public class PendingFragment extends Fragment {
     private String jobNo;
     private String token;
     private String userName;
-    private String mStringMessage;
+    private String mStringMessage = "";
 
     private String orderNo;
     private int orderStatus;

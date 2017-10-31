@@ -37,7 +37,7 @@ public class OrderTrackActivity extends BaseActivity {
 
     private NetworkManager mNetworkManager;
     private MyHandler myHandler;
-    private String mStringMessage;
+    private String mStringMessage = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

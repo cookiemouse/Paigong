@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -35,7 +34,6 @@ import com.tianyigps.dispatch2.interfaces.OnModifyDateListener;
 import com.tianyigps.dispatch2.interfaces.OnPendDetailsListener;
 import com.tianyigps.dispatch2.manager.NetworkManager;
 import com.tianyigps.dispatch2.manager.SharedpreferenceManager;
-import com.tianyigps.dispatch2.utils.BitmapU;
 import com.tianyigps.dispatch2.utils.ClipU;
 import com.tianyigps.dispatch2.utils.NodeU;
 import com.tianyigps.dispatch2.utils.RegularU;
@@ -64,7 +62,6 @@ public class PendDetailsActivity extends Activity {
     private ImageView mImageViewTitleLeft, mImageViewTitleRight;
 
     private ImageView mImageViewTitle;
-    private Bitmap mBitmap;
 
     private TextView mTextViewNode;
     private TextView mTextViewTime;
@@ -102,7 +99,7 @@ public class PendDetailsActivity extends Activity {
 
     private Intent mIntent;
 
-    private String mStringMessage;
+    private String mStringMessage = "";
 
     //  改约
     private String mDays[];
@@ -130,8 +127,6 @@ public class PendDetailsActivity extends Activity {
 
     @Override
     protected void onResume() {
-        mBitmap = BitmapU.getBitmap(this, R.drawable.bg_order_details_top, 320, 160);
-        mImageViewTitle.setImageBitmap(mBitmap);
         if (mCreateTime > 0) {
             updateTime();
         }
@@ -141,9 +136,6 @@ public class PendDetailsActivity extends Activity {
     @Override
     protected void onStop() {
         super.onStop();
-        if (null != mBitmap) {
-            mBitmap.recycle();
-        }
         myHandler.removeMessages(Data.MSG_3);
     }
 
@@ -787,7 +779,7 @@ public class PendDetailsActivity extends Activity {
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             if (mLoadingDialogFragment.isAdded() && msg.what != Data.MSG_3) {
-                mLoadingDialogFragment.dismiss();
+                mLoadingDialogFragment.dismissAllowingStateLoss();
             }
             switch (msg.what) {
                 case Data.MSG_ERO: {

@@ -214,9 +214,11 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".activity.TestActivity">
+        <activity android:name=".activity.TestActivity"
+                  android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".activity.ShowPicActivity">
+        <activity android:name=".activity.ShowPicActivity"
+                  android:screenOrientation="portrait">
         </activity>
     </application>
 

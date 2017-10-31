@@ -96,7 +96,7 @@ public class OperateInstallActivity extends BaseActivity {
     private NetworkManager mNetworkManager;
     private SharedpreferenceManager mSharedpreferenceManager;
     private MyHandler myHandler;
-    private String mStringMessage;
+    private String mStringMessage = "";
     private int eid;
     private String token;
     private String userName;
@@ -1613,7 +1613,7 @@ public class OperateInstallActivity extends BaseActivity {
     //  显示LoadingFragment
     private void showLoading() {
         if (mLoadingDialogFragment.isAdded()) {
-            mLoadingDialogFragment.dismiss();
+            mLoadingDialogFragment.dismissAllowingStateLoss();
         }
         mLoadingDialogFragment.show(getFragmentManager(), "LoadingFragment");
     }
@@ -1702,7 +1702,7 @@ public class OperateInstallActivity extends BaseActivity {
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             if (mLoadingDialogFragment.isAdded()) {
-                mLoadingDialogFragment.dismiss();
+                mLoadingDialogFragment.dismissAllowingStateLoss();
             }
 
             Log.i(TAG, "handleMessage: msg.what-->" + msg.what);
