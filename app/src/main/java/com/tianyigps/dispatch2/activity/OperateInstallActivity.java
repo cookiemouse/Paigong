@@ -393,6 +393,9 @@ public class OperateInstallActivity extends BaseActivity {
 
     @Override
     protected void onDestroy() {
+        if (null != myHandler) {
+            myHandler.removeMessages(Data.MSG_2);
+        }
         mDatabaseManager.close();
         super.onDestroy();
     }
