@@ -484,6 +484,9 @@ public class OperateRepairActivity extends BaseActivity {
                     if (RegularU.isEmpty(imei)) {
                         //  imei为空
                         Log.i(TAG, "onFocusChange: imei为空");
+                    } else if (imei.length() < 8) {
+                        mStringMessage = "设备号不为唯一，请输入更多位数";
+                        myHandler.sendEmptyMessage(Data.MSG_8);
                     } else {
                         isCheckedImei = false;
                         getWholeImei(imei);
