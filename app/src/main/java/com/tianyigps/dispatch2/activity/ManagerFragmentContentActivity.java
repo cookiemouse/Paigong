@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -32,7 +31,6 @@ import com.tianyigps.dispatch2.fragment.PendingFragment;
 import com.tianyigps.dispatch2.interfaces.OnGetWorkerOrderHandingListener;
 import com.tianyigps.dispatch2.manager.NetworkManager;
 import com.tianyigps.dispatch2.manager.SharedpreferenceManager;
-import com.tianyigps.dispatch2.utils.BitmapU;
 
 import q.rorbin.badgeview.QBadgeView;
 
@@ -43,7 +41,7 @@ public class ManagerFragmentContentActivity extends AppCompatActivity implements
     private FrameLayout mFrameLayout;
 
     private ImageView mImageViewBackground;
-    private Bitmap mBitmap;
+//    private Bitmap mBitmap;
 
     //  顶部小红点锚点
     private View mViewRedDot;
@@ -118,9 +116,9 @@ public class ManagerFragmentContentActivity extends AppCompatActivity implements
             unregisterReceiver(mBroadcastReceiver);
             isReceiver = false;
         }
-        if (null != mBitmap) {
-            mBitmap.recycle();
-        }
+//        if (null != mBitmap) {
+//            mBitmap.recycle();
+//        }
         super.onDestroy();
     }
 
@@ -189,8 +187,8 @@ public class ManagerFragmentContentActivity extends AppCompatActivity implements
         mQBadgeView.bindTarget(mViewRedDot);
 
         mImageViewBackground = (ImageView) findViewById(R.id.iv_activity_manager_fragment_content);
-        mBitmap = BitmapU.getBitmap(this, R.drawable.bg_content);
-        mImageViewBackground.setImageBitmap(mBitmap);
+//        mBitmap = BitmapU.getBitmap(this, R.drawable.bg_content);
+//        mImageViewBackground.setImageBitmap(mBitmap);
 
         mLinearLayoutPending = (LinearLayout) findViewById(R.id.ll_manager_fragment_content_bottom_pending);
         mLinearLayoutHandled = (LinearLayout) findViewById(R.id.ll_manager_fragment_content_bottom_handled);
