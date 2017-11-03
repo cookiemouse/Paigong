@@ -64,6 +64,7 @@ public class RepairAdapter extends BaseAdapter {
             viewHolder.frameLayout = contentView.findViewById(R.id.fl_item_repair);
             viewHolder.ivGo = contentView.findViewById(R.id.iv_item_repair_go);
             viewHolder.tvGo = contentView.findViewById(R.id.tv_item_repair_go);
+            viewHolder.tvPosition = contentView.findViewById(R.id.tv_item_repair_position);
 
             contentView.setTag(viewHolder);
         } else {
@@ -87,6 +88,7 @@ public class RepairAdapter extends BaseAdapter {
         }
 
         viewHolder.textViewType.setText(terminalType);
+        viewHolder.tvPosition.setText("" + (position + 1));
         viewHolder.textViewId.setText(data.getId());
         viewHolder.textViewName.setText(data.getName());
         viewHolder.textViewCarNo.setText(data.getCarNo());
@@ -136,5 +138,6 @@ public class RepairAdapter extends BaseAdapter {
         private FrameLayout frameLayout;
         private ImageView ivGo;
         private TextView tvGo;
+        private TextView tvPosition;
     }
 }

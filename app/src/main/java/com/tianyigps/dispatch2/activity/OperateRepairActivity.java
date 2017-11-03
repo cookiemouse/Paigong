@@ -1154,7 +1154,7 @@ public class OperateRepairActivity extends BaseActivity {
             super.handleMessage(msg);
             Log.i(TAG, "handleMessage: msg.what-->" + msg.what);
             if (mLoadingDialogFragment.isAdded()) {
-                mLoadingDialogFragment.dismiss();
+                mLoadingDialogFragment.dismissAllowingStateLoss();
             }
 
             switch (msg.what) {

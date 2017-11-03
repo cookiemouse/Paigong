@@ -32,7 +32,6 @@ import com.tianyigps.dispatch2.utils.MD5U;
 import com.tianyigps.dispatch2.utils.SnackbarU;
 
 import static com.tianyigps.dispatch2.data.Data.MSG_2;
-import static com.tianyigps.dispatch2.data.Data.MSG_ERO;
 
 public class ModifyPasswordActivity extends BaseActivity {
 
@@ -46,7 +45,7 @@ public class ModifyPasswordActivity extends BaseActivity {
 
     private SharedpreferenceManager mSharedpreferenceManager;
 
-    private String mStringMessage;
+    private String mStringMessage = "";
 
     //  LoadingFragment
     private LoadingDialogFragment mLoadingDialogFragment;
@@ -206,7 +205,7 @@ public class ModifyPasswordActivity extends BaseActivity {
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             if (mLoadingDialogFragment.isAdded()) {
-                mLoadingDialogFragment.dismiss();
+                mLoadingDialogFragment.dismissAllowingStateLoss();
             }
 
             switch (msg.what) {

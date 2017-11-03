@@ -76,6 +76,7 @@ public class InstallingAdapter extends BaseAdapter {
             viewHolder.textViewCompleteOffline = contentView.findViewById(R.id.tv_item_installing_complete_offline);
             viewHolder.ivGo = contentView.findViewById(R.id.iv_item_installing_go);
             viewHolder.tvGo = contentView.findViewById(R.id.tv_item_installing_go);
+            viewHolder.tvPosition = contentView.findViewById(R.id.tv_item_installing_position);
 
             contentView.setTag(viewHolder);
         } else {
@@ -89,6 +90,7 @@ public class InstallingAdapter extends BaseAdapter {
         }
 
         viewHolder.textViewFrameNo.setText(data.getFrameNo());
+        viewHolder.tvPosition.setText("" + (position + 1));
         viewHolder.textViewPendingOnline.setText("" + data.getOrderLine());
         viewHolder.textViewPendingOffline.setText("" + data.getOrderOffline());
         viewHolder.textViewCompleteOnline.setText("" + data.getCompleteLine());
@@ -116,5 +118,6 @@ public class InstallingAdapter extends BaseAdapter {
         private TextView textViewFrameNo, textViewPendingOnline, textViewPendingOffline, textViewCompleteOnline, textViewCompleteOffline;
         private ImageView ivGo;
         private TextView tvGo;
+        private TextView tvPosition;
     }
 }

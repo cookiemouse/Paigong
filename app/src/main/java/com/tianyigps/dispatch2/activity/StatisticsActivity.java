@@ -69,7 +69,7 @@ public class StatisticsActivity extends BaseActivity {
     private int uiMode;
     private String monthP;
 
-    private String mStringMessage;
+    private String mStringMessage = "";
 
     //  LoadingFragment
     LoadingDialogFragment mLoadingDialogFragment;
@@ -348,7 +348,7 @@ public class StatisticsActivity extends BaseActivity {
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             if (mLoadingDialogFragment.isAdded()) {
-                mLoadingDialogFragment.dismiss();
+                mLoadingDialogFragment.dismissAllowingStateLoss();
             }
 
             switch (msg.what) {

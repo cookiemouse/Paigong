@@ -77,7 +77,7 @@ public class CustomSignActivity extends BaseActivity {
 
     private int installType;
 
-    private String mStringMessage;
+    private String mStringMessage = "";
 
     //  LoadingFragment
     private LoadingDialogFragment mLoadingDialogFragment;
@@ -626,7 +626,7 @@ public class CustomSignActivity extends BaseActivity {
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             if (mLoadingDialogFragment.isAdded()) {
-                mLoadingDialogFragment.dismiss();
+                mLoadingDialogFragment.dismissAllowingStateLoss();
             }
 
             switch (msg.what) {

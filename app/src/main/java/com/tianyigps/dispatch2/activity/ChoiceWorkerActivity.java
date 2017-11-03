@@ -56,7 +56,7 @@ public class ChoiceWorkerActivity extends BaseActivity {
     private String userName;
     private MyHandler myHandler;
 
-    private String mStringMessage;
+    private String mStringMessage = "";
 
     private Intent mIntent;
     private String orderNo;
@@ -275,7 +275,7 @@ public class ChoiceWorkerActivity extends BaseActivity {
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             if (mLoadingDialogFragment.isAdded()) {
-                mLoadingDialogFragment.dismiss();
+                mLoadingDialogFragment.dismissAllowingStateLoss();
             }
             switch (msg.what) {
                 case Data.MSG_ERO: {

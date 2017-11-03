@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 
@@ -32,6 +33,7 @@ public class DatePickerDialogFragment extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View viewDialog = inflater.inflate(R.layout.dialog_date_picker, container, false);
+        getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         init(viewDialog);
 
