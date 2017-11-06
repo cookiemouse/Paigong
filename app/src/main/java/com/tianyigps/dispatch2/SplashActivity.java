@@ -105,11 +105,11 @@ public class SplashActivity extends Activity {
     }
 
     @Override
-    protected void onStop() {
+    protected void onDestroy() {
         if (null != mBitmap) {
             mBitmap.recycle();
         }
-        super.onStop();
+        super.onDestroy();
     }
 
     @Override
