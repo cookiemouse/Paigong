@@ -210,12 +210,14 @@ public class OrderTrackDialogFragment extends DialogFragment {
             case 4: {
                 info += "派单\n";     //ok
                 OrderTrackBean.ObjBean.EngineerBean engineerBean = objBean.getEngineer();
-                info += engineerBean.getJobNo() + "\t" + engineerBean.getName() + "\t";
-                if (mEngineerType != 1) {
-                    if (orderNodeBean.getPayDoorFee() == 0) {
-                        info += "不支付上门费";
-                    } else {
-                        info += "支付上门费";
+                if (null != engineerBean) {
+                    info += engineerBean.getJobNo() + "\t" + engineerBean.getName() + "\t";
+                    if (mEngineerType != 1) {
+                        if (orderNodeBean.getPayDoorFee() == 0) {
+                            info += "不支付上门费";
+                        } else {
+                            info += "支付上门费";
+                        }
                     }
                 }
                 break;
