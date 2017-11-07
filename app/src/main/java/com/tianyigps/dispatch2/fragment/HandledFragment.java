@@ -18,7 +18,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -344,6 +343,9 @@ public class HandledFragment extends Fragment {
 
     //  显示信息Dialog
     private void showMessageDialog(String msg) {
+        if (null == getContext()){
+            return;
+        }
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setMessage(msg);
         builder.setPositiveButton(R.string.ensure, new DialogInterface.OnClickListener() {

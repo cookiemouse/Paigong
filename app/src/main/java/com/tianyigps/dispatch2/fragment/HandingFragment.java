@@ -343,7 +343,7 @@ public class HandingFragment extends Fragment implements View.OnClickListener {
 
     //  显示信息Dialog
     private void showMessageDialog(String msg) {
-        if (getActivity().isFinishing()) {
+        if (null == getActivity()) {
             return;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());

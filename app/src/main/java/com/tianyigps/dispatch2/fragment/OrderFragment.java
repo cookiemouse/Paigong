@@ -419,6 +419,9 @@ public class OrderFragment extends Fragment {
 
     //  确认签到对话框
     private void showAskSignDialog() {
+        if (null == getContext()){
+            return;
+        }
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setCancelable(false);
         View viewDialog = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_ask_sign, null);
@@ -449,7 +452,7 @@ public class OrderFragment extends Fragment {
     }
 
     private void showMessageDialog(String message) {
-        if (getActivity().isFinishing()) {
+        if (null == getActivity()){
             return;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -473,6 +476,9 @@ public class OrderFragment extends Fragment {
 
     //  订单已被取消对话框
     private void showNotPerfectDialog() {
+        if (null == getActivity()){
+            return;
+        }
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         View viewDialog = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_message_editable, null);
         builder.setView(viewDialog);

@@ -167,6 +167,9 @@ public class MineFragment extends Fragment {
     }
 
     private void showExitDialog() {
+        if (null == getContext()){
+            return;
+        }
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         View viewDialog = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_exit, null);
         builder.setView(viewDialog);

@@ -462,6 +462,9 @@ public class PendedFragment extends Fragment {
 
     //  显示信息Dialog
     private void showMessageDialog(String msg) {
+        if (null == getContext()){
+            return;
+        }
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage(msg);
         builder.setPositiveButton(R.string.ensure, new DialogInterface.OnClickListener() {
