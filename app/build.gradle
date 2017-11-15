@@ -5,7 +5,7 @@ android {
         debug {
             keyAlias 'paigong'
             keyPassword '12345678'
-            storeFile file('/home/cookie/Workspace/Paigong/keystore/key.jks')
+            storeFile file('D:/Workspace/Paigong/keystore/key.jks')
             storePassword '12345678'
         }
     }
@@ -16,7 +16,7 @@ android {
         minSdkVersion 15
         targetSdkVersion 26
         versionCode 2
-        versionName "2.1"
+        versionName "2.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
