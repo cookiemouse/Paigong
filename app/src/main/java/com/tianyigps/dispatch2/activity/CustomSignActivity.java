@@ -293,6 +293,7 @@ public class CustomSignActivity extends BaseActivity {
                     int tid = cursorTer.getInt(9);
                     int locateType = cursorTer.getInt(10);
                     int cid = cursorTer.getInt(11);
+                    int wire = cursorTer.getInt(12);
 
                     Log.i(TAG, "loadTerminalData: id-->" + id);
                     Log.i(TAG, "loadTerminalData: tNoOld-->" + tNoOld);
@@ -306,6 +307,7 @@ public class CustomSignActivity extends BaseActivity {
                     Log.i(TAG, "loadTerminalData: tid-->" + tid);
                     Log.i(TAG, "loadTerminalData: cid-->" + cid);
                     Log.i(TAG, "loadTerminalData: locateType-->" + locateType);
+                    Log.i(TAG, "loadTerminalData: wire-->" + wire);
                     if (RegularU.isEmpty(position)) {
                         continue;
                     }
@@ -314,6 +316,14 @@ public class CustomSignActivity extends BaseActivity {
                     }
                     if (locateType == 0) {
                         locateType = 3;
+                    }
+                    //  直接上传框的有线或无线
+                    if (wire == 0) {
+                        model = 2;
+                    } else if (wire == 1) {
+                        model = 1;
+                    } else {
+                        model = 0;
                     }
                     if (RegularU.isEmpty(tNoOld)) {
                         terminalInfo = new TerminalInfo(tid, tNoNew, tNoOld, model, locateType, position);
