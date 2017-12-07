@@ -982,13 +982,42 @@ public class InstallingActivity extends BaseActivity {
                 //  check车辆信息是否完整
                 Cursor cursorCar = mDatabaseManager.getCar(carId);
                 if (null != cursorCar && cursorCar.moveToFirst()) {
+                    String carNo = cursorCar.getString(1);
+                    String frameNo = cursorCar.getString(2);
+                    String carNoUrl = cursorCar.getString(6);
                     String frameNoUrl = cursorCar.getString(7);
 
+                    Log.i(TAG, "checkInstallListCar: carNo-->" + carNo);
+                    Log.i(TAG, "checkInstallListCar: frameNo-->" + frameNo);
+                    Log.i(TAG, "checkInstallListCar: carNoUrl-->" + carNoUrl);
                     Log.i(TAG, "checkInstallListCar: frameNoUrl-->" + frameNoUrl);
 
-                    carComplete = (null != frameNoUrl);
+                    isFilled = (null != frameNoUrl)
+                            || (null != frameNo)
+                            || !RegularU.isEmpty(carNoUrl)
+                            || !RegularU.isEmpty(carNo);
+
+                    carComplete = (null != frameNoUrl)
+                            && (null != frameNo);
+
+                    if (carComplete) {
+                        if (!RegularU.isEmpty(carNoUrl)) {
+                            carComplete = !RegularU.isEmpty(carNo);
+                        }
+                        if (!RegularU.isEmpty(carNo)) {
+                            carComplete = !RegularU.isEmpty(carNoUrl);
+                        }
+                    }
 
                     cursorCar.close();
+
+                    if (!carComplete && isFilled) {
+                        mCompleteCountInstall = 0;
+                        data.setComplete(false);
+                        myHandler.sendEmptyMessage(Data.MSG_1);
+                        return false;
+                    }
+
                 } else {
                     Log.i(TAG, "checkInstallList: cursorCar is null");
                 }

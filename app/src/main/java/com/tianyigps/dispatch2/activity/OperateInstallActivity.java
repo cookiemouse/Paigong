@@ -71,7 +71,7 @@ public class OperateInstallActivity extends BaseActivity {
     private ImageView mImageViewCarNo, mImageViewFrameNo;
     private ImageView mImageViewCarNoDelete, mImageViewFrameNoDelete;
     private EditText mEditTextCarNo, mEditTextCarType;
-    private TextView mTextViewFrameNo;
+    private EditText mEditTextFrameNo;
 
     //  提示
     private TextView mTextViewTip1, mTextViewTip2, mTextViewTip3;
@@ -462,7 +462,7 @@ public class OperateInstallActivity extends BaseActivity {
         mImageViewCarNoDelete = findViewById(R.id.iv_layout_operate_install_car_pic_delete);
         mImageViewFrameNoDelete = findViewById(R.id.iv_layout_operate_install_frame_pic_delete);
         mEditTextCarNo = findViewById(R.id.et_layout_operate_install_car_no);
-        mTextViewFrameNo = findViewById(R.id.tv_layout_operate_install_frame_no);
+        mEditTextFrameNo = findViewById(R.id.et_layout_operate_install_frame_no);
         mEditTextCarType = findViewById(R.id.et_layout_operate_install_car_type);
 
         mTextViewTip1 = findViewById(R.id.tv_activity_operate_install_tip_1);
@@ -475,7 +475,12 @@ public class OperateInstallActivity extends BaseActivity {
         mButtonSave = mViewSave.findViewById(R.id.btn_layout_activity_installing_next);
         mButtonSave.setText(R.string.save);
 
-        mTextViewFrameNo.setText(frameNo);
+        if (RegularU.isEmpty(frameNo)) {
+            mEditTextFrameNo.setEnabled(true);
+        } else {
+            mEditTextFrameNo.setText(frameNo);
+            mEditTextFrameNo.setEnabled(false);
+        }
 
         mRecyclerView = findViewById(R.id.rv_layout_activity_operate_install);
         mListView = findViewById(R.id.lv_activity_operate_install);
@@ -1137,7 +1142,7 @@ public class OperateInstallActivity extends BaseActivity {
         String carNo = mEditTextCarNo.getText().toString();
 
         String carType = mEditTextCarType.getText().toString();
-        String carFrameNo = mTextViewFrameNo.getText().toString();
+        String carFrameNo = mEditTextFrameNo.getText().toString();
 
         mDatabaseManager.addCarInfo(idMainCar, carNo, carFrameNo, carType);
 
@@ -1554,6 +1559,7 @@ public class OperateInstallActivity extends BaseActivity {
     private boolean isCarComplete() {
 
         String carNo = mEditTextCarNo.getText().toString();
+        String vinNo = mEditTextFrameNo.getText().toString();
         String carType = mEditTextCarType.getText().toString();
 
         boolean carComplete = true;
@@ -1597,19 +1603,34 @@ public class OperateInstallActivity extends BaseActivity {
             mImageViewCarNo.setBackgroundResource(R.color.colorNull);
         }
 
+        // TODO: 2017/12/6 添加车架号校验
+        Log.i(TAG, "isCarComplete: vinNo-->" + vinNo);
+        Log.i(TAG, "isCarComplete: frameNoPicUrl-->" + frameNoPicUrl);
+        if (RegularU.isEmpty(frameNoPicUrl)) {
+            carComplete = false;
+            mTextViewTip3.setVisibility(View.VISIBLE);
+            mTextViewTip3.setText(getString(R.string.tip_pic));
+            mImageViewFrameNo.setBackgroundResource(R.drawable.bg_edit_orange);
+        }
+        if (RegularU.isEmpty(vinNo)) {
+            carComplete = false;
+            mTextViewTip3.setText("提示：请输入车架号!");
+            mTextViewTip3.setVisibility(View.VISIBLE);
+        } else if (!RegularU.isFrameNo(vinNo)) {
+            carComplete = false;
+            mTextViewTip3.setVisibility(View.VISIBLE);
+            mTextViewTip3.setText("提示：请输入正确的车架号!");
+        }
+//        else {
+//            mImageViewFrameNo.setBackgroundResource(R.color.colorNull);
+//            mTextViewTip3.setVisibility(View.GONE);
+//        }
+
         if (RegularU.isEmpty(carType)) {
             carComplete = false;
             mTextViewTip2.setVisibility(View.VISIBLE);
         } else {
             mTextViewTip2.setVisibility(View.GONE);
-        }
-        if (RegularU.isEmpty(frameNoPicUrl)) {
-            carComplete = false;
-            mTextViewTip3.setVisibility(View.VISIBLE);
-            mImageViewFrameNo.setBackgroundResource(R.drawable.bg_edit_orange);
-        } else {
-            mImageViewFrameNo.setBackgroundResource(R.color.colorNull);
-            mTextViewTip3.setVisibility(View.GONE);
         }
 
         return carComplete;
@@ -1934,7 +1955,7 @@ public class OperateInstallActivity extends BaseActivity {
 
                     //  将车辆信息置为本地最新
                     loadCarData();
-                    mTextViewFrameNo.setText(mCarFrameNo);
+                    mEditTextFrameNo.setText(mCarFrameNo);
                     mEditTextCarNo.setText(mCarNo);
                     mEditTextCarType.setText(mCarBrand);
 

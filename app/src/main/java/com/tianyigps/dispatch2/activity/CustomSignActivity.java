@@ -606,6 +606,8 @@ public class CustomSignActivity extends BaseActivity {
         alertDialog.show();
     }
 
+    //  联系后台底部
+
     //  显示LoadingFragment
     private void showLoading() {
         mLoadingDialogFragment.show(getFragmentManager(), "LoadingFragment");
