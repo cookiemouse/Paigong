@@ -383,8 +383,11 @@ public class OperateInstallActivity extends BaseActivity {
             }
         } else {
             String carNo = mEditTextCarNo.getText().toString();
+            String vinNo = mEditTextFrameNo.getText().toString();
             if (mTextViewTip1.getVisibility() == View.VISIBLE && !RegularU.isEmpty(carNo) && !RegularU.checkCarNo(carNo)) {
                 showNotCompleteDialog("车牌号填写不正确");
+            } else if (mTextViewTip3.getVisibility() == View.VISIBLE && !RegularU.isEmpty(vinNo) && !RegularU.isFrameNo(vinNo)) {
+                showNotCompleteDialog("车架号填写不正确");
             } else {
                 showNotCompleteDialog("车辆信息内有未填写内容，请填写完整");
             }
@@ -762,6 +765,10 @@ public class OperateInstallActivity extends BaseActivity {
                             mCarBrand = carListBean.getNewCarBrand();
                         }
                         mCarFrameNo = carListBean.getCarVin();
+                        String newCarVin = carListBean.getNewCarVin();
+                        if (!RegularU.isEmpty(newCarVin)) {
+                            mCarFrameNo = newCarVin;
+                        }
                         mCarNoPicUrl = carListBean.getCarNoPic();
                         mCarFramePicUrl = carListBean.getCarVinPic();
                         mCarNoPic = mBaseImg + mCarNoPicUrl;
@@ -1043,6 +1050,7 @@ public class OperateInstallActivity extends BaseActivity {
         if (null != cursor && cursor.moveToFirst()) {
             Log.i(TAG, "loadCardata: idMain-->" + cursor.getInt(0));
             String carNo = cursor.getString(1);
+            String vinNo = cursor.getString(2);
             String carType = cursor.getString(3);
 
             Log.i(TAG, "loadCarData: carNo-->" + mCarNo);
@@ -1052,6 +1060,9 @@ public class OperateInstallActivity extends BaseActivity {
             }
             if (!RegularU.isEmpty(carType)) {
                 mCarBrand = carType;
+            }
+            if (!RegularU.isEmpty(vinNo)) {
+                mCarFrameNo = vinNo;
             }
 
             cursor.close();
@@ -1609,17 +1620,26 @@ public class OperateInstallActivity extends BaseActivity {
         if (RegularU.isEmpty(frameNoPicUrl)) {
             carComplete = false;
             mTextViewTip3.setVisibility(View.VISIBLE);
-            mTextViewTip3.setText(getString(R.string.tip_pic));
+            mTextViewTip3.setText("提示:请上传车架号照片!");
             mImageViewFrameNo.setBackgroundResource(R.drawable.bg_edit_orange);
         }
         if (RegularU.isEmpty(vinNo)) {
             carComplete = false;
-            mTextViewTip3.setText("提示：请输入车架号!");
+            mTextViewTip3.setText("提示：请填写车架号!");
             mTextViewTip3.setVisibility(View.VISIBLE);
         } else if (!RegularU.isFrameNo(vinNo)) {
             carComplete = false;
             mTextViewTip3.setVisibility(View.VISIBLE);
             mTextViewTip3.setText("提示：请输入正确的车架号!");
+        }
+        if (RegularU.isEmpty(vinNo) && RegularU.isEmpty(frameNoPicUrl)) {
+            carComplete = false;
+            mTextViewTip3.setVisibility(View.VISIBLE);
+            mTextViewTip3.setText("提示：请完善车架号信息!");
+        }
+        if (!RegularU.isEmpty(vinNo) && RegularU.isEmpty(frameNoPicUrl)) {
+            carComplete = true;
+            mTextViewTip3.setVisibility(View.GONE);
         }
 //        else {
 //            mImageViewFrameNo.setBackgroundResource(R.color.colorNull);
