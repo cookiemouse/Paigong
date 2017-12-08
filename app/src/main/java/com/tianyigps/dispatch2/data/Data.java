@@ -79,6 +79,8 @@ public final class Data {
 
     public final static String DATA_WITCH_MAP = "witch_map";
 
+    public final static String SH_HEAD_PHONE_LIST = "head_phone_list";
+
     public final static String MAP_BAIDU = "map_baidu";
     public final static String MAP_GAODE = "map_gaode";
 

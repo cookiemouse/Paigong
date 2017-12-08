@@ -182,6 +182,11 @@ public class SplashActivity extends Activity {
                             , objBean.getImgBaseUrl()
                             , launchMode);
                 }
+                String headPhoneList = "";
+                for (CheckUserBean.ObjBean.HeadPhoneList phoneList : objBean.getHeadPhoneList()) {
+                    headPhoneList = phoneList.getContactPhone() + ",";
+                }
+                mSharedpreferenceManager.saveHeadPhoneList(headPhoneList);
 
                 myHandler.sendEmptyMessage(MSG_1);
             }

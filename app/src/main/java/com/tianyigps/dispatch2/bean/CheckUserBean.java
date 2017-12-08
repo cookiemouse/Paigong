@@ -1,5 +1,7 @@
 package com.tianyigps.dispatch2.bean;
 
+import java.util.List;
+
 /**
  * Created by djc on 2017/7/17.
  */
@@ -93,6 +95,7 @@ public class CheckUserBean {
         private int eid;
         private String headPhone;
         private String imgBaseUrl;
+        private List<HeadPhoneList> headPhoneList;
 
         public String getPhoneNo() {
             return phoneNo;
@@ -173,5 +176,26 @@ public class CheckUserBean {
         public void setImgBaseUrl(String imgBaseUrl) {
             this.imgBaseUrl = imgBaseUrl;
         }
+
+        public List<HeadPhoneList> getHeadPhoneList() {
+            return headPhoneList;
+        }
+
+        public void setHeadPhoneList(List<HeadPhoneList> headPhoneList) {
+            this.headPhoneList = headPhoneList;
+        }
+
+        public static class HeadPhoneList{
+            private String contactPhone;
+
+            public String getContactPhone() {
+                return contactPhone;
+            }
+
+            public void setContactPhone(String contactPhone) {
+                this.contactPhone = contactPhone;
+            }
+        }
+
     }
 }

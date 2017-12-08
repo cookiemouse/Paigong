@@ -144,6 +144,20 @@ public class SharedpreferenceManager {
         editor.apply();
     }
 
+    /**
+     * 保存总部电话列表
+     * 格式12345678901,12345678902
+     */
+    public void saveHeadPhoneList(String headPhoneList) {
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putString(Data.SH_HEAD_PHONE_LIST, headPhoneList);
+        editor.apply();
+    }
+
+    public String getHeadPhoneList() {
+        return mSharedPreferences.getString(Data.SH_HEAD_PHONE_LIST, "");
+    }
+
     public void saveImageBaseUrl(String url) {
         SharedPreferences.Editor editor = mSharedPreferences.edit();
         editor.putString(DATA_JSON_IMG_BASE_URL, url);

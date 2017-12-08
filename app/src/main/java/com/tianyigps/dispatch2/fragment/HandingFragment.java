@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -23,6 +24,7 @@ import com.tianyigps.dispatch2.R;
 import com.tianyigps.dispatch2.activity.InstallingActivity;
 import com.tianyigps.dispatch2.activity.ManagerFragmentContentActivity;
 import com.tianyigps.dispatch2.activity.OrderDetailsActivity;
+import com.tianyigps.dispatch2.adapter.ChoicePhoneAdapter;
 import com.tianyigps.dispatch2.adapter.HandingAdapter;
 import com.tianyigps.dispatch2.bean.StartHandingBean;
 import com.tianyigps.dispatch2.bean.WorkerHandingBean;
@@ -34,8 +36,10 @@ import com.tianyigps.dispatch2.interfaces.OnGetWorkerOrderHandingListener;
 import com.tianyigps.dispatch2.interfaces.OnStartHandingListener;
 import com.tianyigps.dispatch2.manager.NetworkManager;
 import com.tianyigps.dispatch2.manager.SharedpreferenceManager;
+import com.yundian.bottomdialog.v4.BottomDialog;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -66,6 +70,8 @@ public class HandingFragment extends Fragment implements View.OnClickListener {
     private String token;
     private String userName;
     private String eName;
+
+    private List<String> mPhoneList;
 
     //  正在操作的item
     private int mPosition = 0;
@@ -99,8 +105,9 @@ public class HandingFragment extends Fragment implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_fragment_handing_head: {
-                String phone = mSharedpreferenceManager.getHeadPhone();
-                toCall(phone);
+                showChoicePhoneDialog();
+//                String phone = mSharedpreferenceManager.getHeadPhone();
+//                toCall(phone);
                 break;
             }
             case R.id.tv_fragment_handing_manager: {
@@ -142,6 +149,7 @@ public class HandingFragment extends Fragment implements View.OnClickListener {
         token = mSharedpreferenceManager.getToken();
         userName = mSharedpreferenceManager.getAccount();
         eName = mSharedpreferenceManager.getName();
+
         int launchMode = mSharedpreferenceManager.getLaunchMode();
         if (Data.DATA_LAUNCH_MODE_WORKER == launchMode) {
             mImageViewTitleLeft.setVisibility(View.GONE);
@@ -273,7 +281,7 @@ public class HandingFragment extends Fragment implements View.OnClickListener {
                     }
 
                     long submitTime = objBean.getSubmitTime();
-                    if (0 == submitTime){
+                    if (0 == submitTime) {
                         submitTime = System.currentTimeMillis();
                     }
 
@@ -331,6 +339,28 @@ public class HandingFragment extends Fragment implements View.OnClickListener {
     //  显示LoadingFragment
     private void showLoading() {
         mLoadingDialogFragment.show(getChildFragmentManager(), "LoadingFragment");
+    }
+
+    //  显示选择电话对话框
+    private void showChoicePhoneDialog() {
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.dialog_choice_phone, null);
+        //  选择电话
+        ListView listViewChoicePhone = view.findViewById(R.id.lv_dialog_choice_phone);
+        String headPhoneList = mSharedpreferenceManager.getHeadPhoneList();
+        String[] headPhones = headPhoneList.split(",");
+        mPhoneList = Arrays.asList(headPhones);
+        ChoicePhoneAdapter choicePhoneAdapter = new ChoicePhoneAdapter(getContext(), mPhoneList);
+        listViewChoicePhone.setAdapter(choicePhoneAdapter);
+        listViewChoicePhone.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                toCall(mPhoneList.get(i));
+            }
+        });
+
+        BottomDialog bottomDialog = new BottomDialog();
+        bottomDialog.setContentView(view);
+        bottomDialog.show(getChildFragmentManager(), "ChoicePhone");
     }
 
     //  拨打电话

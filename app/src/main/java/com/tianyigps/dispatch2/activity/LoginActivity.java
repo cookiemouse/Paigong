@@ -146,6 +146,11 @@ public class LoginActivity extends AppCompatActivity {
                             , objBean.getImgBaseUrl()
                             , launchMode);
                 }
+                String headPhoneList = "";
+                for (CheckUserBean.ObjBean.HeadPhoneList phoneList : objBean.getHeadPhoneList()) {
+                    headPhoneList = phoneList.getContactPhone() + ",";
+                }
+                mSharedpreferenceManager.saveHeadPhoneList(headPhoneList);
 
                 mSharedpreferenceManager.saveAccount(launchAccount);
 

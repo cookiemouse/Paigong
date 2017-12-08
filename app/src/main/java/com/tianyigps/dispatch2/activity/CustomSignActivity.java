@@ -16,13 +16,16 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.baidu.mapapi.model.LatLng;
 import com.google.gson.Gson;
 import com.tianyigps.dispatch2.R;
+import com.tianyigps.dispatch2.adapter.ChoicePhoneAdapter;
 import com.tianyigps.dispatch2.base.BaseActivity;
 import com.tianyigps.dispatch2.bean.CarInfo;
 import com.tianyigps.dispatch2.bean.CarInfoOut;
@@ -44,8 +47,10 @@ import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.PermissionListener;
 import com.yanzhenjie.permission.Rationale;
 import com.yanzhenjie.permission.RationaleListener;
+import com.yundian.bottomdialog.BottomDialog;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class CustomSignActivity extends BaseActivity {
@@ -72,6 +77,8 @@ public class CustomSignActivity extends BaseActivity {
     private String mOrderNo;
     private String mPartReason = "";
     private String mSignature;
+
+    private List<String> mPhoneList;
 
     private String mJson;
 
@@ -134,6 +141,8 @@ public class CustomSignActivity extends BaseActivity {
         if (mFileManager.isExists()) {
             mSignView.setBitmap(BitmapFactory.decodeFile(mFileManager.getPath()));
         }
+
+        showPartCompleteDialog();
     }
 
     private void setEventListener() {
@@ -588,25 +597,35 @@ public class CustomSignActivity extends BaseActivity {
             public void onClick(View view) {
                 alertDialog.dismiss();
 
-                //  跳转到进行中
-                Intent intent = new Intent(CustomSignActivity.this, WorkerFragmentContentActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra(Data.DATA_INTENT_WORKER_FRAGMENT, Data.DATA_INTENT_WORKER_FRAGMENT_HANDING);
-
-                // 2017/8/16 拨打后台电话，即总部电话
-                Intent intentCall = new Intent();
-                intentCall.setAction(Intent.ACTION_DIAL);
-                String phone = mSharedpreferenceManager.getHeadPhone();
-                intentCall.setData(Uri.parse("tel:" + phone));
-
-                startActivities(new Intent[]{intent, intentCall});
+                showChoicePhoneDialog();
             }
         });
 
         alertDialog.show();
     }
 
-    //  联系后台底部
+    //  显示选择电话对话框
+    private void showChoicePhoneDialog() {
+        View view = LayoutInflater.from(this).inflate(R.layout.dialog_choice_phone, null);
+        //  选择电话
+        ListView listViewChoicePhone = view.findViewById(R.id.lv_dialog_choice_phone);
+        String headPhoneList = mSharedpreferenceManager.getHeadPhoneList();
+        String[] headPhones = headPhoneList.split(",");
+        mPhoneList = Arrays.asList(headPhones);
+        ChoicePhoneAdapter choicePhoneAdapter = new ChoicePhoneAdapter(this, mPhoneList);
+        listViewChoicePhone.setAdapter(choicePhoneAdapter);
+        listViewChoicePhone.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                toCall(mPhoneList.get(i));
+            }
+        });
+
+        BottomDialog bottomDialog = new BottomDialog();
+        bottomDialog.setContentView(view);
+        bottomDialog.setCancelable(false);
+        bottomDialog.show(getFragmentManager(), "ChoicePhone");
+    }
 
     //  显示LoadingFragment
     private void showLoading() {
@@ -631,6 +650,21 @@ public class CustomSignActivity extends BaseActivity {
             cursor.close();
         }
         mDatabaseManager.deleteOrder(mOrderNo);
+    }
+
+    //  拨打电话
+    private void toCall(String number) {
+        //  跳转到进行中
+        Intent intent = new Intent(CustomSignActivity.this, WorkerFragmentContentActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra(Data.DATA_INTENT_WORKER_FRAGMENT, Data.DATA_INTENT_WORKER_FRAGMENT_HANDING);
+
+        // 2017/8/16 拨打后台电话，即总部电话
+        Intent intentCall = new Intent();
+        intentCall.setAction(Intent.ACTION_DIAL);
+        intentCall.setData(Uri.parse("tel:" + number));
+
+        startActivities(new Intent[]{intent, intentCall});
     }
 
     private class MyHandler extends Handler {
