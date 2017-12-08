@@ -1637,7 +1637,7 @@ public class OperateInstallActivity extends BaseActivity {
             mTextViewTip3.setVisibility(View.VISIBLE);
             mTextViewTip3.setText("提示：请完善车架号信息!");
         }
-        if (!RegularU.isEmpty(vinNo) && RegularU.isEmpty(frameNoPicUrl)) {
+        if (!RegularU.isEmpty(vinNo) && !RegularU.isEmpty(frameNoPicUrl) && RegularU.isFrameNo(vinNo)) {
             carComplete = true;
             mTextViewTip3.setVisibility(View.GONE);
         }
