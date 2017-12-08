@@ -15,6 +15,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.baidu.mapapi.SDKInitializer;
@@ -39,19 +40,25 @@ import com.baidu.mapapi.search.geocode.ReverseGeoCodeOption;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 import com.google.gson.Gson;
 import com.tianyigps.dispatch2.R;
+import com.tianyigps.dispatch2.adapter.LocateWarnAdapter;
 import com.tianyigps.dispatch2.base.BaseActivity;
 import com.tianyigps.dispatch2.bean.TerminalInfoBean;
 import com.tianyigps.dispatch2.bean.WholeImeiBean;
+import com.tianyigps.dispatch2.data.AdapterLocateWarnData;
 import com.tianyigps.dispatch2.data.Data;
 import com.tianyigps.dispatch2.dialog.LoadingDialogFragment;
 import com.tianyigps.dispatch2.interfaces.OnGetTerminalInfoListener;
 import com.tianyigps.dispatch2.interfaces.OnGetWholeIMEIListener;
+import com.tianyigps.dispatch2.interfaces.OnLocateWarnListener;
 import com.tianyigps.dispatch2.manager.LocateManager;
 import com.tianyigps.dispatch2.manager.NetworkManager;
 import com.tianyigps.dispatch2.manager.SharedpreferenceManager;
 import com.tianyigps.dispatch2.utils.SnackbarU;
 import com.tianyigps.dispatch2.utils.TimeFormatU;
 import com.tianyigps.dispatch2.utils.TimerU;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.tianyigps.dispatch2.data.Data.DATA_INTENT_SCANNER_REQUEST;
 import static com.tianyigps.dispatch2.data.Data.DATA_INTENT_SCANNER_RESULT;
@@ -72,6 +79,7 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
     private EditText mEditTextImei;
     private ImageView mImageViewScanner, mImageViewLocateIcon, mImageViewLocate;
     private TextView mTextViewLook, mTextViewAddress, mTextViewNormal, mTextViewSatellate, mTextViewFlush;
+    private ListView mListViewWarn;
     private LinearLayout mLinearLayout;
 
     private LocateManager mLocateManager;
@@ -89,6 +97,9 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
 
     private String wholeImei;
     private String errMsg;
+
+    private List<AdapterLocateWarnData> mAdapterLocateWarnDataList;
+    private LocateWarnAdapter mLocateWarnAdapter;
 
     //  地理编码
     private GeoCoder mGeoCoderSearch;
@@ -164,7 +175,16 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
                 break;
             }
             case R.id.iv_activity_locate_locate: {
-                //
+                //  查看设备定位
+                mListViewWarn.setVisibility(View.GONE);
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(mEditTextImei.getWindowToken(), 0);
+                String imei = mEditTextImei.getText().toString();
+                if (imei.length() > 7) {
+                    getWholeImei(imei);
+                } else {
+                    showToast("请至少输入IMEI号后8位数");
+                }
                 break;
             }
             case R.id.iv_layout_map_control_locate: {
@@ -173,12 +193,13 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
                 break;
             }
             case R.id.tv_activity_locate_look: {
-                // 2017/7/12 查看设备定位
+                // 2017/7/12 查看报警记录
+                mListViewWarn.setVisibility(View.VISIBLE);
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(mEditTextImei.getWindowToken(), 0);
                 String imei = mEditTextImei.getText().toString();
                 if (imei.length() > 7) {
-                    getWholeImei(imei);
+                    getWarnInfo(imei);
                 } else {
                     showToast("请至少输入IMEI号后8位数");
                 }
@@ -245,8 +266,16 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
         mTextViewSatellate = findViewById(R.id.tv_layout_map_control_satellite);
         mTextViewFlush = findViewById(R.id.tv_layout_map_control_flush);
         mLinearLayout = findViewById(R.id.ll_activity_locate);
+        mListViewWarn = findViewById(R.id.lv_activity_locate_warn);
 
         mLocateManager = new LocateManager(getApplicationContext());
+
+        mAdapterLocateWarnDataList = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            mAdapterLocateWarnDataList.add(new AdapterLocateWarnData("asdfasdf", "1123123123"));
+        }
+        mLocateWarnAdapter = new LocateWarnAdapter(this, mAdapterLocateWarnDataList);
+        mListViewWarn.setAdapter(mLocateWarnAdapter);
 
         mSharedpreferenceManager = new SharedpreferenceManager(this);
         eid = mSharedpreferenceManager.getEid();
@@ -350,7 +379,7 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
 
             @Override
             public void onSuccess(String result) {
-                Log.i(TAG, "onSuccess: result-->" + result);
+
                 Gson gson = new Gson();
                 TerminalInfoBean terminalInfoBean = gson.fromJson(result, TerminalInfoBean.class);
                 if (!terminalInfoBean.isSuccess()) {
@@ -410,6 +439,19 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
 
 
                 myHandler.sendEmptyMessage(Data.MSG_1);
+            }
+        });
+
+        mNetworkManager.setOnLocateWarnListener(new OnLocateWarnListener() {
+            @Override
+            public void onFailure() {
+                Log.i(TAG, "onFailure: ");
+                myHandler.sendEmptyMessage(MSG_ERO);
+            }
+
+            @Override
+            public void onSuccess(String result) {
+                Log.i(TAG, "onSuccess: result-->" + result);
             }
         });
 
@@ -480,6 +522,12 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
         mNetworkManager.getWholeImei(eid, token, imei, userName);
     }
 
+    //  获取报警信息
+    private void getWarnInfo(String imei) {
+        showLoading();
+        mNetworkManager.getLocateWary(userName, token, imei);
+    }
+
     //  获取目标位置
     private void getImeiLocation(String imei) {
         showLoading();
@@ -509,6 +557,15 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
                 long mm = timeFormatU.dateToMillis2(gps);
                 if (mNow - mm <= MIN_10) {
                     locateType = 1;
+                } else {
+                    locateType = 3;
+                }
+                break;
+            }
+            case 3: {
+                long mm = timeFormatU.dateToMillis2(lbs);
+                if (mNow - mm <= MIN_10) {
+                    locateType = 2;
                 } else {
                     locateType = 3;
                 }

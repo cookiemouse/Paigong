@@ -20,6 +20,7 @@ import com.tianyigps.dispatch2.interfaces.OnGetWorkerOrderInfoStartListener;
 import com.tianyigps.dispatch2.interfaces.OnGetWorkerOrderListener;
 import com.tianyigps.dispatch2.interfaces.OnInstallBackListener;
 import com.tianyigps.dispatch2.interfaces.OnInstallCountListener;
+import com.tianyigps.dispatch2.interfaces.OnLocateWarnListener;
 import com.tianyigps.dispatch2.interfaces.OnModifyDateListener;
 import com.tianyigps.dispatch2.interfaces.OnModifyPasswordListener;
 import com.tianyigps.dispatch2.interfaces.OnOrderTrackListener;
@@ -87,6 +88,7 @@ public class NetworkManager {
     private OnDeletePicListener mOnDeletePicListener;
     //  20
     private OnGetWholeIMEIListener mOnGetWholeIMEIListener;
+    private OnLocateWarnListener mOnLocateWarnListener;
 
     //  服务主任
     private OnPendingOrderListener mOnPendingOrderListener;
@@ -1034,6 +1036,38 @@ public class NetworkManager {
 
     public void setOnGetWholeIMEIListener(OnGetWholeIMEIListener listener) {
         this.mOnGetWholeIMEIListener = listener;
+    }
+
+    //  获取定位报警信息
+    public void getLocateWary(String userName, String token, String imei) {
+        Request.Builder builder = new Request.Builder();
+        builder.url(Urls.URL_WORKER_LOCATE_WARN + "userName=" + userName
+                + "&token=" + token
+                + "&imei=" + imei);
+        mRequest = builder.build();
+        Log.i(TAG, "getLocateWary: url-->" + mRequest.url());
+        Call call = mOkHttpClient.newCall(mRequest);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                if (null == mOnLocateWarnListener) {
+                    throw new NullPointerException("OnLocateWarnListener is null");
+                }
+                mOnLocateWarnListener.onFailure();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (null == mOnLocateWarnListener) {
+                    throw new NullPointerException("OnLocateWarnListener is null");
+                }
+                mOnLocateWarnListener.onSuccess(response.body().string());
+            }
+        });
+    }
+
+    public void setOnLocateWarnListener(OnLocateWarnListener listener) {
+        this.mOnLocateWarnListener = listener;
     }
 
     /***************************************华丽的化割线*************************************************/

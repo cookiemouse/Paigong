@@ -66,13 +66,26 @@
         android:paddingLeft="@dimen/dp_96"
         android:paddingRight="@dimen/dp_96"
         android:paddingTop="@dimen/dp_8"
-        android:text="@string/look_location"
+        android:text="查看报警记录"
         android:textColor="@color/colorWhite"
         android:textSize="@dimen/sp_18"/>
 
-    <include
-        layout="@layout/layout_map"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
+        android:layout_height="match_parent">
+
+        <include
+            layout="@layout/layout_map"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+
+        <ListView
+            android:id="@+id/lv_activity_locate_warn"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorWhite"
+            android:visibility="gone"/>
+    </FrameLayout>
+
 </LinearLayout>

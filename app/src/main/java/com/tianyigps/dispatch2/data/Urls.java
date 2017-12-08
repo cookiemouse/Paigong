@@ -33,6 +33,7 @@ public class Urls {
     public static final String URL_WORKER_UPLOAD_PIC = IP + "/dispatch4AppController/uploadPic4Engineer";
     public static final String URL_WORKER_DELETE_PIC = IP + "/dispatch4AppController/deletePic4Engineer?";
     public static final String URL_WORKER_WHOLE_IMEI = IP + "/dispatch4AppController/getWholeImei4Engineer?";
+    public static final String URL_WORKER_LOCATE_WARN = IP + "/dispatch4AppController/getWarnInfo?";
 
     //================================分割线========================================
     public static final String URL_MANAGER_PENDING_ORDER = IP + "/dispatch4AppController/getPendingOrders4Director?";
