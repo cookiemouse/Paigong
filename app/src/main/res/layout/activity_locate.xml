@@ -42,6 +42,16 @@
             android:layout_marginStart="@dimen/dp_4"
             android:src="@drawable/ic_scanner"/>
 
+        <ImageView
+            android:id="@+id/iv_activity_locate_locate"
+            android:layout_width="@dimen/dp_32"
+            android:layout_height="@dimen/dp_48"
+            android:layout_marginEnd="@dimen/dp_16"
+            android:layout_marginLeft="@dimen/dp_4"
+            android:layout_marginRight="@dimen/dp_16"
+            android:layout_marginStart="@dimen/dp_4"
+            android:src="@drawable/ic_locate_1"/>
+
     </LinearLayout>
 
     <TextView

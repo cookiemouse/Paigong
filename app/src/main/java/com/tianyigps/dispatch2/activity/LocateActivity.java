@@ -70,7 +70,7 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
     private Overlay mOverlayMarker;
 
     private EditText mEditTextImei;
-    private ImageView mImageViewScanner, mImageViewLocate;
+    private ImageView mImageViewScanner, mImageViewLocateIcon, mImageViewLocate;
     private TextView mTextViewLook, mTextViewAddress, mTextViewNormal, mTextViewSatellate, mTextViewFlush;
     private LinearLayout mLinearLayout;
 
@@ -163,6 +163,10 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
                 startActivityForResult(intent, DATA_INTENT_SCANNER_REQUEST);
                 break;
             }
+            case R.id.iv_activity_locate_locate: {
+                //
+                break;
+            }
             case R.id.iv_layout_map_control_locate: {
                 // 2017/7/12 定位
                 mLocateManager.startLocate();
@@ -233,6 +237,7 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
 
         mEditTextImei = findViewById(R.id.et_activity_locate_imei);
         mImageViewScanner = findViewById(R.id.iv_activity_locate_imei);
+        mImageViewLocateIcon = findViewById(R.id.iv_activity_locate_locate);
         mImageViewLocate = findViewById(R.id.iv_layout_map_control_locate);
         mTextViewLook = findViewById(R.id.tv_activity_locate_look);
         mTextViewAddress = findViewById(R.id.tv_layout_map_address);
@@ -263,6 +268,7 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
 
     private void setEventListener() {
         mImageViewScanner.setOnClickListener(this);
+        mImageViewLocateIcon.setOnClickListener(this);
         mImageViewLocate.setOnClickListener(this);
         mTextViewLook.setOnClickListener(this);
         mTextViewAddress.setOnClickListener(this);
