@@ -95,6 +95,7 @@ public class InstallingActivity extends BaseActivity {
     private int mCompleteCountRepair = 0, mCompleteCountInstall = 0, mCompleteCountRemove = 0;
     //  卡片中是否已有填写内容
     private boolean isFilled = false;
+    private boolean isInstallCarFilled = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -979,50 +980,6 @@ public class InstallingActivity extends BaseActivity {
                 boolean carComplete = false;
                 int carId = data.getCarId();
 
-                //  check车辆信息是否完整
-                Cursor cursorCar = mDatabaseManager.getCar(carId);
-                if (null != cursorCar && cursorCar.moveToFirst()) {
-                    String carNo = cursorCar.getString(1);
-                    String frameNo = cursorCar.getString(2);
-                    String carNoUrl = cursorCar.getString(6);
-                    String frameNoUrl = cursorCar.getString(7);
-
-                    Log.i(TAG, "checkInstallListCar: carNo-->" + carNo);
-                    Log.i(TAG, "checkInstallListCar: frameNo-->" + frameNo);
-                    Log.i(TAG, "checkInstallListCar: carNoUrl-->" + carNoUrl);
-                    Log.i(TAG, "checkInstallListCar: frameNoUrl-->" + frameNoUrl);
-
-                    isFilled = (null != frameNoUrl)
-                            || (null != frameNo)
-                            || !RegularU.isEmpty(carNoUrl)
-                            || !RegularU.isEmpty(carNo);
-
-                    carComplete = (null != frameNoUrl)
-                            && (null != frameNo);
-
-                    if (carComplete) {
-                        if (!RegularU.isEmpty(carNoUrl)) {
-                            carComplete = !RegularU.isEmpty(carNo);
-                        }
-                        if (!RegularU.isEmpty(carNo)) {
-                            carComplete = !RegularU.isEmpty(carNoUrl);
-                        }
-                    }
-
-                    cursorCar.close();
-
-                    if (!carComplete && isFilled) {
-                        mCompleteCountInstall = 0;
-                        data.setComplete(false);
-                        myHandler.sendEmptyMessage(Data.MSG_1);
-                        return false;
-                    }
-
-                } else {
-                    Log.i(TAG, "checkInstallList: cursorCar is null");
-                }
-
-
                 //  ------------分割线---------------
                 //  check设备信息是否完整
                 Cursor cursorTer = mDatabaseManager.getTerByCarId(carId);
@@ -1052,6 +1009,50 @@ public class InstallingActivity extends BaseActivity {
 
                 //  设备数量是否全部安装完
                 completeCount = completeCount + data.getCompleteLine() + data.getCompleteOffline();
+
+                //  check车辆信息是否完整
+                Cursor cursorCar = mDatabaseManager.getCar(carId);
+                if (null != cursorCar && cursorCar.moveToFirst()) {
+                    String carNo = cursorCar.getString(1);
+                    String frameNo = cursorCar.getString(2);
+                    String carNoUrl = cursorCar.getString(6);
+                    String frameNoUrl = cursorCar.getString(7);
+
+                    Log.i(TAG, "checkInstallListCar: carNo-->" + carNo);
+                    Log.i(TAG, "checkInstallListCar: frameNo-->" + frameNo);
+                    Log.i(TAG, "checkInstallListCar: carNoUrl-->" + carNoUrl);
+                    Log.i(TAG, "checkInstallListCar: frameNoUrl-->" + frameNoUrl);
+                    Log.i(TAG, "checkInstallListCar: ---------------");
+
+                    isInstallCarFilled = (null != frameNoUrl)
+                            || (null != frameNo)
+                            || !RegularU.isEmpty(carNoUrl)
+                            || !RegularU.isEmpty(carNo);
+
+                    carComplete = (!RegularU.isEmpty(frameNoUrl))
+                            && (!RegularU.isEmpty(frameNo));
+
+                    if (carComplete) {
+                        if (!RegularU.isEmpty(carNoUrl)) {
+                            carComplete = !RegularU.isEmpty(carNo);
+                        }
+                        if (!RegularU.isEmpty(carNo)) {
+                            carComplete = !RegularU.isEmpty(carNoUrl);
+                        }
+                    }
+
+                    cursorCar.close();
+
+                    if (!carComplete && isInstallCarFilled && (completeCount == data.getOrderLine() + data.getOrderOffline())) {
+                        mCompleteCountInstall = 0;
+                        data.setComplete(false);
+                        myHandler.sendEmptyMessage(Data.MSG_1);
+                        return false;
+                    }
+                } else {
+                    Log.i(TAG, "checkInstallList: cursorCar is null");
+                }
+
                 if (carComplete && data.getOrderLine() == data.getCompleteLine() && data.getOrderOffline() == data.getCompleteOffline()) {
                     data.setComplete(true);
                 } else {
