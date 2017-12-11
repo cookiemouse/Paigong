@@ -359,10 +359,21 @@ public class PendedFragment extends Fragment {
                             || Data.STATUS_7 == orderStatus) {
 
                         String address = objBean.getProvince() + objBean.getCity() + objBean.getDistrict() + objBean.getDetail();
+                        String worker;
+                        if (RegularU.isEmpty(objBean.getEName())) {
+                            worker = "";
+                        } else {
+                            worker = objBean.getEName();
+                        }
+                        if (RegularU.isEmpty(objBean.getJobNo())) {
+                            worker += "";
+                        } else {
+                            worker += objBean.getJobNo();
+                        }
                         mAdapterPendedDataList.add(new AdapterPendedData(objBean.getCustName()
                                 , address
                                 , objBean.getJobNo()
-                                , objBean.getEName() + " " + objBean.getJobNo()
+                                , worker
                                 , objBean.getPhoneNo()
                                 , objBean.getContactName()
                                 , objBean.getContactPhone()
@@ -462,7 +473,7 @@ public class PendedFragment extends Fragment {
 
     //  显示信息Dialog
     private void showMessageDialog(String msg) {
-        if (null == getContext()){
+        if (null == getContext()) {
             return;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
