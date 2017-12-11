@@ -1125,15 +1125,21 @@ public class OperateInstallActivity extends BaseActivity {
 
                 AdapterOperateInstallListData data = mAdapterOperateInstallListDataList.get(i);
                 if (data.gettId() == tid) {
-                    if (!RegularU.isEmpty(tNoNew)) {
+                    if (null != tNoNew) {
                         data.settNoNew(tNoNew);
                     }
+//                    if (!RegularU.isEmpty(tNoNew)) {
+//                        data.settNoNew(tNoNew);
+//                    }
                     if (!RegularU.isEmpty(tNoOld)) {
                         data.settNoOld(tNoOld);
                     }
-                    if (!RegularU.isEmpty(position)) {
+                    if (null != position) {
                         data.setPosition(position);
                     }
+//                    if (!RegularU.isEmpty(position)) {
+//                        data.setPosition(position);
+//                    }
 
                     if (!RegularU.isEmpty(position)) {
                         data.setModel(model);
