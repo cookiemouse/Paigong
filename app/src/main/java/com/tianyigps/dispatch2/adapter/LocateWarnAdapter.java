@@ -63,9 +63,11 @@ public class LocateWarnAdapter extends BaseAdapter {
         if (0 == i) {
             viewHolder.tvType.setTextSize(18);
             viewHolder.tvTime.setTextSize(18);
+//            viewHolder.tvType.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+//            viewHolder.tvTime.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
         } else {
-            viewHolder.tvType.setTextSize(14);
-            viewHolder.tvTime.setTextSize(14);
+            viewHolder.tvType.setTextSize(16);
+            viewHolder.tvTime.setTextSize(16);
         }
 
         return view;

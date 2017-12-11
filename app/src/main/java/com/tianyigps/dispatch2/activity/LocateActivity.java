@@ -42,6 +42,7 @@ import com.google.gson.Gson;
 import com.tianyigps.dispatch2.R;
 import com.tianyigps.dispatch2.adapter.LocateWarnAdapter;
 import com.tianyigps.dispatch2.base.BaseActivity;
+import com.tianyigps.dispatch2.bean.LocateWarnBean;
 import com.tianyigps.dispatch2.bean.TerminalInfoBean;
 import com.tianyigps.dispatch2.bean.WholeImeiBean;
 import com.tianyigps.dispatch2.data.AdapterLocateWarnData;
@@ -113,6 +114,9 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
     //  LoadingFragment
     private LoadingDialogFragment mLoadingDialogFragment;
 
+    //  是否为查询报警信息
+    private boolean mIsWarn = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -176,11 +180,14 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
             }
             case R.id.iv_activity_locate_locate: {
                 //  查看设备定位
-                mListViewWarn.setVisibility(View.GONE);
+                mIsWarn = false;
+                mEditTextImei.clearFocus();
+
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(mEditTextImei.getWindowToken(), 0);
                 String imei = mEditTextImei.getText().toString();
                 if (imei.length() > 7) {
+                    mListViewWarn.setVisibility(View.GONE);
                     getWholeImei(imei);
                 } else {
                     showToast("请至少输入IMEI号后8位数");
@@ -194,12 +201,15 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
             }
             case R.id.tv_activity_locate_look: {
                 // 2017/7/12 查看报警记录
-                mListViewWarn.setVisibility(View.VISIBLE);
+                mIsWarn = true;
+                mEditTextImei.clearFocus();
+
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(mEditTextImei.getWindowToken(), 0);
                 String imei = mEditTextImei.getText().toString();
                 if (imei.length() > 7) {
-                    getWarnInfo(imei);
+                    mListViewWarn.setVisibility(View.VISIBLE);
+                    getWholeImei(imei);
                 } else {
                     showToast("请至少输入IMEI号后8位数");
                 }
@@ -229,6 +239,7 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
                     getImeiLocation(wholeImei);
                     return;
                 }
+                mIsWarn = false;
                 String imei = mEditTextImei.getText().toString();
                 if (imei.length() > 7) {
                     getWholeImei(imei);
@@ -271,9 +282,6 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
         mLocateManager = new LocateManager(getApplicationContext());
 
         mAdapterLocateWarnDataList = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            mAdapterLocateWarnDataList.add(new AdapterLocateWarnData("asdfasdf", "1123123123"));
-        }
         mLocateWarnAdapter = new LocateWarnAdapter(this, mAdapterLocateWarnDataList);
         mListViewWarn.setAdapter(mLocateWarnAdapter);
 
@@ -452,6 +460,24 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
             @Override
             public void onSuccess(String result) {
                 Log.i(TAG, "onSuccess: result-->" + result);
+                Gson gson = new Gson();
+                LocateWarnBean locateWarnBean = gson.fromJson(result, LocateWarnBean.class);
+                if (null == locateWarnBean) {
+                    errMsg = Data.DEFAULT_MESSAGE;
+                    myHandler.sendEmptyMessage(Data.MSG_4);
+                    return;
+                }
+                if (!locateWarnBean.isSuccess()) {
+                    errMsg = locateWarnBean.getMsg();
+                    myHandler.sendEmptyMessage(Data.MSG_4);
+                    return;
+                }
+                mAdapterLocateWarnDataList.clear();
+                mAdapterLocateWarnDataList.add(new AdapterLocateWarnData("报警类型", "报警时间"));
+                for (LocateWarnBean.ObjBean objBean : locateWarnBean.getObj()) {
+                    mAdapterLocateWarnDataList.add(new AdapterLocateWarnData(objBean.getName(), new TimeFormatU().millisToDate(objBean.getCreate_time())));
+                }
+                myHandler.sendEmptyMessage(Data.MSG_6);
             }
         });
 
@@ -630,7 +656,11 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
                 case Data.MSG_3: {
                     //  获取到WholeImei
                     mEditTextImei.setText(wholeImei);
-                    getImeiLocation(wholeImei);
+                    if (mIsWarn) {
+                        getWarnInfo(wholeImei);
+                    } else {
+                        getImeiLocation(wholeImei);
+                    }
                     break;
                 }
                 case Data.MSG_4: {
@@ -641,6 +671,11 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
                 case Data.MSG_5: {
                     //  init 获取设备信息，延时了200ms
                     getImeiLocation(wholeImei);
+                    break;
+                }
+                case Data.MSG_6: {
+                    //  获取报警信息
+                    mLocateWarnAdapter.notifyDataSetChanged();
                     break;
                 }
                 default: {
