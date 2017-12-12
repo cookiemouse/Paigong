@@ -141,8 +141,6 @@ public class CustomSignActivity extends BaseActivity {
         if (mFileManager.isExists()) {
             mSignView.setBitmap(BitmapFactory.decodeFile(mFileManager.getPath()));
         }
-
-        showPartCompleteDialog();
     }
 
     private void setEventListener() {

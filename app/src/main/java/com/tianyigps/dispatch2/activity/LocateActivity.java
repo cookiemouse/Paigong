@@ -255,7 +255,7 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
     }
 
     private void init() {
-        this.setTitleText(R.string.look_location);
+        this.setTitleText("查看设备信息");
 
         mMapView = findViewById(R.id.mv_layout_map);
         mBaiduMap = mMapView.getMap();
