@@ -184,7 +184,7 @@ public class SplashActivity extends Activity {
                 }
                 String headPhoneList = "";
                 for (CheckUserBean.ObjBean.HeadPhoneList phoneList : objBean.getHeadPhoneList()) {
-                    headPhoneList = phoneList.getContactPhone() + ",";
+                    headPhoneList += phoneList.getContactPhone() + ",";
                 }
                 mSharedpreferenceManager.saveHeadPhoneList(headPhoneList);
 
