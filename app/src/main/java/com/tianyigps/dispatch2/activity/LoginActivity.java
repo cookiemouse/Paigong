@@ -87,6 +87,11 @@ public class LoginActivity extends AppCompatActivity {
         String password = mSharedpreferenceManager.getPassword();
         mIsRemenber = mSharedpreferenceManager.getIsRemenber();
         mCheckBoxRemenber.setChecked(mIsRemenber);
+        if (mIsRemenber) {
+            mCheckBoxRemenber.setTextColor(getResources().getColor(R.color.colorBlueTheme));
+        } else {
+            mCheckBoxRemenber.setTextColor(getResources().getColor(R.color.colorText));
+        }
         mEditTextAccount.setText(account);
         mEditTextPassword.setText(password);
     }
@@ -117,6 +122,11 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 mSharedpreferenceManager.saveIsRemenber(b);
+                if (b) {
+                    mCheckBoxRemenber.setTextColor(getResources().getColor(R.color.colorBlueTheme));
+                } else {
+                    mCheckBoxRemenber.setTextColor(getResources().getColor(R.color.colorText));
+                }
             }
         });
 
