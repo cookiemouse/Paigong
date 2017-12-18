@@ -13,6 +13,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -34,6 +36,7 @@ public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
 
     private EditText mEditTextAccount, mEditTextPassword;
+    private CheckBox mCheckBoxRemenber;
     private Button mButtonLogin;
 
     private NetworkManager mNetworkManager;
@@ -41,7 +44,8 @@ public class LoginActivity extends AppCompatActivity {
 
     private SharedpreferenceManager mSharedpreferenceManager;
     private int launchMode = Data.DATA_LAUNCH_MODE_WORKER;
-    private String launchAccount = "";
+    private String launchAccount = "", mPassword = "";
+    private boolean mIsRemenber = false;
 
     private String mStringMessage = "数据请求失败";
 
@@ -70,6 +74,7 @@ public class LoginActivity extends AppCompatActivity {
     private void init() {
         mEditTextAccount = (EditText) findViewById(R.id.et_activity_login_account);
         mEditTextPassword = (EditText) findViewById(R.id.et_activity_login_password);
+        mCheckBoxRemenber = (CheckBox) findViewById(R.id.cb_activity_login_remember_password);
         mButtonLogin = (Button) findViewById(R.id.btn_activity_login);
 
         mNetworkManager = new NetworkManager();
@@ -79,7 +84,11 @@ public class LoginActivity extends AppCompatActivity {
         mLoadingDialogFragment = new LoadingDialogFragment();
 
         String account = mSharedpreferenceManager.getAccount();
+        String password = mSharedpreferenceManager.getPassword();
+        mIsRemenber = mSharedpreferenceManager.getIsRemenber();
+        mCheckBoxRemenber.setChecked(mIsRemenber);
         mEditTextAccount.setText(account);
+        mEditTextPassword.setText(password);
     }
 
     private void setEventListener() {
@@ -88,19 +97,26 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 // 2017/7/14 登录
                 launchAccount = mEditTextAccount.getText().toString();
-                String password = mEditTextPassword.getText().toString();
+                mPassword = mEditTextPassword.getText().toString();
 
                 if (null == launchAccount || "".equals(launchAccount)) {
                     showToast("请输入账号");
                     return;
                 }
-                if ("".equals(password)) {
+                if ("".equals(mPassword)) {
                     showToast("请输入密码");
                     return;
                 }
 
                 showLoading();
-                mNetworkManager.checkUser(launchAccount, password, "");
+                mNetworkManager.checkUser(launchAccount, mPassword, "");
+            }
+        });
+
+        mCheckBoxRemenber.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                mSharedpreferenceManager.saveIsRemenber(b);
             }
         });
 
@@ -155,6 +171,12 @@ public class LoginActivity extends AppCompatActivity {
                 mSharedpreferenceManager.saveHeadPhoneList(headPhoneList);
 
                 mSharedpreferenceManager.saveAccount(launchAccount);
+                boolean isChecked = mCheckBoxRemenber.isChecked();
+                if (isChecked) {
+                    mSharedpreferenceManager.savePassword(mPassword);
+                } else {
+                    mSharedpreferenceManager.savePassword("");
+                }
 
                 myHandler.sendEmptyMessage(Data.MSG_1);
             }

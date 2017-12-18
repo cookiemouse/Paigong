@@ -63,7 +63,7 @@ import java.util.List;
 public class OperateInstallActivity extends BaseActivity {
 
     private static final String TAG = "OperateInstall";
-    private static final int PIC_MAX = 5;
+    private static final int PIC_MAX = 8;
 
     private static final String KEY_IMEI = "imei";
     private static final String KEY_REPLACE = "replace";
@@ -783,6 +783,9 @@ public class OperateInstallActivity extends BaseActivity {
                         String pic4 = carListBean.getPic4();
                         String pic5 = carListBean.getPic5();
                         String pic6 = carListBean.getPic6();
+                        String pic7 = carListBean.getPic7();
+                        String pic8 = carListBean.getPic8();
+                        String pic9 = carListBean.getPic9();
 
                         if (null != pic1) {
                             mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData(mBaseImg + pic1, pic1));
@@ -807,6 +810,15 @@ public class OperateInstallActivity extends BaseActivity {
                         if (null != pic6) {
                             mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData(mBaseImg + pic6, pic6));
 //                    mDatabaseManager.addCarPics(idMainCar, 5, mBaseImg + pic1, pic1);
+                        }
+                        if (null != pic7) {
+                            mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData(mBaseImg + pic7, pic7));
+                        }
+                        if (null != pic8) {
+                            mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData(mBaseImg + pic8, pic8));
+                        }
+                        if (null != pic9) {
+                            mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData(mBaseImg + pic9, pic9));
                         }
                         List<StartOrderInfoBean.ObjBean.CarListBean.CarTerminalListBean> carTerminalListBeanList = carListBean.getCarTerminalList();
                         for (int i = 0; i < carTerminalListBeanList.size(); i++) {
@@ -952,7 +964,7 @@ public class OperateInstallActivity extends BaseActivity {
                         AdapterOperateInstallRecyclerData data = mAdapterOperateInstallRecyclerDataList.get(itemRecycler);
                         if (null == data || null == data.getImgUrl()) {
                             int size = mAdapterOperateInstallRecyclerDataList.size();
-                            if (size < 6) {
+                            if (size <= PIC_MAX) {
                                 mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData());
                             }
                         }

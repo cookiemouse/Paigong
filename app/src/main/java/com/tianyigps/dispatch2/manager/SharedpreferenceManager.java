@@ -89,6 +89,30 @@ public class SharedpreferenceManager {
         return mSharedPreferences.getString(DATA_LAUNCH_ACCOUNT, "");
     }
 
+    //  保存是否记住密码
+    public void saveIsRemenber(boolean remenber) {
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putBoolean(Data.DATA_LAUNCH_IS_REMBNBER, remenber);
+        editor.apply();
+    }
+
+    //  获取是否记住密码
+    public boolean getIsRemenber() {
+        return mSharedPreferences.getBoolean(Data.DATA_LAUNCH_IS_REMBNBER, false);
+    }
+
+    //  保存密码
+    public void savePassword(String password) {
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putString(Data.DATA_LAUNCH_PASSWORD, password);
+        editor.apply();
+    }
+
+    //  获取密码
+    public String getPassword() {
+        return mSharedPreferences.getString(Data.DATA_LAUNCH_PASSWORD, "");
+    }
+
     //  保存名字
     public void saveName(String name) {
         SharedPreferences.Editor editor = mSharedPreferences.edit();

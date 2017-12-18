@@ -607,6 +607,9 @@ public class StartOrderInfoBean {
             private String pic4;
             private String pic5;
             private String pic6;
+            private String pic7;
+            private String pic8;
+            private String pic9;
             private int removeFlag;
             private int wiredAnnual;
             private int wiredNum;
@@ -764,6 +767,30 @@ public class StartOrderInfoBean {
 
             public void setPic6(String pic6) {
                 this.pic6 = pic6;
+            }
+
+            public String getPic7() {
+                return pic7;
+            }
+
+            public void setPic7(String pic7) {
+                this.pic7 = pic7;
+            }
+
+            public String getPic8() {
+                return pic8;
+            }
+
+            public void setPic8(String pic8) {
+                this.pic8 = pic8;
+            }
+
+            public String getPic9() {
+                return pic9;
+            }
+
+            public void setPic9(String pic9) {
+                this.pic9 = pic9;
             }
 
             public int getRemoveFlag() {

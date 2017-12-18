@@ -9,6 +9,8 @@ public final class Data {
 
     //  账号类型，worker或manager
     public final static String DATA_LAUNCH_ACCOUNT = "paigong_sharedpreferences_launch_account";
+    public final static String DATA_LAUNCH_PASSWORD = "paigong_sharedpreferences_launch_password";
+    public final static String DATA_LAUNCH_IS_REMBNBER = "paigong_sharedpreferences_launch_isremenber";
     public final static String DATA_LAUNCH_MODE = "paigong_sharedpreferences_launch_mode";
     public final static int DATA_LAUNCH_MODE_WORKER = 1;
     public final static int DATA_LAUNCH_MODE_MANAGER = 2;

@@ -85,6 +85,16 @@
         android:layout_marginTop="@dimen/dp_4"
         android:background="@color/colorBlueTheme"/>
 
+    <CheckBox
+        android:id="@+id/cb_activity_login_remember_password"
+        style="@style/MyCheck"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_8"
+        android:layout_marginLeft="@dimen/dp_32"
+        android:layout_marginStart="@dimen/dp_32"
+        android:text="@string/remember_password"/>
+
     <Button
         android:id="@+id/btn_activity_login"
         android:layout_width="match_parent"
