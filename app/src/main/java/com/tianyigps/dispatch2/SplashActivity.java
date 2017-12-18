@@ -183,8 +183,10 @@ public class SplashActivity extends Activity {
                             , launchMode);
                 }
                 String headPhoneList = "";
-                for (CheckUserBean.ObjBean.HeadPhoneList phoneList : objBean.getHeadPhoneList()) {
-                    headPhoneList += phoneList.getContactPhone() + ",";
+                if (null != objBean.getHeadPhoneList()) {
+                    for (CheckUserBean.ObjBean.HeadPhoneList phoneList : objBean.getHeadPhoneList()) {
+                        headPhoneList += phoneList.getContactPhone() + ",";
+                    }
                 }
                 mSharedpreferenceManager.saveHeadPhoneList(headPhoneList);
 
