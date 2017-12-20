@@ -5,11 +5,12 @@ package com.tianyigps.dispatch2.data;
  */
 
 public class Urls {
-//    private static final String IP = "http://10.0.0.8:8080/dispatch-services";  //  本地服务
+    //    private static final String IP = "http://10.0.0.8:8080/dispatch-services";  //  本地服务
 //    private static final String IP = "http://sit.tianyigps.cn/dispatch-services";
-    private static final String IP = "http://121.43.178.183/dispatch-services";
+//    private static final String IP = "http://121.43.178.183/dispatch-services";
+    private static final String IP = "http://dser.tianyigps.cn:8081/dispatch-services";
+//    private static final String IP = "http://121.196.194.36:8081/dispatch-services";
 //    private static final String IP = "http://116.62.58.232:8081/dispatch-services";
-//    private static final String IP = "http://dser.tianyigps.cn:8081/dispatch-services";
 
     public static final String URL_CHECK_USER = IP + "/dispatch4AppController/checkuser?";
     public static final String URL_CHANGE_PSD = IP + "/dispatch4AppController/changePwd?";
