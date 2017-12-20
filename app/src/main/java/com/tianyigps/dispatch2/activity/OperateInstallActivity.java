@@ -1131,36 +1131,39 @@ public class OperateInstallActivity extends BaseActivity {
                 Log.i(TAG, "loadTerminalData: position-->" + position);
                 Log.i(TAG, "loadTerminalData: model-->" + model);
                 Log.i(TAG, "loadTerminalData: tid-->" + tid);
-                Log.i(TAG, "........................................");
+                Log.i(TAG, "loadTerminalData: ........................................");
 
                 cursor.close();
 
-                AdapterOperateInstallListData data = mAdapterOperateInstallListDataList.get(i);
-                if (data.gettId() == tid) {
-                    if (null != tNoNew) {
-                        data.settNoNew(tNoNew);
-                    }
+//                AdapterOperateInstallListData data = mAdapterOperateInstallListDataList.get(i);
+                for (AdapterOperateInstallListData data : mAdapterOperateInstallListDataList) {
+                    Log.i(TAG, "loadTerminalData: data.gettId-->" + data.gettId());
+                    if (data.gettId() == tid) {
+                        if (null != tNoNew) {
+                            data.settNoNew(tNoNew);
+                        }
 //                    if (!RegularU.isEmpty(tNoNew)) {
 //                        data.settNoNew(tNoNew);
 //                    }
-                    if (!RegularU.isEmpty(tNoOld)) {
-                        data.settNoOld(tNoOld);
-                    }
-                    if (null != position) {
-                        data.setPosition(position);
-                    }
+                        if (!RegularU.isEmpty(tNoOld)) {
+                            data.settNoOld(tNoOld);
+                        }
+                        if (null != position) {
+                            data.setPosition(position);
+                        }
 //                    if (!RegularU.isEmpty(position)) {
 //                        data.setPosition(position);
 //                    }
 
-                    if (!RegularU.isEmpty(position)) {
-                        data.setModel(model);
+                        if (!RegularU.isEmpty(position)) {
+                            data.setModel(model);
+                        }
                     }
+                    Log.i(TAG, "loadTerminalData: positionPic-->" + data.getPositionPic());
+                    Log.i(TAG, "loadTerminalData: getInstallPic-->" + data.getInstallPic());
+                    Log.i(TAG, "loadTerminalData: -------------------------------------");
                 }
 
-                Log.i(TAG, "loadTerminalData: positionPic-->" + data.getPositionPic());
-                Log.i(TAG, "loadTerminalData: getInstallPic-->" + data.getInstallPic());
-                Log.i(TAG, "loadTerminalData: -------------------------------------");
             }
         }
         mOperateInstallListAdapter.notifyDataSetChanged();
