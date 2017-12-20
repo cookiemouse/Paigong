@@ -1149,7 +1149,10 @@ public class InstallingActivity extends BaseActivity {
             if (mSwipeRefreshLayout.isRefreshing()) {
                 mSwipeRefreshLayout.setRefreshing(false);
             }
-            mTextViewRemarks.setText(mStringRemarks);
+            if (!RegularU.isEmpty(mStringRemarks)) {
+                mStringRemarks = mStringRemarks.replaceAll("null", "");
+                mTextViewRemarks.setText(mStringRemarks);
+            }
             switch (msg.what) {
                 case Data.MSG_ERO: {
                     showFailureDialog(mStringMsg);
