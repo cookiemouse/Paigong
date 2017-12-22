@@ -98,7 +98,7 @@ public class SharedpreferenceManager {
 
     //  获取是否记住密码
     public boolean getIsRemenber() {
-        return mSharedPreferences.getBoolean(Data.DATA_LAUNCH_IS_REMBNBER, false);
+        return mSharedPreferences.getBoolean(Data.DATA_LAUNCH_IS_REMBNBER, true);
     }
 
     //  保存密码
