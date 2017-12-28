@@ -251,6 +251,9 @@ public class HandledFragment extends Fragment {
                 mKey = mEditTextSearch.getText().toString();
                 mKey = mKey.trim();
                 mSwipeRefreshLayout.setRefreshing(true);
+                if (mSwipeRefreshLayout.isRefreshing()) {
+                    mAdapterHandledDataList.clear();
+                }
                 mNetworkManager.getWorkerOrderHanded(eid, token, mKey, "", userName);
 
                 if (!RegularU.isEmpty(mKey)) {

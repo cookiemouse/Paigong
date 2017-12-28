@@ -222,6 +222,9 @@ public class PendedFragment extends Fragment {
                 mKey = mEditTextSearch.getText().toString();
                 mKey = mKey.trim();
                 mSwipeRefreshLayout.setRefreshing(true);
+                if (mSwipeRefreshLayout.isRefreshing()) {
+                    mAdapterPendedDataList.clear();
+                }
                 mNetworkManager.getPended(jobNo, token, "", mKey, "", userName);
 
                 if (!"".equals(mKey)) {
