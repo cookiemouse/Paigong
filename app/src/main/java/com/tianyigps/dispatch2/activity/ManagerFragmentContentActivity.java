@@ -29,6 +29,7 @@ import com.tianyigps.dispatch2.fragment.MineFragment;
 import com.tianyigps.dispatch2.fragment.PendedFragment;
 import com.tianyigps.dispatch2.fragment.PendingFragment;
 import com.tianyigps.dispatch2.interfaces.OnGetWorkerOrderHandingListener;
+import com.tianyigps.dispatch2.manager.DatabaseManager;
 import com.tianyigps.dispatch2.manager.NetworkManager;
 import com.tianyigps.dispatch2.manager.SharedpreferenceManager;
 
@@ -71,6 +72,9 @@ public class ManagerFragmentContentActivity extends AppCompatActivity implements
     private int mHandingCount = 0;
 
     private MyHandler myHandler;
+
+    //  关闭数据库
+    private DatabaseManager mDatabaseManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -165,6 +169,7 @@ public class ManagerFragmentContentActivity extends AppCompatActivity implements
         builder.setPositiveButton(R.string.ensure, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+                mDatabaseManager.close();
                 ManagerFragmentContentActivity.this.finish();
             }
         });
@@ -220,6 +225,8 @@ public class ManagerFragmentContentActivity extends AppCompatActivity implements
         mUserName = mSharedpreferenceManager.getAccount();
 
         myHandler = new MyHandler();
+
+        mDatabaseManager = new DatabaseManager(this);
 
         mBroadcastReceiver = new BroadcastReceiver() {
             @Override

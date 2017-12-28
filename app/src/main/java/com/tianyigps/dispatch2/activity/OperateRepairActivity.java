@@ -274,7 +274,7 @@ public class OperateRepairActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mDatabaseManager.close();
+//        mDatabaseManager.close();
     }
 
     private void init() {

@@ -25,6 +25,7 @@ import com.tianyigps.dispatch2.activity.WorkerFragmentContentActivity;
 import com.tianyigps.dispatch2.adapter.MineAdapter;
 import com.tianyigps.dispatch2.data.AdapterMineData;
 import com.tianyigps.dispatch2.data.Data;
+import com.tianyigps.dispatch2.manager.DatabaseManager;
 import com.tianyigps.dispatch2.manager.SharedpreferenceManager;
 
 import java.util.ArrayList;
@@ -51,6 +52,9 @@ public class MineFragment extends Fragment {
 
     private SharedpreferenceManager mSharedpreferenceManager;
     private int uiMode;
+
+    //  关闭数据库
+    private DatabaseManager mDatabaseManager;
 
     @Nullable
     @Override
@@ -91,6 +95,8 @@ public class MineFragment extends Fragment {
 
         mListViewMine = view.findViewById(R.id.lv_fragment_mine);
         mTextViewExit = view.findViewById(R.id.tv_fragment_mine);
+
+        mDatabaseManager = new DatabaseManager(getContext());
 
         mSharedpreferenceManager = new SharedpreferenceManager(getActivity());
         uiMode = mSharedpreferenceManager.getUiMode();
@@ -198,5 +204,6 @@ public class MineFragment extends Fragment {
     //  退出登陆，数据清零
     private void exitLogin() {
         mSharedpreferenceManager.saveUserData(0, "", "", "", "", "", "", 1);
+        mDatabaseManager.close();
     }
 }

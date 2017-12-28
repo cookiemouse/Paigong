@@ -110,7 +110,7 @@ public class CustomSignActivity extends BaseActivity {
 
     @Override
     protected void onDestroy() {
-        mDatabaseManager.close();
+//        mDatabaseManager.close();
         super.onDestroy();
     }
 

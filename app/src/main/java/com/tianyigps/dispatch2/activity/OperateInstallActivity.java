@@ -399,7 +399,7 @@ public class OperateInstallActivity extends BaseActivity {
         if (null != myHandler) {
             myHandler.removeMessages(Data.MSG_2);
         }
-        mDatabaseManager.close();
+//        mDatabaseManager.close();
         super.onDestroy();
     }
 

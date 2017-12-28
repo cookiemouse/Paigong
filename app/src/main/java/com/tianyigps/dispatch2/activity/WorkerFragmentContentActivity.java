@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -31,9 +30,9 @@ import com.tianyigps.dispatch2.fragment.HandledFragment;
 import com.tianyigps.dispatch2.fragment.MineFragment;
 import com.tianyigps.dispatch2.fragment.OrderFragment;
 import com.tianyigps.dispatch2.interfaces.OnGetWorkerOrderHandingListener;
+import com.tianyigps.dispatch2.manager.DatabaseManager;
 import com.tianyigps.dispatch2.manager.NetworkManager;
 import com.tianyigps.dispatch2.manager.SharedpreferenceManager;
-import com.tianyigps.dispatch2.utils.BitmapU;
 
 import q.rorbin.badgeview.QBadgeView;
 
@@ -70,6 +69,9 @@ public class WorkerFragmentContentActivity extends AppCompatActivity implements 
     private String mToken, mUserName;
     private int mEid, mCount = 0;
     private MyHandler myHandler;
+
+    //  关闭数据库
+    private DatabaseManager mDatabaseManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -174,6 +176,7 @@ public class WorkerFragmentContentActivity extends AppCompatActivity implements 
         builder.setPositiveButton(R.string.ensure, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+                mDatabaseManager.close();
                 WorkerFragmentContentActivity.this.finish();
             }
         });
@@ -213,6 +216,8 @@ public class WorkerFragmentContentActivity extends AppCompatActivity implements 
         mUserName = mSharedpreferenceManager.getAccount();
         mEid = mSharedpreferenceManager.getEid();
         launchMode = mSharedpreferenceManager.getLaunchMode();
+
+        mDatabaseManager = new DatabaseManager(this);
 
         mNetworkManager = new NetworkManager();
 
