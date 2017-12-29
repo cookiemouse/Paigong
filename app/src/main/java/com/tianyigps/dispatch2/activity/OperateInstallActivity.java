@@ -1192,6 +1192,7 @@ public class OperateInstallActivity extends BaseActivity {
             Log.i(TAG, "saveData: tNoOld-->" + tNoOld);
             Log.i(TAG, "saveData: tNoNew-->" + tNoNew);
             Log.i(TAG, "saveData: position-->" + position);
+            Log.i(TAG, "saveData: tid-->" + data.gettId());
             data.setPosition(position);
 
             String id = ID_MAIN_TERMINAL + i;
@@ -1204,6 +1205,11 @@ public class OperateInstallActivity extends BaseActivity {
             int wire = 0;
             if (data.isWire()) {
                 wire = 1;
+            }
+
+            Cursor cursor = mDatabaseManager.getTer(data.gettId());
+            if (null != cursor && cursor.moveToFirst()) {
+                id = cursor.getString(0);
             }
 
             mDatabaseManager.addTer(id, tNoOld, tNoNew, position
