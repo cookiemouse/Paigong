@@ -439,6 +439,7 @@ public class PendDetailsActivity extends Activity {
                     String carVin = carListBean.getCarVin();
                     String carNo = carListBean.getCarNo();
                     String carBrand = carListBean.getCarBrand();
+                    String owner = carListBean.getOwnerName();
                     if (1 == carListBean.getRemoveFlag()) {
                         if (null != carVin && !"".equals(carVin)) {
                             mRemoveContent += carVin;
@@ -446,12 +447,18 @@ public class PendDetailsActivity extends Activity {
                             mRemoveContent += carNo;
                         }
                         if ("".equals(mRemoveContent)) {
+                            if (!RegularU.isEmpty(owner)) {
+                                mRemoveContent += (owner + "，");
+                            }
                             if (!RegularU.isEmpty(carBrand)) {
                                 mRemoveContent += (carBrand + "\n");
                             } else {
                                 mRemoveContent += "\n";
                             }
                         } else {
+                            if (!RegularU.isEmpty(owner)) {
+                                mRemoveContent += ("，" + owner);
+                            }
                             if (!RegularU.isEmpty(carBrand)) {
                                 mRemoveContent += ("，" + carBrand + "\n");
                             } else {
@@ -465,12 +472,18 @@ public class PendDetailsActivity extends Activity {
                             mInfoContent += carNo;
                         }
                         if ("".equals(mInfoContent)) {
+                            if (!RegularU.isEmpty(owner)) {
+                                mInfoContent += (owner + "，");
+                            }
                             if (!RegularU.isEmpty(carBrand)) {
                                 mInfoContent += (carBrand + "\n");
                             } else {
                                 mInfoContent += "\n";
                             }
                         } else {
+                            if (!RegularU.isEmpty(owner)) {
+                                mInfoContent += ("，" + owner);
+                            }
                             if (!RegularU.isEmpty(carBrand)) {
                                 mInfoContent += ("，" + carBrand + "\n");
                             } else {

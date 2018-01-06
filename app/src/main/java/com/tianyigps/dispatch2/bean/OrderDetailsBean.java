@@ -331,12 +331,14 @@ public class OrderDetailsBean {
              * carVin : 111122232
              * removeFlag : 1
              * carBrand :
+             * ownerName :
              */
 
             private String carNo;
             private String carVin;
             private int removeFlag;
             private String carBrand;
+            private String ownerName;
 
             public String getCarNo() {
                 return carNo;
@@ -368,6 +370,14 @@ public class OrderDetailsBean {
 
             public void setCarBrand(String carBrand) {
                 this.carBrand = carBrand;
+            }
+
+            public String getOwnerName() {
+                return ownerName;
+            }
+
+            public void setOwnerName(String ownerName) {
+                this.ownerName = ownerName;
             }
         }
     }

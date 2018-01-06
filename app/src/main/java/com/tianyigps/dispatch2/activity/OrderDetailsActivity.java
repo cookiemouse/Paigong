@@ -378,10 +378,18 @@ public class OrderDetailsActivity extends Activity {
                         String carVin = carInfoBean.getCarVin();
                         String carNo = carInfoBean.getCarNo();
                         String carBrand = carInfoBean.getCarBrand();
+                        String owner = carInfoBean.getOwnerName();
                         if (null != carVin && !"".equals(carVin)) {
                             mStringInstallInfo += carVin;
                         } else if (null != carNo && !"".equals(carNo)) {
                             mStringInstallInfo += carNo;
+                        }
+                        if (!"".equals(mStringInstallInfo)){
+                            if (!RegularU.isEmpty(owner)){
+                                mStringInstallInfo += ("，" + owner);
+                            }else {
+                                mStringInstallInfo += "\n";
+                            }
                         }
                         if (!"".equals(mStringInstallInfo)) {
                             if (!RegularU.isEmpty(carBrand)) {
@@ -394,10 +402,18 @@ public class OrderDetailsActivity extends Activity {
                         String carVin = carInfoBean.getCarVin();
                         String carNo = carInfoBean.getCarNo();
                         String carBrand = carInfoBean.getCarBrand();
+                        String owner = carInfoBean.getOwnerName();
                         if (null != carVin && !"".equals(carVin)) {
                             mStringRemoveContent += carVin;
                         } else if (null != carNo && !"".equals(carNo)) {
                             mStringRemoveContent += carNo;
+                        }
+                        if (!"".equals(mStringRemoveContent)){
+                            if (!RegularU.isEmpty(owner)){
+                                mStringRemoveContent += ("，" + owner);
+                            }else {
+                                mStringRemoveContent += "\n";
+                            }
                         }
                         if (!"".equals(mStringRemoveContent)) {
                             if (!RegularU.isEmpty(carBrand)) {
