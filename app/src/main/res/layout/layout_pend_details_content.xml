@@ -72,7 +72,6 @@
                     android:layout_height="@dimen/dp_40"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
-                    android:layout_centerVertical="true"
                     android:layout_margin="@dimen/dp_4"
                     android:padding="@dimen/dp_4"
                     android:src="@drawable/ic_order_details_contacts"/>
@@ -91,7 +90,7 @@
                     android:id="@+id/tv_layout_pend_details_content_contact_phone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignBottom="@+id/iv_layout_pend_details_content_contact"
+                    android:layout_below="@id/tv_layout_pend_details_content_contact_name"
                     android:layout_toEndOf="@+id/iv_layout_pend_details_content_contact"
                     android:layout_toRightOf="@+id/iv_layout_pend_details_content_contact"
                     android:text=""/>

@@ -387,8 +387,6 @@ public class OrderDetailsActivity extends Activity {
                         if (!"".equals(mStringInstallInfo)){
                             if (!RegularU.isEmpty(owner)){
                                 mStringInstallInfo += ("，" + owner);
-                            }else {
-                                mStringInstallInfo += "\n";
                             }
                         }
                         if (!"".equals(mStringInstallInfo)) {
@@ -411,8 +409,6 @@ public class OrderDetailsActivity extends Activity {
                         if (!"".equals(mStringRemoveContent)){
                             if (!RegularU.isEmpty(owner)){
                                 mStringRemoveContent += ("，" + owner);
-                            }else {
-                                mStringRemoveContent += "\n";
                             }
                         }
                         if (!"".equals(mStringRemoveContent)) {
