@@ -94,6 +94,7 @@ public class PendDetailsActivity extends Activity {
     private String token;
     private String userName;
     private String orderNo;
+    private boolean mIsEdit = false;
     private int orderStatus;
     private int mOrderId;
 
@@ -297,6 +298,7 @@ public class PendDetailsActivity extends Activity {
                 PendDetailsBean.ObjBean.OrderNodeBean nodeBean = objBean.getOrderNode();
                 PendDetailsBean.ObjBean.EngineerBean engineerBean = objBean.getEngineer();
 
+                mIsEdit = (0 != objBean.getIsEdit());
                 mOrderId = nodeBean.getOrderId();
 
                 if (!RegularU.isEmpty(objBean.getInstallDemand())) {
@@ -840,7 +842,11 @@ public class PendDetailsActivity extends Activity {
                         }
                     }
 
-                    mTextViewNode.setText(NodeU.getNode(mNode));
+                    if (mIsEdit) {
+                        mTextViewNode.setText(NodeU.getNode(6));
+                    } else {
+                        mTextViewNode.setText(NodeU.getNode(mNode));
+                    }
 
                     if (Data.NODE_14 == mNode
                             || Data.NODE_13 == mNode
