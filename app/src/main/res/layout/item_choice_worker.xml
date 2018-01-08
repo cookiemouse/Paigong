@@ -16,15 +16,23 @@
         android:id="@+id/tv_item_choice_worker_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_16"
+        android:layout_marginStart="@dimen/dp_16"
         android:layout_weight="1"
-        android:gravity="center"
+        android:ellipsize="end"
+        android:gravity="center_vertical"
+        android:lines="1"
+        android:maxWidth="@dimen/dp_120"
         android:text="张师傅"/>
 
     <TextView
         android:id="@+id/tv_item_choice_worker_area"
-        android:layout_width="wrap_content"
+        android:layout_width="@dimen/dp_120"
         android:layout_height="wrap_content"
+        android:ellipsize="end"
         android:gravity="center"
+        android:lines="1"
+        android:maxWidth="@dimen/dp_120"
         android:text="宝山区、嘉定区"/>
 
 </LinearLayout>
