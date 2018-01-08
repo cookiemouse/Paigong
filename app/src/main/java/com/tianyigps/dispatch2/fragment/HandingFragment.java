@@ -281,8 +281,12 @@ public class HandingFragment extends Fragment implements View.OnClickListener {
                     }
 
                     long submitTime = objBean.getSubmitTime();
+                    int checkStatus;
                     if (0 == submitTime) {
                         submitTime = System.currentTimeMillis();
+                        checkStatus = 0;
+                    } else {
+                        checkStatus = objBean.getCheckStatus();
                     }
 
                     mAdapterHandingDataList.add(new AdapterHandingData(objBean.getCustName()
@@ -293,7 +297,7 @@ public class HandingFragment extends Fragment implements View.OnClickListener {
                             , objBean.getContactName()
                             , objBean.getContactPhone()
                             , objBean.getOrderType()
-                            , objBean.getCheckStatus()
+                            , checkStatus
                             , objBean.getOrderStatus()
                             , wire, wireless, removeWire, removeWireless, modify));
                 }
