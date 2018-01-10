@@ -391,11 +391,11 @@ public class PendDetailsActivity extends Activity {
                     }
                 }
                 if (Data.NODE_12 == mNode) {
-                    if (mOrderStatusGet != Data.STATUS_3) {
                         String engineer = engineerBean.getJobNo() + " " + engineerBean.getName();
                         String phone = engineerBean.getPhoneNo();
                         mAdapterPendDetailsDataList.add(new AdapterPendDetailsData(R.drawable.ic_modify_date_engineer, engineer, phone));
-                    }
+//                    if (mOrderStatusGet != Data.STATUS_3) {
+//                    }
 
                     String backReason;
                     if (RegularU.isEmpty(nodeBean.getReasonFilled())) {
