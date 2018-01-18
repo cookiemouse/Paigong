@@ -57,6 +57,7 @@ import com.tianyigps.dispatch2.manager.SharedpreferenceManager;
 import com.tianyigps.dispatch2.utils.SnackbarU;
 import com.tianyigps.dispatch2.utils.TimeFormatU;
 import com.tianyigps.dispatch2.utils.TimerU;
+import com.tianyigps.dispatch2.utils.ToastU;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -110,6 +111,8 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
     private boolean mIsShow = false;
 
     private long mNow = System.currentTimeMillis();
+
+    private ToastU mToastU;
 
     //  LoadingFragment
     private LoadingDialogFragment mLoadingDialogFragment;
@@ -293,6 +296,8 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
         mNetworkManager = new NetworkManager();
         myHandler = new MyHandler();
 
+        mToastU = new ToastU(LocateActivity.this);
+
         mGeoCoderSearch = GeoCoder.newInstance();
 
         mIntent = getIntent();
@@ -400,6 +405,10 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
                 mNow = terminalInfoBean.getTime();
 
                 TerminalInfoBean.ObjBean.RedisObjBean redisObjBean = objBean.getRedisObj();
+                boolean isShowTip = redisObjBean.isShowTip();
+                if (isShowTip) {
+                    myHandler.obtainMessage(Data.MSG_7).sendToTarget();
+                }
                 String type;
                 switch (redisObjBean.getLocate_type()) {
                     case 0: {
@@ -676,6 +685,11 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
                 case Data.MSG_6: {
                     //  获取报警信息
                     mLocateWarnAdapter.notifyDataSetChanged();
+                    break;
+                }
+                case Data.MSG_7: {
+                    //  显示Toast
+                    mToastU.showToast("无法解析基站定位数据");
                     break;
                 }
                 default: {
