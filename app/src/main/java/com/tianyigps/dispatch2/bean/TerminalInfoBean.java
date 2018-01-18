@@ -450,6 +450,7 @@ public class TerminalInfoBean {
             private String acc_status;
             private double longitudeF;
             private double latitudeF;
+            private boolean isShowTip;
 
             public String getLocate_time() {
                 return locate_time;
@@ -577,6 +578,14 @@ public class TerminalInfoBean {
 
             public void setLatitudeF(double latitudeF) {
                 this.latitudeF = latitudeF;
+            }
+
+            public boolean isShowTip() {
+                return isShowTip;
+            }
+
+            public void setShowTip(boolean showTip) {
+                isShowTip = showTip;
             }
         }
     }
