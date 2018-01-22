@@ -1,11 +1,14 @@
 package com.tianyigps.dispatch2.activity;
 
 import android.app.AlertDialog;
+import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
@@ -31,6 +34,7 @@ import com.tianyigps.dispatch2.interfaces.OnGetWorkerOrderInfoStartListener;
 import com.tianyigps.dispatch2.manager.DatabaseManager;
 import com.tianyigps.dispatch2.manager.NetworkManager;
 import com.tianyigps.dispatch2.manager.SharedpreferenceManager;
+import com.tianyigps.dispatch2.service.SpeakService;
 import com.tianyigps.dispatch2.utils.RegularU;
 
 import java.util.ArrayList;
@@ -97,6 +101,29 @@ public class InstallingActivity extends BaseActivity {
     private boolean isFilled = false;
     private boolean isInstallCarFilled = false;
 
+    //  绑定服务
+    private boolean mIsBound = false;
+    private SpeakService mSpeakService;
+
+    private ServiceConnection mServiceConnection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            Log.i(TAG, "onServiceConnected: ");
+            mIsBound = true;
+            SpeakService.SpeakBinder binder = (SpeakService.SpeakBinder) service;
+            mSpeakService = binder.getService();
+
+            mSpeakService.speak("");
+        }
+
+        //client 和service连接意外丢失时，会调用该方法
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            Log.i(TAG, "onServiceDisconnected: ");
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -114,6 +141,12 @@ public class InstallingActivity extends BaseActivity {
         mSwipeRefreshLayout.setRefreshing(true);
         mNetworkManager.getWorkerOrderInfoStart(eid, token, orderNo, userName);
 //        resetRepairList();
+    }
+
+    @Override
+    protected void onStop() {
+        closeService();
+        super.onStop();
     }
 
     @Override
@@ -321,6 +354,9 @@ public class InstallingActivity extends BaseActivity {
 
                 switch (mAdapterType) {
                     case TYPE_INSTALL: {
+                        //  绑定服务
+                        bindService();
+
                         for (StartOrderInfoBean.ObjBean.CarListBean carListBean : objBean.getCarList()) {
                             ID_MAIN_TERMINAL = carListBean.getId() + "T";
                             int i = 0;
@@ -1140,6 +1176,19 @@ public class InstallingActivity extends BaseActivity {
         mCompleteCountRemove = completeCount;
 
         return nextAble;
+    }
+
+    //  绑定服务
+    private void bindService() {
+        Intent intent = new Intent(InstallingActivity.this, SpeakService.class);
+        bindService(intent, mServiceConnection, BIND_AUTO_CREATE);
+    }
+
+    //  关闭服务
+    private void closeService() {
+        if (null != mSpeakService) {
+            mSpeakService.onDestroy();
+        }
     }
 
     private class MyHandler extends Handler {

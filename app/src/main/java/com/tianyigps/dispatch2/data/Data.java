@@ -163,4 +163,8 @@ public final class Data {
     //  极光推送
     public static final String BROAD_FILTER = "cn.jpush.android.intent.NOTIFICATION_RECEIVED";
     public static final String BROAD_CATEGORY = "com.tianyigps.dispatch2";
+
+    //  服务ID
+    public static final int SERVICE_ID = 1001;
+    public static final int NOTIFICATION_ID = 1002;
 }
