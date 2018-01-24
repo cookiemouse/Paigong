@@ -774,8 +774,8 @@ public class OperateInstallActivity extends BaseActivity {
                         mCarNoPic = mBaseImg + mCarNoPicUrl;
                         mCarFramePic = mBaseImg + mCarFramePicUrl;
 
-                        mDatabaseManager.addCarNoPic(idMainCar, mCarNoPic, carListBean.getCarNoPic());
-                        mDatabaseManager.addCarFrameNoPic(idMainCar, mCarFramePic, carListBean.getCarVinPic());
+//                        mDatabaseManager.addCarNoPic(idMainCar, mCarNoPic, carListBean.getCarNoPic());
+//                        mDatabaseManager.addCarFrameNoPic(idMainCar, mCarFramePic, carListBean.getCarVinPic());
 
                         String pic1 = carListBean.getPic1();
                         String pic2 = carListBean.getPic2();
@@ -980,7 +980,7 @@ public class OperateInstallActivity extends BaseActivity {
                         mCarNoPicUrl = imgUrl;
                         mCarNoPic = mBaseImg + mCarNoPicUrl;
 
-                        mDatabaseManager.addCarNoPic(idMainCar, itemPath, imgUrl);
+//                        mDatabaseManager.addCarNoPic(idMainCar, itemPath, imgUrl);
                         myHandler.sendEmptyMessage(Data.MSG_4);
                         break;
                     }
@@ -991,7 +991,7 @@ public class OperateInstallActivity extends BaseActivity {
                         mCarFramePicUrl = imgUrl;
                         mCarFramePic = mBaseImg + mCarFramePicUrl;
 
-                        mDatabaseManager.addCarFrameNoPic(idMainCar, itemPath, imgUrl);
+//                        mDatabaseManager.addCarFrameNoPic(idMainCar, itemPath, imgUrl);
                         myHandler.sendEmptyMessage(Data.MSG_5);
                         break;
                     }
@@ -1176,7 +1176,8 @@ public class OperateInstallActivity extends BaseActivity {
         String carType = mEditTextCarType.getText().toString();
         String carFrameNo = mEditTextFrameNo.getText().toString();
 
-        mDatabaseManager.addCarInfo(idMainCar, carNo, carFrameNo, carType);
+//        mDatabaseManager.addCarInfo(idMainCar, carNo, carFrameNo, carType);
+        mDatabaseManager.addCar2Info(idMainCar, carNo, carFrameNo, carType);
 
         int i = 0;
         for (AdapterOperateInstallListData data : mAdapterOperateInstallListDataList) {
@@ -1899,7 +1900,7 @@ public class OperateInstallActivity extends BaseActivity {
                                 .centerInside()
                                 .into(mImageViewCarNo);
 
-                        mDatabaseManager.addCarNoPic(idMainCar, null, null);
+//                        mDatabaseManager.addCarNoPic(idMainCar, null, null);
                         mImageViewCarNoDelete.setVisibility(View.GONE);
                         break;
                     }
@@ -1914,7 +1915,7 @@ public class OperateInstallActivity extends BaseActivity {
                                 .centerInside()
                                 .into(mImageViewFrameNo);
 
-                        mDatabaseManager.addCarFrameNoPic(idMainCar, null, null);
+//                        mDatabaseManager.addCarFrameNoPic(idMainCar, null, null);
                         mImageViewFrameNoDelete.setVisibility(View.GONE);
                         break;
                     }

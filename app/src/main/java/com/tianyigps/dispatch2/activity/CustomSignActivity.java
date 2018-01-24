@@ -342,7 +342,7 @@ public class CustomSignActivity extends BaseActivity {
                 }
 
                 //  车辆信息
-                Cursor cursorCar = mDatabaseManager.getCar(carId);
+                Cursor cursorCar = mDatabaseManager.getCar2(carId);
                 Log.i(TAG, "getOrder: cursorCar-->" + cursorCar);
                 if (null != cursorCar && cursorCar.moveToFirst()) {
 
@@ -640,7 +640,8 @@ public class CustomSignActivity extends BaseActivity {
                 int tId = cursor.getInt(2);
                 Log.i(TAG, "deleteOrderInfo: orderNo-->" + orderNo + " ,carId-->" + carId + " ,tId-->" + tId);
                 mDatabaseManager.deleteTerByTid(tId);
-                mDatabaseManager.deleteCar(tId);
+//                mDatabaseManager.deleteCar(tId);
+                mDatabaseManager.deleteCar2(tId);
                 mDatabaseManager.deleteRepair(tId);
 
             } while (cursor.moveToNext());

@@ -308,14 +308,15 @@ public class InstallingActivity extends BaseActivity {
                     } else {
                         carBrand = carListBean.getNewCarBrand();
                     }
-                    Cursor cursor = mDatabaseManager.getCar(carListBean.getId());
+                    Cursor cursor = mDatabaseManager.getCar2(carListBean.getId());
                     if (null == cursor || !cursor.moveToFirst()) {
-                        mDatabaseManager.addCarInfo(carListBean.getId(), carNo, carListBean.getCarVin(), carBrand);
-                        mDatabaseManager.addCarFrameNoPic(carListBean.getId()
-                                , mBaseImg + carListBean.getCarVinPic()
-                                , carListBean.getCarVinPic());
-                        mDatabaseManager.addCarNoPic(carListBean.getId(), mBaseImg + carListBean.getCarNoPic()
-                                , carListBean.getCarNoPic());
+//                        mDatabaseManager.addCarInfo(carListBean.getId(), carNo, carListBean.getCarVin(), carBrand);
+                        mDatabaseManager.addCar2Info(carListBean.getId(), carNo, carListBean.getCarVin(), carBrand);
+//                        mDatabaseManager.addCarFrameNoPic(carListBean.getId()
+//                                , mBaseImg + carListBean.getCarVinPic()
+//                                , carListBean.getCarVinPic());
+//                        mDatabaseManager.addCarNoPic(carListBean.getId(), mBaseImg + carListBean.getCarNoPic()
+//                                , carListBean.getCarNoPic());
                     }
                 }
 

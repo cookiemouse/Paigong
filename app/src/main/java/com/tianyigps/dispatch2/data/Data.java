@@ -110,7 +110,9 @@ public final class Data {
     public final static String DATA_TAB_REPAIR = "paigong_database_tab_repair";
     public final static String DATA_TAB_REMOVE = "paigong_database_tab_remove";
     public final static String DATA_TAB_INSTALL_CAR = "paigong_database_tab_install_car";
+    public final static String DATA_TAB_INSTALL_CAR_2 = "paigong_database_tab_install_car_2";
     public final static String DATA_TAB_INSTALL_TERMINAL = "paigong_database_tab_install_terminal";
+    public final static String DATA_TAB_INSTALL_TERMINAL_2 = "paigong_database_tab_install_terminal_2";
     public final static String DATA_DB_NAME = "paigong_database_db.db";
 
     //  上传图片type

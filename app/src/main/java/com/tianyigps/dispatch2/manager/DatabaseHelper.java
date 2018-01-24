@@ -16,6 +16,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TAG = "DatabaseHelper";
 
     private static final int VERSION = 1;
+    private static final int VERSION_NEW = 2;
 
     private static final String TABLE_ORDER = "create table " + Data.DATA_TAB_ORDER
             + "(orderNo TEXT,carId INTEGER,tId INTEGER)";
@@ -39,6 +40,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TABLE_INSTALL_TERMINAL = "create table " + Data.DATA_TAB_INSTALL_TERMINAL
             + "(idMain TEXT,tNoOld TEXT,tNoNew TEXT,position TEXT,positionPic TEXT,installPic TEXT" +
             ",positionPicUri TEXT,installPicUri TEXT,model INTEGER,tId INTEGER,locateType INTEGER,carId INTEGER, wire INTEGER)";
+
+    private static final String TABLE_INSTALL_CAR_2 = "create table " + Data.DATA_TAB_INSTALL_CAR_2
+            + "(carId INTEGER,carNo TEXT,frameNo TEXT,carType TEXT"
+            + ",carNoPic TEXT,frameNoPic TEXT)";
+
+    private static final String TABLE_INSTALL_TERMINAL_2 = "create table " + Data.DATA_TAB_INSTALL_TERMINAL_2
+            + "(tNoOld TEXT,tNoNew TEXT,position TEXT,item INTEGER"
+            + ",positionPic TEXT,installPic TEXT"
+            + ",model INTEGER,tId INTEGER,locateType INTEGER,carId INTEGER, wire INTEGER)";
 
     /*
     * 需要保存的信息
@@ -89,7 +99,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     * **/
 
     public DatabaseHelper(Context context, String name) {
-        this(context, name, null, VERSION);
+        this(context, name, null, VERSION_NEW);
     }
 
     private DatabaseHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
@@ -101,12 +111,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Log.i(TAG, "onCreate: -->" + 1);
         sqLiteDatabase.execSQL(TABLE_ORDER);
         sqLiteDatabase.execSQL(TABLE_REPAIR);
-        sqLiteDatabase.execSQL(TABLE_INSTALL_CAR);
-        sqLiteDatabase.execSQL(TABLE_INSTALL_TERMINAL);
+//        sqLiteDatabase.execSQL(TABLE_INSTALL_CAR);
+//        sqLiteDatabase.execSQL(TABLE_INSTALL_TERMINAL);
+        sqLiteDatabase.execSQL(TABLE_INSTALL_CAR_2);
+        sqLiteDatabase.execSQL(TABLE_INSTALL_TERMINAL_2);
         Log.i(TAG, "onCreate: -->" + 2);
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
+    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
+        Log.i(TAG, "onUpgrade: ");
+        if (oldVersion == VERSION && newVersion == VERSION_NEW) {
+            Log.i(TAG, "onUpgrade: -->2");
+            sqLiteDatabase.execSQL(TABLE_INSTALL_CAR_2);
+            sqLiteDatabase.execSQL(TABLE_INSTALL_TERMINAL_2);
+        }
     }
 }

@@ -1553,6 +1553,100 @@ public class DatabaseManager {
         return null != cursor && cursor.moveToFirst();
     }
 
+    //  ====================================车辆====2======================================
+    public void addCar2(int carId){
+        if (carExist(carId)) {
+            return;
+        }
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("carId", carId);
+
+        mSqLiteDatabase.beginTransaction();
+        try {
+            mSqLiteDatabase.insert(Data.DATA_TAB_INSTALL_CAR_2, null, contentValues);
+            mSqLiteDatabase.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.e(TAG, e + "SqliteDatabase insert error");
+        } finally {
+            mSqLiteDatabase.endTransaction();
+        }
+    }
+
+    public void addCar2Info(int carId, String carNo, String frameNo, String carType){
+        if (carExist2(carId)) {
+            modifyCar2(carId, carNo, frameNo, carType);
+            return;
+        }
+        this.addCar2(carId);
+        this.addCarInfo(carId, carNo, frameNo, carType);
+    }
+
+    public void deleteCar2(int carId) {
+        if (!carExist2(carId)) {
+            return;
+        }
+        mSqLiteDatabase.beginTransaction();
+        try {
+            mSqLiteDatabase.delete(Data.DATA_TAB_INSTALL_CAR_2
+                    , "carId=?"
+                    , new String[]{("" + carId)});
+            mSqLiteDatabase.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.e(TAG, e + "SqliteDatabase delete error");
+        } finally {
+            mSqLiteDatabase.endTransaction();
+        }
+    }
+
+    public void modifyCar2(int carId, String carNo, String frameNo, String carType) {
+        if (!carExist2(carId)) {
+            return;
+        }
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("carNo", carNo);
+        contentValues.put("frameNo", frameNo);
+        contentValues.put("carType", carType);
+
+        mSqLiteDatabase.beginTransaction();
+        try {
+            mSqLiteDatabase.update(Data.DATA_TAB_INSTALL_CAR_2
+                    , contentValues
+                    , "carId=?"
+                    , new String[]{("" + carId)});
+            mSqLiteDatabase.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.e(TAG, e + "SqLiteDatabase update error");
+        } finally {
+            mSqLiteDatabase.endTransaction();
+        }
+    }
+
+    public boolean carExist2(int carId) {
+        Cursor cursor = getCar2(carId);
+        return null != cursor && cursor.moveToFirst();
+    }
+
+    public Cursor getCar2(int carId) {
+        mSqLiteDatabase.beginTransaction();
+        try {
+            Cursor cursor = mSqLiteDatabase.query(Data.DATA_TAB_INSTALL_CAR
+                    , new String[]{"carId, carNo, frameNo, carType"}
+                    , "carId=?"
+                    , new String[]{("" + carId)}
+                    , null, null, null);
+            mSqLiteDatabase.setTransactionSuccessful();
+
+            return cursor;
+        } catch (Exception e) {
+            Log.e(TAG, e + "SqliteDatabase query error");
+        } finally {
+            mSqLiteDatabase.endTransaction();
+        }
+        return null;
+    }
+
+    //  ====================================设备====2======================================
+
     public void close() {
         mSqLiteDatabase.close();
     }
