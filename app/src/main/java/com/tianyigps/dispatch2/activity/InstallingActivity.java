@@ -311,7 +311,12 @@ public class InstallingActivity extends BaseActivity {
                     Cursor cursor = mDatabaseManager.getCar2(carListBean.getId());
                     if (null == cursor || !cursor.moveToFirst()) {
 //                        mDatabaseManager.addCarInfo(carListBean.getId(), carNo, carListBean.getCarVin(), carBrand);
-                        mDatabaseManager.addCar2Info(carListBean.getId(), carNo, carListBean.getCarVin(), carBrand);
+                        mDatabaseManager.addCar2Info(carListBean.getId()
+                                , carNo
+                                , carListBean.getCarVin()
+                                , carBrand
+                                , carListBean.getCarNoPic()
+                                , carListBean.getCarVinPic());
 //                        mDatabaseManager.addCarFrameNoPic(carListBean.getId()
 //                                , mBaseImg + carListBean.getCarVinPic()
 //                                , carListBean.getCarVinPic());
@@ -1012,12 +1017,12 @@ public class InstallingActivity extends BaseActivity {
                 completeCount = completeCount + data.getCompleteLine() + data.getCompleteOffline();
 
                 //  check车辆信息是否完整
-                Cursor cursorCar = mDatabaseManager.getCar(carId);
+                Cursor cursorCar = mDatabaseManager.getCar2(carId);
                 if (null != cursorCar && cursorCar.moveToFirst()) {
                     String carNo = cursorCar.getString(1);
                     String frameNo = cursorCar.getString(2);
-                    String carNoUrl = cursorCar.getString(6);
-                    String frameNoUrl = cursorCar.getString(7);
+                    String carNoUrl = cursorCar.getString(4);
+                    String frameNoUrl = cursorCar.getString(5);
 
                     Log.i(TAG, "checkInstallListCar: carNo-->" + carNo);
                     Log.i(TAG, "checkInstallListCar: frameNo-->" + frameNo);

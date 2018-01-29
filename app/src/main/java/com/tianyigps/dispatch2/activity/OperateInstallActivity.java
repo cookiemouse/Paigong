@@ -1058,7 +1058,7 @@ public class OperateInstallActivity extends BaseActivity {
 
     //  获取并显示数据库里的车辆数据
     private void loadCarData() {
-        Cursor cursor = mDatabaseManager.getCar(idMainCar);
+        Cursor cursor = mDatabaseManager.getCar2(idMainCar);
         if (null != cursor && cursor.moveToFirst()) {
             Log.i(TAG, "loadCardata: idMain-->" + cursor.getInt(0));
             String carNo = cursor.getString(1);
@@ -1079,38 +1079,6 @@ public class OperateInstallActivity extends BaseActivity {
 
             cursor.close();
         }
-    }
-
-    //  加载Recycler图片
-    private void loadCarPics() {
-        mAdapterOperateInstallRecyclerDataList.clear();
-        Cursor cursor = mDatabaseManager.getCarPics(idMainCar);
-        if (null != cursor && cursor.moveToFirst()) {
-            for (int i = 0; i < 6; i++) {
-                String pic = cursor.getString(i);
-                String url = cursor.getString(i + 6);
-                Log.i(TAG, "loadCarPics: pic-->" + pic);
-                Log.i(TAG, "loadCarPics: url-->" + url);
-                if (null != pic) {
-                    mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData(pic, url));
-                }
-            }
-            cursor.close();
-        }
-        if (mAdapterOperateInstallRecyclerDataList.size() <= PIC_MAX) {
-            mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData());
-        }
-        mOperateInstallAdapter.notifyDataSetChanged();
-    }
-
-    //  RecyclerView添加图片
-    private void addPicToRecycler(String path) {
-        AdapterOperateInstallRecyclerData adapterOperateInstallRecyclerData = mAdapterOperateInstallRecyclerDataList.get(itemRecycler);
-        adapterOperateInstallRecyclerData.setPath(path);
-        if (mAdapterOperateInstallRecyclerDataList.size() <= PIC_MAX) {
-            mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData());
-        }
-        mOperateInstallAdapter.notifyDataSetChanged();
     }
 
     //  加载ListView数据库里的数据
@@ -1947,8 +1915,6 @@ public class OperateInstallActivity extends BaseActivity {
                             mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData());
                         }
                         mOperateInstallAdapter.notifyDataSetChanged();
-
-                        mDatabaseManager.modifyCarPics(idMainCar, itemRecycler, null, null);
                         break;
                     }
                     break;

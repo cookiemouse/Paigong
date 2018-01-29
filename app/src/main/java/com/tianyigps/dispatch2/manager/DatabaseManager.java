@@ -790,315 +790,6 @@ public class DatabaseManager {
 
     //=====================维修========================华丽的分割线=======================车辆============================
 
-    //  添加Car
-    public void addCar(int idMain) {
-        if (carExist(idMain)) {
-            return;
-        }
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("idMain", idMain);
-
-        mSqLiteDatabase.beginTransaction();
-        try {
-            mSqLiteDatabase.insert(Data.DATA_TAB_INSTALL_CAR, null, contentValues);
-            mSqLiteDatabase.setTransactionSuccessful();
-        } catch (Exception e) {
-            Log.e(TAG, e + "SqliteDatabase insert error");
-        } finally {
-            mSqLiteDatabase.endTransaction();
-        }
-    }
-
-    //  添加,car,重载
-    public void addCarInfo(int idMain, String carNo, String carType) {
-        this.addCarInfo(idMain, carNo, null, carType);
-    }
-
-    //  添加,car,重载
-    public void addCarInfo(int idMain, String carNo, String frameNo, String carType) {
-        if (carExist(idMain)) {
-            modifyCar(idMain, carNo, frameNo, carType);
-            return;
-        }
-        this.addCar(idMain);
-        this.addCarInfo(idMain, carNo, frameNo, carType);
-    }
-
-    //  添加，car，重载
-    public void addCarNoPic(int idMain, String carNoPic, String carNoPicUri) {
-        if (carExist(idMain)) {
-            modifyCarNoPic(idMain, carNoPic, carNoPicUri);
-            return;
-        }
-        this.addCar(idMain);
-        this.addCarNoPic(idMain, carNoPic, carNoPicUri);
-    }
-
-    //  添加，car，重载
-    public void addCarFrameNoPic(int idMain, String frameNoPic, String frameNoPicUri) {
-        if (carExist(idMain)) {
-            modifyCarFrameNoPic(idMain, frameNoPic, frameNoPicUri);
-            return;
-        }
-        this.addCar(idMain);
-        this.addCarFrameNoPic(idMain, frameNoPic, frameNoPicUri);
-    }
-
-    //  添加，car，重载
-    public void addCarPics(int idMain, int position, String pic) {
-        if (carExist(idMain)) {
-            modifyCarPics(idMain, position, pic);
-            return;
-        }
-        this.addCar(idMain);
-        this.addCarPics(idMain, position, pic);
-    }
-
-    //  添加，car，重载
-    public void addCarPics(int idMain, int position, String pic, String picUrl) {
-        if (carExist(idMain)) {
-            modifyCarPics(idMain, position, pic, picUrl);
-            return;
-        }
-        this.addCar(idMain);
-        this.addCarPics(idMain, position, pic, picUrl);
-    }
-
-    //  删除Car
-    public void deleteCar(int idMain) {
-        if (!carExist(idMain)) {
-            return;
-        }
-        mSqLiteDatabase.beginTransaction();
-        try {
-            mSqLiteDatabase.delete(Data.DATA_TAB_INSTALL_CAR
-                    , "idMain=?"
-                    , new String[]{("" + idMain)});
-            mSqLiteDatabase.setTransactionSuccessful();
-        } catch (Exception e) {
-            Log.e(TAG, e + "SqliteDatabase delete error");
-        } finally {
-            mSqLiteDatabase.endTransaction();
-        }
-    }
-
-    //  修改，车辆
-    public void modifyCar(int idMain, String carNo, String frameNo, String carType
-            , String carNoPic, String frameNoPic
-            , String pic1, String pic2, String pic3, String pic4, String pic5, String pic6
-            , String carNoPicUri, String frameNoPicUri
-            , String pic1Uri, String pic2Uri, String pic3Uri, String pic4Uri, String pic5Uri, String pic6Uri) {
-        if (!carExist(idMain)) {
-            return;
-        }
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("carNo", carNo);
-        contentValues.put("frameNo", frameNo);
-        contentValues.put("carType", carType);
-        contentValues.put("carNoPic", carNoPic);
-        contentValues.put("frameNoPic", frameNoPic);
-        contentValues.put("pic1", pic1);
-        contentValues.put("pic2", pic2);
-        contentValues.put("pic3", pic3);
-        contentValues.put("pic4", pic4);
-        contentValues.put("pic5", pic5);
-        contentValues.put("pic6", pic6);
-        contentValues.put("carNoPicUri", carNoPicUri);
-        contentValues.put("frameNoPicUri", frameNoPicUri);
-        contentValues.put("pic1Uri", pic1Uri);
-        contentValues.put("pic2Uri", pic2Uri);
-        contentValues.put("pic3Uri", pic3Uri);
-        contentValues.put("pic4Uri", pic4Uri);
-        contentValues.put("pic5Uri", pic5Uri);
-        contentValues.put("pic6Uri", pic6Uri);
-
-        mSqLiteDatabase.beginTransaction();
-        try {
-            mSqLiteDatabase.update(Data.DATA_TAB_INSTALL_CAR
-                    , contentValues
-                    , "idMain=?"
-                    , new String[]{("" + idMain)});
-            mSqLiteDatabase.setTransactionSuccessful();
-        } catch (Exception e) {
-            Log.e(TAG, e + "SqLiteDatabase update error");
-        } finally {
-            mSqLiteDatabase.endTransaction();
-        }
-    }
-
-    //  修改，车辆，重载
-    public void modifyCar(int idMain, String carNo, String frameNo, String carType) {
-        if (!carExist(idMain)) {
-            return;
-        }
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("carNo", carNo);
-        contentValues.put("frameNo", frameNo);
-        contentValues.put("carType", carType);
-
-        mSqLiteDatabase.beginTransaction();
-        try {
-            mSqLiteDatabase.update(Data.DATA_TAB_INSTALL_CAR
-                    , contentValues
-                    , "idMain=?"
-                    , new String[]{("" + idMain)});
-            mSqLiteDatabase.setTransactionSuccessful();
-        } catch (Exception e) {
-            Log.e(TAG, e + "SqLiteDatabase update error");
-        } finally {
-            mSqLiteDatabase.endTransaction();
-        }
-    }
-
-    //  修改，车辆，重载
-    public void modifyCarNoPic(int idMain, String carNoPic, String carNoPicUri) {
-        if (!carExist(idMain)) {
-            return;
-        }
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("carNoPic", carNoPic);
-        contentValues.put("carNoPicUri", carNoPicUri);
-
-        mSqLiteDatabase.beginTransaction();
-        try {
-            mSqLiteDatabase.update(Data.DATA_TAB_INSTALL_CAR
-                    , contentValues
-                    , "idMain=?"
-                    , new String[]{("" + idMain)});
-            mSqLiteDatabase.setTransactionSuccessful();
-        } catch (Exception e) {
-            Log.e(TAG, e + "SqLiteDatabase update error");
-        } finally {
-            mSqLiteDatabase.endTransaction();
-        }
-    }
-
-    //  修改，车辆，重载
-    public void modifyCarFrameNoPic(int idMain, String frameNoPic, String frameNoPicUri) {
-        if (!carExist(idMain)) {
-            return;
-        }
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("frameNoPic", frameNoPic);
-        contentValues.put("frameNoPicUri", frameNoPicUri);
-
-        mSqLiteDatabase.beginTransaction();
-        try {
-            mSqLiteDatabase.update(Data.DATA_TAB_INSTALL_CAR
-                    , contentValues
-                    , "idMain=?"
-                    , new String[]{("" + idMain)});
-            mSqLiteDatabase.setTransactionSuccessful();
-        } catch (Exception e) {
-            Log.e(TAG, e + "SqLiteDatabase update error");
-        } finally {
-            mSqLiteDatabase.endTransaction();
-        }
-    }
-
-    //  修改，car，重载
-    public void modifyCarPics(int idMain, int position, String pic) {
-        if (!carExist(idMain)) {
-            return;
-        }
-
-        String key = "pic" + (position + 1);
-
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(key, pic);
-
-        mSqLiteDatabase.beginTransaction();
-        try {
-            mSqLiteDatabase.update(Data.DATA_TAB_INSTALL_CAR
-                    , contentValues
-                    , "idMain=?"
-                    , new String[]{("" + idMain)});
-            mSqLiteDatabase.setTransactionSuccessful();
-        } catch (Exception e) {
-            Log.e(TAG, e + "SqLiteDatabase update error");
-        } finally {
-            mSqLiteDatabase.endTransaction();
-        }
-    }
-
-    //  修改，car，重载
-    public void modifyCarPics(int idMain, int position, String pic, String picUrl) {
-        if (!carExist(idMain)) {
-            return;
-        }
-
-        String key = "pic" + (position + 1);
-        String keyUrl = key + "Uri";
-
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(key, pic);
-        contentValues.put(keyUrl, picUrl);
-
-        mSqLiteDatabase.beginTransaction();
-        try {
-            mSqLiteDatabase.update(Data.DATA_TAB_INSTALL_CAR
-                    , contentValues
-                    , "idMain=?"
-                    , new String[]{("" + idMain)});
-            mSqLiteDatabase.setTransactionSuccessful();
-        } catch (Exception e) {
-            Log.e(TAG, e + "SqLiteDatabase update error");
-        } finally {
-            mSqLiteDatabase.endTransaction();
-        }
-    }
-
-    //  查，车辆
-    public Cursor getCar(int idMain) {
-        mSqLiteDatabase.beginTransaction();
-        try {
-            Cursor cursor = mSqLiteDatabase.query(Data.DATA_TAB_INSTALL_CAR
-                    , new String[]{"idMain, carNo, frameNo, carType"
-                            + ", carNoPic, frameNoPic"
-                            + ", carNoPicUri, frameNoPicUri"
-                            + ", pic1, pic2, pic3, pic4, pic5, pic6"
-                            + ", pic1Uri, pic2Uri, pic3Uri, pic4Uri, pic5Uri, pic6Uri"}
-                    , "idMain=?"
-                    , new String[]{("" + idMain)}
-                    , null, null, null);
-            mSqLiteDatabase.setTransactionSuccessful();
-
-            return cursor;
-        } catch (Exception e) {
-            Log.e(TAG, e + "SqliteDatabase query error");
-        } finally {
-            mSqLiteDatabase.endTransaction();
-        }
-        return null;
-    }
-
-    //  查，car，RecyclerPic
-    public Cursor getCarPics(int idMain) {
-        mSqLiteDatabase.beginTransaction();
-        try {
-            Cursor cursor = mSqLiteDatabase.query(Data.DATA_TAB_INSTALL_CAR
-                    , new String[]{"pic1, pic2, pic3, pic4, pic5, pic6"
-                            + ", pic1Uri, pic2Uri, pic3Uri, pic4Uri, pic5Uri, pic6Uri"}
-                    , "idMain=?"
-                    , new String[]{("" + idMain)}
-                    , null, null, null);
-            mSqLiteDatabase.setTransactionSuccessful();
-
-            return cursor;
-        } catch (Exception e) {
-            Log.e(TAG, e + "SqliteDatabase query error");
-        } finally {
-            mSqLiteDatabase.endTransaction();
-        }
-        return null;
-    }
-
-    //  查，是否存在该Car
-    public boolean carExist(int idMain) {
-        Cursor cursor = getCar(idMain);
-        return null != cursor && cursor.moveToFirst();
-    }
-
     //=====================车辆========================华丽的分割线=======================设备============================
 
     //  增，T
@@ -1554,8 +1245,8 @@ public class DatabaseManager {
     }
 
     //  ====================================车辆====2======================================
-    public void addCar2(int carId){
-        if (carExist(carId)) {
+    public void addCar2(int carId) {
+        if (carExist2(carId)) {
             return;
         }
         ContentValues contentValues = new ContentValues();
@@ -1572,13 +1263,22 @@ public class DatabaseManager {
         }
     }
 
-    public void addCar2Info(int carId, String carNo, String frameNo, String carType){
+    public void addCar2Info(int carId, String carNo, String frameNo, String carType) {
         if (carExist2(carId)) {
             modifyCar2(carId, carNo, frameNo, carType);
             return;
         }
         this.addCar2(carId);
-        this.addCarInfo(carId, carNo, frameNo, carType);
+        this.addCar2Info(carId, carNo, frameNo, carType);
+    }
+
+    public void addCar2Info(int carId, String carNo, String frameNo, String carType, String carNoPic, String frameNoPic) {
+        if (carExist2(carId)) {
+            modifyCar2(carId, carNo, frameNo, carType, carNoPic, frameNoPic);
+            return;
+        }
+        this.addCar2(carId);
+        this.addCar2Info(carId, carNo, frameNo, carType, carNoPic, frameNoPic);
     }
 
     public void deleteCar2(int carId) {
@@ -1593,6 +1293,48 @@ public class DatabaseManager {
             mSqLiteDatabase.setTransactionSuccessful();
         } catch (Exception e) {
             Log.e(TAG, e + "SqliteDatabase delete error");
+        } finally {
+            mSqLiteDatabase.endTransaction();
+        }
+    }
+
+    public void modifyCar2CarNoPic(int carId, String carNoPic) {
+        if (!carExist2(carId)) {
+            return;
+        }
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("carNoPic", carNoPic);
+
+        mSqLiteDatabase.beginTransaction();
+        try {
+            mSqLiteDatabase.update(Data.DATA_TAB_INSTALL_CAR_2
+                    , contentValues
+                    , "carId=?"
+                    , new String[]{("" + carId)});
+            mSqLiteDatabase.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.e(TAG, e + "SqLiteDatabase update error");
+        } finally {
+            mSqLiteDatabase.endTransaction();
+        }
+    }
+
+    public void modifyCar2FrameNoPic(int carId, String frameNoPic) {
+        if (!carExist2(carId)) {
+            return;
+        }
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("frameNoPic", frameNoPic);
+
+        mSqLiteDatabase.beginTransaction();
+        try {
+            mSqLiteDatabase.update(Data.DATA_TAB_INSTALL_CAR_2
+                    , contentValues
+                    , "carId=?"
+                    , new String[]{("" + carId)});
+            mSqLiteDatabase.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.e(TAG, e + "SqLiteDatabase update error");
         } finally {
             mSqLiteDatabase.endTransaction();
         }
@@ -1621,6 +1363,31 @@ public class DatabaseManager {
         }
     }
 
+    public void modifyCar2(int carId, String carNo, String frameNo, String carType, String carNoPic, String frameNoPic) {
+        if (!carExist2(carId)) {
+            return;
+        }
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("carNo", carNo);
+        contentValues.put("frameNo", frameNo);
+        contentValues.put("carType", carType);
+        contentValues.put("carNoPic", carNoPic);
+        contentValues.put("frameNoPic", frameNoPic);
+
+        mSqLiteDatabase.beginTransaction();
+        try {
+            mSqLiteDatabase.update(Data.DATA_TAB_INSTALL_CAR_2
+                    , contentValues
+                    , "carId=?"
+                    , new String[]{("" + carId)});
+            mSqLiteDatabase.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.e(TAG, e + "SqLiteDatabase update error");
+        } finally {
+            mSqLiteDatabase.endTransaction();
+        }
+    }
+
     public boolean carExist2(int carId) {
         Cursor cursor = getCar2(carId);
         return null != cursor && cursor.moveToFirst();
@@ -1629,8 +1396,8 @@ public class DatabaseManager {
     public Cursor getCar2(int carId) {
         mSqLiteDatabase.beginTransaction();
         try {
-            Cursor cursor = mSqLiteDatabase.query(Data.DATA_TAB_INSTALL_CAR
-                    , new String[]{"carId, carNo, frameNo, carType"}
+            Cursor cursor = mSqLiteDatabase.query(Data.DATA_TAB_INSTALL_CAR_2
+                    , new String[]{"carId, carNo, frameNo, carType, carNoPic, frameNoPic"}
                     , "carId=?"
                     , new String[]{("" + carId)}
                     , null, null, null);
