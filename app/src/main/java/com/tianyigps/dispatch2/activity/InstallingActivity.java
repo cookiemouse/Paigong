@@ -78,7 +78,6 @@ public class InstallingActivity extends BaseActivity {
     private String orderNo;
     private SharedpreferenceManager mSharedpreferenceManager;
     private String mBaseImg;
-    private String ID_MAIN_TERMINAL;
 
     private String mStringRemarks;
     private String mStringMsg = "数据请求失败，请检查网络";
@@ -328,52 +327,51 @@ public class InstallingActivity extends BaseActivity {
                 switch (mAdapterType) {
                     case TYPE_INSTALL: {
                         for (StartOrderInfoBean.ObjBean.CarListBean carListBean : objBean.getCarList()) {
-                            ID_MAIN_TERMINAL = carListBean.getId() + "T";
-                            int i = 0;
-                            for (StartOrderInfoBean.ObjBean.CarListBean.CarTerminalListBean carTerminalListBean
-                                    : carListBean.getCarTerminalList()) {
-
-                                Cursor cursor = mDatabaseManager.getTer(carTerminalListBean.getId());
-                                if (null == cursor || !cursor.moveToFirst()) {
-                                    String tno, newtno;
-                                    if (RegularU.isEmpty(carTerminalListBean.getNewTNo())) {
-                                        tno = "";
-                                        newtno = carTerminalListBean.getTNo();
-                                    } else {
-                                        tno = carTerminalListBean.getTNo();
-                                        newtno = carTerminalListBean.getNewTNo();
-                                    }
-                                    Log.i(TAG, "onSuccess: tno-->" + tno);
-                                    Log.i(TAG, "onSuccess: newtno-->" + newtno);
-                                    Log.i(TAG, "onSuccess: position-->" + carTerminalListBean.getNewInstallLocation());
-                                    Log.i(TAG, "onSuccess: positionurl-->" + carTerminalListBean.getNewInstallLocationPic());
-                                    Log.i(TAG, "onSuccess: installurl-->" + carTerminalListBean.getNewWiringDiagramPic());
-                                    Log.i(TAG, "onSuccess: tid-->" + carTerminalListBean.getId());
-                                    Log.i(TAG, "onSuccess: terminalType-->" + carTerminalListBean.getTerminalType());
-                                    int wire;
-                                    if (carTerminalListBean.getTerminalType() == 2) {
-                                        wire = 0;
-                                    } else {
-                                        wire = 1;
-                                    }
-                                    mDatabaseManager.addTer(ID_MAIN_TERMINAL + i
-                                            , tno
-                                            , newtno
-                                            , carTerminalListBean.getNewInstallLocation()
-                                            , mBaseImg + carTerminalListBean.getNewInstallLocationPic()
-                                            , mBaseImg + carTerminalListBean.getNewWiringDiagramPic()
-                                            , carTerminalListBean.getNewInstallLocationPic()
-                                            , carTerminalListBean.getNewWiringDiagramPic()
-                                            , carListBean.getId()
-                                            , wire);
-                                    mDatabaseManager.addTerModel(ID_MAIN_TERMINAL + i
-                                            , carTerminalListBean.getTerminalType());
-                                    mDatabaseManager.addTerId(ID_MAIN_TERMINAL + i
-                                            , carTerminalListBean.getId()
-                                            , carListBean.getId());
-                                }
-                                i++;
-                            }
+//                            int i = 0;
+//                            for (StartOrderInfoBean.ObjBean.CarListBean.CarTerminalListBean carTerminalListBean
+//                                    : carListBean.getCarTerminalList()) {
+//
+//                                Cursor cursor = mDatabaseManager.getTer2ByTid(carTerminalListBean.getId());
+//                                if (null == cursor || !cursor.moveToFirst()) {
+//                                    String tno, newtno;
+//                                    if (RegularU.isEmpty(carTerminalListBean.getNewTNo())) {
+//                                        tno = "";
+//                                        newtno = carTerminalListBean.getTNo();
+//                                    } else {
+//                                        tno = carTerminalListBean.getTNo();
+//                                        newtno = carTerminalListBean.getNewTNo();
+//                                    }
+//                                    Log.i(TAG, "onSuccess: tno-->" + tno);
+//                                    Log.i(TAG, "onSuccess: newtno-->" + newtno);
+//                                    Log.i(TAG, "onSuccess: position-->" + carTerminalListBean.getNewInstallLocation());
+//                                    Log.i(TAG, "onSuccess: positionurl-->" + carTerminalListBean.getNewInstallLocationPic());
+//                                    Log.i(TAG, "onSuccess: installurl-->" + carTerminalListBean.getNewWiringDiagramPic());
+//                                    Log.i(TAG, "onSuccess: tid-->" + carTerminalListBean.getId());
+//                                    Log.i(TAG, "onSuccess: terminalType-->" + carTerminalListBean.getTerminalType());
+//                                    int wire;
+//                                    if (carTerminalListBean.getTerminalType() == 2) {
+//                                        wire = 0;
+//                                    } else {
+//                                        wire = 1;
+//                                    }
+//                                    mDatabaseManager.addTer(ID_MAIN_TERMINAL + i
+//                                            , tno
+//                                            , newtno
+//                                            , carTerminalListBean.getNewInstallLocation()
+//                                            , mBaseImg + carTerminalListBean.getNewInstallLocationPic()
+//                                            , mBaseImg + carTerminalListBean.getNewWiringDiagramPic()
+//                                            , carTerminalListBean.getNewInstallLocationPic()
+//                                            , carTerminalListBean.getNewWiringDiagramPic()
+//                                            , carListBean.getId()
+//                                            , wire);
+//                                    mDatabaseManager.addTerModel(ID_MAIN_TERMINAL + i
+//                                            , carTerminalListBean.getTerminalType());
+//                                    mDatabaseManager.addTerId(ID_MAIN_TERMINAL + i
+//                                            , carTerminalListBean.getId()
+//                                            , carListBean.getId());
+//                                }
+//                                i++;
+//                            }
                             if (carListBean.getRemoveFlag() == 0) {
                                 mAdapterInstallingDataList.add(new AdapterInstallingData(carListBean.getId()
                                         , carListBean.getCarVin()
@@ -419,12 +417,11 @@ public class InstallingActivity extends BaseActivity {
                                         }
                                     }
                                 } else {
-                                    ID_MAIN_TERMINAL = carListBean.getId() + "T";
                                     int i = 0;
                                     for (StartOrderInfoBean.ObjBean.CarListBean.CarTerminalListBean carTerminalListBean
                                             : carListBean.getCarTerminalList()) {
 
-                                        Cursor cursor = mDatabaseManager.getTer(carTerminalListBean.getId());
+                                        Cursor cursor = mDatabaseManager.getTer2ByTid(carTerminalListBean.getId());
                                         if (null == cursor || !cursor.moveToFirst()) {
                                             String tno, newtno;
                                             if (RegularU.isEmpty(carTerminalListBean.getNewTNo())) {

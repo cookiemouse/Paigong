@@ -286,33 +286,29 @@ public class CustomSignActivity extends BaseActivity {
 
                 //  设备信息
                 TerminalInfo terminalInfo = null;
-                Cursor cursorTer = mDatabaseManager.getTer(tId);
+                Cursor cursorTer = mDatabaseManager.getTer2ByTid(tId);
                 if (null != cursorTer && cursorTer.moveToFirst()) {
-                    String id = cursorTer.getString(0);
-                    String tNoOld = cursorTer.getString(1);
-                    String tNoNew = cursorTer.getString(2);
-                    String position = cursorTer.getString(3);
+                    String tNoOld = cursorTer.getString(0);
+                    String tNoNew = cursorTer.getString(1);
+                    String position = cursorTer.getString(2);
                     String positionPic = cursorTer.getString(4);
                     String installPic = cursorTer.getString(5);
-                    String positionPicUrl = cursorTer.getString(6);
-                    String installPicUrl = cursorTer.getString(7);
-                    int model = cursorTer.getInt(8);
-                    int tid = cursorTer.getInt(9);
-                    int locateType = cursorTer.getInt(10);
-                    int cid = cursorTer.getInt(11);
-                    int wire = cursorTer.getInt(12);
+                    int item = cursorTer.getInt(3);
+                    int model = cursorTer.getInt(6);
+                    int tid = cursorTer.getInt(7);
+                    int locateType = cursorTer.getInt(8);
+                    int carid = cursorTer.getInt(9);
+                    int wire = cursorTer.getInt(10);
 
-                    Log.i(TAG, "loadTerminalData: id-->" + id);
                     Log.i(TAG, "loadTerminalData: tNoOld-->" + tNoOld);
                     Log.i(TAG, "loadTerminalData: tNoNew-->" + tNoNew);
                     Log.i(TAG, "loadTerminalData: position-->" + position);
                     Log.i(TAG, "loadTerminalData: positionPic-->" + positionPic);
                     Log.i(TAG, "loadTerminalData: installPic-->" + installPic);
-                    Log.i(TAG, "loadTerminalData: positionPicUrl-->" + positionPicUrl);
-                    Log.i(TAG, "loadTerminalData: installPicUrl-->" + installPicUrl);
                     Log.i(TAG, "loadTerminalData: model-->" + model);
                     Log.i(TAG, "loadTerminalData: tid-->" + tid);
-                    Log.i(TAG, "loadTerminalData: cid-->" + cid);
+                    Log.i(TAG, "loadTerminalData: item-->" + item);
+                    Log.i(TAG, "loadTerminalData: carid-->" + carid);
                     Log.i(TAG, "loadTerminalData: locateType-->" + locateType);
                     Log.i(TAG, "loadTerminalData: wire-->" + wire);
                     if (RegularU.isEmpty(position)) {
@@ -639,7 +635,8 @@ public class CustomSignActivity extends BaseActivity {
                 int carId = cursor.getInt(1);
                 int tId = cursor.getInt(2);
                 Log.i(TAG, "deleteOrderInfo: orderNo-->" + orderNo + " ,carId-->" + carId + " ,tId-->" + tId);
-                mDatabaseManager.deleteTerByTid(tId);
+//                mDatabaseManager.deleteTerByTid(tId);
+                mDatabaseManager.deleteTer2ByTid(tId);
 //                mDatabaseManager.deleteCar(tId);
                 mDatabaseManager.deleteCar2(carId);
                 mDatabaseManager.deleteRepair(tId);
