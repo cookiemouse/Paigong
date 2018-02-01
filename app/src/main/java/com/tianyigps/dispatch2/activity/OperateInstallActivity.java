@@ -1394,14 +1394,16 @@ public class OperateInstallActivity extends BaseActivity {
             public void callback(boolean isSuccess, String outfile) {
                 //  上传
                 if (isSuccess) {
-                    new UploadPicU(mNetworkManager).uploadCarPic(eid, token, orderNo, carId, mTempType, mTempImgUrl, outfile, userName);
+                    new UploadPicU(mNetworkManager).uploadCarPic(eid, token, orderNo, carId, mTempType, mTempImgUrl, outfile, userName
+                            , "", "", "", "");
                 } else {
                     FileManager fileManager = new FileManager(localPath, true);
                     if (fileManager.getFileSize() > 5) {
                         mStringMessage = "选择图片过大，请重新上传！";
                         myHandler.sendEmptyMessage(Data.MSG_ERO);
                     } else {
-                        new UploadPicU(mNetworkManager).uploadCarPic(eid, token, orderNo, carId, mTempType, mTempImgUrl, localPath, userName);
+                        new UploadPicU(mNetworkManager).uploadCarPic(eid, token, orderNo, carId, mTempType, mTempImgUrl, localPath, userName
+                                , "", "", "", "");
                     }
                 }
             }
@@ -1429,14 +1431,16 @@ public class OperateInstallActivity extends BaseActivity {
             public void callback(boolean isSuccess, String outfile) {
                 //  上传
                 if (isSuccess) {
-                    new UploadPicU(mNetworkManager).uploadPic(eid, token, orderNo, carId, mTempId, mTempType, mTempModel, mTempImgUrl, outfile, userName);
+                    new UploadPicU(mNetworkManager).uploadPic(eid, token, orderNo, carId, mTempId, mTempType, mTempModel, mTempImgUrl, outfile, userName
+                            , "", "", "", "");
                 } else {
                     FileManager fileManager = new FileManager(localPath, true);
                     if (fileManager.getFileSize() > 5) {
                         mStringMessage = "选择图片过大，请重新上传！";
                         myHandler.sendEmptyMessage(Data.MSG_ERO);
                     } else {
-                        new UploadPicU(mNetworkManager).uploadPic(eid, token, orderNo, carId, mTempId, mTempType, mTempModel, mTempImgUrl, localPath, userName);
+                        new UploadPicU(mNetworkManager).uploadPic(eid, token, orderNo, carId, mTempId, mTempType, mTempModel, mTempImgUrl, localPath, userName
+                                , "", "", "", "");
                     }
                 }
             }

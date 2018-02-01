@@ -35,6 +35,7 @@ import com.tianyigps.dispatch2.bean.StartOrderInfoBean;
 import com.tianyigps.dispatch2.bean.UploadPicBean;
 import com.tianyigps.dispatch2.bean.WholeImeiBean;
 import com.tianyigps.dispatch2.data.Data;
+import com.tianyigps.dispatch2.data.PicData;
 import com.tianyigps.dispatch2.dialog.LoadingDialogFragment;
 import com.tianyigps.dispatch2.interfaces.OnCheckIMEIListener;
 import com.tianyigps.dispatch2.interfaces.OnDeletePicListener;
@@ -47,6 +48,7 @@ import com.tianyigps.dispatch2.manager.FileManager;
 import com.tianyigps.dispatch2.manager.NetworkManager;
 import com.tianyigps.dispatch2.manager.SharedpreferenceManager;
 import com.tianyigps.dispatch2.utils.MessageDialogU;
+import com.tianyigps.dispatch2.utils.PicU;
 import com.tianyigps.dispatch2.utils.RegularU;
 import com.tianyigps.dispatch2.utils.TinyU;
 import com.tianyigps.dispatch2.utils.UploadPicU;
@@ -100,6 +102,8 @@ public class OperateRepairActivity extends BaseActivity {
     private String wholeImei;
     private int tId;
     private int carId;
+    private String mUserInfo = "";
+    private PicData mPicData;
 
     //  网络数据返回
     private String carNoG, frameNoG, typeAndNameG, positionG, positionPicG, installPicG, installNameG, installPhoneG;
@@ -891,22 +895,28 @@ public class OperateRepairActivity extends BaseActivity {
             imgUrl = "";
         }
         final String localPath = path;
+        Log.i(TAG, "uploadPic: path-->" + path);
+        mPicData = PicU.getExinfo(path);
         mTempType = type;
         mTempImgUrl = imgUrl;
+
+        mUserInfo = mSharedpreferenceManager.getJobNo() + " " + mSharedpreferenceManager.getName();
         showLoading();
         TinyU.tinyPic(path, new FileCallback() {
             @Override
             public void callback(boolean isSuccess, String outfile) {
                 //  上传
                 if (isSuccess) {
-                    new UploadPicU(mNetworkManager).uploadPic(eid, token, orderNo, carId, tId, mTempType, mOrderTerType, mTempImgUrl, outfile, userName);
+                    new UploadPicU(mNetworkManager).uploadPic(eid, token, orderNo, carId, tId, mTempType, mOrderTerType, mTempImgUrl, outfile, userName
+                            , mUserInfo, "" + 0.0, "" + 0.0, mPicData.getDatetime());
                 } else {
                     FileManager fileManager = new FileManager(localPath, true);
                     if (fileManager.getFileSize() > 5) {
                         mStringMessage = "选择图片过大，请重新上传！";
                         myHandler.sendEmptyMessage(Data.MSG_3);
                     } else {
-                        new UploadPicU(mNetworkManager).uploadPic(eid, token, orderNo, carId, tId, mTempType, mOrderTerType, mTempImgUrl, localPath, userName);
+                        new UploadPicU(mNetworkManager).uploadPic(eid, token, orderNo, carId, tId, mTempType, mOrderTerType, mTempImgUrl, localPath, userName
+                                , mUserInfo, "" + 0.0, "" + 0.0, mPicData.getDatetime());
                     }
                 }
             }

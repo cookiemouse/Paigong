@@ -763,7 +763,8 @@ public class NetworkManager {
     //  上转图片    19
     public void uploadPic(int eid, String token, String orderNo
             , String carId, String tId, int type, int model
-            , @Nullable String imgUrl, String upfile, String userName) {
+            , @Nullable String imgUrl, String upfile, String userName
+            , String engineerInfo, String lat, String lng, String photoTime) {
         MultipartBody.Builder builder = new MultipartBody.Builder();
         builder.setType(MultipartBody.FORM);
         File file = new File(upfile);
@@ -781,6 +782,11 @@ public class NetworkManager {
         builder.addFormDataPart("tId", "" + tId);
         builder.addFormDataPart("type", ("" + type));
         builder.addFormDataPart("model", ("" + model));
+        builder.addFormDataPart("engineerInfo", engineerInfo);
+        builder.addFormDataPart("lat", lat);
+        builder.addFormDataPart("lon", lng);
+        builder.addFormDataPart("locateType", ("gps"));
+        builder.addFormDataPart("photoTime", photoTime);
         if (null != imgUrl) {
             builder.addFormDataPart("imgUrl", ("" + imgUrl));
         }
@@ -826,7 +832,8 @@ public class NetworkManager {
     //  上转图片    19-1
     public void uploadCarPic(int eid, String token, String orderNo
             , @Nullable int carId, int type
-            , @Nullable String imgUrl, String upfile, String userName) {
+            , @Nullable String imgUrl, String upfile, String userName
+            , String engineerInfo, String lat, String lng, String photoTime) {
         MultipartBody.Builder builder = new MultipartBody.Builder();
         builder.setType(MultipartBody.FORM);
         File file = new File(upfile);
@@ -842,6 +849,11 @@ public class NetworkManager {
         builder.addFormDataPart("orderNo", orderNo);
         builder.addFormDataPart("carId", ("" + carId));
         builder.addFormDataPart("type", ("" + type));
+        builder.addFormDataPart("engineerInfo", engineerInfo);
+        builder.addFormDataPart("lat", lat);
+        builder.addFormDataPart("lon", lng);
+        builder.addFormDataPart("locateType", ("gps"));
+        builder.addFormDataPart("photoTime", photoTime);
         if (null != imgUrl) {
             builder.addFormDataPart("imgUrl", ("" + imgUrl));
         }

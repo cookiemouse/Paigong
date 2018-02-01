@@ -18,19 +18,24 @@ public class UploadPicU {
     //  上传单张图片
     public void uploadPic(int eid, String token, String orderNo
             , int carId, @Nullable int tId, int type, int model
-            , @Nullable String imgUrl, String upfile, String userName) {
+            , @Nullable String imgUrl, String upfile, String userName
+            , String engineerInfo, String lat, String lng, String photoTime) {
         if (0 == tId || 0 == carId) {
-            mNetworkManager.uploadPic(eid, token, orderNo, "" + carId, "", type, model, imgUrl, upfile, userName);
+            mNetworkManager.uploadPic(eid, token, orderNo, "" + carId, "", type, model, imgUrl, upfile, userName
+                    , engineerInfo, lat, lng, photoTime);
             return;
         }
-        mNetworkManager.uploadPic(eid, token, orderNo, "" + carId, "" + tId, type, model, imgUrl, upfile, userName);
+        mNetworkManager.uploadPic(eid, token, orderNo, "" + carId, "" + tId, type, model, imgUrl, upfile, userName
+                , engineerInfo, lat, lng, photoTime);
     }
 
     //  上传单张图片
     public void uploadCarPic(int eid, String token, String orderNo
             , @Nullable int carId, int type
-            , @Nullable String imgUrl, String upfile, String userName) {
-        mNetworkManager.uploadCarPic(eid, token, orderNo, carId, type, imgUrl, upfile, userName);
+            , @Nullable String imgUrl, String upfile, String userName
+            , String engineerInfo, String lat, String lng, String photoTime) {
+        mNetworkManager.uploadCarPic(eid, token, orderNo, carId, type, imgUrl, upfile, userName
+                , engineerInfo, lat, lng, photoTime);
     }
 
     //  上传多张图片
