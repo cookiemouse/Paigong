@@ -1442,11 +1442,22 @@ public class DatabaseManager {
         this.addTer2(carId, item, tNoOld, tNoNew, position, positionPic, installPic, wire);
     }
 
-    public void addTer2ByTid(int tId, String tNoOld, String tNoNew, String position, String positionPic, String installPic, int wire){
-        if (terExist2ByTid(tId)) {
-            modifyTer2(carId, item, tNoOld, tNoNew, position, positionPic, installPic, wire);
+    public void addTer2LocateType(int carId, int item, int locateType){
+        if (terExist2(carId, item)) {
+            modifyTer2LocateType(carId, item, locateType);
             return;
         }
+        this.addTer2(carId, item);
+        this.addTer2LocateType(carId, item, locateType);
+    }
+
+    public void addTer2ByTid(int tid, String tNoOld, String tNoNew, String position, String positionPic, String installPic, int carId
+            , int locateType, int wire){
+        if (terExist2ByTid(tid)) {
+            modifyTer2ByTid(tid, tNoOld, tNoNew, position, positionPic, installPic, carId, locateType, wire);
+            return;
+        }
+        this.addTer2ByTid(tid, tNoOld, tNoNew, position, positionPic, installPic, carId, locateType, wire);
     }
 
     //  改，T, 重载
