@@ -72,14 +72,58 @@ public class PicU {
             String processingMethod = exifInterface.getAttribute(ExifInterface.TAG_GPS_PROCESSING_METHOD);
             Log.i(TAG, "getExinfo: processingMethod-->" + processingMethod);
 
-            if (!RegularU.isEmpty(latitude)){
+            if (RegularU.isEmpty(latitude)) {
+                latitude = "0.0";
+            } else {
+                try {
+                    latitude = "" + convertToDegree(latitude);
+                } catch (Exception e) {
+                    Log.i(TAG, "getExinfo: e-->" + e);
+                    latitude = "0.0";
+                }
+            }
 
+            if (RegularU.isEmpty(longitude)) {
+                longitude = "0.0";
+            } else {
+                try {
+                    longitude = "" + convertToDegree(longitude);
+                } catch (Exception e) {
+                    Log.i(TAG, "getExinfo: e-->" + e);
+                    longitude = "0.0";
+                }
             }
 
             return new PicData(dateTime, latitude, longitude);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return null;
+        return new PicData("", "0.0", "0.0");
+    }
+
+    public static Double convertToDegree(String stringDMS) {
+        Float result = null;
+        String[] DMS = stringDMS.split(",", 3);
+
+        String[] stringD = DMS[0].split("/", 2);
+        Double D0 = new Double(stringD[0]);
+        Double D1 = new Double(stringD[1]);
+        Double FloatD = D0 / D1;
+
+        String[] stringM = DMS[1].split("/", 2);
+        Double M0 = new Double(stringM[0]);
+        Double M1 = new Double(stringM[1]);
+        Double FloatM = M0 / M1;
+
+        String[] stringS = DMS[2].split("/", 2);
+        Double S0 = new Double(stringS[0]);
+        Double S1 = new Double(stringS[1]);
+        Double FloatS = S0 / S1;
+
+        result = new Float(FloatD + (FloatM / 60) + (FloatS / 3600));
+
+        Log.i(TAG, "convertToDegree: result-->" + (double)result);
+
+        return (double) result;
     }
 }

@@ -39,6 +39,7 @@ import com.tianyigps.dispatch2.customview.MyRecyclerView;
 import com.tianyigps.dispatch2.data.AdapterOperateInstallListData;
 import com.tianyigps.dispatch2.data.AdapterOperateInstallRecyclerData;
 import com.tianyigps.dispatch2.data.Data;
+import com.tianyigps.dispatch2.data.PicData;
 import com.tianyigps.dispatch2.dialog.LoadingDialogFragment;
 import com.tianyigps.dispatch2.interfaces.OnCheckIMEIListener;
 import com.tianyigps.dispatch2.interfaces.OnDeletePicListener;
@@ -49,6 +50,7 @@ import com.tianyigps.dispatch2.manager.DatabaseManager;
 import com.tianyigps.dispatch2.manager.FileManager;
 import com.tianyigps.dispatch2.manager.NetworkManager;
 import com.tianyigps.dispatch2.manager.SharedpreferenceManager;
+import com.tianyigps.dispatch2.utils.PicU;
 import com.tianyigps.dispatch2.utils.RegularU;
 import com.tianyigps.dispatch2.utils.TinyU;
 import com.tianyigps.dispatch2.utils.ToastU;
@@ -72,6 +74,8 @@ public class OperateInstallActivity extends BaseActivity {
     private ImageView mImageViewCarNoDelete, mImageViewFrameNoDelete;
     private EditText mEditTextCarNo, mEditTextCarType;
     private EditText mEditTextFrameNo;
+    private String mUserInfo = "";
+    private PicData mPicData;
 
     //  提示
     private TextView mTextViewTip1, mTextViewTip2, mTextViewTip3;
@@ -1386,6 +1390,8 @@ public class OperateInstallActivity extends BaseActivity {
             imgUrl = "";
         }
         final String localPath = path;
+        mPicData = PicU.getExinfo(path);
+        mUserInfo = mSharedpreferenceManager.getJobNo() + " " + mSharedpreferenceManager.getName();
         mTempType = type;
         mTempImgUrl = imgUrl;
         showLoading();
@@ -1395,7 +1401,7 @@ public class OperateInstallActivity extends BaseActivity {
                 //  上传
                 if (isSuccess) {
                     new UploadPicU(mNetworkManager).uploadCarPic(eid, token, orderNo, carId, mTempType, mTempImgUrl, outfile, userName
-                            , "", "", "", "");
+                            , mUserInfo, "" + mPicData.getLatitude(), "" + mPicData.getLongitued(), mPicData.getDatetime());
                 } else {
                     FileManager fileManager = new FileManager(localPath, true);
                     if (fileManager.getFileSize() > 5) {
@@ -1403,7 +1409,7 @@ public class OperateInstallActivity extends BaseActivity {
                         myHandler.sendEmptyMessage(Data.MSG_ERO);
                     } else {
                         new UploadPicU(mNetworkManager).uploadCarPic(eid, token, orderNo, carId, mTempType, mTempImgUrl, localPath, userName
-                                , "", "", "", "");
+                                , mUserInfo, "" + mPicData.getLatitude(), "" + mPicData.getLongitued(), mPicData.getDatetime());
                     }
                 }
             }
@@ -1417,6 +1423,8 @@ public class OperateInstallActivity extends BaseActivity {
             imgUrl = "";
         }
         final String localPath = path;
+        mPicData = PicU.getExinfo(path);
+        mUserInfo = mSharedpreferenceManager.getJobNo() + " " + mSharedpreferenceManager.getName();
         mTempType = type;
         if (mAdapterOperateInstallListDataList.get(itemPosition).isWire()) {
             mTempModel = 1;
@@ -1432,7 +1440,7 @@ public class OperateInstallActivity extends BaseActivity {
                 //  上传
                 if (isSuccess) {
                     new UploadPicU(mNetworkManager).uploadPic(eid, token, orderNo, carId, mTempId, mTempType, mTempModel, mTempImgUrl, outfile, userName
-                            , "", "", "", "");
+                            , mUserInfo, "" + mPicData.getLatitude(), "" + mPicData.getLongitued(), mPicData.getDatetime());
                 } else {
                     FileManager fileManager = new FileManager(localPath, true);
                     if (fileManager.getFileSize() > 5) {
@@ -1440,7 +1448,7 @@ public class OperateInstallActivity extends BaseActivity {
                         myHandler.sendEmptyMessage(Data.MSG_ERO);
                     } else {
                         new UploadPicU(mNetworkManager).uploadPic(eid, token, orderNo, carId, mTempId, mTempType, mTempModel, mTempImgUrl, localPath, userName
-                                , "", "", "", "");
+                                , mUserInfo, "" + mPicData.getLatitude(), "" + mPicData.getLongitued(), mPicData.getDatetime());
                     }
                 }
             }

@@ -908,7 +908,7 @@ public class OperateRepairActivity extends BaseActivity {
                 //  上传
                 if (isSuccess) {
                     new UploadPicU(mNetworkManager).uploadPic(eid, token, orderNo, carId, tId, mTempType, mOrderTerType, mTempImgUrl, outfile, userName
-                            , mUserInfo, "" + 0.0, "" + 0.0, mPicData.getDatetime());
+                            , mUserInfo, "" + mPicData.getLatitude(), "" + mPicData.getLongitued(), mPicData.getDatetime());
                 } else {
                     FileManager fileManager = new FileManager(localPath, true);
                     if (fileManager.getFileSize() > 5) {
@@ -916,7 +916,7 @@ public class OperateRepairActivity extends BaseActivity {
                         myHandler.sendEmptyMessage(Data.MSG_3);
                     } else {
                         new UploadPicU(mNetworkManager).uploadPic(eid, token, orderNo, carId, tId, mTempType, mOrderTerType, mTempImgUrl, localPath, userName
-                                , mUserInfo, "" + 0.0, "" + 0.0, mPicData.getDatetime());
+                                , mUserInfo, "" + mPicData.getLatitude(), "" + mPicData.getLongitued(), mPicData.getDatetime());
                     }
                 }
             }
