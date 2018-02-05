@@ -46,9 +46,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + ",carNoPic TEXT,frameNoPic TEXT)";
 
     private static final String TABLE_INSTALL_TERMINAL_2 = "create table " + Data.DATA_TAB_INSTALL_TERMINAL_2
-            + "(tNoOld TEXT,tNoNew TEXT,position TEXT,item INTEGER"
+            + "(carId INTEGER,tId INTEGER,tNoOld TEXT,tNoNew TEXT,position TEXT"
             + ",positionPic TEXT,installPic TEXT"
-            + ",model INTEGER,tId INTEGER,locateType INTEGER,carId INTEGER, wire INTEGER)";
+            + ",model INTEGER,locateType INTEGER,wire INTEGER)";
 
     /*
     * 需要保存的信息
