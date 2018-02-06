@@ -1414,13 +1414,12 @@ public class DatabaseManager {
 
     //  ====================================设备====2======================================
 
-    public void addTer2(int carId, int item) {
-        if (terExist2(carId, item)) {
+    public void addTer2(int tId) {
+        if (terExist2(tId)) {
             return;
         }
         ContentValues contentValues = new ContentValues();
-        contentValues.put("carId", carId);
-        contentValues.put("item", item);
+        contentValues.put("tId", tId);
 
         mSqLiteDatabase.beginTransaction();
         try {
@@ -1433,22 +1432,22 @@ public class DatabaseManager {
         }
     }
 
-    public void addTer2(int carId, int item, String tNoOld, String tNoNew, String position, String positionPic, String installPic, int wire) {
-        if (terExist2(carId, item)) {
-            modifyTer2(carId, item, tNoOld, tNoNew, position, positionPic, installPic, wire);
+    public void addTer2(int tId, int carId, String tNoOld, String tNoNew, String position, String positionPic, String installPic, int wire) {
+        if (terExist2(tId)) {
+            modifyTer2(tId, carId, tNoOld, tNoNew, position, positionPic, installPic, wire);
             return;
         }
-        this.addTer2(carId, item);
-        this.addTer2(carId, item, tNoOld, tNoNew, position, positionPic, installPic, wire);
+        this.addTer2(tId);
+        this.addTer2(tId, carId, tNoOld, tNoNew, position, positionPic, installPic, wire);
     }
 
-    public void addTer2LocateType(int carId, int item, int locateType){
-        if (terExist2(carId, item)) {
-            modifyTer2LocateType(carId, item, locateType);
+    public void addTer2LocateType(int tId, int locateType){
+        if (terExist2(tId)) {
+            modifyTer2LocateType(tId, locateType);
             return;
         }
-        this.addTer2(carId, item);
-        this.addTer2LocateType(carId, item, locateType);
+        this.addTer2(tId);
+        this.addTer2LocateType(tId, locateType);
     }
 
     public void addTer2ByTid(int tid, String tNoOld, String tNoNew, String position, String positionPic, String installPic, int carId
@@ -1461,8 +1460,8 @@ public class DatabaseManager {
     }
 
     //  改，T, 重载
-    public void modifyTer2LocateType(int carId, int item, int locateType) {
-        if (!terExist2(carId, item)) {
+    public void modifyTer2LocateType(int tId, int locateType) {
+        if (!terExist2(tId)) {
             return;
         }
         ContentValues contentValues = new ContentValues();
@@ -1472,8 +1471,8 @@ public class DatabaseManager {
         try {
             mSqLiteDatabase.update(Data.DATA_TAB_INSTALL_TERMINAL
                     , contentValues
-                    , "carId=? and item=?"
-                    , new String[]{"" + carId, "" + item});
+                    , "tId=?tId"
+                    , new String[]{"" + tId});
             mSqLiteDatabase.setTransactionSuccessful();
         } catch (Exception e) {
             Log.e(TAG, e + "SqLiteDatabase update error");
@@ -1483,8 +1482,8 @@ public class DatabaseManager {
     }
 
     //  改，T，重载
-    public void modifyTer2(int carId, int item, String tNoNew, String position) {
-        if (!terExist2(carId, item)) {
+    public void modifyTer2(int tId, String tNoNew, String position) {
+        if (!terExist2(tId)) {
             return;
         }
         ContentValues contentValues = new ContentValues();
@@ -1495,8 +1494,8 @@ public class DatabaseManager {
         try {
             mSqLiteDatabase.update(Data.DATA_TAB_INSTALL_TERMINAL
                     , contentValues
-                    , "carId=? and item=?"
-                    , new String[]{"" + carId, "" + item});
+                    , "tId=?"
+                    , new String[]{"" + tId});
             mSqLiteDatabase.setTransactionSuccessful();
         } catch (Exception e) {
             Log.e(TAG, e + "SqLiteDatabase update error");
@@ -1505,8 +1504,8 @@ public class DatabaseManager {
         }
     }
 
-    public void modifyTer2(int carId, int item, String tNoOld, String tNoNew, String position) {
-        if (!terExist2(carId, item)) {
+    public void modifyTer2(int tId, String tNoOld, String tNoNew, String position) {
+        if (!terExist2(tId)) {
             return;
         }
         ContentValues contentValues = new ContentValues();
@@ -1518,8 +1517,8 @@ public class DatabaseManager {
         try {
             mSqLiteDatabase.update(Data.DATA_TAB_INSTALL_TERMINAL_2
                     , contentValues
-                    , "carId=? and item=?"
-                    , new String[]{"" + carId, "" + item});
+                    , "tId=?"
+                    , new String[]{"" + tId});
             mSqLiteDatabase.setTransactionSuccessful();
         } catch (Exception e) {
             Log.e(TAG, e + "SqLiteDatabase update error");
@@ -1528,11 +1527,12 @@ public class DatabaseManager {
         }
     }
 
-    public void modifyTer2(int carId, int item, String tNoOld, String tNoNew, String position, String positionPic, String installPic, int wire) {
-        if (!terExist2(carId, item)) {
+    public void modifyTer2(int tId, int carId, String tNoOld, String tNoNew, String position, String positionPic, String installPic, int wire) {
+        if (!terExist2(tId)) {
             return;
         }
         ContentValues contentValues = new ContentValues();
+        contentValues.put("carId", carId);
         contentValues.put("tNoOld", tNoOld);
         contentValues.put("tNoNew", tNoNew);
         contentValues.put("position", position);
@@ -1544,8 +1544,8 @@ public class DatabaseManager {
         try {
             mSqLiteDatabase.update(Data.DATA_TAB_INSTALL_TERMINAL
                     , contentValues
-                    , "carId=? and item=?"
-                    , new String[]{"" + carId, "" + item});
+                    , "tId=?"
+                    , new String[]{"" + carId});
             mSqLiteDatabase.setTransactionSuccessful();
         } catch (Exception e) {
             Log.e(TAG, e + "SqLiteDatabase update error");
@@ -1584,8 +1584,8 @@ public class DatabaseManager {
     }
 
     //  查，T，重载
-    public boolean terExist2(int carId, int item) {
-        Cursor cursor = getTer2(carId, item);
+    public boolean terExist2(int tId) {
+        Cursor cursor = getTer2(tId);
         return null != cursor && cursor.moveToFirst();
     }
 
@@ -1596,15 +1596,15 @@ public class DatabaseManager {
     }
 
     //  查，T
-    public Cursor getTer2(int carId, int item) {
+    public Cursor getTer2(int tId) {
         mSqLiteDatabase.beginTransaction();
         try {
             Cursor cursor = mSqLiteDatabase.query(Data.DATA_TAB_INSTALL_TERMINAL_2
                     , new String[]{"tNoOld, tNoNew, position, item"
                             + ", positionPic, installPic"
                             + ", model, tId, locateType, carId, wire"}
-                    , "carId=? and item=?"
-                    , new String[]{"" + carId, "" + item}
+                    , "tId=?"
+                    , new String[]{"" + tId}
                     , null, null, null);
             mSqLiteDatabase.setTransactionSuccessful();
 
@@ -1661,17 +1661,8 @@ public class DatabaseManager {
         return null;
     }
 
-    public int getTer2Tid(int carId, int item) {
-        int id = 0;
-        Cursor cursor = this.getTer2(carId, item);
-        if (null != cursor && cursor.moveToFirst()) {
-            id = cursor.getInt(7);
-        }
-        return id;
-    }
-
-    public void modifyTer2InstallPic(int carId, int item, String installPic) {
-        if (!terExist2(carId, item)) {
+    public void modifyTer2InstallPic(int tId, String installPic) {
+        if (!terExist2(tId)) {
             return;
         }
         ContentValues contentValues = new ContentValues();
@@ -1681,8 +1672,8 @@ public class DatabaseManager {
         try {
             mSqLiteDatabase.update(Data.DATA_TAB_INSTALL_TERMINAL_2
                     , contentValues
-                    , "carId=? and item=?"
-                    , new String[]{"" + carId, "" + item});
+                    , "tId=?"
+                    , new String[]{"" + tId});
             mSqLiteDatabase.setTransactionSuccessful();
         } catch (Exception e) {
             Log.e(TAG, e + "SqLiteDatabase update error");
@@ -1691,8 +1682,8 @@ public class DatabaseManager {
         }
     }
 
-    public void modifyTer2PositionPic(int carId, int item, String positionPic) {
-        if (!terExist2(carId, item)) {
+    public void modifyTer2PositionPic(int tId, String positionPic) {
+        if (!terExist2(tId)) {
             return;
         }
         ContentValues contentValues = new ContentValues();
@@ -1702,8 +1693,8 @@ public class DatabaseManager {
         try {
             mSqLiteDatabase.update(Data.DATA_TAB_INSTALL_TERMINAL_2
                     , contentValues
-                    , "carId=? and item=?"
-                    , new String[]{"" + carId, "" + item});
+                    , "tId=?"
+                    , new String[]{"" + tId});
             mSqLiteDatabase.setTransactionSuccessful();
         } catch (Exception e) {
             Log.e(TAG, e + "SqLiteDatabase update error");
