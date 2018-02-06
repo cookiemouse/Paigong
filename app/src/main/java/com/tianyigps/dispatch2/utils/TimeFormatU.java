@@ -91,4 +91,17 @@ public class TimeFormatU {
         }
         return timeStamp;
     }
+
+    public static String dateToDate(String time) {
+        String strData = "";
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        try {
+            Date date = sdf.parse(time);
+            strData = simpleDateFormat.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return strData;
+    }
 }

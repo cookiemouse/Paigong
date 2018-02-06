@@ -94,6 +94,12 @@ public class PicU {
                 }
             }
 
+            if (RegularU.isEmpty(dateTime)) {
+                dateTime = "";
+            } else {
+                dateTime = TimeFormatU.dateToDate(dateTime);
+            }
+
             return new PicData(dateTime, latitude, longitude);
         } catch (IOException e) {
             e.printStackTrace();
@@ -122,7 +128,7 @@ public class PicU {
 
         result = new Float(FloatD + (FloatM / 60) + (FloatS / 3600));
 
-        Log.i(TAG, "convertToDegree: result-->" + (double)result);
+        Log.i(TAG, "convertToDegree: result-->" + (double) result);
 
         return (double) result;
     }
