@@ -1600,7 +1600,7 @@ public class DatabaseManager {
         mSqLiteDatabase.beginTransaction();
         try {
             Cursor cursor = mSqLiteDatabase.query(Data.DATA_TAB_INSTALL_TERMINAL_2
-                    , new String[]{"tNoOld, tNoNew, position, item"
+                    , new String[]{"tNoOld, tNoNew, position"
                             + ", positionPic, installPic"
                             + ", model, tId, locateType, carId, wire"}
                     , "tId=?"
@@ -1622,7 +1622,7 @@ public class DatabaseManager {
         mSqLiteDatabase.beginTransaction();
         try {
             Cursor cursor = mSqLiteDatabase.query(Data.DATA_TAB_INSTALL_TERMINAL_2
-                    , new String[]{"tNoOld, tNoNew, position, item"
+                    , new String[]{"tNoOld, tNoNew, position"
                             + ", positionPic, installPic"
                             + ", model, tId, locateType, carId, wire"}
                     , "tId=?"
@@ -1644,7 +1644,7 @@ public class DatabaseManager {
         mSqLiteDatabase.beginTransaction();
         try {
             Cursor cursor = mSqLiteDatabase.query(Data.DATA_TAB_INSTALL_TERMINAL_2
-                    , new String[]{"tNoOld, tNoNew, position, item"
+                    , new String[]{"tNoOld, tNoNew, position"
                             + ", positionPic, installPic"
                             + ", model, tId, locateType, carId, wire"}
                     , "carId=?"
