@@ -95,7 +95,7 @@ public class PicU {
             }
 
             if (RegularU.isEmpty(dateTime)) {
-                dateTime = "";
+                dateTime = new TimeFormatU().millisToDate(System.currentTimeMillis());
             } else {
                 dateTime = TimeFormatU.dateToDate(dateTime);
             }
@@ -104,7 +104,7 @@ public class PicU {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return new PicData("", "0.0", "0.0");
+        return new PicData(new TimeFormatU().millisToDate(System.currentTimeMillis()), "0.0", "0.0");
     }
 
     public static Double convertToDegree(String stringDMS) {
