@@ -111,7 +111,11 @@ public class NetworkManager {
 
     @Deprecated
     public void setTimeOut() {
-        mOkHttpClient = new OkHttpClient.Builder().connectTimeout(5, TimeUnit.SECONDS).build();
+        mOkHttpClient = new OkHttpClient.Builder()
+                .connectTimeout(40, TimeUnit.SECONDS)
+                .writeTimeout(40, TimeUnit.SECONDS)
+                .readTimeout(40, TimeUnit.SECONDS)
+                .build();
     }
 
     //  登录  1
