@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -55,6 +56,7 @@ public class InstallingActivity extends BaseActivity {
     private static final int TYPE_REPAIR = 1;
     private static final int TYPE_REMOVE = 2;
 
+    private LinearLayout mLinearLayoutRemark;
     private TextView mTextViewRemarks;
     private MyListView mListView;
     private Button mButtonNext;
@@ -135,6 +137,7 @@ public class InstallingActivity extends BaseActivity {
 
         mListView = findViewById(R.id.lv_activity_installing);
 
+        mLinearLayoutRemark = findViewById(R.id.ll_layout_activity_installing_remarkds);
         mTextViewRemarks = findViewById(R.id.tv_layout_activity_installing_remarks);
         mButtonNext = findViewById(R.id.btn_layout_activity_installing_next);
 
@@ -1149,7 +1152,9 @@ public class InstallingActivity extends BaseActivity {
             if (mSwipeRefreshLayout.isRefreshing()) {
                 mSwipeRefreshLayout.setRefreshing(false);
             }
-            if (!RegularU.isEmpty(mStringRemarks)) {
+            if (RegularU.isEmpty(mStringRemarks)) {
+                mLinearLayoutRemark.setVisibility(View.GONE);
+            } else {
                 mStringRemarks = mStringRemarks.replaceAll("null", "");
                 mTextViewRemarks.setText(mStringRemarks);
             }

@@ -1,32 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content">
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content">
 
     <LinearLayout
-        android:layout_height="wrap_content"
-              android:background="@drawable/bg_item"
-              android:layout_margin="@dimen/dp_8"
-              android:id="@+id/ll_layout_activity_installing_remarkds"
+        android:id="@+id/ll_layout_activity_installing_remarkds"
         android:layout_width="match_parent"
-              android:elevation="@dimen/dp_4"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dp_8"
+        android:background="@drawable/bg_item"
+        android:elevation="@dimen/dp_4"
         android:orientation="vertical">
 
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="@string/remarks"
-        android:textColor="@color/colorBlueTheme"
-        android:textSize="@dimen/sp_18"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/remarks"
+            android:textColor="@color/colorBlueTheme"
+            android:textSize="@dimen/sp_18"/>
 
-    <TextView
-        android:id="@+id/tv_layout_activity_installing_remarks"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp_8"
-        android:gravity="center"/>
+        <TextView
+            android:id="@+id/tv_layout_activity_installing_remarks"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_8"
+            android:gravity="center"/>
     </LinearLayout>
 
 </FrameLayout>

@@ -680,7 +680,7 @@ public class PendDetailsActivity extends Activity {
         bottomDialog.setCancelable(false);
 
         TextView tvTitle = viewReason.findViewById(R.id.tv_dialog_modify_title);
-        TextView tvCancel = viewReason.findViewById(R.id.tv_dialog_modify_reason_cancel);
+        ImageView ivCancel = viewReason.findViewById(R.id.iv_dialog_modify_reason_cancel);
         Button btnSubmit = viewReason.findViewById(R.id.btn_dialog_modify_reason_submit);
         final EditText etReason = viewReason.findViewById(R.id.et_dialog_modify_reason);
         final TextView tvInfo = viewReason.findViewById(R.id.tv_dialog_modify_reason_info);
@@ -698,7 +698,7 @@ public class PendDetailsActivity extends Activity {
             tvTitle.setText(title);
         }
 
-        tvCancel.setOnClickListener(new View.OnClickListener() {
+        ivCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mDay = 0;

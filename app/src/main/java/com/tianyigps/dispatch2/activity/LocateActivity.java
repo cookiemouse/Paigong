@@ -2,13 +2,10 @@ package com.tianyigps.dispatch2.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.design.widget.Snackbar;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -54,7 +51,6 @@ import com.tianyigps.dispatch2.interfaces.OnLocateWarnListener;
 import com.tianyigps.dispatch2.manager.LocateManager;
 import com.tianyigps.dispatch2.manager.NetworkManager;
 import com.tianyigps.dispatch2.manager.SharedpreferenceManager;
-import com.tianyigps.dispatch2.utils.SnackbarU;
 import com.tianyigps.dispatch2.utils.TimeFormatU;
 import com.tianyigps.dispatch2.utils.TimerU;
 import com.tianyigps.dispatch2.utils.ToastU;
@@ -614,15 +610,16 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
     }
 
     private void showToast(String message) {
-        LinearLayout linearLayout = findViewById(R.id.activity_locate);
-        View viewToast = LayoutInflater.from(LocateActivity.this).inflate(R.layout.layout_top_toast, null);
-        TextView textViewInfo = viewToast.findViewById(R.id.tv_layout_top_toast);
-        textViewInfo.setText(message);
-        new SnackbarU()
-                .make(linearLayout, viewToast, Snackbar.LENGTH_SHORT)
-                .setBackground(Color.WHITE)
-                .setGravity(Gravity.TOP)
-                .show();
+//        LinearLayout linearLayout = findViewById(R.id.activity_locate);
+//        View viewToast = LayoutInflater.from(LocateActivity.this).inflate(R.layout.layout_top_toast, null);
+//        TextView textViewInfo = viewToast.findViewById(R.id.tv_layout_top_toast);
+//        textViewInfo.setText(message);
+//        new SnackbarU()
+//                .make(linearLayout, viewToast, Snackbar.LENGTH_SHORT)
+//                .setBackground(Color.WHITE)
+//                .setGravity(Gravity.TOP)
+//                .show();
+        mToastU.showToast(message);
     }
 
     //  显示LoadingFragment
