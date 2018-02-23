@@ -20,44 +20,69 @@
         android:id="@+id/line_item_handing_1"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_1"
-        android:layout_below="@+id/tv_item_handing_content_title"
+        android:layout_below="@+id/tv_item_handing_address"
         android:layout_marginTop="@dimen/dp_8"
         android:background="@color/color_cut_line"/>
 
-    <TextView
-        android:id="@+id/tv_item_handing_time"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/ll_item_handing_1"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/tv_item_handing_name"
         android:layout_alignStart="@+id/tv_item_handing_name"
+        android:layout_marginBottom="@dimen/dp_4"
         android:layout_below="@+id/tv_item_handing_name"
-        android:layout_marginTop="@dimen/dp_8"
-        android:text="time"/>
+        android:orientation="horizontal"
+        android:textColor="@color/colorGray">
+
+        <TextView
+            android:id="@+id/tv_item_handing_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorGray"
+            android:text="orderNo"/>
+
+        <View
+            android:layout_width="@dimen/dp_1"
+            android:layout_height="@dimen/dp_12"
+            android:layout_marginLeft="@dimen/dp_8"
+            android:layout_marginRight="@dimen/dp_8"
+            android:layout_gravity="center"
+            android:background="@color/colorGray"/>
+
+        <TextView
+            android:id="@+id/tv_item_handing_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="time"
+            android:textColor="@color/colorGray"/>
+
+        <TextView
+            android:id="@+id/tv_item_handing_modify"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_8"
+            android:layout_marginStart="@dimen/dp_8"
+            android:text="@string/modify"
+            android:textColor="@color/colorRed"
+            android:visibility="gone"/>
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/tv_item_handing_address"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/tv_item_handing_time"
-        android:layout_alignStart="@+id/tv_item_handing_time"
-        android:layout_below="@+id/tv_item_handing_time"
+        android:layout_alignLeft="@+id/tv_item_handing_content_title"
+        android:layout_alignStart="@+id/tv_item_handing_content_title"
+        android:layout_below="@+id/tv_item_handing_content_title"
         android:text="address"/>
-
-    <TextView
-        android:id="@+id/tv_item_handing_id"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/tv_item_handing_address"
-        android:layout_alignStart="@+id/tv_item_handing_address"
-        android:layout_below="@+id/tv_item_handing_address"
-        android:layout_marginTop="@dimen/dp_8"
-        android:text="orderNo"/>
 
     <LinearLayout
         android:id="@+id/ll_item_handing_remove"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tv_item_handing_id"
+        android:layout_below="@id/ll_item_handing_1"
         android:orientation="horizontal">
 
         <TextView
@@ -110,8 +135,8 @@
         android:id="@+id/tv_item_handing_content_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/tv_item_handing_id"
-        android:layout_alignStart="@+id/tv_item_handing_id"
+        android:layout_alignLeft="@+id/ll_item_handing_1"
+        android:layout_alignStart="@+id/ll_item_handing_1"
         android:layout_below="@+id/ll_item_handing_remove"
         android:text="安装："/>
 
@@ -120,7 +145,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/tv_item_handing_content_title"
-        android:layout_below="@+id/tv_item_handing_id"
+        android:layout_below="@+id/ll_item_handing_1"
         android:layout_toEndOf="@+id/tv_item_handing_content_title"
         android:layout_toRightOf="@+id/tv_item_handing_content_title"
         android:text="@string/wire"/>
@@ -175,67 +200,80 @@
         android:layout_alignParentStart="true"
         android:layout_below="@+id/line_item_handing_1"
         android:layout_marginTop="@dimen/dp_8"
+        android:gravity="right"
         android:orientation="horizontal">
 
-        <LinearLayout
-            android:id="@+id/ll_item_handing_call"
-            android:layout_width="0dp"
+        <TextView
+            android:id="@+id/tv_item_handing_phone_name"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center_horizontal"
-            android:orientation="vertical">
+            android:layout_marginTop="@dimen/dp_4"
+            android:background="@drawable/bg_ellipse_gay"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:lines="1"
+            android:text="@string/app_name"/>
 
-            <ImageView
-                android:id="@+id/iv_item_handing_phone"
-                android:layout_width="@dimen/dp_32"
-                android:layout_height="@dimen/dp_32"
-                android:src="@drawable/ic_phone_status"/>
-
-            <TextView
-                android:id="@+id/tv_item_handing_phone_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:lines="1"
-                android:ellipsize="end"
-                android:layout_marginTop="@dimen/dp_4"
-                android:text="@string/app_name"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center_horizontal"
-            android:orientation="vertical">
+            android:layout_marginLeft="@dimen/dp_8"
+            android:layout_marginStart="@dimen/dp_8"
+            android:layout_marginTop="@dimen/dp_4"
+            android:background="@drawable/bg_ellipse_blue"
+            android:gravity="center"
+            android:text="@string/start"
+            android:textColor="@color/colorBlueTheme"/>
 
-            <ImageView
-                android:id="@+id/iv_item_handing_start"
-                android:layout_width="@dimen/dp_32"
-                android:layout_height="@dimen/dp_32"
-                android:src="@drawable/ic_start_status"/>
+        <!--<LinearLayout-->
+        <!--android:id="@+id/ll_item_handing_call"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_weight="1"-->
+        <!--android:gravity="center_horizontal"-->
+        <!--android:orientation="vertical">-->
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_4"
-                android:text="@string/start"/>
+        <!--<ImageView-->
+        <!--android:id="@+id/iv_item_handing_phone"-->
+        <!--android:layout_width="@dimen/dp_32"-->
+        <!--android:layout_height="@dimen/dp_32"-->
+        <!--android:src="@drawable/ic_phone_status"/>-->
 
-        </LinearLayout>
+        <!--<TextView-->
+        <!--android:id="@+id/tv_item_handing_phone_name"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:lines="1"-->
+        <!--android:ellipsize="end"-->
+        <!--android:layout_marginTop="@dimen/dp_4"-->
+        <!--android:gravity="center"-->
+        <!--android:background="@drawable/bg_ellipse_gay"-->
+        <!--android:text="@string/app_name"/>-->
+
+        <!--</LinearLayout>-->
+
+        <!--<LinearLayout-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_weight="1"-->
+        <!--android:gravity="center_horizontal"-->
+        <!--android:orientation="vertical">-->
+
+        <!--<ImageView-->
+        <!--android:id="@+id/iv_item_handing_start"-->
+        <!--android:layout_width="@dimen/dp_32"-->
+        <!--android:layout_height="@dimen/dp_32"-->
+        <!--android:src="@drawable/ic_start_status"/>-->
+
+        <!--<TextView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="@dimen/dp_4"-->
+        <!--android:text="@string/start"/>-->
+
+        <!--</LinearLayout>-->
 
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/tv_item_handing_modify"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/tv_item_handing_time"
-        android:layout_marginLeft="@dimen/dp_8"
-        android:layout_toEndOf="@+id/tv_item_handing_time"
-        android:layout_toRightOf="@+id/tv_item_handing_time"
-        android:text="@string/modify"
-        android:textColor="@color/colorRed"
-        android:visibility="gone"/>
 
     <TextView
         android:id="@+id/tv_item_handing_status"
