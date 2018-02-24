@@ -21,7 +21,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_1"
         android:layout_below="@+id/tv_item_handing_address"
-        android:layout_marginTop="@dimen/dp_8"
+        android:layout_marginTop="@dimen/dp_12"
         android:background="@color/color_cut_line"/>
 
     <LinearLayout
@@ -30,8 +30,8 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/tv_item_handing_name"
         android:layout_alignStart="@+id/tv_item_handing_name"
-        android:layout_marginBottom="@dimen/dp_4"
         android:layout_below="@+id/tv_item_handing_name"
+        android:layout_marginBottom="@dimen/dp_4"
         android:orientation="horizontal"
         android:textColor="@color/colorGray">
 
@@ -39,15 +39,15 @@
             android:id="@+id/tv_item_handing_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorGray"
-            android:text="orderNo"/>
+            android:text="orderNo"
+            android:textColor="@color/colorGray"/>
 
         <View
             android:layout_width="@dimen/dp_1"
             android:layout_height="@dimen/dp_12"
+            android:layout_gravity="center"
             android:layout_marginLeft="@dimen/dp_8"
             android:layout_marginRight="@dimen/dp_8"
-            android:layout_gravity="center"
             android:background="@color/colorGray"/>
 
         <TextView
@@ -69,128 +69,152 @@
 
     </LinearLayout>
 
+    <ImageView
+        android:id="@+id/iv_item_handing_address"
+        android:layout_width="@dimen/dp_24"
+        android:layout_height="@dimen/dp_24"
+        android:layout_alignLeft="@+id/ll_item_handing_1"
+        android:layout_alignStart="@+id/ll_item_handing_1"
+        android:layout_below="@+id/ll_item_handing_layout"
+        android:layout_marginLeft="@dimen/dp_4"
+        android:layout_marginStart="@dimen/dp_4"
+        android:padding="@dimen/dp_4"
+        android:src="@drawable/ic_address_item"/>
+
     <TextView
         android:id="@+id/tv_item_handing_address"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/tv_item_handing_content_title"
-        android:layout_alignStart="@+id/tv_item_handing_content_title"
-        android:layout_below="@+id/tv_item_handing_content_title"
+        android:layout_height="@dimen/dp_24"
+        android:layout_below="@+id/ll_item_handing_layout"
+        android:layout_toEndOf="@+id/iv_item_handing_address"
+        android:layout_toRightOf="@+id/iv_item_handing_address"
+        android:gravity="center_vertical"
         android:text="address"/>
 
-    <LinearLayout
-        android:id="@+id/ll_item_handing_remove"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/ll_item_handing_1"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/tv_item_pending_remove_content_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp_8"
-            android:layout_marginStart="@dimen/dp_8"
-            android:text="拆除："/>
-
-        <TextView
-            android:id="@+id/tv_item_pending_remove_content_1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/wire"/>
-
-        <TextView
-            android:id="@+id/tv_item_handing_remove_content_wire"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp_4"
-            android:layout_marginRight="@dimen/dp_4"
-            android:text="0"
-            android:textColor="@color/colorBlueTheme"/>
-
-        <TextView
-            android:id="@+id/tv_item_handing_remove_content_2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/ge_middle"/>
-
-        <TextView
-            android:id="@+id/tv_item_handing_remove_content_wireless"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp_4"
-            android:layout_marginRight="@dimen/dp_4"
-            android:text="0"
-            android:textColor="@color/colorBlueTheme"/>
-
-        <TextView
-            android:id="@+id/tv_item_handing_remove_content_3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/ge"/>
-
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/tv_item_handing_content_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <ImageView
+        android:id="@+id/iv_item_handing_order"
+        android:layout_width="@dimen/dp_24"
+        android:layout_height="@dimen/dp_24"
         android:layout_alignLeft="@+id/ll_item_handing_1"
         android:layout_alignStart="@+id/ll_item_handing_1"
-        android:layout_below="@+id/ll_item_handing_remove"
-        android:text="安装："/>
-
-    <TextView
-        android:id="@+id/tv_item_handing_content_1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/tv_item_handing_content_title"
         android:layout_below="@+id/ll_item_handing_1"
-        android:layout_toEndOf="@+id/tv_item_handing_content_title"
-        android:layout_toRightOf="@+id/tv_item_handing_content_title"
-        android:text="@string/wire"/>
-
-    <TextView
-        android:id="@+id/tv_item_handing_content_wire"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/tv_item_handing_content_1"
         android:layout_marginLeft="@dimen/dp_4"
-        android:layout_marginRight="@dimen/dp_4"
-        android:layout_toEndOf="@+id/tv_item_handing_content_1"
-        android:layout_toRightOf="@+id/tv_item_handing_content_1"
-        android:text="0"
-        android:textColor="@color/colorBlueTheme"/>
+        android:layout_marginStart="@dimen/dp_4"
+        android:layout_marginTop="@dimen/dp_8"
+        android:padding="@dimen/dp_4"
+        android:src="@drawable/ic_order_item"/>
 
-    <TextView
-        android:id="@+id/tv_item_handing_content_2"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/ll_item_handing_layout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/tv_item_handing_content_wire"
-        android:layout_toEndOf="@+id/tv_item_handing_content_wire"
-        android:layout_toRightOf="@+id/tv_item_handing_content_wire"
-        android:text="@string/ge_middle"/>
+        android:layout_alignTop="@+id/iv_item_handing_order"
+        android:layout_toEndOf="@id/iv_item_handing_order"
+        android:layout_toRightOf="@id/iv_item_handing_order"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tv_item_handing_content_wireless"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/tv_item_handing_content_2"
-        android:layout_marginLeft="@dimen/dp_4"
-        android:layout_marginRight="@dimen/dp_4"
-        android:layout_toEndOf="@+id/tv_item_handing_content_2"
-        android:layout_toRightOf="@+id/tv_item_handing_content_2"
-        android:text="0"
-        android:textColor="@color/colorBlueTheme"/>
+        <LinearLayout
+            android:id="@+id/ll_item_handing_remove"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_24"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:visibility="visible">
 
-    <TextView
-        android:id="@+id/tv_item_handing_content_3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/tv_item_handing_content_wireless"
-        android:layout_toEndOf="@+id/tv_item_handing_content_wireless"
-        android:layout_toRightOf="@+id/tv_item_handing_content_wireless"
-        android:text="@string/ge"/>
+            <TextView
+                android:id="@+id/tv_item_pending_remove_content_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="拆除："/>
+
+            <TextView
+                android:id="@+id/tv_item_pending_remove_content_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/wire"/>
+
+            <TextView
+                android:id="@+id/tv_item_handing_remove_content_wire"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_4"
+                android:layout_marginRight="@dimen/dp_4"
+                android:text="0"
+                android:textColor="@color/colorBlueTheme"/>
+
+            <TextView
+                android:id="@+id/tv_item_handing_remove_content_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ge_middle"/>
+
+            <TextView
+                android:id="@+id/tv_item_handing_remove_content_wireless"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_4"
+                android:layout_marginRight="@dimen/dp_4"
+                android:text="0"
+                android:textColor="@color/colorBlueTheme"/>
+
+            <TextView
+                android:id="@+id/tv_item_handing_remove_content_3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ge"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_item_handing_install"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_24"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_item_handing_content_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="安装："/>
+
+            <TextView
+                android:id="@+id/tv_item_handing_content_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/wire"/>
+
+            <TextView
+                android:id="@+id/tv_item_handing_content_wire"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_4"
+                android:layout_marginRight="@dimen/dp_4"
+                android:text="0"
+                android:textColor="@color/colorBlueTheme"/>
+
+            <TextView
+                android:id="@+id/tv_item_handing_content_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ge_middle"/>
+
+            <TextView
+                android:id="@+id/tv_item_handing_content_wireless"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_4"
+                android:layout_marginRight="@dimen/dp_4"
+                android:text="0"
+                android:textColor="@color/colorBlueTheme"/>
+
+            <TextView
+                android:id="@+id/tv_item_handing_content_3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ge"/>
+        </LinearLayout>
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/ll_item_handing_"
@@ -212,16 +236,21 @@
             android:ellipsize="end"
             android:gravity="center"
             android:lines="1"
+            android:maxEms="6"
             android:text="@string/app_name"/>
 
         <TextView
+            android:id="@+id/tv_item_handing_start"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp_8"
-            android:layout_marginStart="@dimen/dp_8"
+            android:layout_marginLeft="@dimen/dp_24"
+            android:layout_marginStart="@dimen/dp_24"
             android:layout_marginTop="@dimen/dp_4"
             android:background="@drawable/bg_ellipse_blue"
+            android:ellipsize="end"
             android:gravity="center"
+            android:lines="1"
+            android:maxEms="6"
             android:text="@string/start"
             android:textColor="@color/colorBlueTheme"/>
 

@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -76,11 +75,9 @@ public class HandingAdapter extends BaseAdapter {
             viewHolder.textViewWireless = contentView.findViewById(R.id.tv_item_handing_content_wireless);
             viewHolder.tvRemoveWireless = contentView.findViewById(R.id.tv_item_handing_remove_content_wireless);
             viewHolder.textViewStatue = contentView.findViewById(R.id.tv_item_handing_status);
+            viewHolder.tvStart = contentView.findViewById(R.id.tv_item_handing_start);
 
-            viewHolder.imageViewCall = contentView.findViewById(R.id.iv_item_handing_phone);
-            viewHolder.imageViewStart = contentView.findViewById(R.id.iv_item_handing_start);
             viewHolder.llRemove = contentView.findViewById(R.id.ll_item_handing_remove);
-            viewHolder.llCall = contentView.findViewById(R.id.ll_item_handing_call);
 
             contentView.setTag(viewHolder);
         } else {
@@ -119,33 +116,29 @@ public class HandingAdapter extends BaseAdapter {
             case 1: {
                 viewHolder.textViewStatue.setVisibility(View.VISIBLE);
                 viewHolder.textViewStatue.setText(R.string.pending_audit);
-                viewHolder.imageViewCall.setEnabled(false);
-                viewHolder.llCall.setEnabled(false);
-                viewHolder.imageViewStart.setEnabled(false);
+                viewHolder.textViewPhoneName.setEnabled(false);
+                viewHolder.tvStart.setEnabled(false);
                 break;
             }
             case 2: {
                 viewHolder.textViewStatue.setVisibility(View.VISIBLE);
                 viewHolder.textViewStatue.setText(R.string.audit_fault);
-                viewHolder.imageViewCall.setEnabled(true);
-                viewHolder.llCall.setEnabled(true);
-                viewHolder.imageViewStart.setEnabled(true);
+                viewHolder.textViewPhoneName.setEnabled(true);
+                viewHolder.tvStart.setEnabled(true);
                 break;
             }
             case 3: {
                 viewHolder.textViewStatue.setVisibility(View.GONE);
                 viewHolder.textViewStatue.setText("");
-                viewHolder.imageViewCall.setEnabled(true);
-                viewHolder.llCall.setEnabled(true);
-                viewHolder.imageViewStart.setEnabled(true);
+                viewHolder.textViewPhoneName.setEnabled(true);
+                viewHolder.tvStart.setEnabled(true);
                 break;
             }
             default: {
                 viewHolder.textViewStatue.setVisibility(View.GONE);
                 viewHolder.textViewStatue.setText("");
-                viewHolder.imageViewCall.setEnabled(true);
-                viewHolder.llCall.setEnabled(true);
-                viewHolder.imageViewStart.setEnabled(true);
+                viewHolder.textViewPhoneName.setEnabled(true);
+                viewHolder.tvStart.setEnabled(true);
                 Log.i(TAG, "getView: default" + data.getCheckStatus());
             }
         }
@@ -162,7 +155,7 @@ public class HandingAdapter extends BaseAdapter {
             viewHolder.textViewModify.setVisibility(View.GONE);
         }
 
-        viewHolder.imageViewCall.setOnClickListener(new View.OnClickListener() {
+        viewHolder.textViewPhoneName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (null == mOnItemListener) {
@@ -172,17 +165,7 @@ public class HandingAdapter extends BaseAdapter {
             }
         });
 
-        viewHolder.llCall.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (null == mOnItemListener) {
-                    throw new NullPointerException("OnStartClickListener is null");
-                }
-                mOnItemListener.onCall(position);
-            }
-        });
-
-        viewHolder.imageViewStart.setOnClickListener(new View.OnClickListener() {
+        viewHolder.tvStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // TODO: 2017/7/13 开始
@@ -235,10 +218,10 @@ public class HandingAdapter extends BaseAdapter {
     }
 
     private class ViewHolder {
-        private TextView textViewName, textViewTime, textViewAddress, textViewId, textViewTitle, textViewPhoneName, textViewModify, textViewWire, textViewWireless, textViewStatue;
+        private TextView textViewName, textViewTime, textViewAddress, textViewId, textViewTitle, textViewPhoneName
+                , textViewModify, textViewWire, textViewWireless, textViewStatue, tvStart;
         private TextView tvRemoveWire, tvRemoveWireless;
-        private ImageView imageViewCall, imageViewStart;
-        private LinearLayout llRemove, llCall;
+        private LinearLayout llRemove;
     }
 
     public interface OnItemListener {
