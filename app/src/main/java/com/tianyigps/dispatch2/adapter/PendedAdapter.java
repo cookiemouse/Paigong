@@ -6,8 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.tianyigps.dispatch2.R;
@@ -63,15 +61,11 @@ public class PendedAdapter extends BaseAdapter {
             viewHolder.tvTitle = contentView.findViewById(R.id.tv_item_pended_title);
             viewHolder.tvTime = contentView.findViewById(R.id.tv_item_pended_time);
             viewHolder.tvAddress = contentView.findViewById(R.id.tv_item_pended_address);
+            viewHolder.tvMap = contentView.findViewById(R.id.tv_item_pended_map);
             viewHolder.tvWorker = contentView.findViewById(R.id.tv_item_pended_phone_worker_name);
             viewHolder.tvContactName = contentView.findViewById(R.id.tv_item_pended_contact);
             viewHolder.tvStatus = contentView.findViewById(R.id.tv_item_pended_order_status);
             viewHolder.tvModify = contentView.findViewById(R.id.tv_item_pended_modify);
-            viewHolder.ivPhone = contentView.findViewById(R.id.iv_item_pended_phone);
-            viewHolder.ivContact = contentView.findViewById(R.id.iv_item_pended_contact);
-            viewHolder.ivMap = contentView.findViewById(R.id.iv_item_pended_map);
-            viewHolder.llWorker = contentView.findViewById(R.id.ll_item_pended_worker);
-            viewHolder.llContact = contentView.findViewById(R.id.ll_item_pended_contact);
 
             contentView.setTag(viewHolder);
         } else {
@@ -82,9 +76,9 @@ public class PendedAdapter extends BaseAdapter {
         if (Data.STATUS_2 == orderStatus
                 || Data.STATUS_4 == orderStatus
                 || Data.STATUS_5 == orderStatus) {
-            viewHolder.llWorker.setVisibility(View.GONE);
+            viewHolder.tvWorker.setVisibility(View.GONE);
         } else {
-            viewHolder.llWorker.setVisibility(View.VISIBLE);
+            viewHolder.tvWorker.setVisibility(View.VISIBLE);
         }
         viewHolder.tvStatus.setText(getOrderStatus(data.getOrderStatus()));
 
@@ -99,17 +93,7 @@ public class PendedAdapter extends BaseAdapter {
             viewHolder.tvModify.setVisibility(View.GONE);
         }
 
-        viewHolder.ivPhone.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (null == mOnItemListener) {
-                    throw new NullPointerException("OnItemListener is null");
-                }
-                mOnItemListener.onCall(position);
-            }
-        });
-
-        viewHolder.ivContact.setOnClickListener(new View.OnClickListener() {
+        viewHolder.tvContactName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (null == mOnItemListener) {
@@ -119,7 +103,7 @@ public class PendedAdapter extends BaseAdapter {
             }
         });
 
-        viewHolder.llWorker.setOnClickListener(new View.OnClickListener() {
+        viewHolder.tvWorker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (null == mOnItemListener) {
@@ -129,17 +113,7 @@ public class PendedAdapter extends BaseAdapter {
             }
         });
 
-        viewHolder.llContact.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (null == mOnItemListener) {
-                    throw new NullPointerException("OnItemListener is null");
-                }
-                mOnItemListener.onContact(position);
-            }
-        });
-
-        viewHolder.ivMap.setOnClickListener(new View.OnClickListener() {
+        viewHolder.tvMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (null == mOnItemListener) {
@@ -164,8 +138,7 @@ public class PendedAdapter extends BaseAdapter {
 
     private class ViewHolder {
         TextView tvTitle, tvTime, tvAddress, tvWorker, tvContactName, tvStatus, tvModify;
-        ImageView ivPhone, ivContact, ivMap;
-        LinearLayout llWorker, llContact;
+        TextView tvMap;
     }
 
     //  订单状态
