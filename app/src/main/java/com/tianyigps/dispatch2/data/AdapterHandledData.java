@@ -5,13 +5,14 @@ package com.tianyigps.dispatch2.data;
  */
 
 public class AdapterHandledData {
-    private String name, time, address, id, orderType;
+    private String name, time, address, id;
+    private int orderType;
     private int online, lineLess;
-
+    private int wireRemove, wirelessRemove;
     private int lastId;
 
-    public AdapterHandledData(String name, String time, String address, String id, String orderType
-            , int online, int lineLess, int lastId) {
+    public AdapterHandledData(String name, String time, String address, String id, int orderType
+            , int online, int lineLess, int wireRemove, int wirelessRemove, int lastId) {
         this.name = name;
         this.time = time;
         this.address = address;
@@ -19,6 +20,8 @@ public class AdapterHandledData {
         this.orderType = orderType;
         this.online = online;
         this.lineLess = lineLess;
+        this.wireRemove = wireRemove;
+        this.wirelessRemove = wirelessRemove;
         this.lastId = lastId;
     }
 
@@ -54,11 +57,11 @@ public class AdapterHandledData {
         this.id = id;
     }
 
-    public String getOrderType() {
+    public int getOrderType() {
         return orderType;
     }
 
-    public void setOrderType(String orderType) {
+    public void setOrderType(int orderType) {
         this.orderType = orderType;
     }
 
@@ -84,5 +87,21 @@ public class AdapterHandledData {
 
     public void setLastId(int lastId) {
         this.lastId = lastId;
+    }
+
+    public int getWireRemove() {
+        return wireRemove;
+    }
+
+    public void setWireRemove(int wireRemove) {
+        this.wireRemove = wireRemove;
+    }
+
+    public int getWirelessRemove() {
+        return wirelessRemove;
+    }
+
+    public void setWirelessRemove(int wirelessRemove) {
+        this.wirelessRemove = wirelessRemove;
     }
 }

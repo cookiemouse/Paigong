@@ -302,40 +302,20 @@ public class HandledFragment extends Fragment {
                 }
                 for (WorkerHandedBean.ObjBean objBean : workerHandedBean.getObj()) {
 
-                    String orderType;
                     int wire, wireless;
-                    switch (objBean.getOrderType()) {
-                        case 1: {
-                            orderType = "安装：";
-                            wire = objBean.getFinishWiredNum();
-                            wireless = objBean.getFinishWirelessNum();
-                            break;
-                        }
-                        case 2: {
-                            orderType = "维修：";
-                            wire = objBean.getFinishWiredNum();
-                            wireless = objBean.getFinishWirelessNum();
-                            break;
-                        }
-                        case 3: {
-                            orderType = "拆改：";
-                            wire = objBean.getRemoveFinishWiredNum();
-                            wireless = objBean.getRemoveFinishWirelessNum();
-                            break;
-                        }
-                        default: {
-                            orderType = "安装：";
-                            wire = 0;
-                            wireless = 0;
-                            Log.i(TAG, "onResponse: default");
-                        }
-                    }
+                    int wireRemove, wirelessRemove;
+                    wire = objBean.getFinishWiredNum();
+                    wireless = objBean.getFinishWirelessNum();
+                    wireRemove = objBean.getRemoveFinishWiredNum();
+                    wirelessRemove = objBean.getRemoveFinishWirelessNum();
 
                     mAdapterHandledDataList.add(new AdapterHandledData(objBean.getCustName()
                             , new TimeFormatU().millisToDate2(objBean.getDoorTime())
                             , objBean.getProvince() + objBean.getCity() + objBean.getDistrict() + objBean.getDetail()
                             , objBean.getOrderNo()
-                            , orderType, wire, wireless
+                            , objBean.getOrderType()
+                            , wire, wireless
+                            , wireRemove, wirelessRemove
                             , objBean.getOrderId()));
                 }
 
