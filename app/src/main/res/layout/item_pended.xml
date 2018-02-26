@@ -36,13 +36,15 @@
         android:layout_alignStart="@+id/tv_item_pended_title"
         android:layout_marginLeft="@dimen/dp_4"
         android:layout_marginStart="@dimen/dp_4"
-        android:padding="@dimen/dp_4"
+        android:paddingLeft="@dimen/dp_4"
+        android:paddingRight="@dimen/dp_4"
+        android:paddingBottom="@dimen/dp_4"
         android:src="@drawable/ic_address_item"/>
 
     <TextView
         android:id="@+id/tv_item_pended_address"
         android:layout_width="wrap_content"
-        android:layout_height="@dimen/dp_24"
+        android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:layout_toEndOf="@+id/iv_item_pended_address"
         android:layout_toRightOf="@+id/iv_item_pended_address"

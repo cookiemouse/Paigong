@@ -118,6 +118,7 @@ public class HandingAdapter extends BaseAdapter {
                 viewHolder.textViewStatue.setText(R.string.pending_audit);
                 viewHolder.textViewPhoneName.setEnabled(false);
                 viewHolder.tvStart.setEnabled(false);
+                viewHolder.tvStart.setTextColor(context.getResources().getColor(R.color.colorGray));
                 break;
             }
             case 2: {
@@ -125,6 +126,7 @@ public class HandingAdapter extends BaseAdapter {
                 viewHolder.textViewStatue.setText(R.string.audit_fault);
                 viewHolder.textViewPhoneName.setEnabled(true);
                 viewHolder.tvStart.setEnabled(true);
+                viewHolder.tvStart.setTextColor(context.getResources().getColor(R.color.colorBlueTheme));
                 break;
             }
             case 3: {
@@ -132,6 +134,7 @@ public class HandingAdapter extends BaseAdapter {
                 viewHolder.textViewStatue.setText("");
                 viewHolder.textViewPhoneName.setEnabled(true);
                 viewHolder.tvStart.setEnabled(true);
+                viewHolder.tvStart.setTextColor(context.getResources().getColor(R.color.colorBlueTheme));
                 break;
             }
             default: {
@@ -139,6 +142,7 @@ public class HandingAdapter extends BaseAdapter {
                 viewHolder.textViewStatue.setText("");
                 viewHolder.textViewPhoneName.setEnabled(true);
                 viewHolder.tvStart.setEnabled(true);
+                viewHolder.tvStart.setTextColor(context.getResources().getColor(R.color.colorBlueTheme));
                 Log.i(TAG, "getView: default" + data.getCheckStatus());
             }
         }
