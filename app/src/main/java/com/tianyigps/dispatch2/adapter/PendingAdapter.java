@@ -1,14 +1,13 @@
 package com.tianyigps.dispatch2.adapter;
 
 import android.content.Context;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.tianyigps.dispatch2.R;
@@ -69,39 +68,23 @@ public class PendingAdapter extends BaseAdapter {
             viewHolder = new ViewHolder();
             view = LayoutInflater.from(context).inflate(R.layout.item_pending, null);
 
-            viewHolder.imageViewCall = view.findViewById(R.id.iv_item_pending_phone);
-            viewHolder.imageViewLocate = view.findViewById(R.id.iv_item_pending_map);
             viewHolder.tvOrderNo = view.findViewById(R.id.tv_item_pending_id);
             viewHolder.tvName = view.findViewById(R.id.tv_item_pending_name);
             viewHolder.tvTime = view.findViewById(R.id.tv_item_pending_time);
             viewHolder.tvAddress = view.findViewById(R.id.tv_item_pending_address);
-            viewHolder.tvOrderType = view.findViewById(R.id.tv_item_pending_content_title);
-            viewHolder.tvWire = view.findViewById(R.id.tv_item_pending_content_wire);
-            viewHolder.tvWireless = view.findViewById(R.id.tv_item_pending_content_wireless);
-            viewHolder.imageViewPend = view.findViewById(R.id.iv_item_pending_pend);
-            viewHolder.tvWorkerName = view.findViewById(R.id.tv_item_pending_phone_name);
-            viewHolder.llRemove = view.findViewById(R.id.ll_item_pending_remove);
-            viewHolder.llContact = view.findViewById(R.id.ll_item_pending_contact);
-            viewHolder.llPend = view.findViewById(R.id.ll_item_pending_pend);
-            viewHolder.llModify = view.findViewById(R.id.ll_item_pending_modify);
-            viewHolder.llInstallComplete = view.findViewById(R.id.ll_item_pending_install_complete);
-            viewHolder.llRemoveComplete = view.findViewById(R.id.ll_item_pending_remove_complete);
-            viewHolder.tvWireRemove = view.findViewById(R.id.tv_item_pending_remove_content_wire);
-            viewHolder.tvWirelessRemove = view.findViewById(R.id.tv_item_pending_remove_content_wireless);
             viewHolder.tvStatus = view.findViewById(R.id.tv_item_pending_order_status);
-            viewHolder.tvModifyDate = view.findViewById(R.id.tv_item_pending_modify_date);
-            viewHolder.tvModifyReason = view.findViewById(R.id.tv_item_pending_modify_reason);
-            viewHolder.tvModify = view.findViewById(R.id.tv_item_pending_modify);
-            viewHolder.tvRed = view.findViewById(R.id.tv_item_pending_red);
-            viewHolder.tvBackReason = view.findViewById(R.id.tv_item_pending_back);
-            viewHolder.rlContact = view.findViewById(R.id.rl_item_pending_contact);
-            viewHolder.tvContactPhone = view.findViewById(R.id.tv_item_pending_rl_contact_phone);
-            viewHolder.tvJobNoName = view.findViewById(R.id.tv_item_pending_rl_contact_jobNo_name);
-            viewHolder.tvRemoveTitle = view.findViewById(R.id.tv_item_pending_remove_content_title);
-            viewHolder.tvWireC = view.findViewById(R.id.tv_item_pending_install_content_wire_complete);
-            viewHolder.tvWirelessC = view.findViewById(R.id.tv_item_pending_install_content_wireless_complete);
-            viewHolder.tvRemoveWireC = view.findViewById(R.id.tv_item_pending_remove_content_wire_complete);
-            viewHolder.tvRemoveWirelessC = view.findViewById(R.id.tv_item_pending_remove_content_wireless_complete);
+            viewHolder.tvContact = view.findViewById(R.id.tv_item_pending_phone_name);
+            viewHolder.tvMap = view.findViewById(R.id.tv_item_pending_map);
+            viewHolder.tvPend = view.findViewById(R.id.tv_item_pending_pend);
+
+            viewHolder.tvOrderInfo = view.findViewById(R.id.tv_item_pending_order);
+            viewHolder.tvPart = view.findViewById(R.id.tv_item_pending_part_finish);
+            viewHolder.tvEngineer = view.findViewById(R.id.tv_item_pending_engineer);
+
+            viewHolder.trRefuse = view.findViewById(R.id.tr_item_pending_refuse);
+            viewHolder.trEngineer = view.findViewById(R.id.tr_item_pending_engineer);
+            viewHolder.trModify = view.findViewById(R.id.tr_item_pending_modify);
+            viewHolder.trPart = view.findViewById(R.id.tr_item_pending_part_finish);
 
             view.setTag(viewHolder);
         } else {
@@ -112,54 +95,57 @@ public class PendingAdapter extends BaseAdapter {
         viewHolder.tvName.setText(data.getName());
         viewHolder.tvTime.setText(new TimeFormatU().millisToDate2(data.getTime()));
         viewHolder.tvAddress.setText(data.getAddress());
-        viewHolder.tvWire.setText("" + data.getLineNumber());
-        viewHolder.tvWireless.setText("" + data.getLinelessNumber());
-        viewHolder.tvWorkerName.setText(data.getContactName());
-        viewHolder.tvModifyDate.setText(data.getModifyTime());
-        viewHolder.tvModifyReason.setText(data.getModifyReason());
-        viewHolder.tvWireC.setText("" + data.getFinishWiredNum());
-        viewHolder.tvWirelessC.setText("" + data.getFinishWirelessNum());
-        viewHolder.tvRemoveWireC.setText("" + data.getRemoFinWiredNum());
-        viewHolder.tvRemoveWirelessC.setText("" + data.getRemoFinWirelessNum());
+//        viewHolder.tvWire.setText("" + data.getLineNumber());
+//        viewHolder.tvWireless.setText("" + data.getLinelessNumber());
+        viewHolder.tvPart.setText(data.getModifyReason());
 
         if (data.getReviseFlag() == 1) {
-            viewHolder.tvModify.setVisibility(View.VISIBLE);
+            viewHolder.trModify.setVisibility(View.VISIBLE);
         } else {
-            viewHolder.tvModify.setVisibility(View.GONE);
+            viewHolder.trModify.setVisibility(View.GONE);
         }
 
         if (data.getReviseStatus() == 1) {
-            viewHolder.tvRed.setVisibility(View.VISIBLE);
-            viewHolder.tvModify.setVisibility(View.GONE);
+            viewHolder.trRefuse.setVisibility(View.VISIBLE);
+            viewHolder.trModify.setVisibility(View.GONE);
         } else {
-            viewHolder.tvRed.setVisibility(View.GONE);
+            viewHolder.trRefuse.setVisibility(View.GONE);
         }
 
-        String orderType;
+        String orderInfo;
         switch (data.getOrderType()) {
             case 1: {
-                orderType = "安装：";
-                viewHolder.llRemove.setVisibility(View.GONE);
+                orderInfo = "安装订单：有线 <font color='#3cabfa'>"
+                        + data.getLineNumber() + "</font> 个，无线 <font color='#3cabfa'>"
+                        + data.getLinelessNumber() + "</font> 个";
                 break;
             }
             case 2: {
-                orderType = "维修：";
-                viewHolder.llRemove.setVisibility(View.GONE);
+                orderInfo = "维修订单：有线 <font color='#3cabfa'>"
+                        + data.getLineNumber() + "</font> 个，无线 <font color='#3cabfa'>"
+                        + data.getLinelessNumber() + "</font> 个";
                 break;
             }
             case 3: {
-                orderType = "安装：";
-                viewHolder.llRemove.setVisibility(View.VISIBLE);
-                viewHolder.tvRemoveTitle.setText("拆除：");
-                viewHolder.tvWireRemove.setText("" + data.getWireRemove());
-                viewHolder.tvWirelessRemove.setText("" + data.getWirelessRemove());
+                orderInfo = "拆除订单：有线 <font color='#3cabfa'>"
+                        + data.getWireRemove() + "</font> 个，无线 <font color='#3cabfa'>"
+                        + data.getWirelessRemove() + "</font> 个"
+                        + "<br>"
+                        + "安装订单：有线 <font color='#3cabfa'>"
+                        + data.getLineNumber() + "</font> 个，无线 <font color='#3cabfa'>"
+                        + data.getLinelessNumber() + "</font> 个";
                 break;
             }
             default: {
-                orderType = "安装：";
+                orderInfo = "安装订单：有线 <font color='#3cabfa'>"
+                        + data.getLineNumber() + "</font> 个，无线 <font color='#3cabfa'>"
+                        + data.getLinelessNumber() + "</font> 个";
                 Log.i(TAG, "onSuccess: orderType.default-->" + data.getOrderType());
             }
         }
+
+        CharSequence charSequence= Html.fromHtml(orderInfo);
+        viewHolder.tvOrderInfo.setText(charSequence);
 
 //        if (Data.STATUS_99 == data.getOrderStatus()) {
 //            viewHolder.tvStatus.setText("待审核");
@@ -169,75 +155,100 @@ public class PendingAdapter extends BaseAdapter {
 //        }
         viewHolder.tvStatus.setText(getOrderStatus(data.getOrderStatus()));
         if (Data.STATUS_6 == data.getOrderStatus()) {
-            viewHolder.rlContact.setVisibility(View.VISIBLE);
+            viewHolder.trEngineer.setVisibility(View.VISIBLE);
             String reason = "退回原因：" + data.getBackReason();
-            viewHolder.tvBackReason.setText(reason);
+            viewHolder.tvPart.setText(reason);
 
-            viewHolder.tvBackReason.setVisibility(View.VISIBLE);
-            viewHolder.tvContactPhone.setText(data.getPhoneNumber());
-            viewHolder.tvJobNoName.setText(data.getJobNo() + " " + data.geteName());
+            viewHolder.trPart.setVisibility(View.VISIBLE);
+            viewHolder.tvContact.setText(data.getContactName());
+            CharSequence charSequence_call= Html.fromHtml(data.getJobNo() + "&ensp;" + data.geteName()
+                    + "&ensp;|&ensp;<font color='#3cabfa'>打电话</font>");
+            viewHolder.tvEngineer.setText(charSequence_call);
         } else {
-            viewHolder.rlContact.setVisibility(View.GONE);
-            viewHolder.tvBackReason.setVisibility(View.GONE);
+            viewHolder.trEngineer.setVisibility(View.GONE);
+            viewHolder.trPart.setVisibility(View.GONE);
         }
 
         if (Data.NODE_2 == data.getNode()) {
             viewHolder.tvStatus.setText("待审核");
-            viewHolder.llPend.setVisibility(View.GONE);
-            viewHolder.tvBackReason.setVisibility(View.GONE);
-            viewHolder.llModify.setVisibility(View.VISIBLE);
+            viewHolder.tvPend.setVisibility(View.GONE);
+            viewHolder.trPart.setVisibility(View.GONE);
+//            viewHolder.llModify.setVisibility(View.VISIBLE);
         } else {
-            viewHolder.llPend.setVisibility(View.VISIBLE);
-            viewHolder.llModify.setVisibility(View.GONE);
+            viewHolder.tvPend.setVisibility(View.VISIBLE);
+//            viewHolder.llModify.setVisibility(View.GONE);
         }
 
         if (Data.NODE_12 == data.getNode()) {
-            viewHolder.llPend.setVisibility(View.GONE);
+            viewHolder.tvPend.setVisibility(View.GONE);
             viewHolder.tvStatus.setText("待审核");
-            viewHolder.tvModifyReason.setVisibility(View.GONE);
-            viewHolder.tvModifyDate.setVisibility(View.GONE);
+            viewHolder.trPart.setVisibility(View.GONE);
             String reason = "部分完成：" + data.getModifyReason();
-            viewHolder.tvBackReason.setText(reason);
-            viewHolder.tvBackReason.setVisibility(View.VISIBLE);
-            viewHolder.tvContactPhone.setText(data.getPhoneNumber());
-            viewHolder.tvJobNoName.setText(data.getJobNo() + " " + data.geteName());
-            viewHolder.rlContact.setVisibility(View.VISIBLE);
-
-            viewHolder.llInstallComplete.setVisibility(View.VISIBLE);
+            viewHolder.tvPart.setText(reason);
+            viewHolder.trPart.setVisibility(View.VISIBLE);
+            viewHolder.tvContact.setText(data.getContactName());
+//            <a href="tel:021-60297588">021-60297588</a>
+            CharSequence charSequence_call= Html.fromHtml(data.getJobNo() + "&ensp;" + data.geteName()
+                    + "&ensp;|&ensp;<font color='#3cabfa'>打电话</font>");
+            viewHolder.tvEngineer.setText(charSequence_call);
+            viewHolder.trEngineer.setVisibility(View.VISIBLE);
 
             switch (data.getOrderType()) {
                 case 1: {
-                    orderType = "安装 派单：";
-                    viewHolder.llRemoveComplete.setVisibility(View.GONE);
+                    orderInfo = "安装&ensp;派单：有线 <font color='#3cabfa'>"
+                            + data.getLineNumber() + "</font> 个，无线 <font color='#3cabfa'>"
+                            + data.getLinelessNumber() + "</font> 个"
+                            + "<br>"
+                            + "&emsp;&emsp;&ensp;"
+                            + "完成：有线 <font color='#3cabfa'>"
+                            + data.getFinishWiredNum() + "</font> 个，无线 <font color='#3cabfa'>"
+                            + data.getFinishWirelessNum() + "</font> 个";
                     break;
                 }
                 case 2: {
-                    orderType = "维修 派单：";
-                    viewHolder.llRemoveComplete.setVisibility(View.GONE);
+                    orderInfo = "维修&ensp;派单：有线 <font color='#3cabfa'>"
+                            + data.getLineNumber() + "</font> 个，无线 <font color='#3cabfa'>"
+                            + data.getLinelessNumber() + "</font> 个"
+                            + "<br>"
+                            + "&emsp;&emsp;&ensp;"
+                            + "完成：有线 <font color='#3cabfa'>"
+                            + data.getFinishWiredNum() + "</font> 个，无线 <font color='#3cabfa'>"
+                            + data.getFinishWirelessNum() + "</font> 个";
                     break;
                 }
                 case 3: {
-                    orderType = "安装 派单：";
-                    viewHolder.tvRemoveTitle.setText("拆除 派单：");
-                    viewHolder.llRemoveComplete.setVisibility(View.VISIBLE);
+                    orderInfo = "拆除&ensp;派单：有线 <font color='#3cabfa'>"
+                            + data.getWireRemove() + "</font> 个，无线 <font color='#3cabfa'>"
+                            + data.getWirelessRemove() + "</font> 个"
+                            + "<br>"
+                            + "&emsp;&emsp;&ensp;"
+                            + "完成：有线 <font color='#3cabfa'>"
+                            + data.getRemoFinWiredNum() + "</font> 个，无线 <font color='#3cabfa'>"
+                            + data.getRemoFinWirelessNum() + "</font> 个"
+                            + "<br>"
+                            + "安装&ensp;派单：有线 <font color='#3cabfa'>"
+                            + data.getLineNumber() + "</font> 个，无线 <font color='#3cabfa'>"
+                            + data.getLinelessNumber() + "</font> 个"
+                            + "<br>"
+                            + "&emsp;&emsp;&ensp;"
+                            + "完成：有线 <font color='#3cabfa'>"
+                            + data.getFinishWiredNum() + "</font> 个，无线 <font color='#3cabfa'>"
+                            + data.getFinishWirelessNum() + "</font> 个";
                     break;
                 }
                 default: {
-                    orderType = "安装 派单：";
+                    orderInfo = "安装 派单：";
                     Log.i(TAG, "onSuccess: orderType.default-->" + data.getOrderType());
                 }
             }
         } else {
-            viewHolder.tvModifyReason.setVisibility(View.VISIBLE);
-            viewHolder.tvModifyDate.setVisibility(View.VISIBLE);
-
-            viewHolder.llInstallComplete.setVisibility(View.GONE);
-            viewHolder.llRemoveComplete.setVisibility(View.GONE);
+            viewHolder.trPart.setVisibility(View.VISIBLE);
         }
 
-        viewHolder.tvOrderType.setText(orderType);
+        charSequence= Html.fromHtml(orderInfo);
+        viewHolder.tvOrderInfo.setText(charSequence);
 
-        viewHolder.imageViewCall.setOnClickListener(new View.OnClickListener() {
+        viewHolder.tvContact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (null == mOnItemListener) {
@@ -247,17 +258,17 @@ public class PendingAdapter extends BaseAdapter {
             }
         });
 
-        viewHolder.llContact.setOnClickListener(new View.OnClickListener() {
+        viewHolder.tvEngineer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (null == mOnItemListener) {
                     throw new NullPointerException("OnItemListener is null");
                 }
-                mOnItemListener.onCall(position);
+                mOnItemListener.onContactCall(position);
             }
         });
 
-        viewHolder.imageViewLocate.setOnClickListener(new View.OnClickListener() {
+        viewHolder.tvMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (null == mOnItemListener) {
@@ -267,23 +278,13 @@ public class PendingAdapter extends BaseAdapter {
             }
         });
 
-        viewHolder.imageViewPend.setOnClickListener(new View.OnClickListener() {
+        viewHolder.tvPend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (null == mOnItemListener) {
                     throw new NullPointerException("OnItemListener is null");
                 }
                 mOnItemListener.onPend(position);
-            }
-        });
-
-        viewHolder.rlContact.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (null == mOnItemListener) {
-                    throw new NullPointerException("OnItemListener is null");
-                }
-                mOnItemListener.onContactCall(position);
             }
         });
 
@@ -329,17 +330,11 @@ public class PendingAdapter extends BaseAdapter {
     }
 
     private class ViewHolder {
-        private ImageView imageViewCall, imageViewLocate, imageViewPend;
-        private TextView tvOrderNo, tvName, tvTime, tvAddress, tvOrderType, tvWire, tvWireless, tvWorkerName, tvStatus;
-        private TextView tvWireRemove, tvWirelessRemove;
-        private TextView tvModifyDate, tvModifyReason;
-        private TextView tvModify, tvRed;
-        private TextView tvRemoveTitle;
-        private TextView tvBackReason;
-        private TextView tvWireC, tvWirelessC, tvRemoveWireC, tvRemoveWirelessC;
-        private LinearLayout llRemove, llContact, llPend, llModify, llInstallComplete, llRemoveComplete;
-        private RelativeLayout rlContact;
-        private TextView tvContactPhone, tvJobNoName;
+        private TextView tvOrderNo, tvName, tvTime, tvAddress, tvStatus;
+        private TextView tvContact, tvEngineer, tvMap, tvPend;
+        private TextView tvOrderInfo;
+        private TextView tvPart;
+        private TableRow trRefuse, trEngineer, trModify, trPart;
     }
 
     //  订单状态

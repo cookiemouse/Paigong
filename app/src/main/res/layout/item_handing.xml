@@ -66,7 +66,6 @@
             android:text="@string/modify"
             android:textColor="@color/colorRed"
             android:visibility="gone"/>
-
     </LinearLayout>
 
     <ImageView
