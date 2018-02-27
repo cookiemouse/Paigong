@@ -77,6 +77,8 @@ public class PendingAdapter extends BaseAdapter {
             viewHolder.tvMap = view.findViewById(R.id.tv_item_pending_map);
             viewHolder.tvPend = view.findViewById(R.id.tv_item_pending_pend);
 
+            viewHolder.tvModifyTitle = view.findViewById(R.id.tv_item_pending_modify_title);
+            viewHolder.tvModify = view.findViewById(R.id.tv_item_pending_modify);
             viewHolder.tvOrderInfo = view.findViewById(R.id.tv_item_pending_order);
             viewHolder.tvPart = view.findViewById(R.id.tv_item_pending_part_finish);
             viewHolder.tvEngineer = view.findViewById(R.id.tv_item_pending_engineer);
@@ -99,14 +101,14 @@ public class PendingAdapter extends BaseAdapter {
         viewHolder.tvPart.setText(data.getModifyReason());
 
         if (data.getReviseFlag() == 1) {
-            viewHolder.trModify.setVisibility(View.VISIBLE);
+            viewHolder.tvModifyTitle.setVisibility(View.VISIBLE);
         } else {
-            viewHolder.trModify.setVisibility(View.GONE);
+            viewHolder.tvModifyTitle.setVisibility(View.GONE);
         }
 
         if (data.getReviseStatus() == 1) {
             viewHolder.trRefuse.setVisibility(View.VISIBLE);
-            viewHolder.trModify.setVisibility(View.GONE);
+            viewHolder.tvModifyTitle.setVisibility(View.GONE);
         } else {
             viewHolder.trRefuse.setVisibility(View.GONE);
         }
@@ -153,11 +155,11 @@ public class PendingAdapter extends BaseAdapter {
 //            viewHolder.llContact.setVisibility(View.VISIBLE);
 //        }
         viewHolder.tvStatus.setText(getOrderStatus(data.getOrderStatus()));
+
         if (Data.STATUS_6 == data.getOrderStatus()) {
             viewHolder.trEngineer.setVisibility(View.VISIBLE);
             String reason = "退回原因：" + data.getBackReason();
             viewHolder.tvPart.setText(reason);
-
             viewHolder.trPart.setVisibility(View.VISIBLE);
             viewHolder.tvContact.setText(data.getContactName());
             CharSequence charSequence_call= Html.fromHtml(data.getJobNo() + "&ensp;" + data.geteName()
@@ -171,10 +173,13 @@ public class PendingAdapter extends BaseAdapter {
         if (Data.NODE_2 == data.getNode()) {
             viewHolder.tvStatus.setText("待审核");
             viewHolder.tvPend.setVisibility(View.GONE);
-            viewHolder.trPart.setVisibility(View.VISIBLE);
-        } else {
-            viewHolder.tvPend.setVisibility(View.VISIBLE);
             viewHolder.trPart.setVisibility(View.GONE);
+            viewHolder.trModify.setVisibility(View.VISIBLE);
+            String reason = "改约：" + data.getModifyTime() + " ["+ data.getBackReason() + "]";
+            viewHolder.tvModify.setText(reason);
+        } else {
+            viewHolder.trModify.setVisibility(View.GONE);
+            viewHolder.tvPend.setVisibility(View.VISIBLE);
         }
 
         if (Data.NODE_12 == data.getNode()) {
@@ -244,8 +249,6 @@ public class PendingAdapter extends BaseAdapter {
                     Log.i(TAG, "onSuccess: orderType.default-->" + data.getOrderType());
                 }
             }
-        } else {
-            viewHolder.trPart.setVisibility(View.VISIBLE);
         }
 
         charSequence= Html.fromHtml(orderInfo);
@@ -336,6 +339,8 @@ public class PendingAdapter extends BaseAdapter {
         private TextView tvOrderNo, tvName, tvTime, tvAddress, tvStatus;
         private TextView tvContact, tvEngineer, tvMap, tvPend;
         private TextView tvOrderInfo;
+        private TextView tvModifyTitle;
+        private TextView tvModify;
         private TextView tvPart;
         private TableRow trRefuse, trEngineer, trModify, trPart;
     }
