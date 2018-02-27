@@ -95,8 +95,7 @@ public class PendingAdapter extends BaseAdapter {
         viewHolder.tvName.setText(data.getName());
         viewHolder.tvTime.setText(new TimeFormatU().millisToDate2(data.getTime()));
         viewHolder.tvAddress.setText(data.getAddress());
-//        viewHolder.tvWire.setText("" + data.getLineNumber());
-//        viewHolder.tvWireless.setText("" + data.getLinelessNumber());
+        viewHolder.tvContact.setText(data.getContactName());
         viewHolder.tvPart.setText(data.getModifyReason());
 
         if (data.getReviseFlag() == 1) {
@@ -172,22 +171,19 @@ public class PendingAdapter extends BaseAdapter {
         if (Data.NODE_2 == data.getNode()) {
             viewHolder.tvStatus.setText("待审核");
             viewHolder.tvPend.setVisibility(View.GONE);
-            viewHolder.trPart.setVisibility(View.GONE);
-//            viewHolder.llModify.setVisibility(View.VISIBLE);
+            viewHolder.trPart.setVisibility(View.VISIBLE);
         } else {
             viewHolder.tvPend.setVisibility(View.VISIBLE);
-//            viewHolder.llModify.setVisibility(View.GONE);
+            viewHolder.trPart.setVisibility(View.GONE);
         }
 
         if (Data.NODE_12 == data.getNode()) {
             viewHolder.tvPend.setVisibility(View.GONE);
             viewHolder.tvStatus.setText("待审核");
-            viewHolder.trPart.setVisibility(View.GONE);
             String reason = "部分完成：" + data.getModifyReason();
             viewHolder.tvPart.setText(reason);
             viewHolder.trPart.setVisibility(View.VISIBLE);
             viewHolder.tvContact.setText(data.getContactName());
-//            <a href="tel:021-60297588">021-60297588</a>
             CharSequence charSequence_call= Html.fromHtml(data.getJobNo() + "&ensp;" + data.geteName()
                     + "&ensp;|&ensp;<font color='#3cabfa'>打电话</font>");
             viewHolder.tvEngineer.setText(charSequence_call);
@@ -237,7 +233,14 @@ public class PendingAdapter extends BaseAdapter {
                     break;
                 }
                 default: {
-                    orderInfo = "安装 派单：";
+                    orderInfo = "安装&ensp;派单：有线 <font color='#3cabfa'>"
+                            + data.getLineNumber() + "</font> 个，无线 <font color='#3cabfa'>"
+                            + data.getLinelessNumber() + "</font> 个"
+                            + "<br>"
+                            + "&emsp;&emsp;&ensp;"
+                            + "完成：有线 <font color='#3cabfa'>"
+                            + data.getFinishWiredNum() + "</font> 个，无线 <font color='#3cabfa'>"
+                            + data.getFinishWirelessNum() + "</font> 个";
                     Log.i(TAG, "onSuccess: orderType.default-->" + data.getOrderType());
                 }
             }
