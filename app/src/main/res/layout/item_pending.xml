@@ -197,7 +197,7 @@
         android:layout_height="@dimen/dp_1"
         android:layout_below="@+id/tl_item_pending"
         android:layout_marginTop="@dimen/dp_8"
-        android:background="@color/color_cut_line"/>
+        android:background="@color/color_cut_line_gray"/>
 
     <LinearLayout
         android:id="@+id/ll_item_pending_"

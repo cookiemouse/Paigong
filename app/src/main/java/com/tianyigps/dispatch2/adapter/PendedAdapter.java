@@ -66,6 +66,7 @@ public class PendedAdapter extends BaseAdapter {
             viewHolder.tvContactName = contentView.findViewById(R.id.tv_item_pended_contact);
             viewHolder.tvStatus = contentView.findViewById(R.id.tv_item_pended_order_status);
             viewHolder.tvModify = contentView.findViewById(R.id.tv_item_pended_modify);
+            viewHolder.tvOrderNo = contentView.findViewById(R.id.tv_item_pended_id);
 
             contentView.setTag(viewHolder);
         } else {
@@ -87,6 +88,7 @@ public class PendedAdapter extends BaseAdapter {
         viewHolder.tvAddress.setText(data.getAddress());
         viewHolder.tvWorker.setText(data.getWorker());
         viewHolder.tvContactName.setText(data.getContact());
+        viewHolder.tvOrderNo.setText(data.getOrderNo());
         if (data.getReviseFlag() == 1) {
             viewHolder.tvModify.setVisibility(View.VISIBLE);
         } else {
@@ -139,6 +141,7 @@ public class PendedAdapter extends BaseAdapter {
     private class ViewHolder {
         TextView tvTitle, tvTime, tvAddress, tvWorker, tvContactName, tvStatus, tvModify;
         TextView tvMap;
+        TextView tvOrderNo;
     }
 
     //  订单状态

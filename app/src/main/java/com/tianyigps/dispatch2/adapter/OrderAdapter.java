@@ -1,13 +1,12 @@
 package com.tianyigps.dispatch2.adapter;
 
 import android.content.Context;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.tianyigps.dispatch2.R;
@@ -70,20 +69,14 @@ public class OrderAdapter extends BaseAdapter {
             viewHolder.textViewTime = contentView.findViewById(R.id.tv_item_order_time);
             viewHolder.textViewAddress = contentView.findViewById(R.id.tv_item_order_address);
             viewHolder.textViewId = contentView.findViewById(R.id.tv_item_order_id);
-            viewHolder.textViewPhoneName = contentView.findViewById(R.id.tv_item_order_phone_name);
-            viewHolder.textViewLine = contentView.findViewById(R.id.tv_item_order_content_wire);
-            viewHolder.textViewLineless = contentView.findViewById(R.id.tv_item_order_content_wireless);
-            viewHolder.textViewContentTitle = contentView.findViewById(R.id.tv_item_order_content_title);
 
-            viewHolder.imageViewMap = contentView.findViewById(R.id.iv_item_order_map);
-            viewHolder.imageViewCall = contentView.findViewById(R.id.iv_item_order_phone);
-            viewHolder.imageViewSign = contentView.findViewById(R.id.iv_item_order_sign);
+            viewHolder.tvEngineer = contentView.findViewById(R.id.tv_item_order_engineer);
+            viewHolder.tvMap = contentView.findViewById(R.id.tv_item_order_map);
+            viewHolder.tvStart = contentView.findViewById(R.id.tv_item_order_start);
 
-            viewHolder.llRemove = contentView.findViewById(R.id.ll_item_order_remove);
-            viewHolder.llCall = contentView.findViewById(R.id.ll_item_order_call);
-            viewHolder.tvWireRemove = contentView.findViewById(R.id.tv_item_order_remove_content_wire);
-            viewHolder.tvWirelessRemove = contentView.findViewById(R.id.tv_item_order_remove_content_wireless);
-            viewHolder.tvRed = contentView.findViewById(R.id.tv_item_order_red);
+            viewHolder.tvOrder = contentView.findViewById(R.id.tv_item_order_order);
+
+            viewHolder.tvModify = contentView.findViewById(R.id.tv_item_order_modify);
             viewHolder.tvLate = contentView.findViewById(R.id.tv_item_order_late);
 
             contentView.setTag(viewHolder);
@@ -95,17 +88,12 @@ public class OrderAdapter extends BaseAdapter {
         viewHolder.textViewTime.setText(new TimeFormatU().millisToDate2(data.getTime()));
         viewHolder.textViewAddress.setText(data.getAddress());
         viewHolder.textViewId.setText(data.getId());
-        viewHolder.textViewPhoneName.setText(data.getPhoneName());
-
-        viewHolder.textViewLine.setText("" + data.getLineNumber());
-        viewHolder.textViewLineless.setText("" + data.getLinelessNumber());
-        viewHolder.tvWireRemove.setText("" + data.getWireRemove());
-        viewHolder.tvWirelessRemove.setText("" + data.getWirelessRemove());
+        viewHolder.tvEngineer.setText(data.getPhoneName());
 
         if (data.getReviseFlag() == 1) {
-            viewHolder.tvRed.setVisibility(View.VISIBLE);
+            viewHolder.tvModify.setVisibility(View.VISIBLE);
         } else {
-            viewHolder.tvRed.setVisibility(View.GONE);
+            viewHolder.tvModify.setVisibility(View.GONE);
         }
 
         if (currentTime >= data.getTime()) {
@@ -114,32 +102,42 @@ public class OrderAdapter extends BaseAdapter {
             viewHolder.tvLate.setVisibility(View.GONE);
         }
 
-        String orderType;
+        String orderInfo;
         switch (data.getOrderType()) {
             case 1: {
-                orderType = "安装：";
-                viewHolder.llRemove.setVisibility(View.GONE);
+                orderInfo = "安装订单：有线 <font color='#3cabfa'>"
+                        + data.getLineNumber() + "</font> 个，无线 <font color='#3cabfa'>"
+                        + data.getLinelessNumber() + "</font> 个";
                 break;
             }
             case 2: {
-                orderType = "维修：";
-                viewHolder.llRemove.setVisibility(View.GONE);
+                orderInfo = "维修订单：有线 <font color='#3cabfa'>"
+                        + data.getLineNumber() + "</font> 个，无线 <font color='#3cabfa'>"
+                        + data.getLinelessNumber() + "</font> 个";
                 break;
             }
             case 3: {
-                orderType = "安装：";
-                viewHolder.llRemove.setVisibility(View.VISIBLE);
+                orderInfo = "拆除订单：有线 <font color='#3cabfa'>"
+                        + data.getWireRemove() + "</font> 个，无线 <font color='#3cabfa'>"
+                        + data.getWirelessRemove() + "</font> 个"
+                        + "<br>"
+                        + "安装订单：有线 <font color='#3cabfa'>"
+                        + data.getLineNumber() + "</font> 个，无线 <font color='#3cabfa'>"
+                        + data.getLinelessNumber() + "</font> 个";
                 break;
             }
             default: {
-                orderType = "安装：";
+                orderInfo = "安装订单：有线 <font color='#3cabfa'>"
+                        + data.getLineNumber() + "</font> 个，无线 <font color='#3cabfa'>"
+                        + data.getLinelessNumber() + "</font> 个";
                 Log.i(TAG, "onResponse: default");
             }
         }
 
-        viewHolder.textViewContentTitle.setText(orderType);
+        CharSequence charSequence= Html.fromHtml(orderInfo);
+        viewHolder.tvOrder.setText(charSequence);
 
-        viewHolder.imageViewMap.setOnClickListener(new View.OnClickListener() {
+        viewHolder.tvMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // 2017/7/13 地图页
@@ -150,7 +148,7 @@ public class OrderAdapter extends BaseAdapter {
             }
         });
 
-        viewHolder.imageViewCall.setOnClickListener(new View.OnClickListener() {
+        viewHolder.tvEngineer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (null == mOnItemListener) {
@@ -160,17 +158,7 @@ public class OrderAdapter extends BaseAdapter {
             }
         });
 
-        viewHolder.llCall.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (null == mOnItemListener) {
-                    throw new NullPointerException("OnItemListener is null");
-                }
-                mOnItemListener.onCallClick(position);
-            }
-        });
-
-        viewHolder.imageViewSign.setOnClickListener(new View.OnClickListener() {
+        viewHolder.tvStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //  2017/7/13 签到
@@ -223,13 +211,10 @@ public class OrderAdapter extends BaseAdapter {
     }
 
     private class ViewHolder {
-        private TextView textViewName, textViewTime, textViewAddress, textViewId, textViewPhoneName, textViewLine, textViewLineless, textViewContentTitle;
-
-        private ImageView imageViewMap, imageViewCall, imageViewSign;
-
-        private LinearLayout llRemove, llCall;
-        private TextView tvWireRemove, tvWirelessRemove;
-        private TextView tvRed, tvLate;
+        private TextView textViewName, textViewTime, textViewAddress, textViewId;
+        private TextView tvModify, tvLate;
+        private TextView tvEngineer, tvMap, tvStart;
+        private TextView tvOrder;
     }
 
     public interface OnItemListener {

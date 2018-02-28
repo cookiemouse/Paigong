@@ -22,7 +22,7 @@
         android:layout_height="@dimen/dp_1"
         android:layout_below="@+id/tv_item_handing_address"
         android:layout_marginTop="@dimen/dp_12"
-        android:background="@color/color_cut_line"/>
+        android:background="@color/color_cut_line_gray"/>
 
     <LinearLayout
         android:id="@+id/ll_item_handing_1"
@@ -40,6 +40,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="orderNo"
+            android:textSize="@dimen/sp_13"
             android:textColor="@color/colorGray"/>
 
         <View
@@ -55,16 +56,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="time"
+            android:textSize="@dimen/sp_13"
             android:textColor="@color/colorGray"/>
 
         <TextView
             android:id="@+id/tv_item_handing_modify"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp_8"
-            android:layout_marginStart="@dimen/dp_8"
+            android:layout_marginLeft="@dimen/dp_4"
+            android:layout_marginStart="@dimen/dp_4"
             android:text="@string/modify"
-            android:textColor="@color/colorRed"
+            android:textSize="@dimen/sp_13"
+            android:textColor="@color/colorGray"
             android:visibility="gone"/>
     </LinearLayout>
 

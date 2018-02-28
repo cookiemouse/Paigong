@@ -5,6 +5,7 @@
     <color name="colorAccent">#ff4081</color>
 
     <color name="color_cut_line">#e2f3ff</color>
+    <color name="color_cut_line_gray">#CFD1D8</color>
 
     <!--原有色彩-->
     <color name="colorWhite">#FFFFFF</color>
