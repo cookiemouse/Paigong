@@ -555,13 +555,13 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
 
     //  获取报警信息
     private void getWarnInfo(String imei) {
-        showLoading();
+//        showLoading();
         mNetworkManager.getLocateWary(userName, token, imei);
     }
 
     //  获取目标位置
     private void getImeiLocation(String imei) {
-        showLoading();
+//        showLoading();
         mNetworkManager.getTerminalInfo(eid, token, imei, userName);
     }
 
