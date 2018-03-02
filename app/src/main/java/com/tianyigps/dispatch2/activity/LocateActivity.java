@@ -251,7 +251,7 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
                 break;
             }
             case R.id.tv_layout_map_control_warn:{
-                // TODO: 2018/3/2 跳转到报警记录页面
+                // 2018/3/2 跳转到报警记录页面
                 Intent intent = new Intent(LocateActivity.this, WarnInfoActivity.class);
                 intent.putExtra(Data.DATA_INTENT_LOCATE_IMEI, wholeImei);
                 startActivity(intent);

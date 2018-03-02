@@ -222,7 +222,8 @@
             android:name=".activity.ShowPicActivity"
             android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".activity.WarnInfoActivity">
+        <activity android:name=".activity.WarnInfoActivity"
+                  android:screenOrientation="portrait">
         </activity>
     </application>
 
