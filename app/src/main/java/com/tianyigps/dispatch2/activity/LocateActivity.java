@@ -77,6 +77,7 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
     private EditText mEditTextImei;
     private ImageView mImageViewScanner, mImageViewLocateIcon, mImageViewLocate;
     private TextView mTextViewLook, mTextViewAddress, mTextViewNormal, mTextViewSatellate, mTextViewFlush;
+    private TextView mTextViewWarn;
     private ListView mListViewWarn;
     private LinearLayout mLinearLayout;
 
@@ -135,9 +136,11 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
         if (mIsShow) {
             mTextViewLook.setVisibility(View.VISIBLE);
             mLinearLayout.setVisibility(View.VISIBLE);
+            mTextViewWarn.setVisibility(View.GONE);
         } else {
             mTextViewLook.setVisibility(View.GONE);
             mLinearLayout.setVisibility(View.GONE);
+            mTextViewWarn.setVisibility(View.VISIBLE);
         }
         myHandler.sendEmptyMessageDelayed(Data.MSG_5, 200);
     }
@@ -247,6 +250,12 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
                 }
                 break;
             }
+            case R.id.tv_layout_map_control_warn:{
+                // TODO: 2018/3/2 跳转到报警记录页面
+                Intent intent = new Intent(LocateActivity.this, WarnInfoActivity.class);
+                intent.putExtra(Data.DATA_INTENT_LOCATE_IMEI, wholeImei);
+                startActivity(intent);
+            }
             default: {
                 Log.i(TAG, "onSignClick: default");
             }
@@ -275,6 +284,7 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
         mTextViewNormal = findViewById(R.id.tv_layout_map_control_normal);
         mTextViewSatellate = findViewById(R.id.tv_layout_map_control_satellite);
         mTextViewFlush = findViewById(R.id.tv_layout_map_control_flush);
+        mTextViewWarn = findViewById(R.id.tv_layout_map_control_warn);
         mLinearLayout = findViewById(R.id.ll_activity_locate);
         mListViewWarn = findViewById(R.id.lv_activity_locate_warn);
 
@@ -313,6 +323,7 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
         mTextViewNormal.setOnClickListener(this);
         mTextViewSatellate.setOnClickListener(this);
         mTextViewFlush.setOnClickListener(this);
+        mTextViewWarn.setOnClickListener(this);
 
         mLocateManager.setOnReceiveLocationListener(new LocateManager.OnReceiveLocationListener() {
             @Override

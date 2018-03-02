@@ -27,21 +27,39 @@
         android:background="@drawable/bg_map_control_select"
         android:text="@string/map" />
 
-    <TextView
-        android:id="@+id/tv_layout_map_control_flush"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_gravity="center_horizontal"
-        android:background="@drawable/bg_button_flush"
-        android:paddingBottom="@dimen/dp_8"
-        android:paddingLeft="@dimen/dp_64"
-        android:paddingRight="@dimen/dp_64"
-        android:paddingTop="@dimen/dp_8"
-        android:text="@string/flush"
-        android:textColor="@color/colorWhite"
-        android:textSize="@dimen/sp_18" />
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_layout_map_control_flush"
+            android:layout_width="@dimen/dp_160"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:background="@drawable/bg_button_flush"
+            android:paddingBottom="@dimen/dp_8"
+            android:paddingTop="@dimen/dp_8"
+            android:text="@string/flush"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/sp_18" />
+
+        <TextView
+            android:id="@+id/tv_layout_map_control_warn"
+            android:layout_width="@dimen/dp_160"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:background="@drawable/bg_button_flush"
+            android:layout_marginTop="@dimen/dp_8"
+            android:paddingBottom="@dimen/dp_8"
+            android:paddingTop="@dimen/dp_8"
+            android:text="报警记录"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/sp_18" />
+
+    </LinearLayout>
 
     <ImageView
         android:id="@+id/iv_layout_map_control_locate"
