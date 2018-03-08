@@ -788,7 +788,7 @@ public class DatabaseManager {
         return false;
     }
 
-    //=====================维修========================华丽的分割线=======================车辆============================
+    //=====================维修========================华丽的分割线===========================车辆========================
 
     //  添加Car
     public void addCar(int idMain) {
@@ -1247,6 +1247,24 @@ public class DatabaseManager {
         }
     }
 
+    //  删，T
+    public void deleteTerByCarId(int carId) {
+        if (!terExistByCarId(carId)) {
+            return;
+        }
+        mSqLiteDatabase.beginTransaction();
+        try {
+            mSqLiteDatabase.delete(Data.DATA_TAB_INSTALL_TERMINAL
+                    , "carId=?"
+                    , new String[]{"" + carId});
+            mSqLiteDatabase.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.e(TAG, e + "SqliteDatabase delete error");
+        } finally {
+            mSqLiteDatabase.endTransaction();
+        }
+    }
+
     //  改，T
     public void modifyTer(String idMain, int carId) {
         if (!terExist(idMain)) {
@@ -1550,6 +1568,12 @@ public class DatabaseManager {
     //  查，T，重载
     public boolean terExistByTid(int tId) {
         Cursor cursor = getTer(tId);
+        return null != cursor && cursor.moveToFirst();
+    }
+
+    //  查，T，重载
+    public boolean terExistByCarId(int carId) {
+        Cursor cursor = getTerByCarId(carId);
         return null != cursor && cursor.moveToFirst();
     }
 

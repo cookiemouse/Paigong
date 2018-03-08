@@ -283,6 +283,8 @@ public class OperateRepairActivity extends BaseActivity {
 
     private void init() {
         this.setTitleText("维修");
+        this.setTitleRightButtonVisibilite(true);
+        this.setTitleRightButtonResource(R.drawable.ic_refresh);
 
         mSharedpreferenceManager = new SharedpreferenceManager(this);
         mLoadingDialogFragment = new LoadingDialogFragment();
@@ -357,6 +359,18 @@ public class OperateRepairActivity extends BaseActivity {
             @Override
             public void onClick() {
                 OperateRepairActivity.this.onBackPressed();
+            }
+        });
+
+        this.setOnTitleRightClickListener(new OnTitleRightClickListener() {
+            @Override
+            public void onClick() {
+                Log.i(TAG, "onClick: setOnTitleRightClickListener");
+//                mEditTextPosition.setText(null);
+//                mEditTextExplain.setText(null);
+//                mEditTextNewImei.setText(null);
+                mDatabaseManager.deleteRepair(tId);
+                mNetworkManager.getWorkerOrderInfoStart(eid, token, orderNo, userName);
             }
         });
 

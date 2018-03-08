@@ -448,6 +448,8 @@ public class OperateInstallActivity extends BaseActivity {
 
     private void init() {
         this.setTitleText("");
+        this.setTitleRightButtonVisibilite(true);
+        this.setTitleRightButtonResource(R.drawable.ic_refresh);
 
         Intent intent = getIntent();
         orderNo = intent.getStringExtra(Data.DATA_INTENT_ORDER_NO);
@@ -538,6 +540,24 @@ public class OperateInstallActivity extends BaseActivity {
             @Override
             public void onClick() {
                 onBackPressed();
+            }
+        });
+
+        this.setOnTitleRightClickListener(new OnTitleRightClickListener() {
+            @Override
+            public void onClick() {
+                Log.i(TAG, "onClick: setOnTitleRightClickListener");
+                mDatabaseManager.deleteCar(carId);
+                mDatabaseManager.deleteTerByCarId(carId);
+                mAdapterOperateInstallRecyclerDataList.clear();
+                mAdapterOperateInstallListDataList.clear();
+                for (int i = 0; i < wiredNum; i++) {
+                    mAdapterOperateInstallListDataList.add(new AdapterOperateInstallListData(true));
+                }
+                for (int i = 0; i < wirelessNum; i++) {
+                    mAdapterOperateInstallListDataList.add(new AdapterOperateInstallListData(false));
+                }
+                mNetworkManager.getWorkerOrderInfoStart(eid, token, orderNo, userName);
             }
         });
 

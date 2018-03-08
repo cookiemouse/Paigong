@@ -640,7 +640,7 @@ public class CustomSignActivity extends BaseActivity {
                 int tId = cursor.getInt(2);
                 Log.i(TAG, "deleteOrderInfo: orderNo-->" + orderNo + " ,carId-->" + carId + " ,tId-->" + tId);
                 mDatabaseManager.deleteTerByTid(tId);
-                mDatabaseManager.deleteCar(tId);
+                mDatabaseManager.deleteCar(carId);
                 mDatabaseManager.deleteRepair(tId);
 
             } while (cursor.moveToNext());
