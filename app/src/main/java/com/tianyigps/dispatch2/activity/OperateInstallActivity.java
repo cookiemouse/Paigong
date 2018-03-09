@@ -547,17 +547,7 @@ public class OperateInstallActivity extends BaseActivity {
             @Override
             public void onClick() {
                 Log.i(TAG, "onClick: setOnTitleRightClickListener");
-                mDatabaseManager.deleteCar(carId);
-                mDatabaseManager.deleteTerByCarId(carId);
-                mAdapterOperateInstallRecyclerDataList.clear();
-                mAdapterOperateInstallListDataList.clear();
-                for (int i = 0; i < wiredNum; i++) {
-                    mAdapterOperateInstallListDataList.add(new AdapterOperateInstallListData(true));
-                }
-                for (int i = 0; i < wirelessNum; i++) {
-                    mAdapterOperateInstallListDataList.add(new AdapterOperateInstallListData(false));
-                }
-                mNetworkManager.getWorkerOrderInfoStart(eid, token, orderNo, userName);
+                showResetDialog();
             }
         });
 
@@ -1750,6 +1740,47 @@ public class OperateInstallActivity extends BaseActivity {
                 dialog.dismiss();
             }
         });
+        cancle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+    }
+
+    //  重置对话框
+    private void showResetDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View view = LayoutInflater.from(this).inflate(R.layout.dialog_button_editable, null);
+        Button ensure = view.findViewById(R.id.btn_dialog_editable_ensure);
+        Button cancle = view.findViewById(R.id.btn_dialog_editable_cancel);
+        TextView textView = view.findViewById(R.id.tv_dialog_editable_msg);
+        textView.setText("刷新后已填信息将被清空，是否刷新?");
+        ensure.setText(R.string.flush);
+        builder.setView(view);
+
+        final AlertDialog dialog = builder.create();
+
+        ensure.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mDatabaseManager.deleteCar(carId);
+                mDatabaseManager.deleteTerByCarId(carId);
+                mAdapterOperateInstallRecyclerDataList.clear();
+                mAdapterOperateInstallListDataList.clear();
+                for (int i = 0; i < wiredNum; i++) {
+                    mAdapterOperateInstallListDataList.add(new AdapterOperateInstallListData(true));
+                }
+                for (int i = 0; i < wirelessNum; i++) {
+                    mAdapterOperateInstallListDataList.add(new AdapterOperateInstallListData(false));
+                }
+                mNetworkManager.getWorkerOrderInfoStart(eid, token, orderNo, userName);
+                dialog.dismiss();
+            }
+        });
+
         cancle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -8,39 +8,45 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
+        <TextView
+            android:id="@+id/tv_dialog_reason_title"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_40"
+            android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/dp_8"
+            android:layout_marginStart="@dimen/dp_8"
+            android:gravity="center"
+            android:text="改约时间："/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/dp_40"
-                android:layout_gravity="center"
-                android:layout_marginLeft="@dimen/dp_8"
-                android:gravity="center"
-                android:text="改约时间："/>
+        <TextView
+            android:id="@+id/tv_dialog_modify_title"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_40"
+            android:layout_gravity="center_vertical"
+            android:layout_toEndOf="@+id/tv_dialog_reason_title"
+            android:layout_toRightOf="@+id/tv_dialog_reason_title"
+            android:gravity="center"
+            android:text="请选择时间"
+            android:textColor="@color/colorGray"/>
 
+        <ImageView
+            android:id="@+id/iv_dialog_modify_title"
+            android:layout_width="@dimen/dp_40"
+            android:layout_height="@dimen/dp_40"
+            android:layout_gravity="center_horizontal"
+            android:layout_toEndOf="@+id/tv_dialog_modify_title"
+            android:layout_toRightOf="@+id/tv_dialog_modify_title"
+            android:padding="@dimen/dp_12"
+            android:src="@drawable/ic_calendar_date"/>
 
-            <TextView
-                android:id="@+id/tv_dialog_modify_title"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/dp_40"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:textColor="@color/colorGray"
-                android:text="请选择时间"/>
-
-            <ImageView
-                android:id="@+id/iv_dialog_modify_title"
-                android:layout_width="@dimen/dp_40"
-                android:layout_height="@dimen/dp_40"
-                android:layout_gravity="center_horizontal"
-                android:padding="@dimen/dp_12"
-                android:src="@drawable/ic_calendar_date"/>
-
-        </LinearLayout>
+        <View
+            android:layout_width="@dimen/dp_104"
+            android:layout_height="@dimen/px_1"
+            android:layout_below="@+id/tv_dialog_reason_title"
+            android:layout_toEndOf="@+id/tv_dialog_reason_title"
+            android:layout_toRightOf="@+id/tv_dialog_reason_title"
+            android:layout_marginTop="@dimen/dp_8_n"
+            android:background="@color/colorBlueTheme"/>
 
         <ImageView
             android:id="@+id/iv_dialog_modify_reason_cancel"
@@ -51,9 +57,9 @@
             android:layout_alignParentTop="true"
             android:layout_marginEnd="@dimen/dp_4"
             android:layout_marginRight="@dimen/dp_4"
+            android:gravity="center"
             android:padding="@dimen/dp_8"
-            android:src="@drawable/ic_delete_gray"
-            android:gravity="center"/>
+            android:src="@drawable/ic_delete_gray"/>
     </RelativeLayout>
 
     <EditText
@@ -62,11 +68,11 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/dp_8"
         android:background="@drawable/bg_edit"
-        android:hint="填写改约原因（必填）"
-        android:textColorHint="@color/colorGray"
-        android:textSize="@dimen/sp_14"
         android:gravity="start"
-        android:minHeight="@dimen/dp_120"/>
+        android:hint="填写改约原因（必填）"
+        android:minHeight="@dimen/dp_120"
+        android:textColorHint="@color/colorGray"
+        android:textSize="@dimen/sp_14"/>
 
     <TextView
         android:id="@+id/tv_dialog_modify_reason_info"
@@ -81,10 +87,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="@dimen/dp_16"
         android:layout_marginLeft="@dimen/dp_32"
         android:layout_marginRight="@dimen/dp_32"
         android:layout_marginTop="@dimen/dp_8"
-        android:layout_marginBottom="@dimen/dp_16"
         android:background="@drawable/bg_button_flush"
         android:text="@string/submit"
         android:textColor="@color/colorWhite"/>

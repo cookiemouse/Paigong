@@ -369,8 +369,7 @@ public class OperateRepairActivity extends BaseActivity {
 //                mEditTextPosition.setText(null);
 //                mEditTextExplain.setText(null);
 //                mEditTextNewImei.setText(null);
-                mDatabaseManager.deleteRepair(tId);
-                mNetworkManager.getWorkerOrderInfoStart(eid, token, orderNo, userName);
+                showResetDialog();
             }
         });
 
@@ -1143,6 +1142,38 @@ public class OperateRepairActivity extends BaseActivity {
         if (!mLoadingDialogFragment.isAdded()) {
             mLoadingDialogFragment.show(getFragmentManager(), "LoadingFragment");
         }
+    }
+
+    //  重置对话框
+    private void showResetDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View view = LayoutInflater.from(this).inflate(R.layout.dialog_button_editable, null);
+        Button ensure = view.findViewById(R.id.btn_dialog_editable_ensure);
+        Button cancle = view.findViewById(R.id.btn_dialog_editable_cancel);
+        TextView textView = view.findViewById(R.id.tv_dialog_editable_msg);
+        textView.setText("刷新后已填信息将被清空，是否刷新?");
+        ensure.setText(R.string.flush);
+        builder.setView(view);
+
+        final AlertDialog dialog = builder.create();
+
+        ensure.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mDatabaseManager.deleteRepair(tId);
+                mNetworkManager.getWorkerOrderInfoStart(eid, token, orderNo, userName);
+                dialog.dismiss();
+            }
+        });
+
+        cancle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
     }
 
     //  校验该订单中是否填有该imei
