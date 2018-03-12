@@ -65,8 +65,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/ll_item_pending_order"
-        android:layout_marginLeft="@dimen/dp_12"
-        android:layout_marginStart="@dimen/dp_12"
+        android:paddingLeft="@dimen/dp_12"
+        android:paddingStart="@dimen/dp_12"
+        android:paddingRight="@dimen/dp_12"
+        android:paddingEnd="@dimen/dp_12"
         android:layout_marginTop="@dimen/dp_8"
         android:orientation="vertical">
 
@@ -84,7 +86,8 @@
 
             <TextView
                 android:id="@+id/tv_item_pending_order"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:text="order_info"/>
@@ -104,7 +107,8 @@
 
             <TextView
                 android:id="@+id/tv_item_pending_address"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:text="address"/>
@@ -124,7 +128,8 @@
 
             <TextView
                 android:id="@+id/tv_item_pending_refuse"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:text="改约时间不通过"/>
@@ -144,7 +149,8 @@
 
             <TextView
                 android:id="@+id/tv_item_pending_engineer"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:text="10010  安装工程师"/>
@@ -164,7 +170,8 @@
 
             <TextView
                 android:id="@+id/tv_item_pending_modify"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:text="改约"/>
@@ -184,7 +191,8 @@
 
             <TextView
                 android:id="@+id/tv_item_pending_part_finish"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:text="部分完成:  ..."/>

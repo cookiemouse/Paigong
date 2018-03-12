@@ -11,7 +11,9 @@ import android.widget.TextView;
 import com.tianyigps.dispatch2.R;
 import com.tianyigps.dispatch2.data.AdapterPendedData;
 import com.tianyigps.dispatch2.data.Data;
+import com.tianyigps.dispatch2.utils.ClipU;
 import com.tianyigps.dispatch2.utils.TimeFormatU;
+import com.tianyigps.dispatch2.utils.ToastU;
 
 import java.util.List;
 
@@ -28,9 +30,12 @@ public class PendedAdapter extends BaseAdapter {
 
     private OnItemListener mOnItemListener;
 
+    private ToastU mToastU;
+
     public PendedAdapter(Context context, List<AdapterPendedData> mDataList) {
         this.context = context;
         this.mDataList = mDataList;
+        mToastU = new ToastU(context);
     }
 
     @Override
@@ -132,6 +137,15 @@ public class PendedAdapter extends BaseAdapter {
                     throw new NullPointerException("OnItemListener is null");
                 }
                 mOnItemListener.onItem(position);
+            }
+        });
+
+        viewHolder.tvOrderNo.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                ClipU.clip(context, data.getOrderNo());
+                mToastU.showToast("订单编号已成功复制");
+                return true;
             }
         });
 
