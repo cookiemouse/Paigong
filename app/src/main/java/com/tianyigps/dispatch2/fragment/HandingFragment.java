@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -212,9 +213,7 @@ public class HandingFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onStart(int position) {
                 mPosition = position;
-                AdapterHandingData data = mAdapterHandingDataList.get(position);
-                showLoading();
-                mNetworkManager.startHanding(eid, token, data.getId(), eName, userName);
+                showConfirmDialog();
             }
 
             @Override
@@ -373,6 +372,38 @@ public class HandingFragment extends Fragment implements View.OnClickListener {
         intent.setAction(Intent.ACTION_DIAL);
         intent.setData(Uri.parse("tel:" + number));
         startActivity(intent);
+    }
+
+    //  开始前确认对话框
+    private void showConfirmDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.dialog_button_editable, null);
+        Button ensure = view.findViewById(R.id.btn_dialog_editable_ensure);
+        Button cancle = view.findViewById(R.id.btn_dialog_editable_cancel);
+        TextView textView = view.findViewById(R.id.tv_dialog_editable_msg);
+        textView.setText("开始安装前，请确认已核对车架号等订单信息!");
+        builder.setView(view);
+
+        final AlertDialog dialog = builder.create();
+
+        ensure.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AdapterHandingData data = mAdapterHandingDataList.get(mPosition);
+                showLoading();
+                mNetworkManager.startHanding(eid, token, data.getId(), eName, userName);
+                dialog.dismiss();
+            }
+        });
+
+        cancle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
     }
 
     //  显示信息Dialog

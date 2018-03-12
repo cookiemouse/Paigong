@@ -211,8 +211,7 @@ public class OrderDetailsActivity extends Activity {
             public void onClick(View view) {
                 if (isChecked) {
                     // 2017/8/2 已签到，开始
-                    showLoading();
-                    mNetworkManager.startHanding(eid, token, orderNo, eName, userName);
+                    showConfirmDialog();
                     return;
                 }
                 // 2017/8/2 签到
@@ -384,8 +383,8 @@ public class OrderDetailsActivity extends Activity {
                         } else if (null != carNo && !"".equals(carNo)) {
                             mStringInstallInfo += carNo;
                         }
-                        if (!"".equals(mStringInstallInfo)){
-                            if (!RegularU.isEmpty(owner)){
+                        if (!"".equals(mStringInstallInfo)) {
+                            if (!RegularU.isEmpty(owner)) {
                                 mStringInstallInfo += ("，" + owner);
                             }
                         }
@@ -406,8 +405,8 @@ public class OrderDetailsActivity extends Activity {
                         } else if (null != carNo && !"".equals(carNo)) {
                             mStringRemoveContent += carNo;
                         }
-                        if (!"".equals(mStringRemoveContent)){
-                            if (!RegularU.isEmpty(owner)){
+                        if (!"".equals(mStringRemoveContent)) {
+                            if (!RegularU.isEmpty(owner)) {
                                 mStringRemoveContent += ("，" + owner);
                             }
                         }
@@ -569,6 +568,37 @@ public class OrderDetailsActivity extends Activity {
                 dialog.dismiss();
             }
         });
+        dialog.show();
+    }
+
+    //  开始前确认对话框
+    private void showConfirmDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View view = LayoutInflater.from(this).inflate(R.layout.dialog_button_editable, null);
+        Button ensure = view.findViewById(R.id.btn_dialog_editable_ensure);
+        Button cancle = view.findViewById(R.id.btn_dialog_editable_cancel);
+        TextView textView = view.findViewById(R.id.tv_dialog_editable_msg);
+        textView.setText("开始安装前，请确认已核对车架号等订单信息!");
+        builder.setView(view);
+
+        final AlertDialog dialog = builder.create();
+
+        ensure.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showLoading();
+                mNetworkManager.startHanding(eid, token, orderNo, eName, userName);
+                dialog.dismiss();
+            }
+        });
+
+        cancle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
         dialog.show();
     }
 
