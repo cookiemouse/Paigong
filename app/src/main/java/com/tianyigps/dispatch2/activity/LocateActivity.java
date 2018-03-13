@@ -77,6 +77,7 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
     private EditText mEditTextImei;
     private ImageView mImageViewScanner, mImageViewLocateIcon, mImageViewLocate;
     private TextView mTextViewLook, mTextViewAddress, mTextViewNormal, mTextViewSatellate, mTextViewFlush;
+    private TextView mTextViewFlushCycle;
     private TextView mTextViewWarn;
     private ListView mListViewWarn;
     private LinearLayout mLinearLayout;
@@ -136,11 +137,15 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
         if (mIsShow) {
             mTextViewLook.setVisibility(View.VISIBLE);
             mLinearLayout.setVisibility(View.VISIBLE);
+            mTextViewFlush.setVisibility(View.VISIBLE);
             mTextViewWarn.setVisibility(View.GONE);
+            mTextViewFlushCycle.setVisibility(View.GONE);
         } else {
             mTextViewLook.setVisibility(View.GONE);
             mLinearLayout.setVisibility(View.GONE);
+            mTextViewFlush.setVisibility(View.GONE);
             mTextViewWarn.setVisibility(View.VISIBLE);
+            mTextViewFlushCycle.setVisibility(View.VISIBLE);
         }
         myHandler.sendEmptyMessageDelayed(Data.MSG_5, 200);
     }
@@ -250,7 +255,23 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
                 }
                 break;
             }
-            case R.id.tv_layout_map_control_warn:{
+            case R.id.tv_layout_map_control_flush_cycle: {
+                mTextViewFlushCycle.setEnabled(false);
+                mTimerU.start();
+                if (null != wholeImei) {
+                    getImeiLocation(wholeImei);
+                    return;
+                }
+                mIsWarn = false;
+                String imei = mEditTextImei.getText().toString();
+                if (imei.length() > 7) {
+                    getWholeImei(imei);
+                } else {
+                    showToast("请至少输入IMEI号后8位数");
+                }
+                break;
+            }
+            case R.id.tv_layout_map_control_warn: {
                 // 2018/3/2 跳转到报警记录页面
                 Intent intent = new Intent(LocateActivity.this, WarnInfoActivity.class);
                 intent.putExtra(Data.DATA_INTENT_LOCATE_IMEI, wholeImei);
@@ -284,6 +305,7 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
         mTextViewNormal = findViewById(R.id.tv_layout_map_control_normal);
         mTextViewSatellate = findViewById(R.id.tv_layout_map_control_satellite);
         mTextViewFlush = findViewById(R.id.tv_layout_map_control_flush);
+        mTextViewFlushCycle = findViewById(R.id.tv_layout_map_control_flush_cycle);
         mTextViewWarn = findViewById(R.id.tv_layout_map_control_warn);
         mLinearLayout = findViewById(R.id.ll_activity_locate);
         mListViewWarn = findViewById(R.id.lv_activity_locate_warn);
@@ -318,6 +340,7 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
         mImageViewScanner.setOnClickListener(this);
         mImageViewLocateIcon.setOnClickListener(this);
         mImageViewLocate.setOnClickListener(this);
+        mTextViewFlushCycle.setOnClickListener(this);
         mTextViewLook.setOnClickListener(this);
         mTextViewAddress.setOnClickListener(this);
         mTextViewNormal.setOnClickListener(this);
@@ -501,12 +524,15 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
             @Override
             public void onTick(int time) {
                 mTextViewFlush.setText("刷新（" + time + "秒）");
+                mTextViewFlushCycle.setText("" + time);
             }
 
             @Override
             public void onEnd() {
                 mTextViewFlush.setEnabled(true);
+                mTextViewFlushCycle.setEnabled(true);
                 mTextViewFlush.setText(R.string.flush);
+                mTextViewFlushCycle.setText(null);
             }
         });
     }
