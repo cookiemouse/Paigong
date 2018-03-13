@@ -1190,6 +1190,11 @@ public class OperateInstallActivity extends BaseActivity {
         String carType = mEditTextCarType.getText().toString();
         String carFrameNo = mEditTextFrameNo.getText().toString();
 
+        if (RegularU.hadEmoji(carNo + carType + carFrameNo)) {
+            new ToastU(OperateInstallActivity.this).showToast(Data.DEFAULT_EMOJI);
+            return;
+        }
+
         mDatabaseManager.addCarInfo(idMainCar, carNo, carFrameNo, carType);
 
         int i = 0;
@@ -1202,6 +1207,11 @@ public class OperateInstallActivity extends BaseActivity {
             String installPic = data.getInstallPic();
             String positionPicUrl = data.getPositionPicUrl();
             String installPicUrl = data.getInstallPicUrl();
+
+            if (RegularU.hadEmoji(tNoOld + tNoNew + position)) {
+                new ToastU(OperateInstallActivity.this).showToast(Data.DEFAULT_EMOJI);
+                return;
+            }
 
             Log.i(TAG, "saveData: tNoOld-->" + tNoOld);
             Log.i(TAG, "saveData: tNoNew-->" + tNoNew);

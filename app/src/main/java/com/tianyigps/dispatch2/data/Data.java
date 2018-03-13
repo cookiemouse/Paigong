@@ -89,6 +89,7 @@ public final class Data {
     //  default
     public final static String DEFAULT_TOKEN = "";
     public final static String DEFAULT_MESSAGE = "请求数据失败，请检网络！";
+    public final static String DEFAULT_EMOJI = "输入含有表情!";
 
     //  Handler分类
     public final static int MSG_ERO = 0x8888;

@@ -51,6 +51,7 @@ import com.tianyigps.dispatch2.utils.MessageDialogU;
 import com.tianyigps.dispatch2.utils.PicU;
 import com.tianyigps.dispatch2.utils.RegularU;
 import com.tianyigps.dispatch2.utils.TinyU;
+import com.tianyigps.dispatch2.utils.ToastU;
 import com.tianyigps.dispatch2.utils.UploadPicU;
 import com.tianyigps.dispatch2.utils.Uri2FileU;
 import com.yundian.bottomdialog.BottomDialog;
@@ -838,6 +839,10 @@ public class OperateRepairActivity extends BaseActivity {
         mExplainNew = mEditTextExplain.getText().toString();
         mImeiNew = mEditTextNewImei.getText().toString();
         Log.i(TAG, "onSignClick: mStringNewImei-->" + mImeiNew);
+        if (RegularU.hadEmoji(mPositionNew + mExplainNew + mImeiNew)) {
+            new ToastU(OperateRepairActivity.this).showToast(Data.DEFAULT_EMOJI);
+            return;
+        }
         if ("".equals(mPositionNew)) {
             mPositionNew = null;
         }
