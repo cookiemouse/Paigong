@@ -116,9 +116,9 @@
     <View
         android:id="@+id/line_item_order_1"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_1"
+        android:layout_height="@dimen/px_1"
         android:layout_marginTop="@dimen/dp_8"
-        android:layout_below="@id/iv_item_order_address"
+        android:layout_below="@id/tv_item_order_address"
         android:background="@color/color_cut_line_gray"/>
 
     <LinearLayout
