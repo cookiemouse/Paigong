@@ -5,7 +5,7 @@ android {
         debug {
             keyAlias 'paigong'
             keyPassword '12345678'
-            storeFile file('D:/Workspace/Paigong/keystore/key.jks')
+            storeFile file('/home/tianyi/Workspace/Paigong/keystore/key.jks')
             storePassword '12345678'
         }
     }
