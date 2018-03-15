@@ -97,7 +97,7 @@ public class HandledAdapter extends BaseAdapter {
                 break;
             }
             case 3: {
-                orderType = "改装订单：";
+                orderType = "安装订单：";
                 viewHolder.llRemove.setVisibility(View.VISIBLE);
                 break;
             }
