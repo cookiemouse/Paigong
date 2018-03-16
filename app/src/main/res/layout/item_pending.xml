@@ -81,7 +81,7 @@
                 android:id="@+id/iv_item_pending_order"
                 android:layout_width="@dimen/dp_24"
                 android:layout_height="@dimen/dp_24"
-                android:padding="@dimen/dp_4"
+                android:padding="@dimen/dp_5"
                 android:src="@drawable/ic_order_item"/>
 
             <TextView
@@ -89,6 +89,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
+                android:gravity="center_vertical"
                 android:layout_gravity="center_vertical"
                 android:text="order_info"/>
         </TableRow>
@@ -123,7 +124,7 @@
                 android:id="@+id/iv_item_pending_refuse"
                 android:layout_width="@dimen/dp_24"
                 android:layout_height="@dimen/dp_24"
-                android:padding="@dimen/dp_1"
+                android:padding="@dimen/dp_4"
                 android:src="@drawable/ic_refuse_item"/>
 
             <TextView
@@ -144,7 +145,7 @@
                 android:id="@+id/iv_item_pending_engineer"
                 android:layout_width="@dimen/dp_24"
                 android:layout_height="@dimen/dp_24"
-                android:padding="@dimen/dp_1"
+                android:padding="@dimen/dp_4"
                 android:src="@drawable/ic_engineer_item"/>
 
             <TextView
@@ -165,7 +166,7 @@
                 android:id="@+id/iv_item_pending_modify"
                 android:layout_width="@dimen/dp_24"
                 android:layout_height="@dimen/dp_24"
-                android:padding="@dimen/dp_1"
+                android:padding="@dimen/dp_4"
                 android:src="@drawable/ic_modify_item"/>
 
             <TextView
@@ -186,7 +187,7 @@
                 android:id="@+id/iv_item_pending_part_finish"
                 android:layout_width="@dimen/dp_24"
                 android:layout_height="@dimen/dp_24"
-                android:padding="@dimen/dp_1"
+                android:padding="@dimen/dp_4"
                 android:src="@drawable/ic_part_item"/>
 
             <TextView
@@ -214,8 +215,8 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/line_item_pending_1"
-        android:layout_marginTop="@dimen/dp_8"
-        android:gravity="end"
+        android:layout_marginTop="@dimen/dp_12"
+        android:gravity="end|center_vertical"
         android:orientation="horizontal">
 
         <TextView
@@ -224,7 +225,6 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/dp_24"
             android:layout_marginRight="@dimen/dp_24"
-            android:layout_marginTop="@dimen/dp_4"
             android:background="@drawable/bg_ellipse_gay"
             android:ellipsize="end"
             android:gravity="center"
@@ -238,7 +238,6 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/dp_24"
             android:layout_marginRight="@dimen/dp_24"
-            android:layout_marginTop="@dimen/dp_4"
             android:background="@drawable/bg_ellipse_gay"
             android:ellipsize="end"
             android:gravity="center"
@@ -250,7 +249,6 @@
             android:id="@+id/tv_item_pending_pend"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_4"
             android:background="@drawable/bg_ellipse"
             android:ellipsize="end"
             android:gravity="center"

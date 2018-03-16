@@ -21,14 +21,14 @@
         android:layout_marginBottom="@dimen/dp_16"
         android:layout_marginLeft="@dimen/dp_16"
         android:layout_marginRight="@dimen/dp_16"
-        android:layout_marginTop="120dp" />
+        android:layout_marginTop="128dp" />
 
     <FrameLayout
         android:id="@+id/fl_activity_order_details_cycle"
         android:layout_width="@dimen/dp_96"
         android:layout_height="@dimen/dp_96"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="@dimen/dp_72"
+        android:layout_marginTop="@dimen/dp_80"
         android:elevation="@dimen/dp_16"
         android:visibility="visible">
 
