@@ -1483,6 +1483,7 @@ public class OperateInstallActivity extends BaseActivity {
 
     //  checkTerminal数据
     private boolean isComplete() {
+        Log.i(TAG, "isComplete: isCarComplete-->" + isCarComplete());
         return (checkTerComplete() && (!haveTerData || isCarComplete()));
 //        for (int i = 0; i < mAdapterOperateInstallListDataList.size(); i++) {
 //            Cursor cursor = mDatabaseManager.getTer(ID_MAIN_TERMINAL + i);
@@ -1697,7 +1698,7 @@ public class OperateInstallActivity extends BaseActivity {
             mTextViewTip3.setText("提示：请完善车架号信息!");
         }
         if (!RegularU.isEmpty(vinNo) && !RegularU.isEmpty(frameNoPicUrl) && RegularU.isFrameNo(vinNo)) {
-            carComplete = true;
+//            carComplete = true;
             mTextViewTip3.setVisibility(View.GONE);
         }
 //        else {
