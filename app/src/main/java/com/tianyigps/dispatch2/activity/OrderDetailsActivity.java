@@ -604,6 +604,7 @@ public class OrderDetailsActivity extends Activity {
 
     //  显示LoadingFragment
     private void showLoading() {
+        if (!mLoadingDialogFragment.isAdded() && !mLoadingDialogFragment.isVisible())
         mLoadingDialogFragment.show(getFragmentManager(), "LoadingFragment");
 
         /*

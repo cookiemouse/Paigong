@@ -1144,7 +1144,7 @@ public class OperateRepairActivity extends BaseActivity {
 
     //  显示LoadingFragment
     private void showLoading() {
-        if (!mLoadingDialogFragment.isAdded()) {
+        if (!mLoadingDialogFragment.isAdded() && !mLoadingDialogFragment.isVisible()) {
             mLoadingDialogFragment.show(getFragmentManager(), "LoadingFragment");
         }
     }

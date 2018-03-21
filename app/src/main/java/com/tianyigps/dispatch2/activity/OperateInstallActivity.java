@@ -1718,7 +1718,7 @@ public class OperateInstallActivity extends BaseActivity {
 
     //  显示LoadingFragment
     private void showLoading() {
-        if (mLoadingDialogFragment.isAdded()) {
+        if (mLoadingDialogFragment.isAdded() && !mLoadingDialogFragment.isVisible()) {
             mLoadingDialogFragment.dismissAllowingStateLoss();
         }
         mLoadingDialogFragment.show(getFragmentManager(), "LoadingFragment");
