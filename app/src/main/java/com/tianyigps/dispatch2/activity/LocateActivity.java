@@ -516,6 +516,12 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
                 for (LocateWarnBean.ObjBean objBean : locateWarnBean.getObj()) {
                     mAdapterLocateWarnDataList.add(new AdapterLocateWarnData(objBean.getName(), new TimeFormatU().millisToDate(objBean.getCreate_time())));
                 }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mLocateWarnAdapter.notifyDataSetChanged();
+                    }
+                });
                 myHandler.sendEmptyMessage(Data.MSG_6);
             }
         });
@@ -586,8 +592,9 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
 
     //  获取完整imei
     private void getWholeImei(String imei) {
-        showLoading();
-        mNetworkManager.getWholeImei(eid, token, imei, userName);
+        if (showLoading()) {
+            mNetworkManager.getWholeImei(eid, token, imei, userName);
+        }
     }
 
     //  获取报警信息
@@ -660,10 +667,14 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
     }
 
     //  显示LoadingFragment
-    private void showLoading() {
-        if (!mLoadingDialogFragment.isAdded()) {
+    private boolean showLoading() {
+        boolean isVisible = mLoadingDialogFragment.isVisible();
+        Log.i(TAG, "showLoading: isShowed-->" + isVisible);
+        if (!mLoadingDialogFragment.isAdded() && !isVisible) {
             mLoadingDialogFragment.show(getFragmentManager(), "LoadingFragment");
+            return true;
         }
+        return false;
     }
 
     private class MyHandler extends Handler {
@@ -726,7 +737,6 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
                 }
                 case Data.MSG_6: {
                     //  获取报警信息
-                    mLocateWarnAdapter.notifyDataSetChanged();
                     if (mLoadingDialogFragment.isAdded()) {
                         mLoadingDialogFragment.dismissAllowingStateLoss();
                     }
