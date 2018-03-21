@@ -1719,10 +1719,12 @@ public class OperateInstallActivity extends BaseActivity {
 
     //  显示LoadingFragment
     private void showLoading() {
-        if (mLoadingDialogFragment.isAdded() && !mLoadingDialogFragment.isVisible()) {
+        if (mLoadingDialogFragment.isAdded()) {
             mLoadingDialogFragment.dismissAllowingStateLoss();
         }
-        mLoadingDialogFragment.show(getFragmentManager(), "LoadingFragment");
+        if (!mLoadingDialogFragment.isAdded() && !mLoadingDialogFragment.isVisible()) {
+            mLoadingDialogFragment.show(getFragmentManager(), "LoadingFragment");
+        }
     }
 
     //  删除图片确认框

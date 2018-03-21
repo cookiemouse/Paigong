@@ -281,7 +281,7 @@ public class OperateRemoveActivity extends BaseActivity {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            if (mLoadingDialogFragment.isAdded() && !mLoadingDialogFragment.isVisible()) {
+            if (mLoadingDialogFragment.isAdded()) {
                 mLoadingDialogFragment.dismissAllowingStateLoss();
             }
 
