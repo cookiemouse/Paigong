@@ -661,22 +661,27 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
 
     //  显示LoadingFragment
     private void showLoading() {
-        mLoadingDialogFragment.show(getFragmentManager(), "LoadingFragment");
+        if (!mLoadingDialogFragment.isAdded()) {
+            mLoadingDialogFragment.show(getFragmentManager(), "LoadingFragment");
+        }
     }
 
     private class MyHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            if (mLoadingDialogFragment.isAdded()) {
-                mLoadingDialogFragment.dismissAllowingStateLoss();
-            }
 
             switch (msg.what) {
                 case Data.MSG_ERO: {
+                    if (mLoadingDialogFragment.isAdded()) {
+                        mLoadingDialogFragment.dismissAllowingStateLoss();
+                    }
                     break;
                 }
                 case Data.MSG_1: {
+                    if (mLoadingDialogFragment.isAdded()) {
+                        mLoadingDialogFragment.dismissAllowingStateLoss();
+                    }
                     LatLng latLng = new LatLng(lat, lng);
                     markCar(latLng);
                     moveToCenter(latLng);
@@ -708,6 +713,9 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
                 }
                 case Data.MSG_4: {
                     //  获取WholeImei失败
+                    if (mLoadingDialogFragment.isAdded()) {
+                        mLoadingDialogFragment.dismissAllowingStateLoss();
+                    }
                     showToast(errMsg);
                     break;
                 }
@@ -719,14 +727,23 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
                 case Data.MSG_6: {
                     //  获取报警信息
                     mLocateWarnAdapter.notifyDataSetChanged();
+                    if (mLoadingDialogFragment.isAdded()) {
+                        mLoadingDialogFragment.dismissAllowingStateLoss();
+                    }
                     break;
                 }
                 case Data.MSG_7: {
                     //  显示Toast
+                    if (mLoadingDialogFragment.isAdded()) {
+                        mLoadingDialogFragment.dismissAllowingStateLoss();
+                    }
                     mToastU.showToast("无法解析基站定位数据");
                     break;
                 }
                 default: {
+                    if (mLoadingDialogFragment.isAdded()) {
+                        mLoadingDialogFragment.dismissAllowingStateLoss();
+                    }
                     Log.i(TAG, "handleMessage: default");
                 }
             }

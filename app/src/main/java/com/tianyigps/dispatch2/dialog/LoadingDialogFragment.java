@@ -1,5 +1,6 @@
 package com.tianyigps.dispatch2.dialog;
 
+import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -35,9 +36,15 @@ public class LoadingDialogFragment extends DialogFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        getDialog().setCancelable(false);
-        getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getDialog().getWindow().setBackgroundDrawable(getActivity().getResources().getDrawable(R.color.colorNull));
+        Dialog dialog = getDialog();
+        if (null != dialog) {
+            dialog.setCancelable(false);
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            Window window = dialog.getWindow();
+            if (null != window) {
+                window.setBackgroundDrawableResource(android.R.color.transparent);
+            }
+        }
         return mViewDialog;
     }
 

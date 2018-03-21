@@ -43,6 +43,9 @@ public class LocateWarnAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
+        if (i >= mLocateWarnDataList.size()){
+            i = 0;
+        }
         ViewHolder viewHolder = null;
         AdapterLocateWarnData data = mLocateWarnDataList.get(i);
 
