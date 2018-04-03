@@ -247,6 +247,8 @@ public class CustomSignActivity extends BaseActivity {
             @Override
             public void onFailure() {
                 Log.i(TAG, "onFailure: ");
+                mStringMessage = "提交失败！";
+                myHandler.sendEmptyMessage(Data.MSG_ERO);
             }
 
             @Override
