@@ -1028,7 +1028,7 @@ public class InstallingActivity extends BaseActivity {
                     Log.i(TAG, "checkInstallListCar: ---------------");
 
                     isInstallCarFilled = (null != frameNoUrl)
-                            || !RegularU.isEmpty(frameNo)
+//                            || !RegularU.isEmpty(frameNo)
                             || !RegularU.isEmpty(carNoUrl)
                             || !RegularU.isEmpty(carNo);
 
