@@ -106,7 +106,11 @@ public class NetworkManager {
     private OnCheckVersionListener mOnCheckVersionListener;
 
     public NetworkManager() {
-        mOkHttpClient = new OkHttpClient();
+        mOkHttpClient = new OkHttpClient.Builder()
+                .connectTimeout(40, TimeUnit.SECONDS)
+                .writeTimeout(40, TimeUnit.SECONDS)
+                .readTimeout(40, TimeUnit.SECONDS)
+                .build();
     }
 
     @Deprecated
