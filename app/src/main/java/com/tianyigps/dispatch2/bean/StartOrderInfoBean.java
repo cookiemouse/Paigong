@@ -596,20 +596,31 @@ public class StartOrderInfoBean {
             private String newCarBrand;
             private String newCarNo;
             private String carNoPic;
+            private String ossCarNoPic;
             private String newCarVin;
             private String carVinPic;
+            private String ossCarVinPic;
             private int orderId;
             private String ownerCard;
             private String ownerName;
             private String pic1;
+            private String ossPic1;
             private String pic2;
+            private String ossPic2;
             private String pic3;
+            private String ossPic3;
             private String pic4;
+            private String ossPic4;
             private String pic5;
+            private String ossPic5;
             private String pic6;
+            private String ossPic6;
             private String pic7;
+            private String ossPic7;
             private String pic8;
+            private String ossPic8;
             private String pic9;
+            private String ossPic9;
             private int removeFlag;
             private int wiredAnnual;
             private int wiredNum;
@@ -655,6 +666,22 @@ public class StartOrderInfoBean {
 
             public void setCarVinPic(String carVinPic) {
                 this.carVinPic = carVinPic;
+            }
+
+            public String getOssCarNoPic() {
+                return ossCarNoPic;
+            }
+
+            public void setOssCarNoPic(String ossCarNoPic) {
+                this.ossCarNoPic = ossCarNoPic;
+            }
+
+            public String getOssCarVinPic() {
+                return ossCarVinPic;
+            }
+
+            public void setOssCarVinPic(String ossCarVinPic) {
+                this.ossCarVinPic = ossCarVinPic;
             }
 
             public long getCreateTime() {
@@ -793,6 +820,78 @@ public class StartOrderInfoBean {
                 this.pic9 = pic9;
             }
 
+            public String getOssPic1() {
+                return ossPic1;
+            }
+
+            public void setOssPic1(String ossPic1) {
+                this.ossPic1 = ossPic1;
+            }
+
+            public String getOssPic2() {
+                return ossPic2;
+            }
+
+            public void setOssPic2(String ossPic2) {
+                this.ossPic2 = ossPic2;
+            }
+
+            public String getOssPic3() {
+                return ossPic3;
+            }
+
+            public void setOssPic3(String ossPic3) {
+                this.ossPic3 = ossPic3;
+            }
+
+            public String getOssPic4() {
+                return ossPic4;
+            }
+
+            public void setOssPic4(String ossPic4) {
+                this.ossPic4 = ossPic4;
+            }
+
+            public String getOssPic5() {
+                return ossPic5;
+            }
+
+            public void setOssPic5(String ossPic5) {
+                this.ossPic5 = ossPic5;
+            }
+
+            public String getOssPic6() {
+                return ossPic6;
+            }
+
+            public void setOssPic6(String ossPic6) {
+                this.ossPic6 = ossPic6;
+            }
+
+            public String getOssPic7() {
+                return ossPic7;
+            }
+
+            public void setOssPic7(String ossPic7) {
+                this.ossPic7 = ossPic7;
+            }
+
+            public String getOssPic8() {
+                return ossPic8;
+            }
+
+            public void setOssPic8(String ossPic8) {
+                this.ossPic8 = ossPic8;
+            }
+
+            public String getOssPic9() {
+                return ossPic9;
+            }
+
+            public void setOssPic9(String ossPic9) {
+                this.ossPic9 = ossPic9;
+            }
+
             public int getRemoveFlag() {
                 return removeFlag;
             }
@@ -863,8 +962,11 @@ public class StartOrderInfoBean {
                 private int id;
                 private String newInstallLocation;
                 private String newInstallLocationPic;
+                private String ossNewInstallLocationPic;
                 private String installLocationPic;
+                private String ossInstallLocationPic;
                 private String wiringDiagramPic;
+                private String ossWiringDiagramPic;
                 private String installLocation;
                 private String malDesc;
                 private String terminalName;
@@ -873,6 +975,7 @@ public class StartOrderInfoBean {
                 private String newTNo;
                 private int newTerminalType;
                 private String newWiringDiagramPic;
+                private String ossNewWiringDiagramPic;
                 private long operateTime;
                 private int operateType;
                 private int orderCarId;
@@ -959,6 +1062,38 @@ public class StartOrderInfoBean {
 
                 public void setWiringDiagramPic(String wiringDiagramPic) {
                     this.wiringDiagramPic = wiringDiagramPic;
+                }
+
+                public String getOssNewInstallLocationPic() {
+                    return ossNewInstallLocationPic;
+                }
+
+                public void setOssNewInstallLocationPic(String ossNewInstallLocationPic) {
+                    this.ossNewInstallLocationPic = ossNewInstallLocationPic;
+                }
+
+                public String getOssInstallLocationPic() {
+                    return ossInstallLocationPic;
+                }
+
+                public void setOssInstallLocationPic(String ossInstallLocationPic) {
+                    this.ossInstallLocationPic = ossInstallLocationPic;
+                }
+
+                public String getOssWiringDiagramPic() {
+                    return ossWiringDiagramPic;
+                }
+
+                public void setOssWiringDiagramPic(String ossWiringDiagramPic) {
+                    this.ossWiringDiagramPic = ossWiringDiagramPic;
+                }
+
+                public String getOssNewWiringDiagramPic() {
+                    return ossNewWiringDiagramPic;
+                }
+
+                public void setOssNewWiringDiagramPic(String ossNewWiringDiagramPic) {
+                    this.ossNewWiringDiagramPic = ossNewWiringDiagramPic;
                 }
 
                 public String gettNo() {

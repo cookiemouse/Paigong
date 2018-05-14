@@ -76,6 +76,7 @@ public class UploadPicBean {
          */
 
         private String imgUrl;
+        private String ossImgUrl;
         private int id;
 
         public String getImgUrl() {
@@ -84,6 +85,14 @@ public class UploadPicBean {
 
         public void setImgUrl(String imgUrl) {
             this.imgUrl = imgUrl;
+        }
+
+        public String getOssImgUrl() {
+            return ossImgUrl;
+        }
+
+        public void setOssImgUrl(String ossImgUrl) {
+            this.ossImgUrl = ossImgUrl;
         }
 
         public int getId() {

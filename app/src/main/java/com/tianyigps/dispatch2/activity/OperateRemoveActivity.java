@@ -148,8 +148,8 @@ public class OperateRemoveActivity extends BaseActivity {
                                 , terminalName
                                 , carTerminalListBean.getTNo()
                                 , location
-                                , mBaseUrl + carTerminalListBean.getInstallLocationPic()
-                                , mBaseUrl + carTerminalListBean.getWiringDiagramPic()
+                                , mBaseUrl + carTerminalListBean.getOssInstallLocationPic()
+                                , mBaseUrl + carTerminalListBean.getOssWiringDiagramPic()
                                 , ""
                                 , ""
                                 , ""

@@ -346,7 +346,8 @@ public class OperateRepairActivity extends BaseActivity {
 
         mNetworkManager = new NetworkManager();
         myHandler = new MyHandler();
-        baseUrl = mSharedpreferenceManager.getImageBaseUrl();
+//        baseUrl = mSharedpreferenceManager.getImageBaseUrl();
+        baseUrl = "";
 
         showLoading();
         mNetworkManager.getWorkerOrderInfoStart(eid, token, orderNo, userName);
@@ -396,7 +397,7 @@ public class OperateRepairActivity extends BaseActivity {
         mImageViewPositionOld.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (RegularU.isEmpty(positionPicG) || (baseUrl + "null").equals(positionPicG)) {
+                if (RegularU.isEmpty(positionPicG) || ("null").equals(positionPicG)) {
                     return;
                 }
                 Intent intent = new Intent(OperateRepairActivity.this, ShowPicActivity.class);
@@ -408,7 +409,7 @@ public class OperateRepairActivity extends BaseActivity {
         mImageViewInstallOld.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (RegularU.isEmpty(installPicG) || (baseUrl + "null").equals(installPicG)) {
+                if (RegularU.isEmpty(installPicG) || ("null").equals(installPicG)) {
                     return;
                 }
                 Intent intent = new Intent(OperateRepairActivity.this, ShowPicActivity.class);
@@ -603,8 +604,8 @@ public class OperateRepairActivity extends BaseActivity {
                             }
                             typeAndNameG = terminalType + terminalName;
                             positionG = carTerminalListBean.getInstallLocation();
-                            positionPicG = baseUrl + carTerminalListBean.getInstallLocationPic();
-                            installPicG = baseUrl + carTerminalListBean.getWiringDiagramPic();
+                            positionPicG = baseUrl + carTerminalListBean.getOssInstallLocationPic();
+                            installPicG = baseUrl + carTerminalListBean.getOssWiringDiagramPic();
 //                            installNameG = objBean.getDispatchContactName();
 //                            installPhoneG = objBean.getDispatchContactPhone();
                             mDescribe = carTerminalListBean.getMalDesc();
@@ -614,8 +615,8 @@ public class OperateRepairActivity extends BaseActivity {
 
                             mPositionPicUrlNew = carTerminalListBean.getNewInstallLocationPic();
                             mInstallPicUrlNew = carTerminalListBean.getNewWiringDiagramPic();
-                            mPositionPicNew = baseUrl + carTerminalListBean.getNewInstallLocationPic();
-                            mInstallPicNew = baseUrl + carTerminalListBean.getNewWiringDiagramPic();
+                            mPositionPicNew = baseUrl + carTerminalListBean.getOssNewInstallLocationPic();
+                            mInstallPicNew = baseUrl + carTerminalListBean.getOssNewWiringDiagramPic();
 
                             mDatabaseManager.addRepairPositionPic(tId, mPositionPicNew, mPositionPicUrlNew);
                             mDatabaseManager.addRepairInstallPic(tId, mInstallPicNew, mInstallPicUrlNew);
@@ -730,14 +731,15 @@ public class OperateRepairActivity extends BaseActivity {
                 }
                 UploadPicBean.ObjBean objBean = uploadPicBean.getObj();
                 String imgUrl = objBean.getImgUrl();
+                String ossImgUrl = objBean.getOssImgUrl();
                 if (picType < 3) {
                     mDatabaseManager.addRepairPositionUrl(tId, imgUrl);
                     mPositionPicUrlNew = imgUrl;
-                    mPositionPicNew = baseUrl + mPositionPicUrlNew;
+                    mPositionPicNew = ossImgUrl;
                 } else {
                     mDatabaseManager.addRepairInstallUrl(tId, imgUrl);
                     mInstallPicUrlNew = imgUrl;
-                    mInstallPicNew = baseUrl + mInstallPicUrlNew;
+                    mInstallPicNew = ossImgUrl;
                 }
 
                 myHandler.sendEmptyMessage(Data.MSG_7);

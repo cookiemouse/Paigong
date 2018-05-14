@@ -785,54 +785,65 @@ public class OperateInstallActivity extends BaseActivity {
                         }
                         mCarNoPicUrl = carListBean.getCarNoPic();
                         mCarFramePicUrl = carListBean.getCarVinPic();
-                        mCarNoPic = mBaseImg + mCarNoPicUrl;
-                        mCarFramePic = mBaseImg + mCarFramePicUrl;
+//                        mCarNoPic = mBaseImg + mCarNoPicUrl;
+                        mCarNoPic = carListBean.getOssCarNoPic();
+//                        mCarFramePic = mBaseImg + mCarFramePicUrl;
+                        mCarFramePic = carListBean.getOssCarVinPic();
 
                         mDatabaseManager.addCarNoPic(idMainCar, mCarNoPic, carListBean.getCarNoPic());
                         mDatabaseManager.addCarFrameNoPic(idMainCar, mCarFramePic, carListBean.getCarVinPic());
 
                         String pic1 = carListBean.getPic1();
+                        String ossPic1 = carListBean.getOssPic1();
                         String pic2 = carListBean.getPic2();
+                        String ossPic2 = carListBean.getOssPic2();
                         String pic3 = carListBean.getPic3();
+                        String ossPic3 = carListBean.getOssPic3();
                         String pic4 = carListBean.getPic4();
+                        String ossPic4 = carListBean.getOssPic4();
                         String pic5 = carListBean.getPic5();
+                        String ossPic5 = carListBean.getOssPic5();
                         String pic6 = carListBean.getPic6();
+                        String ossPic6 = carListBean.getOssPic6();
                         String pic7 = carListBean.getPic7();
+                        String ossPic7 = carListBean.getOssPic7();
                         String pic8 = carListBean.getPic8();
+                        String ossPic8 = carListBean.getOssPic8();
                         String pic9 = carListBean.getPic9();
+                        String ossPic9 = carListBean.getOssPic9();
 
                         if (null != pic1) {
-                            mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData(mBaseImg + pic1, pic1));
+                            mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData(ossPic1, pic1));
 //                    mDatabaseManager.addCarPics(idMainCar, 0, mBaseImg + pic1, pic1);
                         }
                         if (null != pic2) {
-                            mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData(mBaseImg + pic2, pic2));
+                            mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData(ossPic2, pic2));
 //                    mDatabaseManager.addCarPics(idMainCar, 1, mBaseImg + pic1, pic1);
                         }
                         if (null != pic3) {
-                            mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData(mBaseImg + pic3, pic3));
+                            mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData(ossPic3, pic3));
 //                    mDatabaseManager.addCarPics(idMainCar, 2, mBaseImg + pic1, pic1);
                         }
                         if (null != pic4) {
-                            mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData(mBaseImg + pic4, pic4));
+                            mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData(ossPic4, pic4));
 //                    mDatabaseManager.addCarPics(idMainCar, 3, mBaseImg + pic1, pic1);
                         }
                         if (null != pic5) {
-                            mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData(mBaseImg + pic5, pic5));
+                            mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData(ossPic5, pic5));
 //                    mDatabaseManager.addCarPics(idMainCar, 4, mBaseImg + pic1, pic1);
                         }
                         if (null != pic6) {
-                            mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData(mBaseImg + pic6, pic6));
+                            mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData(ossPic6, pic6));
 //                    mDatabaseManager.addCarPics(idMainCar, 5, mBaseImg + pic1, pic1);
                         }
                         if (null != pic7) {
-                            mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData(mBaseImg + pic7, pic7));
+                            mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData(ossPic7, pic7));
                         }
                         if (null != pic8) {
-                            mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData(mBaseImg + pic8, pic8));
+                            mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData(ossPic8, pic8));
                         }
                         if (null != pic9) {
-                            mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData(mBaseImg + pic9, pic9));
+                            mAdapterOperateInstallRecyclerDataList.add(new AdapterOperateInstallRecyclerData(ossPic9, pic9));
                         }
                         List<StartOrderInfoBean.ObjBean.CarListBean.CarTerminalListBean> carTerminalListBeanList = carListBean.getCarTerminalList();
                         for (int i = 0; i < carTerminalListBeanList.size(); i++) {
@@ -844,8 +855,10 @@ public class OperateInstallActivity extends BaseActivity {
                             String tNo = carTerminalListBean.getTNo();
                             int tId = carTerminalListBean.getId();
                             String position = carTerminalListBean.getNewInstallLocation();
-                            String positionPic = carTerminalListBean.getNewInstallLocationPic();
-                            String installPic = carTerminalListBean.getNewWiringDiagramPic();
+//                            String positionPic = carTerminalListBean.getNewInstallLocationPic();
+                            String positionPic = carTerminalListBean.getOssNewInstallLocationPic();
+//                            String installPic = carTerminalListBean.getNewWiringDiagramPic();
+                            String installPic = carTerminalListBean.getOssWiringDiagramPic();
                             int type = carTerminalListBean.getTerminalType();
 
                             String idTemp = ID_MAIN_TERMINAL + i;
@@ -856,9 +869,11 @@ public class OperateInstallActivity extends BaseActivity {
                                     data.settId(tId);
                                     data.settNoNew(tNo);
                                     data.setPosition(position);
-                                    data.setPositionPic(mBaseImg + positionPic);
+//                                    data.setPositionPic(mBaseImg + positionPic);
+                                    data.setPositionPic(positionPic);
                                     data.setPositionPicUrl(positionPic);
-                                    data.setInstallPic(mBaseImg + installPic);
+//                                    data.setInstallPic(mBaseImg + installPic);
+                                    data.setInstallPic(installPic);
                                     data.setInstallPicUrl(installPic);
                                     Log.i(TAG, "onSuccess: tid-->" + tId);
                                     Log.i(TAG, "onSuccess: positionPic-->" + positionPic);
@@ -965,7 +980,8 @@ public class OperateInstallActivity extends BaseActivity {
                 int id = objBean.getId();
 
                 String imgUrl = objBean.getImgUrl();
-                itemPath = mBaseImg + imgUrl;
+//                itemPath = mBaseImg + imgUrl;
+                itemPath = objBean.getOssImgUrl();
 
                 Log.i(TAG, "onSuccess: picType-->" + picType);
                 switch (picType) {
@@ -992,7 +1008,7 @@ public class OperateInstallActivity extends BaseActivity {
                     }
                     case INTENT_PHOTO_C: {
                         mCarNoPicUrl = imgUrl;
-                        mCarNoPic = mBaseImg + mCarNoPicUrl;
+                        mCarNoPic = itemPath;
 
                         mDatabaseManager.addCarNoPic(idMainCar, itemPath, imgUrl);
                         myHandler.sendEmptyMessage(Data.MSG_4);
@@ -1003,7 +1019,7 @@ public class OperateInstallActivity extends BaseActivity {
                     }
                     case INTENT_PHOTO_F: {
                         mCarFramePicUrl = imgUrl;
-                        mCarFramePic = mBaseImg + mCarFramePicUrl;
+                        mCarFramePic = itemPath;
 
                         mDatabaseManager.addCarFrameNoPic(idMainCar, itemPath, imgUrl);
                         myHandler.sendEmptyMessage(Data.MSG_5);
