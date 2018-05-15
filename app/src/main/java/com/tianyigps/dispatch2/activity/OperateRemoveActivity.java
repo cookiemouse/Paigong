@@ -81,7 +81,7 @@ public class OperateRemoveActivity extends BaseActivity {
         eid = mSharedpreferenceManager.getEid();
         token = mSharedpreferenceManager.getToken();
         userName = mSharedpreferenceManager.getAccount();
-        mBaseUrl = mSharedpreferenceManager.getImageBaseUrl();
+        mBaseUrl = "";
 
         Intent intent = getIntent();
         orderNo = intent.getStringExtra(Data.DATA_INTENT_ORDER_NO);

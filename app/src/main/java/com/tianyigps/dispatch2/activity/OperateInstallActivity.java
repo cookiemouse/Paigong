@@ -858,7 +858,7 @@ public class OperateInstallActivity extends BaseActivity {
 //                            String positionPic = carTerminalListBean.getNewInstallLocationPic();
                             String positionPic = carTerminalListBean.getOssNewInstallLocationPic();
 //                            String installPic = carTerminalListBean.getNewWiringDiagramPic();
-                            String installPic = carTerminalListBean.getOssWiringDiagramPic();
+                            String installPic = carTerminalListBean.getOssNewWiringDiagramPic();
                             int type = carTerminalListBean.getTerminalType();
 
                             String idTemp = ID_MAIN_TERMINAL + i;
