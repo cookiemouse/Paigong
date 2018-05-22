@@ -1163,6 +1163,9 @@ public class DatabaseManager {
 
     //  增，T, tId
     public void addTerId(String idMain, int tId, int carId) {
+        if (terExistByTid(tId)){
+            return;
+        }
         if (terExist(idMain)) {
             modifyTerId(idMain, tId, carId);
             return;
