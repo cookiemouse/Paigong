@@ -160,6 +160,9 @@ public class OperateInstallActivity extends BaseActivity {
     private boolean isCheckedImei = true;
     private boolean isToLocate = false;
 
+    //  是否需要校验车架号
+    private boolean mIsCheckFrameNo = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -390,8 +393,10 @@ public class OperateInstallActivity extends BaseActivity {
             String vinNo = mEditTextFrameNo.getText().toString();
             if (mTextViewTip1.getVisibility() == View.VISIBLE && !RegularU.isEmpty(carNo) && !RegularU.checkCarNo(carNo)) {
                 showNotCompleteDialog("车牌号填写不正确");
-            } else if (mTextViewTip3.getVisibility() == View.VISIBLE && !RegularU.isEmpty(vinNo) && !RegularU.isFrameNo(vinNo)) {
-                showNotCompleteDialog("车架号填写不正确");
+            } else if (mIsCheckFrameNo) {
+                if (mTextViewTip3.getVisibility() == View.VISIBLE && !RegularU.isEmpty(vinNo) && !RegularU.isFrameNo(vinNo)) {
+                    showNotCompleteDialog("车架号填写不正确");
+                }
             } else {
                 showNotCompleteDialog("车辆信息内有未填写内容，请填写完整");
             }
@@ -766,6 +771,16 @@ public class OperateInstallActivity extends BaseActivity {
 
                 StartOrderInfoBean.ObjBean objBean = startOrderInfoBean.getObj();
 //                StartOrderInfoBean.ObjBean.CarListBean carListBean = objBean.getCarList().get(0);
+
+                //  添加是否需要校验车架号
+                StartOrderInfoBean.ObjBean.CustConfBean custConfBean = objBean.getCustConfBean();
+                if (null != custConfBean) {
+                    String carType = custConfBean.getCarType();
+                    if (!RegularU.isEmpty(carType)) {
+                        mIsCheckFrameNo = !carType.contains("2");
+                    }
+                }
+
                 for (StartOrderInfoBean.ObjBean.CarListBean carListBean : objBean.getCarList()) {
                     if (carListBean.getId() == carId) {
                         if (RegularU.isEmpty(carListBean.getNewCarNo())) {
@@ -1703,10 +1718,12 @@ public class OperateInstallActivity extends BaseActivity {
             carComplete = false;
             mTextViewTip3.setText("提示：请填写车架号!");
             mTextViewTip3.setVisibility(View.VISIBLE);
-        } else if (!RegularU.isFrameNo(vinNo)) {
-            carComplete = false;
-            mTextViewTip3.setVisibility(View.VISIBLE);
-            mTextViewTip3.setText("提示：请输入正确的车架号!");
+        } else if (mIsCheckFrameNo) {
+            if (!RegularU.isFrameNo(vinNo)) {
+                carComplete = false;
+                mTextViewTip3.setVisibility(View.VISIBLE);
+                mTextViewTip3.setText("提示：请输入正确的车架号!");
+            }
         }
         if (RegularU.isEmpty(vinNo) && RegularU.isEmpty(frameNoPicUrl)) {
             carComplete = false;
@@ -1715,6 +1732,9 @@ public class OperateInstallActivity extends BaseActivity {
         }
         if (!RegularU.isEmpty(vinNo) && !RegularU.isEmpty(frameNoPicUrl) && RegularU.isFrameNo(vinNo)) {
 //            carComplete = true;
+            mTextViewTip3.setVisibility(View.GONE);
+        }
+        if (!mIsCheckFrameNo) {
             mTextViewTip3.setVisibility(View.GONE);
         }
 //        else {
@@ -1729,6 +1749,7 @@ public class OperateInstallActivity extends BaseActivity {
             mTextViewTip2.setVisibility(View.GONE);
         }
 
+        Log.i(TAG, "isCarComplete: ------>" + carComplete);
         return carComplete;
 
     }

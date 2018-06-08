@@ -173,6 +173,7 @@ public class StartOrderInfoBean {
         private String submitCoordinate;
         private long submitTime;
         private int type;
+        private CustConfBean custConf;
         private List<CarListBean> carList;
 
         public long getAccessStatusTime() {
@@ -565,6 +566,100 @@ public class StartOrderInfoBean {
 
         public void setCarList(List<CarListBean> carList) {
             this.carList = carList;
+        }
+
+        public CustConfBean getCustConfBean() {
+            return custConf;
+        }
+
+        public void setCustConfBean(CustConfBean custConf) {
+            this.custConf = custConf;
+        }
+
+        public static class CustConfBean {
+            /**
+             * carType : 1,2
+             * cid : 1
+             * createTime : -61923390758000
+             * id : 558
+             * installDemand : 4564
+             * updateTime : 1528449850000
+             * wiredAnnual : 2,4,5
+             * wirelessAnnual : 1,2,3,4,5
+             */
+
+            private String carType;
+            private int cid;
+            private long createTime;
+            private int id;
+            private String installDemand;
+            private long updateTime;
+            private String wiredAnnual;
+            private String wirelessAnnual;
+
+            public String getCarType() {
+                return carType;
+            }
+
+            public void setCarType(String carType) {
+                this.carType = carType;
+            }
+
+            public int getCid() {
+                return cid;
+            }
+
+            public void setCid(int cid) {
+                this.cid = cid;
+            }
+
+            public long getCreateTime() {
+                return createTime;
+            }
+
+            public void setCreateTime(long createTime) {
+                this.createTime = createTime;
+            }
+
+            public int getId() {
+                return id;
+            }
+
+            public void setId(int id) {
+                this.id = id;
+            }
+
+            public String getInstallDemand() {
+                return installDemand;
+            }
+
+            public void setInstallDemand(String installDemand) {
+                this.installDemand = installDemand;
+            }
+
+            public long getUpdateTime() {
+                return updateTime;
+            }
+
+            public void setUpdateTime(long updateTime) {
+                this.updateTime = updateTime;
+            }
+
+            public String getWiredAnnual() {
+                return wiredAnnual;
+            }
+
+            public void setWiredAnnual(String wiredAnnual) {
+                this.wiredAnnual = wiredAnnual;
+            }
+
+            public String getWirelessAnnual() {
+                return wirelessAnnual;
+            }
+
+            public void setWirelessAnnual(String wirelessAnnual) {
+                this.wirelessAnnual = wirelessAnnual;
+            }
         }
 
         public static class CarListBean {
