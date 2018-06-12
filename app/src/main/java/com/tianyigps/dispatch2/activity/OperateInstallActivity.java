@@ -493,7 +493,9 @@ public class OperateInstallActivity extends BaseActivity {
             mEditTextFrameNo.setEnabled(true);
         } else {
             mEditTextFrameNo.setText(frameNo);
-            mEditTextFrameNo.setEnabled(false);
+            if (RegularU.isFrameNo(frameNo)) {
+                mEditTextFrameNo.setEnabled(false);
+            }
         }
 
         mRecyclerView = findViewById(R.id.rv_layout_activity_operate_install);
