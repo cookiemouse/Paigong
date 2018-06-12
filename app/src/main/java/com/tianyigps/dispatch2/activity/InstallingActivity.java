@@ -312,8 +312,13 @@ public class InstallingActivity extends BaseActivity {
                         carBrand = carListBean.getNewCarBrand();
                     }
                     Cursor cursor = mDatabaseManager.getCar(carListBean.getId());
+                    String carVinStr = carListBean.getCarVin();
+                    String newCarVinStr = carListBean.getNewCarVin();
+                    if (!RegularU.isEmpty(newCarVinStr)) {
+                        carVinStr = newCarVinStr;
+                    }
                     if (null == cursor || !cursor.moveToFirst()) {
-                        mDatabaseManager.addCarInfo(carListBean.getId(), carNo, carListBean.getCarVin(), carBrand);
+                        mDatabaseManager.addCarInfo(carListBean.getId(), carNo, carVinStr, carBrand);
                         mDatabaseManager.addCarFrameNoPic(carListBean.getId()
                                 , mBaseImg + carListBean.getCarVinPic()
                                 , carListBean.getCarVinPic());
@@ -371,9 +376,14 @@ public class InstallingActivity extends BaseActivity {
                                 }
                                 i++;
                             }
+                            String carVinStr = carListBean.getCarVin();
+                            String newCarVinStr = carListBean.getNewCarVin();
+                            if (!RegularU.isEmpty(newCarVinStr)) {
+                                carVinStr = newCarVinStr;
+                            }
                             if (carListBean.getRemoveFlag() == 0) {
                                 mAdapterInstallingDataList.add(new AdapterInstallingData(carListBean.getId()
-                                        , carListBean.getCarVin()
+                                        , carVinStr
                                         , carListBean.getWiredNum()
                                         , carListBean.getWirelessNum()));
                             }
