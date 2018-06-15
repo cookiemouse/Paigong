@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.NumberPicker;
+import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -107,7 +108,7 @@ public class PendDetailsActivity extends Activity {
     private String mHours[];
     private String mMins[];
     private int mDay, mHour, mMin;
-    private String mReason;
+    private String mReason, mReasonChoice = "";
 
     //  LoadingFragment
     private LoadingDialogFragment mLoadingDialogFragment;
@@ -391,9 +392,9 @@ public class PendDetailsActivity extends Activity {
                     }
                 }
                 if (Data.NODE_12 == mNode) {
-                        String engineer = engineerBean.getJobNo() + " " + engineerBean.getName();
-                        String phone = engineerBean.getPhoneNo();
-                        mAdapterPendDetailsDataList.add(new AdapterPendDetailsData(R.drawable.ic_modify_date_engineer, engineer, phone));
+                    String engineer = engineerBean.getJobNo() + " " + engineerBean.getName();
+                    String phone = engineerBean.getPhoneNo();
+                    mAdapterPendDetailsDataList.add(new AdapterPendDetailsData(R.drawable.ic_modify_date_engineer, engineer, phone));
 //                    if (mOrderStatusGet != Data.STATUS_3) {
 //                    }
 
@@ -579,7 +580,16 @@ public class PendDetailsActivity extends Activity {
         String newTime = new TimeFormatU().millisToDate(modify);
 
         showLoading();
-        mNetworkManager.modifyDate(jobNo, userName, token, orderNo, orderStatus, newTime, mReason);
+        String reason;
+        if (RegularU.isEmpty(mReasonChoice)) {
+            reason = mReason;
+        } else if (RegularU.isEmpty(mReason)) {
+            reason = mReasonChoice;
+        } else {
+            reason = mReasonChoice + "，" + mReason;
+        }
+        Log.i(TAG, "modifyDate: reason-->" + reason);
+//        mNetworkManager.modifyDate(jobNo, userName, token, orderNo, orderStatus, newTime, reason);
     }
 
     //  选择改约时间
@@ -681,6 +691,13 @@ public class PendDetailsActivity extends Activity {
 
         TextView tvTitle = viewReason.findViewById(R.id.tv_dialog_modify_title);
         ImageView ivCancel = viewReason.findViewById(R.id.iv_dialog_modify_reason_cancel);
+        final RadioButton rbNoCar = viewReason.findViewById(R.id.rb_dialog_modify_reason_no_car);
+        final RadioButton rbNoProcedures = viewReason.findViewById(R.id.rb_dialog_modify_reason_no_procedures);
+        final RadioButton rbNewAddress = viewReason.findViewById(R.id.rb_dialog_modify_reason_new_address);
+        final RadioButton rbNewTime = viewReason.findViewById(R.id.rb_dialog_modify_reason_new_time);
+        final RadioButton rbConflict = viewReason.findViewById(R.id.rb_dialog_modify_reason_conflict);
+        final RadioButton rbNoEquip = viewReason.findViewById(R.id.rb_dialog_modify_reason_no_equip);
+        final RadioButton rbOther = viewReason.findViewById(R.id.rb_dialog_modify_reason_other);
         Button btnSubmit = viewReason.findViewById(R.id.btn_dialog_modify_reason_submit);
         final EditText etReason = viewReason.findViewById(R.id.et_dialog_modify_reason);
         final TextView tvInfo = viewReason.findViewById(R.id.tv_dialog_modify_reason_info);
@@ -717,6 +734,118 @@ public class PendDetailsActivity extends Activity {
             }
         });
 
+        rbNoCar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                clearCheck(rbNoCar);
+                clearCheck(rbNoProcedures);
+                clearCheck(rbNewAddress);
+                clearCheck(rbNewTime);
+                clearCheck(rbConflict);
+                clearCheck(rbNoEquip);
+                clearCheck(rbOther);
+
+                rbNoCar.setChecked(true);
+                mReasonChoice = "车未到";
+            }
+        });
+
+        rbNoProcedures.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                clearCheck(rbNoCar);
+                clearCheck(rbNoProcedures);
+                clearCheck(rbNewAddress);
+                clearCheck(rbNewTime);
+                clearCheck(rbConflict);
+                clearCheck(rbNoEquip);
+                clearCheck(rbOther);
+
+                rbNoProcedures.setChecked(true);
+                mReasonChoice = "手续未办好";
+            }
+        });
+
+        rbNewAddress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                clearCheck(rbNoCar);
+                clearCheck(rbNoProcedures);
+                clearCheck(rbNewAddress);
+                clearCheck(rbNewTime);
+                clearCheck(rbConflict);
+                clearCheck(rbNoEquip);
+                clearCheck(rbOther);
+
+                rbNewAddress.setChecked(true);
+                mReasonChoice = "联系人要求换地址";
+            }
+        });
+
+        rbNewTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                clearCheck(rbNoCar);
+                clearCheck(rbNoProcedures);
+                clearCheck(rbNewAddress);
+                clearCheck(rbNewTime);
+                clearCheck(rbConflict);
+                clearCheck(rbNoEquip);
+                clearCheck(rbOther);
+
+                rbNewTime.setChecked(true);
+                mReasonChoice = "联系人要求换时间";
+            }
+        });
+
+        rbConflict.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                clearCheck(rbNoCar);
+                clearCheck(rbNoProcedures);
+                clearCheck(rbNewAddress);
+                clearCheck(rbNewTime);
+                clearCheck(rbConflict);
+                clearCheck(rbNoEquip);
+                clearCheck(rbOther);
+
+                rbConflict.setChecked(true);
+                mReasonChoice = "工单时间冲突，约定时间来不及";
+            }
+        });
+
+        rbNoEquip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                clearCheck(rbNoCar);
+                clearCheck(rbNoProcedures);
+                clearCheck(rbNewAddress);
+                clearCheck(rbNewTime);
+                clearCheck(rbConflict);
+                clearCheck(rbNoEquip);
+                clearCheck(rbOther);
+
+                rbNoEquip.setChecked(true);
+                mReasonChoice = "设备携带不足";
+            }
+        });
+
+        rbOther.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                clearCheck(rbNoCar);
+                clearCheck(rbNoProcedures);
+                clearCheck(rbNewAddress);
+                clearCheck(rbNewTime);
+                clearCheck(rbConflict);
+                clearCheck(rbNoEquip);
+                clearCheck(rbOther);
+
+                rbOther.setChecked(true);
+                mReasonChoice = "";
+            }
+        });
+
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -726,7 +855,7 @@ public class PendDetailsActivity extends Activity {
                     return;
                 }
                 mReason = etReason.getText().toString();
-                if ("".equals(mReason)) {
+                if (RegularU.isEmpty(mReason) && RegularU.isEmpty(mReasonChoice)) {
                     tvInfo.setText("原因不能为空");
                     return;
                 }
@@ -738,6 +867,10 @@ public class PendDetailsActivity extends Activity {
         });
 
         bottomDialog.show(getFragmentManager(), "modify reason");
+    }
+
+    private void clearCheck(RadioButton radioButton) {
+        radioButton.setChecked(false);
     }
 
     //  显示信息Dialog
