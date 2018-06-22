@@ -147,7 +147,7 @@
         android:layout_margin="@dimen/dp_8"
         android:background="@drawable/bg_edit"
         android:gravity="start"
-        android:hint="填写改约原因（必填）"
+        android:hint="选择其他原因请输入详细原因"
         android:minHeight="@dimen/dp_120"
         android:textColorHint="@color/colorGray"
         android:textSize="@dimen/sp_14" />
