@@ -586,10 +586,10 @@ public class PendDetailsActivity extends Activity {
         } else if (RegularU.isEmpty(mReason)) {
             reason = mReasonChoice;
         } else {
-            reason = mReasonChoice + "，" + mReason;
+            reason = mReasonChoice + ";" + mReason;
         }
         Log.i(TAG, "modifyDate: reason-->" + reason);
-//        mNetworkManager.modifyDate(jobNo, userName, token, orderNo, orderStatus, newTime, reason);
+        mNetworkManager.modifyDate(jobNo, userName, token, orderNo, orderStatus, newTime, reason);
     }
 
     //  选择改约时间
@@ -842,7 +842,7 @@ public class PendDetailsActivity extends Activity {
                 clearCheck(rbOther);
 
                 rbOther.setChecked(true);
-                mReasonChoice = "";
+                mReasonChoice = "其他原因";
             }
         });
 
@@ -855,7 +855,11 @@ public class PendDetailsActivity extends Activity {
                     return;
                 }
                 mReason = etReason.getText().toString();
-                if (RegularU.isEmpty(mReason) && RegularU.isEmpty(mReasonChoice)) {
+                if (RegularU.isEmpty(mReasonChoice)){
+                    tvInfo.setText("请选择改约原因");
+                    return;
+                }
+                if ("其他原因".equals(mReasonChoice) && RegularU.isEmpty(mReason)) {
                     tvInfo.setText("原因不能为空");
                     return;
                 }
