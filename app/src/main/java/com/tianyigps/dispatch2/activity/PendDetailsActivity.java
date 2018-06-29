@@ -108,6 +108,7 @@ public class PendDetailsActivity extends Activity {
     private String mHours[];
     private String mMins[];
     private int mDay, mHour, mMin;
+    private int mChoiceRadio = 0;
     private String mReason, mReasonChoice = "";
 
     //  LoadingFragment
@@ -702,6 +703,37 @@ public class PendDetailsActivity extends Activity {
         final EditText etReason = viewReason.findViewById(R.id.et_dialog_modify_reason);
         final TextView tvInfo = viewReason.findViewById(R.id.tv_dialog_modify_reason_info);
 
+        switch (mChoiceRadio){
+            case 1:{
+                rbNoCar.setChecked(true);
+                break;
+            }
+            case 2:{
+                rbNoProcedures.setChecked(true);
+                break;
+            }
+            case 3:{
+                rbNewAddress.setChecked(true);
+                break;
+            }
+            case 4:{
+                rbNewTime.setChecked(true);
+                break;
+            }
+            case 5:{
+                rbConflict.setChecked(true);
+                break;
+            }
+            case 6:{
+                rbNoEquip.setChecked(true);
+                break;
+            }
+            case 7:{
+                rbOther.setChecked(true);
+                break;
+            }
+        }
+
         etReason.setText(mReason);
         if (null != mReason) {
             int length = mReason.length();
@@ -721,6 +753,10 @@ public class PendDetailsActivity extends Activity {
                 mDay = 0;
                 mHour = 0;
                 mMin = 0;
+
+                mChoiceRadio = 0;
+                mReasonChoice = "";
+
                 bottomDialog.dismiss();
             }
         });
@@ -747,6 +783,7 @@ public class PendDetailsActivity extends Activity {
 
                 rbNoCar.setChecked(true);
                 mReasonChoice = "车未到";
+                mChoiceRadio = 1;
             }
         });
 
@@ -763,6 +800,7 @@ public class PendDetailsActivity extends Activity {
 
                 rbNoProcedures.setChecked(true);
                 mReasonChoice = "手续未办好";
+                mChoiceRadio = 2;
             }
         });
 
@@ -779,6 +817,7 @@ public class PendDetailsActivity extends Activity {
 
                 rbNewAddress.setChecked(true);
                 mReasonChoice = "联系人要求换地址";
+                mChoiceRadio = 3;
             }
         });
 
@@ -795,6 +834,7 @@ public class PendDetailsActivity extends Activity {
 
                 rbNewTime.setChecked(true);
                 mReasonChoice = "联系人要求换时间";
+                mChoiceRadio = 4;
             }
         });
 
@@ -811,6 +851,7 @@ public class PendDetailsActivity extends Activity {
 
                 rbConflict.setChecked(true);
                 mReasonChoice = "工单时间冲突，约定时间来不及";
+                mChoiceRadio = 5;
             }
         });
 
@@ -827,6 +868,7 @@ public class PendDetailsActivity extends Activity {
 
                 rbNoEquip.setChecked(true);
                 mReasonChoice = "设备携带不足";
+                mChoiceRadio = 6;
             }
         });
 
@@ -843,6 +885,7 @@ public class PendDetailsActivity extends Activity {
 
                 rbOther.setChecked(true);
                 mReasonChoice = "其他原因";
+                mChoiceRadio = 7;
             }
         });
 
