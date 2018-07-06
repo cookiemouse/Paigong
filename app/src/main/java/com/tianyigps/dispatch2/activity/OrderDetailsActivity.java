@@ -29,6 +29,7 @@ import com.tianyigps.dispatch2.bean.StartHandingBean;
 import com.tianyigps.dispatch2.data.Data;
 import com.tianyigps.dispatch2.dialog.LoadingDialogFragment;
 import com.tianyigps.dispatch2.dialog.ReturnOrderDialogFragment;
+import com.tianyigps.dispatch2.interfaces.OnContactSiteListener;
 import com.tianyigps.dispatch2.interfaces.OnGetWorkerOrderInfoHandingListener;
 import com.tianyigps.dispatch2.interfaces.OnSignedWorkerListener;
 import com.tianyigps.dispatch2.interfaces.OnStartHandingListener;
@@ -202,6 +203,7 @@ public class OrderDetailsActivity extends Activity {
         mImageViewCall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                mNetworkManager.contactSite(eid, token, orderNo, mStringContactName, userName);
                 toCalll(mStringContactPhone);
             }
         });
@@ -442,6 +444,18 @@ public class OrderDetailsActivity extends Activity {
                     return;
                 }
                 myHandler.sendEmptyMessage(Data.MSG_5);
+            }
+        });
+
+        mNetworkManager.setContactSiteListener(new OnContactSiteListener() {
+            @Override
+            public void onFailure() {
+                Log.i(TAG, "onFailure: 联系现场请求失败");
+            }
+
+            @Override
+            public void onSuccess(String result) {
+                Log.i(TAG, "onSuccess: 联系现场请求成功");
             }
         });
 
