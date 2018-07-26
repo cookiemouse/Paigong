@@ -7,6 +7,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -97,6 +99,29 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void setEventListener() {
+        mEditTextAccount.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (charSequence.toString().contains(" ")) {
+                    String[] str = charSequence.toString().split(" ");
+                    String str1 = "";
+                    for (int count = 0; count < str.length; count++) {
+                        str1 += str[count];
+                    }
+                    mEditTextAccount.setText(str1);
+                    mEditTextAccount.setSelection(str1.length());
+
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
+        });
         mButtonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

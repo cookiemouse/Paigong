@@ -37,6 +37,7 @@
             android:layout_marginLeft="@dimen/dp_8"
             android:layout_marginStart="@dimen/dp_8"
             android:layout_weight="1"
+            android:singleLine="true"
             android:background="@color/colorNull"
             android:hint="@string/enter_account"
             android:textSize="@dimen/sp_14"/>
@@ -73,6 +74,7 @@
             android:layout_weight="1"
             android:background="@color/colorNull"
             android:hint="@string/enter_password"
+            android:singleLine="true"
             android:inputType="textPassword"
             android:textSize="@dimen/sp_14"/>
     </LinearLayout>
