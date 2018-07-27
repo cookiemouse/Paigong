@@ -451,6 +451,7 @@ public class TerminalInfoBean {
             private double longitudeF;
             private double latitudeF;
             private boolean isShowTip;
+            private String dianliang;
 
             public String getLocate_time() {
                 return locate_time;
@@ -586,6 +587,14 @@ public class TerminalInfoBean {
 
             public void setShowTip(boolean showTip) {
                 isShowTip = showTip;
+            }
+
+            public String getDianliang() {
+                return dianliang;
+            }
+
+            public void setDianliang(String dianliang) {
+                this.dianliang = dianliang;
             }
         }
     }

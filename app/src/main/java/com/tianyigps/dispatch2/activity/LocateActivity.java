@@ -10,9 +10,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.baidu.mapapi.SDKInitializer;
@@ -51,6 +53,7 @@ import com.tianyigps.dispatch2.interfaces.OnLocateWarnListener;
 import com.tianyigps.dispatch2.manager.LocateManager;
 import com.tianyigps.dispatch2.manager.NetworkManager;
 import com.tianyigps.dispatch2.manager.SharedpreferenceManager;
+import com.tianyigps.dispatch2.utils.RegularU;
 import com.tianyigps.dispatch2.utils.TimeFormatU;
 import com.tianyigps.dispatch2.utils.TimerU;
 import com.tianyigps.dispatch2.utils.ToastU;
@@ -117,6 +120,9 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
 
     //  是否为查询报警信息
     private boolean mIsWarn = false;
+
+    //  电量
+    private int mElectricity = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -472,6 +478,13 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
                 lat = redisObjBean.getLatitudeF();
                 lng = redisObjBean.getLongitudeF();
 
+                String dianliang = redisObjBean.getDianliang();
+                if (!RegularU.isEmpty(dianliang)) {
+                    mElectricity = Integer.valueOf(dianliang);
+                }else {
+                    mElectricity = -1;
+                }
+
                 if (null == redisObjBean.getCurrent_time() || null == redisObjBean.getLocate_time()) {
                     mStringContent = null;
                     myHandler.sendEmptyMessage(Data.MSG_1);
@@ -566,9 +579,21 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
         ImageView imageViewCancel = viewInfo.findViewById(R.id.iv_view_map_info_window_cancel);
         TextView textViewTitle = viewInfo.findViewById(R.id.tv_view_map_info_window_title);
         TextView textViewContent = viewInfo.findViewById(R.id.tv_view_map_info_window_content);
+        TextView tvElectricity = viewInfo.findViewById(R.id.tv_view_map_info_window_electricity);
+        FrameLayout flEle = viewInfo.findViewById(R.id.fl_view_map_info_window_electricity);
+        ProgressBar pbEle = viewInfo.findViewById(R.id.pb_view_map_info_window_electricity);
 
         textViewTitle.setText(title);
         textViewContent.setText(content);
+
+        if (mElectricity > -1){
+            tvElectricity.setText(mElectricity + "%");
+            flEle.setVisibility(View.VISIBLE);
+            pbEle.setProgress(mElectricity);
+        }else {
+            tvElectricity.setVisibility(View.GONE);
+            flEle.setVisibility(View.GONE);
+        }
 
         imageViewCancel.setOnClickListener(new View.OnClickListener() {
             @Override
