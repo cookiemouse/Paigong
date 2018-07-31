@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/dp_8"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_item_repair_suggest_car"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorBlueTheme"
+        android:text="@string/car" />
+
+    <TextView
+        android:id="@+id/tv_item_repair_suggest_imei"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorGray"
+        android:text="@string/imei_number" />
+
+    <TextView
+        android:id="@+id/tv_item_repair_suggest_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorGray"
+        android:text="@string/repair_suggest" />
+
+</LinearLayout>

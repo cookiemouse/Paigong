@@ -1,5 +1,7 @@
 package com.tianyigps.dispatch2.bean;
 
+import com.tianyigps.dispatch2.utils.RegularU;
+
 import java.util.List;
 
 /**
@@ -367,7 +369,7 @@ public class PendDetailsBean {
 
         public static class OrderNodeBean {
             /**
-             * beOperator : 谢鹏
+             * beOperator : 测试
              * beOperatorId : 205
              * beOperatorType : 2
              * createTime : 1502269683000
@@ -576,8 +578,12 @@ public class PendDetailsBean {
             private int wiredNum;
             private int wirelessAnnual;
             private int wirelessNum;
+            private List<CarTerminalListBean> carTerminalList;
 
             public String getCarBrand() {
+                if (RegularU.isEmpty(carBrand)){
+                    return "";
+                }
                 return carBrand;
             }
 
@@ -586,6 +592,9 @@ public class PendDetailsBean {
             }
 
             public String getCarNo() {
+                if (RegularU.isEmpty(carNo)){
+                    return "";
+                }
                 return carNo;
             }
 
@@ -594,6 +603,9 @@ public class PendDetailsBean {
             }
 
             public String getCarVin() {
+                if (RegularU.isEmpty(carVin)){
+                    return "";
+                }
                 return carVin;
             }
 
@@ -679,6 +691,160 @@ public class PendDetailsBean {
 
             public void setWirelessNum(int wirelessNum) {
                 this.wirelessNum = wirelessNum;
+            }
+
+            public List<CarTerminalListBean> getCarTerminalList() {
+                return carTerminalList;
+            }
+
+            public void setCarTerminalList(List<CarTerminalListBean> carTerminalList) {
+                this.carTerminalList = carTerminalList;
+            }
+
+            public static class CarTerminalListBean {
+                /**
+                 * createTime : 1532998926000
+                 * id : 1112843
+                 * installLocation : 他呢
+                 * installLocationPic : TY20180212134919032/4c0fc519af7e4c769af64a8b0e4fd79b.jpg
+                 * malDesc : 334211
+                 * orderCarId : 113950
+                 * orderId : 32683
+                 * repairJudge : 1
+                 * repairSuggest : aaaa
+                 * repaireStatus : 0
+                 * sim : 17701010112
+                 * tNo : 80088008811
+                 * terminalName : 被如何公路软环境法国人发...013488便携式1
+                 * terminalType : 2
+                 */
+
+                private long createTime;
+                private int id;
+                private String installLocation;
+                private String installLocationPic;
+                private String malDesc;
+                private int orderCarId;
+                private int orderId;
+                private int repairJudge;
+                private String repairSuggest;
+                private int repaireStatus;
+                private String sim;
+                private String tNo;
+                private String terminalName;
+                private int terminalType;
+
+                public long getCreateTime() {
+                    return createTime;
+                }
+
+                public void setCreateTime(long createTime) {
+                    this.createTime = createTime;
+                }
+
+                public int getId() {
+                    return id;
+                }
+
+                public void setId(int id) {
+                    this.id = id;
+                }
+
+                public String getInstallLocation() {
+                    return installLocation;
+                }
+
+                public void setInstallLocation(String installLocation) {
+                    this.installLocation = installLocation;
+                }
+
+                public String getInstallLocationPic() {
+                    return installLocationPic;
+                }
+
+                public void setInstallLocationPic(String installLocationPic) {
+                    this.installLocationPic = installLocationPic;
+                }
+
+                public String getMalDesc() {
+                    return malDesc;
+                }
+
+                public void setMalDesc(String malDesc) {
+                    this.malDesc = malDesc;
+                }
+
+                public int getOrderCarId() {
+                    return orderCarId;
+                }
+
+                public void setOrderCarId(int orderCarId) {
+                    this.orderCarId = orderCarId;
+                }
+
+                public int getOrderId() {
+                    return orderId;
+                }
+
+                public void setOrderId(int orderId) {
+                    this.orderId = orderId;
+                }
+
+                public int getRepairJudge() {
+                    return repairJudge;
+                }
+
+                public void setRepairJudge(int repairJudge) {
+                    this.repairJudge = repairJudge;
+                }
+
+                public String getRepairSuggest() {
+                    return repairSuggest;
+                }
+
+                public void setRepairSuggest(String repairSuggest) {
+                    this.repairSuggest = repairSuggest;
+                }
+
+                public int getRepaireStatus() {
+                    return repaireStatus;
+                }
+
+                public void setRepaireStatus(int repaireStatus) {
+                    this.repaireStatus = repaireStatus;
+                }
+
+                public String getSim() {
+                    return sim;
+                }
+
+                public void setSim(String sim) {
+                    this.sim = sim;
+                }
+
+                public String getTNo() {
+                    return tNo;
+                }
+
+                public void setTNo(String tNo) {
+                    this.tNo = tNo;
+                }
+
+                public String getTerminalName() {
+                    return terminalName;
+                }
+
+                public void setTerminalName(String terminalName) {
+                    this.terminalName = terminalName;
+                }
+
+                public int getTerminalType() {
+                    return terminalType;
+                }
+
+                public void setTerminalType(int terminalType) {
+                    this.terminalType = terminalType;
+                }
             }
         }
     }

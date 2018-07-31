@@ -310,6 +310,17 @@
                     android:text="车辆信息"
                     android:textColor="@color/colorBlueTheme"/>
 
+                <ImageView
+                    android:id="@+id/iv_layout_pend_details_content_repair_suggest"
+                    android:layout_width="@dimen/dp_20"
+                    android:layout_height="@dimen/dp_20"
+                    android:layout_toRightOf="@id/tv_layout_pend_details_content_info_title"
+                    android:layout_toEndOf="@+id/tv_layout_pend_details_content_info_title"
+                    android:layout_marginLeft="@dimen/dp_12"
+                    android:layout_marginStart="@dimen/dp_12"
+                    android:layout_marginTop="@dimen/dp_3"
+                    android:src="@drawable/ic_repair_suggest"/>
+
                 <TextView
                     android:id="@+id/tv_layout_pend_details_content_info_content"
                     android:layout_width="wrap_content"

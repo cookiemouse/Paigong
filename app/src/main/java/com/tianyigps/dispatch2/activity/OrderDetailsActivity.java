@@ -28,6 +28,7 @@ import com.tianyigps.dispatch2.bean.SignWorkerBean;
 import com.tianyigps.dispatch2.bean.StartHandingBean;
 import com.tianyigps.dispatch2.data.Data;
 import com.tianyigps.dispatch2.dialog.LoadingDialogFragment;
+import com.tianyigps.dispatch2.dialog.RepairSuggestDialogFragment;
 import com.tianyigps.dispatch2.dialog.ReturnOrderDialogFragment;
 import com.tianyigps.dispatch2.interfaces.OnContactSiteListener;
 import com.tianyigps.dispatch2.interfaces.OnGetWorkerOrderInfoHandingListener;
@@ -104,6 +105,9 @@ public class OrderDetailsActivity extends Activity {
 
     private ToastU mToastU;
 
+    //  维修建议
+    private ImageView mImageViewRepairSuggest;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -166,6 +170,7 @@ public class OrderDetailsActivity extends Activity {
         mTextViewRemove = findViewById(R.id.tv_layout_order_details_content_remove_content);
         mTextViewCaigai = findViewById(R.id.tv_layout_order_details_content_order_caigai_content);
         mImageViewInstall = findViewById(R.id.iv_layout_order_details_install);
+        mImageViewRepairSuggest = findViewById(R.id.iv_layout_order_details_content_repair_suggest);
 
         mButtonSign = findViewById(R.id.btn_layout_order_details_sign);
 
@@ -253,6 +258,21 @@ public class OrderDetailsActivity extends Activity {
                 ClipU.clip(OrderDetailsActivity.this, mStringOrderNum);
                 mToastU.showToast("订单编号已成功复制");
                 return true;
+            }
+        });
+
+        mImageViewRepairSuggest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO: 18-7-30 维修建议
+                RepairSuggestDialogFragment repairSuggestDialogFragment = RepairSuggestDialogFragment.getInstance();
+                Bundle bundle = new Bundle();
+                bundle.putString(Data.DATA_INTENT_ORDER_NO, orderNo);
+                repairSuggestDialogFragment.setArguments(bundle);
+                if (repairSuggestDialogFragment.isAdded()) {
+                    return;
+                }
+                repairSuggestDialogFragment.show(getFragmentManager(), "OrderTrackDialogFragment");
             }
         });
 
@@ -668,6 +688,12 @@ public class OrderDetailsActivity extends Activity {
                     } else {
                         mRelativeLayoutRemove.setVisibility(View.GONE);
                         mRelativeLayoutCaigai.setVisibility(View.GONE);
+                    }
+
+                    if (mIntOrderType == 2) {
+                        mImageViewRepairSuggest.setVisibility(View.VISIBLE);
+                    } else {
+                        mImageViewRepairSuggest.setVisibility(View.GONE);
                     }
 
                     if (mIntReviseFlag == 1) {

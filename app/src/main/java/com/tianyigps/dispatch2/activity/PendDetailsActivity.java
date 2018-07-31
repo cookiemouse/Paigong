@@ -31,6 +31,7 @@ import com.tianyigps.dispatch2.data.AdapterPendDetailsData;
 import com.tianyigps.dispatch2.data.Data;
 import com.tianyigps.dispatch2.dialog.LoadingDialogFragment;
 import com.tianyigps.dispatch2.dialog.OrderTrackDialogFragment;
+import com.tianyigps.dispatch2.dialog.RepairSuggestDialogFragment;
 import com.tianyigps.dispatch2.interfaces.OnModifyDateListener;
 import com.tianyigps.dispatch2.interfaces.OnPendDetailsListener;
 import com.tianyigps.dispatch2.manager.NetworkManager;
@@ -115,6 +116,12 @@ public class PendDetailsActivity extends Activity {
     private LoadingDialogFragment mLoadingDialogFragment;
 
     private ToastU mToastU;
+
+    //  维修建议
+    private ImageView mImageViewRepairSuggest;
+
+    //  订单类型
+    private int mIntOrderType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -210,6 +217,7 @@ public class PendDetailsActivity extends Activity {
         mTextViewInfoContent = findViewById(R.id.tv_layout_pend_details_content_info_content);
         mTextViewRemoveTitle = findViewById(R.id.tv_layout_pend_details_content_order_remove_title);
         mTextViewRemoveModify = findViewById(R.id.tv_layout_pend_details_content_order_remove_content);
+        mImageViewRepairSuggest = findViewById(R.id.iv_layout_pend_details_content_repair_suggest);
 
         mListView = findViewById(R.id.lv_layout_pend_content);
         mAdapterPendDetailsDataList = new ArrayList<>();
@@ -275,6 +283,21 @@ public class PendDetailsActivity extends Activity {
                     return;
                 }
                 orderTrackDialogFragment.show(getFragmentManager(), "OrderTrackDialogFragment");
+            }
+        });
+
+        mImageViewRepairSuggest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO: 18-7-30 维修建议
+                RepairSuggestDialogFragment repairSuggestDialogFragment = RepairSuggestDialogFragment.getInstance();
+                Bundle bundle = new Bundle();
+                bundle.putString(Data.DATA_INTENT_ORDER_NO, orderNo);
+                repairSuggestDialogFragment.setArguments(bundle);
+                if (repairSuggestDialogFragment.isAdded()) {
+                    return;
+                }
+                repairSuggestDialogFragment.show(getFragmentManager(), "OrderTrackDialogFragment");
             }
         });
 
@@ -497,7 +520,8 @@ public class PendDetailsActivity extends Activity {
                     }
                 }
 
-                switch (objBean.getOrderType()) {
+                mIntOrderType = objBean.getOrderType();
+                switch (mIntOrderType) {
                     case 1: {
                         mInstallType = "安装";
                         mInfoTitle = "安装车辆信息";
@@ -1020,6 +1044,12 @@ public class PendDetailsActivity extends Activity {
                             mViewRight.setVisibility(View.GONE);
                             mViewTop.setVisibility(View.GONE);
                         }
+                    }
+
+                    if (mIntOrderType == 2) {
+                        mImageViewRepairSuggest.setVisibility(View.VISIBLE);
+                    } else {
+                        mImageViewRepairSuggest.setVisibility(View.GONE);
                     }
 
                     if (mIsEdit) {
