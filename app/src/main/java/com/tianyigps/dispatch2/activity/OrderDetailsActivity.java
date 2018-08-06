@@ -407,7 +407,10 @@ public class OrderDetailsActivity extends Activity {
                         }
                         if (!"".equals(mStringInstallInfo)) {
                             if (!RegularU.isEmpty(owner)) {
-                                mStringInstallInfo += ("，" + owner);
+                                if (!RegularU.isEmpty(carVin) || !RegularU.isEmpty(carNo)){
+                                    mStringRemoveContent += "，";
+                                }
+                                mStringInstallInfo += owner;
                             }
                         }
                         if (!"".equals(mStringInstallInfo)) {
@@ -428,8 +431,11 @@ public class OrderDetailsActivity extends Activity {
                             mStringRemoveContent += carNo;
                         }
                         if (!"".equals(mStringRemoveContent)) {
+                            if (!RegularU.isEmpty(carVin) || !RegularU.isEmpty(carNo)){
+                                mStringRemoveContent += "，";
+                            }
                             if (!RegularU.isEmpty(owner)) {
-                                mStringRemoveContent += ("，" + owner);
+                                mStringRemoveContent += owner;
                             }
                         }
                         if (!"".equals(mStringRemoveContent)) {
