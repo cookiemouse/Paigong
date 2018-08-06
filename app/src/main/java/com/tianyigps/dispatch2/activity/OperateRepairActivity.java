@@ -78,7 +78,8 @@ public class OperateRepairActivity extends BaseActivity {
 
     private RelativeLayout mRelativeLayoutReplace, mRelativeLayoutInstall, mRelativeLayoutInstallOld;
     private View mViewLineInstall;
-    private TextView mTextViewState;
+//    private TextView mTextViewState;
+    private ImageView mImageViewState;
     private ImageView mImageViewScanner, mImageViewReplaceLocate;
     private TextView mTextViewNewDeviceTitle;
     private EditText mEditTextNewImei;
@@ -327,7 +328,8 @@ public class OperateRepairActivity extends BaseActivity {
 
         mButtonSave = findViewById(R.id.btn_activity_operate_repair_save);
 
-        mTextViewState = findViewById(R.id.tv_activity_operate_remove_state);
+//        mTextViewState = findViewById(R.id.tv_activity_operate_remove_state);
+        mImageViewState = findViewById(R.id.iv_activity_operate_remove_state);
         mRelativeLayoutReplace = findViewById(R.id.rl_activity_operate_replace);
         mRelativeLayoutInstallOld = findViewById(R.id.rl_activity_operate_default_install);
         mRelativeLayoutInstall = findViewById(R.id.rl_activity_operate_default_install_new);
@@ -456,15 +458,15 @@ public class OperateRepairActivity extends BaseActivity {
             }
         });
 
-        mTextViewState.setOnClickListener(new View.OnClickListener() {
+        mImageViewState.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (mRelativeLayoutReplace.getVisibility() == View.GONE) {
                     mRelativeLayoutReplace.setVisibility(View.VISIBLE);
-                    mTextViewState.setText(R.string.not_replace);
+                    mImageViewState.setSelected(false);
                 } else {
                     mRelativeLayoutReplace.setVisibility(View.GONE);
-                    mTextViewState.setText(R.string.repair_replace);
+                    mImageViewState.setSelected(true);
                 }
             }
         });
@@ -893,11 +895,11 @@ public class OperateRepairActivity extends BaseActivity {
 
             if (0 == replace) {
                 mRelativeLayoutReplace.setVisibility(View.GONE);
-                mTextViewState.setText(R.string.repair_replace);
+                mImageViewState.setSelected(true);
             } else {
                 mRelativeLayoutReplace.setVisibility(View.VISIBLE);
                 setEditTextImei(mImeiNew);
-                mTextViewState.setText(R.string.not_replace);
+                mImageViewState.setSelected(false);
             }
             cursor.close();
         }
@@ -1322,12 +1324,14 @@ public class OperateRepairActivity extends BaseActivity {
 
                     if (mChangeFlag.equals("0")) {
 //                        mRelativeLayoutReplace.setVisibility(View.VISIBLE);
-                        mTextViewState.setText(R.string.repair_replace);
-                        mTextViewState.setEnabled(true);
+//                        mTextViewState.setText(R.string.repair_replace);
+                        mImageViewState.setSelected(true);
+//                        mTextViewState.setEnabled(true);
                     } else {
 //                        mRelativeLayoutReplace.setVisibility(View.GONE);
-                        mTextViewState.setText(R.string.repair_replace);
-                        mTextViewState.setEnabled(false);
+//                        mTextViewState.setText(R.string.repair_replace);
+                        mImageViewState.setSelected(true);
+//                        mTextViewState.setEnabled(false);
                     }
                     break;
                 }
