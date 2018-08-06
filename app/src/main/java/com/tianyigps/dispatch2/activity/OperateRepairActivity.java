@@ -1325,12 +1325,12 @@ public class OperateRepairActivity extends BaseActivity {
                     if (mChangeFlag.equals("0")) {
 //                        mRelativeLayoutReplace.setVisibility(View.VISIBLE);
 //                        mTextViewState.setText(R.string.repair_replace);
-                        mImageViewState.setSelected(true);
+                        mImageViewState.setVisibility(View.VISIBLE);
 //                        mTextViewState.setEnabled(true);
                     } else {
 //                        mRelativeLayoutReplace.setVisibility(View.GONE);
 //                        mTextViewState.setText(R.string.repair_replace);
-                        mImageViewState.setSelected(true);
+                        mImageViewState.setVisibility(View.GONE);
 //                        mTextViewState.setEnabled(false);
                     }
                     break;
