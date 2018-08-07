@@ -179,6 +179,13 @@ public class OrderTrackDialogFragment extends DialogFragment {
                 OrderTrackDialogFragment.this.dismiss();
             }
         });
+
+        mView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                OrderTrackDialogFragment.this.dismiss();
+            }
+        });
     }
 
     private String func(OrderTrackBean.ObjBean objBean) {

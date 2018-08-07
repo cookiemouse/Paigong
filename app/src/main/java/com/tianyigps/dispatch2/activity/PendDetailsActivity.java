@@ -1076,6 +1076,7 @@ public class PendDetailsActivity extends Activity {
                     }
 
                     if (Data.NODE_1 == mNode
+                            || Data.NODE_15 == mNode
                             || Data.NODE_6 == mNode
                             || Data.NODE_11 == mNode
                             || Data.NODE_3 == mNode) {

@@ -155,6 +155,7 @@ public class RepairSuggestDialogFragment extends DialogFragment {
 
             @Override
             public void onSuccess(String result) {
+                mAdapterRepairSeggestDataList.clear();
                 Log.i(TAG, "onSuccess: result-->" + result);
                 Gson gson = new Gson();
                 PendDetailsBean pendDetailsBean = gson.fromJson(result, PendDetailsBean.class);
@@ -168,18 +169,37 @@ public class RepairSuggestDialogFragment extends DialogFragment {
                 for (PendDetailsBean.ObjBean.OrderCarListBean carListBean : carListBeans) {
                     String carVin = carListBean.getCarVin();
                     String carNo = carListBean.getCarNo();
+                    String owner = carListBean.getOwnerName();
                     String carBrand = carListBean.getCarBrand();
 
                     StringBuilder sb = new StringBuilder();
-                    sb.append(carVin);
-                    if (!RegularU.isEmpty(carVin) && !(RegularU.isEmpty(carNo) && RegularU.isEmpty(carBrand))) {
-                        sb.append(",");
+                    if (RegularU.isEmpty(carVin)){
+                        if (!RegularU.isEmpty(carNo)){
+                            sb.append(carNo);
+                        }
+                    }else {
+                        sb.append(carVin);
                     }
-                    sb.append(carNo);
-                    if (!RegularU.isEmpty(carBrand) && !RegularU.isEmpty(carNo)) {
-                        sb.append(",");
+                    if (RegularU.isEmpty(sb.toString())){
+                        if (!RegularU.isEmpty(owner)){
+                            sb.append(owner);
+                        }
+                    }else {
+                        if (!RegularU.isEmpty(owner)){
+                            sb.append(",");
+                            sb.append(owner);
+                        }
                     }
-                    sb.append(carBrand);
+                    if (RegularU.isEmpty(sb.toString())){
+                        if (!RegularU.isEmpty(carBrand)){
+                            sb.append(carBrand);
+                        }
+                    }else {
+                        if (!RegularU.isEmpty(carBrand)){
+                            sb.append(",");
+                            sb.append(carBrand);
+                        }
+                    }
 
                     List<PendDetailsBean.ObjBean.OrderCarListBean.CarTerminalListBean> carTerminalListBeans = carListBean.getCarTerminalList();
                     for (PendDetailsBean.ObjBean.OrderCarListBean.CarTerminalListBean carTerminalListBean : carTerminalListBeans) {
