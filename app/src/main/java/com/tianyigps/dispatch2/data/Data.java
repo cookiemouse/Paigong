@@ -159,6 +159,7 @@ public final class Data {
     public static final int NODE_12 = 12; //  部分完成
     public static final int NODE_13 = 13; //  退回客户
     public static final int NODE_14 = 14; //  完成订单
+    public static final int NODE_15 = 15; //  客服修改
 
     //  广播接收
     //  极光推送

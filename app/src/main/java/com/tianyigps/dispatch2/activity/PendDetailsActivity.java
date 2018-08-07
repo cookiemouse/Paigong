@@ -473,7 +473,7 @@ public class PendDetailsActivity extends Activity {
                         } else if (null != carNo && !"".equals(carNo)) {
                             mRemoveContent += carNo;
                         }
-                        if ("".equals(mRemoveContent)) {
+                        if (RegularU.isEmpty(mRemoveContent)) {
                             if (!RegularU.isEmpty(owner)) {
                                 mRemoveContent += (owner + "，");
                             }
@@ -483,8 +483,10 @@ public class PendDetailsActivity extends Activity {
                                 mRemoveContent += "\n";
                             }
                         } else {
-                            if (!RegularU.isEmpty(owner)) {
+                            if ((!RegularU.isEmpty(carVin) || !RegularU.isEmpty(carNo)) && !RegularU.isEmpty(owner)){
                                 mRemoveContent += ("，" + owner);
+                            } else if (!RegularU.isEmpty(owner)) {
+                                mRemoveContent += (owner);
                             }
                             if (!RegularU.isEmpty(carBrand)) {
                                 mRemoveContent += ("，" + carBrand + "\n");
@@ -498,7 +500,7 @@ public class PendDetailsActivity extends Activity {
                         } else if (null != carNo && !"".equals(carNo)) {
                             mInfoContent += carNo;
                         }
-                        if ("".equals(mInfoContent)) {
+                        if (RegularU.isEmpty(mInfoContent)) {
                             if (!RegularU.isEmpty(owner)) {
                                 mInfoContent += (owner + "，");
                             }
@@ -508,8 +510,10 @@ public class PendDetailsActivity extends Activity {
                                 mInfoContent += "\n";
                             }
                         } else {
-                            if (!RegularU.isEmpty(owner)) {
+                            if ((!RegularU.isEmpty(carVin) || !RegularU.isEmpty(carNo)) && !RegularU.isEmpty(owner)){
                                 mInfoContent += ("，" + owner);
+                            } else if (!RegularU.isEmpty(owner)) {
+                                mInfoContent += (owner);
                             }
                             if (!RegularU.isEmpty(carBrand)) {
                                 mInfoContent += ("，" + carBrand + "\n");
