@@ -282,7 +282,7 @@ public class OrderTrackDialogFragment extends DialogFragment {
                 break;
             }
             case 15:{
-                info += "客服修改";
+                info += "客服判断";
             }
             default: {
                 Log.i(TAG, "func: default-->" + node);
