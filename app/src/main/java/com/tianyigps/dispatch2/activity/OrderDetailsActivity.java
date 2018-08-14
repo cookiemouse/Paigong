@@ -400,51 +400,117 @@ public class OrderDetailsActivity extends Activity {
                         String carNo = carInfoBean.getCarNo();
                         String carBrand = carInfoBean.getCarBrand();
                         String owner = carInfoBean.getOwnerName();
-                        if (null != carVin && !"".equals(carVin)) {
-                            mStringInstallInfo += carVin;
-                        } else if (null != carNo && !"".equals(carNo)) {
-                            mStringInstallInfo += carNo;
+
+                        StringBuilder sb = new StringBuilder();
+                        if (RegularU.isEmpty(carVin)){
+                            if (!RegularU.isEmpty(carNo)){
+                                sb.append(carNo);
+                            }
+                        }else {
+                            sb.append(carVin);
                         }
-                        if (!"".equals(mStringInstallInfo)) {
-                            if (!RegularU.isEmpty(owner)) {
-                                if (!RegularU.isEmpty(carVin) || !RegularU.isEmpty(carNo)){
-                                    mStringRemoveContent += "，";
-                                }
-                                mStringInstallInfo += owner;
+                        if (RegularU.isEmpty(sb.toString())){
+                            if (!RegularU.isEmpty(owner)){
+                                sb.append(owner);
+                            }
+                        }else {
+                            if (!RegularU.isEmpty(owner)){
+                                sb.append(",");
+                                sb.append(owner);
                             }
                         }
-                        if (!"".equals(mStringInstallInfo)) {
-                            if (!RegularU.isEmpty(carBrand)) {
-                                mStringInstallInfo += ("，" + carBrand + "\n");
-                            } else {
-                                mStringInstallInfo += "\n";
+                        if (RegularU.isEmpty(sb.toString())){
+                            if (!RegularU.isEmpty(carBrand)){
+                                sb.append(carBrand);
+                            }
+                        }else {
+                            if (!RegularU.isEmpty(carBrand)){
+                                sb.append(",");
+                                sb.append(carBrand);
                             }
                         }
+                        sb.append("\n");
+
+                        mStringInstallInfo += sb.toString();
+
+//                        if (null != carVin && !"".equals(carVin)) {
+//                            mStringInstallInfo += carVin;
+//                        } else if (null != carNo && !"".equals(carNo)) {
+//                            mStringInstallInfo += carNo;
+//                        }
+//                        if (!"".equals(mStringInstallInfo)) {
+//                            if (!RegularU.isEmpty(owner)) {
+//                                if (!RegularU.isEmpty(carVin) || !RegularU.isEmpty(carNo)){
+//                                    mStringRemoveContent += "，";
+//                                }
+//                                mStringInstallInfo += owner;
+//                            }
+//                        }
+//                        if (!"".equals(mStringInstallInfo)) {
+//                            if (!RegularU.isEmpty(carBrand)) {
+//                                mStringInstallInfo += ("，" + carBrand + "\n");
+//                            } else {
+//                                mStringInstallInfo += "\n";
+//                            }
+//                        }
                     } else {
                         String carVin = carInfoBean.getCarVin();
                         String carNo = carInfoBean.getCarNo();
                         String carBrand = carInfoBean.getCarBrand();
                         String owner = carInfoBean.getOwnerName();
-                        if (null != carVin && !"".equals(carVin)) {
-                            mStringRemoveContent += carVin;
-                        } else if (null != carNo && !"".equals(carNo)) {
-                            mStringRemoveContent += carNo;
-                        }
-                        if (!"".equals(mStringRemoveContent)) {
-                            if (!RegularU.isEmpty(carVin) || !RegularU.isEmpty(carNo)){
-                                mStringRemoveContent += "，";
+
+                        StringBuilder sb = new StringBuilder();
+                        if (RegularU.isEmpty(carVin)){
+                            if (!RegularU.isEmpty(carNo)){
+                                sb.append(carNo);
                             }
-                            if (!RegularU.isEmpty(owner)) {
-                                mStringRemoveContent += owner;
+                        }else {
+                            sb.append(carVin);
+                        }
+                        if (RegularU.isEmpty(sb.toString())){
+                            if (!RegularU.isEmpty(owner)){
+                                sb.append(owner);
+                            }
+                        }else {
+                            if (!RegularU.isEmpty(owner)){
+                                sb.append(",");
+                                sb.append(owner);
                             }
                         }
-                        if (!"".equals(mStringRemoveContent)) {
-                            if (!RegularU.isEmpty(carBrand)) {
-                                mStringRemoveContent += ("，" + carBrand + "\n");
-                            } else {
-                                mStringRemoveContent += "\n";
+                        if (RegularU.isEmpty(sb.toString())){
+                            if (!RegularU.isEmpty(carBrand)){
+                                sb.append(carBrand);
+                            }
+                        }else {
+                            if (!RegularU.isEmpty(carBrand)){
+                                sb.append(",");
+                                sb.append(carBrand);
                             }
                         }
+                        sb.append("\n");
+
+                        mStringRemoveContent += sb.toString();
+
+//                        if (null != carVin && !"".equals(carVin)) {
+//                            mStringRemoveContent += carVin;
+//                        } else if (null != carNo && !"".equals(carNo)) {
+//                            mStringRemoveContent += carNo;
+//                        }
+//                        if (!"".equals(mStringRemoveContent)) {
+//                            if (!RegularU.isEmpty(carVin) || !RegularU.isEmpty(carNo)){
+//                                mStringRemoveContent += "，";
+//                            }
+//                            if (!RegularU.isEmpty(owner)) {
+//                                mStringRemoveContent += owner;
+//                            }
+//                        }
+//                        if (!"".equals(mStringRemoveContent)) {
+//                            if (!RegularU.isEmpty(carBrand)) {
+//                                mStringRemoveContent += ("，" + carBrand + "\n");
+//                            } else {
+//                                mStringRemoveContent += "\n";
+//                            }
+//                        }
                     }
                 }
 
