@@ -86,7 +86,7 @@ public class TestActivity extends AppCompatActivity {
             Log.i(TAG, "onActivityResult: uri-->" + uri);
             Log.i(TAG, "onActivityResult: path-->" + path);
 
-            Picasso.with(TestActivity.this)
+            Picasso.get()
                     .load(uri)
                     .fit()
                     .centerCrop()

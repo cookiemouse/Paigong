@@ -33,7 +33,7 @@ public class ShowPicActivity extends Activity {
 
         String url = getIntent().getStringExtra("URL");
         Log.i("TAG", "init: url-->" + url);
-        Picasso.with(ShowPicActivity.this)
+        Picasso.get()
                 .load(url)
                 .error(R.color.colorNull)
                 .fit()

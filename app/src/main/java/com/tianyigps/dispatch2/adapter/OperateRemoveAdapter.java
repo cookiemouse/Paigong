@@ -138,13 +138,13 @@ public class OperateRemoveAdapter extends BaseAdapter {
         }
         viewHolder.state.setText(state);
 
-        Picasso.with(context)
+        Picasso.get()
                 .load(data.getPicPosition())
                 .error(R.color.colorNull)
                 .fit()
                 .centerInside()
                 .into(viewHolder.picPosition);
-        Picasso.with(context)
+        Picasso.get()
                 .load(data.getPicInstall())
                 .error(R.color.colorNull)
                 .fit()

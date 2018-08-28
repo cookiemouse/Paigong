@@ -127,7 +127,7 @@ public class OperateInstallListAdapter2 extends BaseAdapter {
         etPosition.setText(data.getPosition());
 
         if (data.getPositionPicUrl() != null) {
-            Picasso.with(context)
+            Picasso.get()
                     .load(data.getPositionPic())
                     .fit()
                     .centerInside()
@@ -135,7 +135,7 @@ public class OperateInstallListAdapter2 extends BaseAdapter {
                     .into(ivPositionPic);
             ivPositionDelete.setVisibility(View.VISIBLE);
         } else {
-            Picasso.with(context)
+            Picasso.get()
                     .load(R.drawable.ic_camera)
                     .fit()
                     .centerInside()
@@ -144,7 +144,7 @@ public class OperateInstallListAdapter2 extends BaseAdapter {
         }
 
         if (data.getInstallPicUrl() != null) {
-            Picasso.with(context)
+            Picasso.get()
                     .load(data.getInstallPic())
                     .fit()
                     .centerInside()
@@ -153,7 +153,7 @@ public class OperateInstallListAdapter2 extends BaseAdapter {
 
             ivInstallDelete.setVisibility(View.VISIBLE);
         } else {
-            Picasso.with(context)
+            Picasso.get()
                     .load(R.drawable.ic_camera)
                     .fit()
                     .centerInside()

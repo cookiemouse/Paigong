@@ -1951,7 +1951,7 @@ public class OperateInstallActivity extends BaseActivity {
                 }
                 case Data.MSG_4: {
                     //  加载carNo图片
-                    Picasso.with(OperateInstallActivity.this)
+                    Picasso.get()
                             .load(mCarNoPic)
                             .fit()
                             .centerInside()
@@ -1964,7 +1964,7 @@ public class OperateInstallActivity extends BaseActivity {
                 }
                 case Data.MSG_5: {
                     //  加载frameNo图片
-                    Picasso.with(OperateInstallActivity.this)
+                    Picasso.get()
                             .load(mCarFramePic)
                             .fit()
                             .centerInside()
@@ -2008,7 +2008,7 @@ public class OperateInstallActivity extends BaseActivity {
                         mCarNoPicUrl = null;
                         mCarNoPic = null;
 
-                        Picasso.with(OperateInstallActivity.this)
+                        Picasso.get()
                                 .load(R.drawable.ic_camera)
                                 .fit()
                                 .centerInside()
@@ -2023,7 +2023,7 @@ public class OperateInstallActivity extends BaseActivity {
                         mCarFramePicUrl = null;
                         mCarFramePic = null;
 
-                        Picasso.with(OperateInstallActivity.this)
+                        Picasso.get()
                                 .load(R.drawable.ic_camera)
                                 .fit()
                                 .centerInside()
@@ -2070,7 +2070,7 @@ public class OperateInstallActivity extends BaseActivity {
                 case Data.MSG_9: {
                     //  获取订单信息
                     if (null != mCarNoPicUrl) {
-                        Picasso.with(OperateInstallActivity.this)
+                        Picasso.get()
                                 .load(mCarNoPic)
                                 .fit()
                                 .centerInside()
@@ -2082,7 +2082,7 @@ public class OperateInstallActivity extends BaseActivity {
                     }
 
                     if (null != mCarFramePicUrl) {
-                        Picasso.with(OperateInstallActivity.this)
+                        Picasso.get()
                                 .load(mCarFramePic)
                                 .fit()
                                 .centerInside()

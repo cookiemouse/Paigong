@@ -1252,27 +1252,27 @@ public class OperateRepairActivity extends BaseActivity {
 //                    mTextViewInstallName.setText(installNameG);
 //                    mTextViewInstallPhone.setText(installPhoneG);
                     mTextViewDescribe.setText(mDescribe);
-                    Picasso.with(OperateRepairActivity.this)
+                    Picasso.get()
                             .load(positionPicG)
                             .error(R.color.colorNull)
                             .fit()
                             .centerInside()
                             .into(mImageViewPositionOld);
-                    Picasso.with(OperateRepairActivity.this)
+                    Picasso.get()
                             .load(installPicG)
                             .error(R.color.colorNull)
                             .fit()
                             .centerInside()
                             .into(mImageViewInstallOld);
                     Log.i(TAG, "handleMessage: mPositionPicNew-->" + mPositionPicNew);
-                    Picasso.with(OperateRepairActivity.this)
+                    Picasso.get()
                             .load(mPositionPicNew)
                             .error(R.drawable.ic_camera)
                             .fit()
                             .centerInside()
                             .into(mImageViewPositionNew);
                     Log.i(TAG, "handleMessage: mInstallPicNew-->" + mInstallPicNew);
-                    Picasso.with(OperateRepairActivity.this)
+                    Picasso.get()
                             .load(mInstallPicNew)
                             .error(R.drawable.ic_camera)
                             .fit()
@@ -1346,7 +1346,7 @@ public class OperateRepairActivity extends BaseActivity {
                         mImageViewPositionNewDelete.setVisibility(View.GONE);
                         mPositionPicUrlNew = null;
                         mDatabaseManager.addRepairPositionUrl(tId, null);
-                        Picasso.with(OperateRepairActivity.this)
+                        Picasso.get()
                                 .load(R.drawable.ic_camera)
                                 .fit()
                                 .centerInside()
@@ -1355,7 +1355,7 @@ public class OperateRepairActivity extends BaseActivity {
                         mImageViewInstallNewDelete.setVisibility(View.GONE);
                         mInstallPicUrlNew = null;
                         mDatabaseManager.addRepairInstallUrl(tId, null);
-                        Picasso.with(OperateRepairActivity.this)
+                        Picasso.get()
                                 .load(R.drawable.ic_camera)
                                 .fit()
                                 .centerInside()
@@ -1367,14 +1367,14 @@ public class OperateRepairActivity extends BaseActivity {
                     //  上传图片成功
                     if (Data.DATA_UPLOAD_TYPE_3 == mPicPosition) {
                         mImageViewPositionNewDelete.setVisibility(View.VISIBLE);
-                        Picasso.with(OperateRepairActivity.this)
+                        Picasso.get()
                                 .load(mPositionPicNew)
                                 .fit()
                                 .centerInside().error(R.drawable.ic_camera)
                                 .into(mImageViewPositionNew);
                     } else {
                         mImageViewInstallNewDelete.setVisibility(View.VISIBLE);
-                        Picasso.with(OperateRepairActivity.this)
+                        Picasso.get()
                                 .load(mInstallPicNew)
                                 .fit()
                                 .centerInside().error(R.drawable.ic_camera)

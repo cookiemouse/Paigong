@@ -44,13 +44,13 @@ public class OperateInstallAdapter extends RecyclerView.Adapter<OperateInstallAd
 
         if (null == path) {
             holder.imageViewDelete.setVisibility(View.GONE);
-            Picasso.with(context)
+            Picasso.get()
                     .load(R.drawable.ic_add_pic)
                     .fit()
                     .centerInside()
                     .into(holder.imageViewPic);
         } else {
-            Picasso.with(context)
+            Picasso.get()
                     .load(path)
                     .fit()
                     .centerInside()
