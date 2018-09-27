@@ -11,6 +11,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.GridLayoutManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -27,6 +29,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 import com.tianyigps.dispatch2.R;
+import com.tianyigps.dispatch2.adapter.OperateInstallAdapter;
 import com.tianyigps.dispatch2.base.BaseActivity;
 import com.tianyigps.dispatch2.bean.CheckImeiBean;
 import com.tianyigps.dispatch2.bean.DeletePicBean;
@@ -34,6 +37,8 @@ import com.tianyigps.dispatch2.bean.LastInstallerBean;
 import com.tianyigps.dispatch2.bean.StartOrderInfoBean;
 import com.tianyigps.dispatch2.bean.UploadPicBean;
 import com.tianyigps.dispatch2.bean.WholeImeiBean;
+import com.tianyigps.dispatch2.customview.MyRecyclerView;
+import com.tianyigps.dispatch2.data.AdapterOperateInstallRecyclerData;
 import com.tianyigps.dispatch2.data.Data;
 import com.tianyigps.dispatch2.data.PicData;
 import com.tianyigps.dispatch2.dialog.LoadingDialogFragment;
@@ -57,17 +62,24 @@ import com.tianyigps.dispatch2.utils.Uri2FileU;
 import com.yundian.bottomdialog.BottomDialog;
 import com.zxy.tiny.callback.FileCallback;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static com.tianyigps.dispatch2.data.Data.DATA_UPLOAD_TYPE_3;
 
 public class OperateRepairActivity extends BaseActivity {
 
     private static final String TAG = "OperateRepairActivity";
 
+    private static final int PIC_MAX = 8;
+
     private static final int INTENT_CHOICE_P = 1;
     private static final int INTENT_PHOTO_P = 2;
     private static final int INTENT_CHOICE_I = 3;
     private static final int INTENT_PHOTO_I = 4;
-    private int picType = 1;   //  1 = 安装位置，3 = 接线图
+    private static final int INTENT_CHOICE_R = 9;
+    private static final int INTENT_PHOTO_R = 10;
+    private int picType = 1;   //  1 = 安装位置，3 = 接线图, 9 = RecyclerView
 
     private ImageView mImageViewLocate, mImageViewPositionOld, mImageViewInstallOld;
     private ImageView mImageViewPositionNew, mImageViewInstallNew, mImageViewPositionNewDelete, mImageViewInstallNewDelete;
@@ -134,6 +146,12 @@ public class OperateRepairActivity extends BaseActivity {
     private boolean isCheckedImei = true;
     private boolean isToLocate = false;
     private boolean isImeiEdit = false;
+
+    //  RecycleView
+    private MyRecyclerView mRecyclerView;
+    private OperateInstallAdapter mOperateRepairAdapter;
+    private List<AdapterOperateInstallRecyclerData> mAdapterOperateRepairRecyclerDataList;
+    private int itemRecycler;   //  Recycler操作位置
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -230,6 +248,34 @@ public class OperateRepairActivity extends BaseActivity {
                 String path = new Uri2FileU(OperateRepairActivity.this).getRealPathFromUri(uri);
                 Log.i(TAG, "onActivityResult: path-->" + path);
                 uploadPic(Data.DATA_UPLOAD_TYPE_4, mInstallPicUrlNew, path);
+                break;
+            }
+            case INTENT_CHOICE_R: {
+                Uri selectedImage = data.getData();
+
+                String path = new Uri2FileU(OperateRepairActivity.this).getRealPathFromUri(selectedImage);
+                Log.i(TAG, "onActivityResult: path-->" + path);
+                String imgUrl = mAdapterOperateRepairRecyclerDataList.get(itemRecycler).getImgUrl();
+
+                uploadPic(Data.DATA_UPLOAD_TYPE_5, imgUrl, path);
+                break;
+            }
+            case INTENT_PHOTO_R: {
+                Uri uri = null;
+                if (data != null && data.getData() != null) {
+                    uri = data.getData();
+                }
+                if (uri == null) {
+                    if (mUriPhoto != null) {
+                        uri = mUriPhoto;
+                    }
+                }
+
+                String path = new Uri2FileU(OperateRepairActivity.this).getRealPathFromUri(uri);
+
+                String imgUrl = mAdapterOperateRepairRecyclerDataList.get(itemRecycler).getImgUrl();
+
+                uploadPic(Data.DATA_UPLOAD_TYPE_5, imgUrl, path);
                 break;
             }
             default: {
@@ -339,7 +385,15 @@ public class OperateRepairActivity extends BaseActivity {
         mTextViewNewDeviceTitle = findViewById(R.id.tv_activity_operate_replace_device_no_title);
         mEditTextNewImei = findViewById(R.id.et_activity_operate_replace_device_no);
 
+        mRecyclerView = findViewById(R.id.rv_activity_operate_repair);
+        mRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+
         mDatabaseManager = new DatabaseManager(OperateRepairActivity.this);
+
+        mAdapterOperateRepairRecyclerDataList = new ArrayList<>();
+        mOperateRepairAdapter = new OperateInstallAdapter(this, mAdapterOperateRepairRecyclerDataList);
+        mRecyclerView.setAdapter(mOperateRepairAdapter);
 
 //        loadSavedData();
 
@@ -534,6 +588,25 @@ public class OperateRepairActivity extends BaseActivity {
             }
         });
 
+        mOperateRepairAdapter.setOnItemOperateListener(new OperateInstallAdapter.OnItemOperateListener() {
+            @Override
+            public void onDeleteClick(int position) {
+                //  2017/8/1 删除图片
+                mPicPosition = Data.DATA_UPLOAD_TYPE_5;
+                itemRecycler = position;
+                removePicFromRecycler(position);
+            }
+
+            @Override
+            public void onPicClick(int position) {
+                // 2017/8/1 添加图片
+                mPicPosition = Data.DATA_UPLOAD_TYPE_5;
+                itemRecycler = position;
+                picType = 9;
+                showChoiceDialog();
+            }
+        });
+
         mEditTextExplain.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -622,6 +695,59 @@ public class OperateRepairActivity extends BaseActivity {
 
                             mDatabaseManager.addRepairPositionPic(tId, mPositionPicNew, mPositionPicUrlNew);
                             mDatabaseManager.addRepairInstallPic(tId, mInstallPicNew, mInstallPicUrlNew);
+
+                            String pic1 = carListBean.getPic1();
+                            String ossPic1 = carListBean.getOssPic1();
+                            String pic2 = carListBean.getPic2();
+                            String ossPic2 = carListBean.getOssPic2();
+                            String pic3 = carListBean.getPic3();
+                            String ossPic3 = carListBean.getOssPic3();
+                            String pic4 = carListBean.getPic4();
+                            String ossPic4 = carListBean.getOssPic4();
+                            String pic5 = carListBean.getPic5();
+                            String ossPic5 = carListBean.getOssPic5();
+                            String pic6 = carListBean.getPic6();
+                            String ossPic6 = carListBean.getOssPic6();
+                            String pic7 = carListBean.getPic7();
+                            String ossPic7 = carListBean.getOssPic7();
+                            String pic8 = carListBean.getPic8();
+                            String ossPic8 = carListBean.getOssPic8();
+                            String pic9 = carListBean.getPic9();
+                            String ossPic9 = carListBean.getOssPic9();
+
+                            if (null != pic1) {
+                                mAdapterOperateRepairRecyclerDataList.add(new AdapterOperateInstallRecyclerData(ossPic1, pic1));
+//                    mDatabaseManager.addCarPics(idMainCar, 0, mBaseImg + pic1, pic1);
+                            }
+                            if (null != pic2) {
+                                mAdapterOperateRepairRecyclerDataList.add(new AdapterOperateInstallRecyclerData(ossPic2, pic2));
+//                    mDatabaseManager.addCarPics(idMainCar, 1, mBaseImg + pic1, pic1);
+                            }
+                            if (null != pic3) {
+                                mAdapterOperateRepairRecyclerDataList.add(new AdapterOperateInstallRecyclerData(ossPic3, pic3));
+//                    mDatabaseManager.addCarPics(idMainCar, 2, mBaseImg + pic1, pic1);
+                            }
+                            if (null != pic4) {
+                                mAdapterOperateRepairRecyclerDataList.add(new AdapterOperateInstallRecyclerData(ossPic4, pic4));
+//                    mDatabaseManager.addCarPics(idMainCar, 3, mBaseImg + pic1, pic1);
+                            }
+                            if (null != pic5) {
+                                mAdapterOperateRepairRecyclerDataList.add(new AdapterOperateInstallRecyclerData(ossPic5, pic5));
+//                    mDatabaseManager.addCarPics(idMainCar, 4, mBaseImg + pic1, pic1);
+                            }
+                            if (null != pic6) {
+                                mAdapterOperateRepairRecyclerDataList.add(new AdapterOperateInstallRecyclerData(ossPic6, pic6));
+//                    mDatabaseManager.addCarPics(idMainCar, 5, mBaseImg + pic1, pic1);
+                            }
+                            if (null != pic7) {
+                                mAdapterOperateRepairRecyclerDataList.add(new AdapterOperateInstallRecyclerData(ossPic7, pic7));
+                            }
+                            if (null != pic8) {
+                                mAdapterOperateRepairRecyclerDataList.add(new AdapterOperateInstallRecyclerData(ossPic8, pic8));
+                            }
+                            if (null != pic9) {
+                                mAdapterOperateRepairRecyclerDataList.add(new AdapterOperateInstallRecyclerData(ossPic9, pic9));
+                            }
 
                             myHandler.sendEmptyMessage(Data.MSG_1);
                             return;
@@ -734,17 +860,53 @@ public class OperateRepairActivity extends BaseActivity {
                 UploadPicBean.ObjBean objBean = uploadPicBean.getObj();
                 String imgUrl = objBean.getImgUrl();
                 String ossImgUrl = objBean.getOssImgUrl();
-                if (picType < 3) {
-                    mDatabaseManager.addRepairPositionUrl(tId, imgUrl);
-                    mPositionPicUrlNew = imgUrl;
-                    mPositionPicNew = ossImgUrl;
-                } else {
-                    mDatabaseManager.addRepairInstallUrl(tId, imgUrl);
-                    mInstallPicUrlNew = imgUrl;
-                    mInstallPicNew = ossImgUrl;
+                switch (picType) {
+                    //  Recycler
+                    case INTENT_CHOICE_P: {
+                    }
+                    case INTENT_PHOTO_P: {
+                        mDatabaseManager.addRepairPositionUrl(tId, imgUrl);
+                        mPositionPicUrlNew = imgUrl;
+                        mPositionPicNew = ossImgUrl;
+                        myHandler.sendEmptyMessage(Data.MSG_7);
+                        break;
+                    }
+                    case INTENT_CHOICE_I: {
+                    }
+                    case INTENT_PHOTO_I: {
+                        mDatabaseManager.addRepairInstallUrl(tId, imgUrl);
+                        mInstallPicUrlNew = imgUrl;
+                        mInstallPicNew = ossImgUrl;
+                        myHandler.sendEmptyMessage(Data.MSG_7);
+                        break;
+                    }
+                    case INTENT_CHOICE_R: {
+                    }
+                    case INTENT_PHOTO_R: {
+                        AdapterOperateInstallRecyclerData data = mAdapterOperateRepairRecyclerDataList.get(itemRecycler);
+                        if (null == data || null == data.getImgUrl()) {
+                            int size = mAdapterOperateRepairRecyclerDataList.size();
+                            if (size <= PIC_MAX) {
+                                mAdapterOperateRepairRecyclerDataList.add(new AdapterOperateInstallRecyclerData());
+                            }
+                        }
+                        data.setPath(ossImgUrl);
+                        data.setImgUrl(imgUrl);
+                        myHandler.sendEmptyMessage(Data.MSG_7);
+                        break;
+                    }
                 }
+//                if (picType < 3) {
+//                    mDatabaseManager.addRepairPositionUrl(tId, imgUrl);
+//                    mPositionPicUrlNew = imgUrl;
+//                    mPositionPicNew = ossImgUrl;
+//                } else {
+//                    mDatabaseManager.addRepairInstallUrl(tId, imgUrl);
+//                    mInstallPicUrlNew = imgUrl;
+//                    mInstallPicNew = ossImgUrl;
+//                }
 
-                myHandler.sendEmptyMessage(Data.MSG_7);
+//                myHandler.sendEmptyMessage(Data.MSG_7);
             }
         });
 
@@ -908,6 +1070,17 @@ public class OperateRepairActivity extends BaseActivity {
     //  删除图片
     private void removePic(int type, String url) {
         showDeletePicDialog(tId, type, url);
+    }
+
+    //  RecycleView删除图片
+    private void removePicFromRecycler(int position) {
+        AdapterOperateInstallRecyclerData data = mAdapterOperateRepairRecyclerDataList.get(position);
+        String url = data.getImgUrl();
+        if (null == url || "".equals(url)) {
+            return;
+        }
+        showDeletePicDialog(carId, Data.DATA_UPLOAD_TYPE_5, url);
+//        mNetworkManager.deletePic(eid, token, orderNo, carId, Data.DATA_UPLOAD_TYPE_5, url, userName);
     }
 
     //  上传图片
@@ -1291,6 +1464,10 @@ public class OperateRepairActivity extends BaseActivity {
                         mImageViewInstallNewDelete.setVisibility(View.GONE);
                     }
 
+                    if (mAdapterOperateRepairRecyclerDataList.size() <= PIC_MAX) {
+                        mAdapterOperateRepairRecyclerDataList.add(new AdapterOperateInstallRecyclerData());
+                    }
+
                     loadSavedData();
                     break;
                 }
@@ -1342,44 +1519,105 @@ public class OperateRepairActivity extends BaseActivity {
                 }
                 case Data.MSG_6: {
                     //  删除图片
-                    if (Data.DATA_UPLOAD_TYPE_3 == mPicPosition) {
-                        mImageViewPositionNewDelete.setVisibility(View.GONE);
-                        mPositionPicUrlNew = null;
-                        mDatabaseManager.addRepairPositionUrl(tId, null);
-                        Picasso.get()
-                                .load(R.drawable.ic_camera)
-                                .fit()
-                                .centerInside()
-                                .into(mImageViewPositionNew);
-                    } else {
-                        mImageViewInstallNewDelete.setVisibility(View.GONE);
-                        mInstallPicUrlNew = null;
-                        mDatabaseManager.addRepairInstallUrl(tId, null);
-                        Picasso.get()
-                                .load(R.drawable.ic_camera)
-                                .fit()
-                                .centerInside()
-                                .into(mImageViewInstallNew);
+                    switch (mPicPosition){
+                        case Data.DATA_UPLOAD_TYPE_3:{
+                            mImageViewPositionNewDelete.setVisibility(View.GONE);
+                            mPositionPicUrlNew = null;
+                            mDatabaseManager.addRepairPositionUrl(tId, null);
+                            Picasso.get()
+                                    .load(R.drawable.ic_camera)
+                                    .fit()
+                                    .centerInside()
+                                    .into(mImageViewPositionNew);
+                            break;
+                        }
+                        case Data.DATA_UPLOAD_TYPE_4:{
+                            mImageViewInstallNewDelete.setVisibility(View.GONE);
+                            mInstallPicUrlNew = null;
+                            mDatabaseManager.addRepairInstallUrl(tId, null);
+                            Picasso.get()
+                                    .load(R.drawable.ic_camera)
+                                    .fit()
+                                    .centerInside()
+                                    .into(mImageViewInstallNew);
+                            break;
+                        }
+                        case Data.DATA_UPLOAD_TYPE_5:{
+                            mAdapterOperateRepairRecyclerDataList.remove(itemRecycler);
+                            int last = mAdapterOperateRepairRecyclerDataList.size() - 1;
+                            if (null != mAdapterOperateRepairRecyclerDataList.get(last).getPath()) {
+                                mAdapterOperateRepairRecyclerDataList.add(new AdapterOperateInstallRecyclerData());
+                            }
+                            mOperateRepairAdapter.notifyDataSetChanged();
+//                            mDatabaseManager.modifyCarPics(idMainCar, itemRecycler, null, null);
+                            break;
+                        }
                     }
+//                    if (Data.DATA_UPLOAD_TYPE_3 == mPicPosition) {
+//                        mImageViewPositionNewDelete.setVisibility(View.GONE);
+//                        mPositionPicUrlNew = null;
+//                        mDatabaseManager.addRepairPositionUrl(tId, null);
+//                        Picasso.get()
+//                                .load(R.drawable.ic_camera)
+//                                .fit()
+//                                .centerInside()
+//                                .into(mImageViewPositionNew);
+//                    } else {
+//                        mImageViewInstallNewDelete.setVisibility(View.GONE);
+//                        mInstallPicUrlNew = null;
+//                        mDatabaseManager.addRepairInstallUrl(tId, null);
+//                        Picasso.get()
+//                                .load(R.drawable.ic_camera)
+//                                .fit()
+//                                .centerInside()
+//                                .into(mImageViewInstallNew);
+//                    }
                     break;
                 }
                 case Data.MSG_7: {
                     //  上传图片成功
-                    if (Data.DATA_UPLOAD_TYPE_3 == mPicPosition) {
-                        mImageViewPositionNewDelete.setVisibility(View.VISIBLE);
-                        Picasso.get()
-                                .load(mPositionPicNew)
-                                .fit()
-                                .centerInside().error(R.drawable.ic_camera)
-                                .into(mImageViewPositionNew);
-                    } else {
-                        mImageViewInstallNewDelete.setVisibility(View.VISIBLE);
-                        Picasso.get()
-                                .load(mInstallPicNew)
-                                .fit()
-                                .centerInside().error(R.drawable.ic_camera)
-                                .into(mImageViewInstallNew);
+                    switch (mPicPosition){
+                        case Data.DATA_UPLOAD_TYPE_3:{
+                            mImageViewPositionNewDelete.setVisibility(View.VISIBLE);
+                            Picasso.get()
+                                    .load(mPositionPicNew)
+                                    .fit()
+                                    .centerInside().error(R.drawable.ic_camera)
+                                    .into(mImageViewPositionNew);
+                            break;
+                        }
+                        case Data.DATA_UPLOAD_TYPE_4:{
+                            mImageViewInstallNewDelete.setVisibility(View.VISIBLE);
+                            Picasso.get()
+                                    .load(mInstallPicNew)
+                                    .fit()
+                                    .centerInside().error(R.drawable.ic_camera)
+                                    .into(mImageViewInstallNew);
+                            break;
+                        }
+                        case Data.DATA_UPLOAD_TYPE_5:{
+                            mOperateRepairAdapter.notifyDataSetChanged();
+                            break;
+                        }
                     }
+//                    if (Data.DATA_UPLOAD_TYPE_3 == mPicPosition) {
+//                        mImageViewPositionNewDelete.setVisibility(View.VISIBLE);
+//                        Picasso.get()
+//                                .load(mPositionPicNew)
+//                                .fit()
+//                                .centerInside().error(R.drawable.ic_camera)
+//                                .into(mImageViewPositionNew);
+//                    } else {
+//                        mImageViewInstallNewDelete.setVisibility(View.VISIBLE);
+//                        Picasso.get()
+//                                .load(mInstallPicNew)
+//                                .fit()
+//                                .centerInside().error(R.drawable.ic_camera)
+//                                .into(mImageViewInstallNew);
+//                    }
+//                    if (Data.DATA_UPLOAD_TYPE_5 == mPicPosition){
+//                        mOperateRepairAdapter.notifyDataSetChanged();
+//                    }
                     break;
                 }
                 case Data.MSG_8: {

@@ -1,11 +1,9 @@
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="@dimen/dp_8"
-    android:scrollbars="none"
-    >
+    android:scrollbars="none">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -19,7 +17,7 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:padding="@dimen/dp_8"
-            android:src="@drawable/ic_car_no"/>
+            android:src="@drawable/ic_car_no" />
 
         <TextView
             android:id="@+id/tv_activity_operate_default_car_no"
@@ -27,8 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/iv_activity_operate_default_device_type"
             android:layout_toEndOf="@+id/iv_activity_operate_default_device_type"
-            android:layout_toRightOf="@+id/iv_activity_operate_default_device_type"
-            />
+            android:layout_toRightOf="@+id/iv_activity_operate_default_device_type" />
 
         <TextView
             android:id="@+id/tv_activity_operate_default_frame_no"
@@ -36,8 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/iv_activity_operate_default_device_type"
             android:layout_toEndOf="@+id/iv_activity_operate_default_device_type"
-            android:layout_toRightOf="@+id/iv_activity_operate_default_device_type"
-            />
+            android:layout_toRightOf="@+id/iv_activity_operate_default_device_type" />
 
         <ImageView
             android:id="@+id/iv_activity_operate_default_locate"
@@ -47,7 +43,7 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:padding="@dimen/dp_8"
-            android:src="@drawable/ic_address"/>
+            android:src="@drawable/ic_address" />
 
         <ImageView
             android:id="@+id/iv_activity_operate_default_device_type"
@@ -58,19 +54,18 @@
             android:layout_below="@+id/iv_activity_operate_default_car"
             android:layout_marginTop="@dimen/dp_16"
             android:padding="@dimen/dp_8"
-            android:src="@drawable/ic_device_no"/>
+            android:src="@drawable/ic_device_no" />
 
         <TextView
             android:id="@+id/tv_activity_operate_default_device_type_and_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:maxWidth="@dimen/dp_240"
-            android:lines="1"
-            android:ellipsize="end"
             android:layout_alignParentTop="true"
             android:layout_toEndOf="@+id/iv_activity_operate_default_car"
             android:layout_toRightOf="@+id/iv_activity_operate_default_car"
-            />
+            android:ellipsize="end"
+            android:lines="1"
+            android:maxWidth="@dimen/dp_240" />
 
         <TextView
             android:id="@+id/tv_activity_operate_default_device_t_no"
@@ -78,8 +73,7 @@
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/iv_activity_operate_default_car"
             android:layout_toEndOf="@+id/iv_activity_operate_default_car"
-            android:layout_toRightOf="@+id/iv_activity_operate_default_car"
-            />
+            android:layout_toRightOf="@+id/iv_activity_operate_default_car" />
 
         <ImageView
             android:id="@+id/iv_activity_operate_default_position"
@@ -90,7 +84,7 @@
             android:layout_below="@+id/iv_activity_operate_default_device_type"
             android:layout_marginTop="@dimen/dp_16"
             android:padding="@dimen/dp_8"
-            android:src="@drawable/ic_place"/>
+            android:src="@drawable/ic_place" />
 
         <TextView
             android:id="@+id/tv_activity_operate_default_position_title"
@@ -99,7 +93,7 @@
             android:layout_alignTop="@+id/iv_activity_operate_default_position"
             android:layout_toEndOf="@+id/iv_activity_operate_default_position"
             android:layout_toRightOf="@+id/iv_activity_operate_default_position"
-            android:text="@string/ole_install_position"/>
+            android:text="@string/ole_install_position" />
 
         <TextView
             android:id="@+id/tv_activity_operate_default_position"
@@ -109,8 +103,7 @@
             android:layout_toEndOf="@+id/iv_activity_operate_default_position"
             android:layout_toRightOf="@+id/iv_activity_operate_default_position"
             android:lines="1"
-            android:maxWidth="@dimen/dp_240"
-            />
+            android:maxWidth="@dimen/dp_240" />
 
         <ImageView
             android:id="@+id/iv_activity_operate_default_position_pic"
@@ -119,17 +112,17 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_alignTop="@+id/tv_activity_operate_default_position_title"
-            android:src="@drawable/ic_camera"/>
+            android:src="@drawable/ic_camera" />
 
         <RelativeLayout
             android:id="@+id/rl_activity_operate_default_install"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:visibility="gone"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/iv_activity_operate_default_position"
-            android:layout_marginTop="@dimen/dp_16">
+            android:layout_marginTop="@dimen/dp_16"
+            android:visibility="gone">
 
             <ImageView
                 android:id="@+id/iv_activity_operate_default_install"
@@ -138,7 +131,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:padding="@dimen/dp_8"
-                android:src="@drawable/ic_connection"/>
+                android:src="@drawable/ic_connection" />
 
             <TextView
                 android:id="@+id/tv_activity_operate_default_install"
@@ -148,7 +141,7 @@
                 android:layout_toEndOf="@+id/iv_activity_operate_default_install"
                 android:layout_toRightOf="@+id/iv_activity_operate_default_install"
                 android:gravity="center"
-                android:text="@string/old_install_pic"/>
+                android:text="@string/old_install_pic" />
 
             <ImageView
                 android:id="@+id/iv_activity_operate_default_install_pic"
@@ -157,7 +150,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignTop="@+id/iv_activity_operate_default_install"
-                android:src="@drawable/ic_camera"/>
+                android:src="@drawable/ic_camera" />
         </RelativeLayout>
 
 
@@ -167,7 +160,7 @@
             android:layout_height="@dimen/dp_0_5"
             android:layout_below="@id/rl_activity_operate_default_install"
             android:layout_marginTop="@dimen/dp_16"
-            android:background="@color/colorBlueTheme"/>
+            android:background="@color/colorBlueTheme" />
 
         <LinearLayout
             android:id="@+id/ll_activity_operate_default_install"
@@ -181,23 +174,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/dp_40"
                 android:gravity="center_vertical"
-                android:text="@string/install_worker"/>
+                android:text="@string/install_worker" />
 
             <TextView
                 android:id="@+id/tv_activity_operate_default_worker"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/dp_40"
                 android:layout_weight="1"
-                android:gravity="center_vertical|end"
-                />
+                android:gravity="center_vertical|end" />
 
             <TextView
                 android:id="@+id/tv_activity_operate_default_worker_phone"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/dp_40"
                 android:layout_weight="1"
-                android:gravity="center_vertical|end"
-                />
+                android:gravity="center_vertical|end" />
         </LinearLayout>
 
         <View
@@ -205,7 +196,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_0_5"
             android:layout_below="@id/ll_activity_operate_default_install"
-            android:background="@color/colorBlueTheme"/>
+            android:background="@color/colorBlueTheme" />
 
         <TextView
             android:id="@+id/tv_activity_operate_fault_describe_title"
@@ -216,8 +207,7 @@
             android:layout_below="@+id/view_activity_operate_default_line_2"
             android:layout_marginTop="@dimen/dp_16"
             android:text="@string/repair_suggest"
-            android:textStyle="bold"
-            />
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/tv_activity_operate_fault_describe"
@@ -226,8 +216,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/tv_activity_operate_fault_describe_title"
-            android:padding="@dimen/dp_8"
-            />
+            android:padding="@dimen/dp_8" />
 
         <ImageView
             android:id="@+id/iv_activity_operate_remove_state"
@@ -240,27 +229,27 @@
             android:layout_marginEnd="@dimen/dp_16"
             android:layout_marginRight="@dimen/dp_16"
             android:layout_marginTop="@dimen/dp_16"
-            android:src="@drawable/bg_switch"/>
+            android:src="@drawable/bg_switch" />
 
         <!--<TextView-->
-            <!--android:id="@+id/tv_activity_operate_remove_state"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_alignParentEnd="true"-->
-            <!--android:layout_alignParentRight="true"-->
-            <!--android:layout_below="@+id/tv_activity_operate_fault_describe"-->
-            <!--android:layout_marginBottom="@dimen/dp_16"-->
-            <!--android:layout_marginEnd="@dimen/dp_16"-->
-            <!--android:layout_marginRight="@dimen/dp_16"-->
-            <!--android:layout_marginTop="@dimen/dp_16"-->
-            <!--android:background="@drawable/bg_button_clickable"-->
-            <!--android:paddingBottom="@dimen/dp_8"-->
-            <!--android:paddingLeft="@dimen/dp_16"-->
-            <!--android:paddingRight="@dimen/dp_16"-->
-            <!--android:paddingTop="@dimen/dp_8"-->
-            <!--android:text="@string/repair_replace"-->
-            <!--android:textColor="@color/colorWhite"-->
-            <!--/>-->
+        <!--android:id="@+id/tv_activity_operate_remove_state"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentEnd="true"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_below="@+id/tv_activity_operate_fault_describe"-->
+        <!--android:layout_marginBottom="@dimen/dp_16"-->
+        <!--android:layout_marginEnd="@dimen/dp_16"-->
+        <!--android:layout_marginRight="@dimen/dp_16"-->
+        <!--android:layout_marginTop="@dimen/dp_16"-->
+        <!--android:background="@drawable/bg_button_clickable"-->
+        <!--android:paddingBottom="@dimen/dp_8"-->
+        <!--android:paddingLeft="@dimen/dp_16"-->
+        <!--android:paddingRight="@dimen/dp_16"-->
+        <!--android:paddingTop="@dimen/dp_8"-->
+        <!--android:text="@string/repair_replace"-->
+        <!--android:textColor="@color/colorWhite"-->
+        <!--/>-->
 
         <RelativeLayout
             android:id="@+id/rl_activity_operate_replace"
@@ -277,7 +266,7 @@
                 android:layout_width="@dimen/dp_40"
                 android:layout_height="@dimen/dp_40"
                 android:padding="@dimen/dp_8"
-                android:src="@drawable/ic_device_no"/>
+                android:src="@drawable/ic_device_no" />
 
             <TextView
                 android:id="@+id/tv_activity_operate_replace_device_no_title"
@@ -286,7 +275,7 @@
                 android:layout_alignParentTop="true"
                 android:layout_toEndOf="@+id/iv_activity_operate_replace"
                 android:layout_toRightOf="@+id/iv_activity_operate_replace"
-                android:text="新设备号"/>
+                android:text="新设备号" />
 
             <EditText
                 android:id="@+id/et_activity_operate_replace_device_no"
@@ -298,13 +287,13 @@
                 android:layout_toEndOf="@+id/iv_activity_operate_replace"
                 android:layout_toRightOf="@+id/iv_activity_operate_replace"
                 android:background="@null"
+                android:ellipsize="end"
                 android:hint="请输入设备号（至少8位）"
                 android:inputType="number"
-                android:ellipsize="end"
-                android:singleLine="true"
                 android:lines="1"
                 android:maxWidth="@dimen/dp_240"
-                android:textSize="@dimen/sp_14"/>
+                android:singleLine="true"
+                android:textSize="@dimen/sp_14" />
 
             <ImageView
                 android:id="@+id/iv_activity_operate_replace_locate"
@@ -313,7 +302,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:padding="@dimen/dp_8"
-                android:src="@drawable/ic_address"/>
+                android:src="@drawable/ic_address" />
 
             <ImageView
                 android:id="@+id/iv_activity_operate_replace_scanner"
@@ -322,7 +311,7 @@
                 android:layout_toLeftOf="@+id/iv_activity_operate_replace_locate"
                 android:layout_toStartOf="@+id/iv_activity_operate_replace_locate"
                 android:padding="@dimen/dp_8"
-                android:src="@drawable/ic_scanner"/>
+                android:src="@drawable/ic_scanner" />
 
             <View
                 android:id="@+id/view_activity_operate_line_0"
@@ -332,7 +321,7 @@
                 android:layout_marginLeft="@dimen/dp_40"
                 android:layout_marginStart="@dimen/dp_40"
                 android:layout_marginTop="@dimen/dp_8"
-                android:background="@color/colorBlueTheme"/>
+                android:background="@color/colorBlueTheme" />
 
             <TextView
                 android:id="@+id/tv_activity_operate_repair_tip_0"
@@ -343,8 +332,7 @@
                 android:layout_marginStart="@dimen/dp_40"
                 android:text="@string/tip_imei"
                 android:textColor="@color/colorOrange"
-                android:visibility="gone">
-            </TextView>
+                android:visibility="gone"></TextView>
         </RelativeLayout>
 
         <ImageView
@@ -356,7 +344,7 @@
             android:layout_below="@+id/rl_activity_operate_replace"
             android:layout_marginTop="@dimen/dp_16"
             android:padding="@dimen/dp_8"
-            android:src="@drawable/ic_place"/>
+            android:src="@drawable/ic_place" />
 
         <TextView
             android:id="@+id/tv_activity_operate_default_position_title_new"
@@ -365,7 +353,7 @@
             android:layout_alignTop="@+id/iv_activity_operate_default_position_new"
             android:layout_toEndOf="@+id/iv_activity_operate_default_position_new"
             android:layout_toRightOf="@+id/iv_activity_operate_default_position_new"
-            android:text="@string/install_place"/>
+            android:text="@string/install_place" />
 
         <EditText
             android:id="@+id/et_activity_operate_default_position_new"
@@ -377,12 +365,12 @@
             android:layout_toEndOf="@+id/iv_activity_operate_default_position_new"
             android:layout_toRightOf="@+id/iv_activity_operate_default_position_new"
             android:background="@null"
-            android:hint="@string/enter_install_place"
             android:ellipsize="end"
-            android:singleLine="true"
+            android:hint="@string/enter_install_place"
             android:lines="1"
             android:maxWidth="@dimen/dp_240"
-            android:textSize="@dimen/sp_14"/>
+            android:singleLine="true"
+            android:textSize="@dimen/sp_14" />
 
         <ImageView
             android:id="@+id/iv_activity_operate_default_position_pic_new"
@@ -391,7 +379,7 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_alignTop="@+id/tv_activity_operate_default_position_title_new"
-            android:src="@drawable/ic_camera"/>
+            android:src="@drawable/ic_camera" />
 
         <ImageView
             android:id="@+id/iv_activity_operate_default_position_pic_new_delete"
@@ -404,7 +392,7 @@
             android:background="@drawable/bg_cycle_delete"
             android:padding="@dimen/dp_4"
             android:src="@drawable/ic_delete"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
         <View
             android:id="@+id/view_activity_operate_default_line_3"
@@ -414,7 +402,7 @@
             android:layout_marginLeft="@dimen/dp_40"
             android:layout_marginStart="@dimen/dp_40"
             android:layout_marginTop="@dimen/dp_4"
-            android:background="@color/colorBlueTheme"/>
+            android:background="@color/colorBlueTheme" />
 
         <TextView
             android:id="@+id/tv_activity_operate_repair_tip_1"
@@ -425,8 +413,7 @@
             android:layout_marginStart="@dimen/dp_40"
             android:text="@string/tip_imei"
             android:textColor="@color/colorOrange"
-            android:visibility="gone">
-        </TextView>
+            android:visibility="gone"></TextView>
 
         <RelativeLayout
             android:id="@+id/rl_activity_operate_default_install_new"
@@ -444,7 +431,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:padding="@dimen/dp_8"
-                android:src="@drawable/ic_connection"/>
+                android:src="@drawable/ic_connection" />
 
             <TextView
                 android:id="@+id/tv_activity_operate_default_install_new"
@@ -454,7 +441,7 @@
                 android:layout_toEndOf="@+id/iv_activity_operate_default_install_new"
                 android:layout_toRightOf="@+id/iv_activity_operate_default_install_new"
                 android:gravity="center"
-                android:text="@string/install_pic"/>
+                android:text="@string/install_pic" />
 
             <ImageView
                 android:id="@+id/iv_activity_operate_default_install_pic_new"
@@ -463,7 +450,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignTop="@+id/iv_activity_operate_default_install_new"
-                android:src="@drawable/ic_camera"/>
+                android:src="@drawable/ic_camera" />
 
             <TextView
                 android:id="@+id/tv_activity_operate_repair_tip_2"
@@ -474,8 +461,7 @@
                 android:layout_marginStart="@dimen/dp_40"
                 android:text="@string/tip_pic"
                 android:textColor="@color/colorOrange"
-                android:visibility="invisible">
-            </TextView>
+                android:visibility="invisible"/>
 
         </RelativeLayout>
 
@@ -490,16 +476,22 @@
             android:background="@drawable/bg_cycle_delete"
             android:padding="@dimen/dp_4"
             android:src="@drawable/ic_delete"
-            android:visibility="gone"/>
+            android:visibility="gone" />
+
 
         <View
             android:id="@+id/view_activity_operate_default_line_4"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_0_5"
             android:layout_below="@+id/rl_activity_operate_default_install_new"
-            android:layout_marginTop="@dimen/dp_16"
+            android:layout_marginTop="@dimen/dp_8"
+            android:background="@color/colorBlueTheme" />
 
-            android:background="@color/colorBlueTheme"/>
+        <com.tianyigps.dispatch2.customview.MyRecyclerView
+            android:id="@+id/rv_activity_operate_repair"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/view_activity_operate_default_line_4"/>
 
         <TextView
             android:id="@+id/tv_activity_operate_default_install_explain_title"
@@ -507,9 +499,9 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/view_activity_operate_default_line_4"
+            android:layout_below="@+id/rv_activity_operate_repair"
             android:layout_marginTop="@dimen/dp_16"
-            android:text="@string/explain"/>
+            android:text="@string/explain" />
 
         <EditText
             android:id="@+id/et_activity_operate_default_install_explain"
@@ -522,7 +514,7 @@
             android:hint="@string/enter_explain"
             android:maxLength="200"
             android:minHeight="@dimen/dp_96"
-            android:textSize="@dimen/sp_14"/>
+            android:textSize="@dimen/sp_14" />
 
         <TextView
             android:id="@+id/tv_activity_operate_repair_tip_3"
@@ -531,8 +523,7 @@
             android:layout_below="@id/et_activity_operate_default_install_explain"
             android:text="@string/tip_explain"
             android:textColor="@color/colorOrange"
-            android:visibility="invisible">
-        </TextView>
+            android:visibility="invisible"></TextView>
 
         <TextView
             android:id="@+id/tv_activity_operate_default_install_explain_count"
@@ -542,7 +533,7 @@
             android:layout_alignParentRight="true"
             android:layout_below="@+id/et_activity_operate_default_install_explain"
             android:layout_marginTop="@dimen/dp_4"
-            android:text="0/200"/>
+            android:text="0/200" />
 
         <Button
             android:id="@+id/btn_activity_operate_repair_save"
@@ -556,6 +547,6 @@
             android:paddingLeft="@dimen/dp_80"
             android:paddingRight="@dimen/dp_80"
             android:text="@string/save"
-            android:textColor="@color/colorWhite"/>
+            android:textColor="@color/colorWhite" />
     </RelativeLayout>
 </ScrollView>
