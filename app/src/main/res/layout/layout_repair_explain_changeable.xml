@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/rb_layout_repair_explain_changeable_1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="设备电量不足"
+            android:textSize="@dimen/sp_12" />
+
+        <RadioButton
+            android:id="@+id/rb_layout_repair_explain_changeable_2"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="设备人为拆除"
+            android:textSize="@dimen/sp_12" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/rb_layout_repair_explain_changeable_3"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="设备自然老化"
+            android:textSize="@dimen/sp_12" />
+
+        <RadioButton
+            android:id="@+id/rb_layout_repair_explain_changeable_4"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="设备被人为损坏，无法使用"
+            android:textSize="@dimen/sp_12" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/rb_layout_repair_explain_changeable_5"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="设备人为拆除，无法找到"
+            android:textSize="@dimen/sp_12" />
+
+        <RadioButton
+            android:id="@+id/rb_layout_repair_explain_changeable_6"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="设备进水"
+            android:textSize="@dimen/sp_12" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/rb_layout_repair_explain_changeable_7"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="完全隐蔽安装无法维修"
+            android:textSize="@dimen/sp_12" />
+
+        <RadioButton
+            android:id="@+id/rb_layout_repair_explain_changeable_8"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="其他"
+            android:textSize="@dimen/sp_12" />
+    </TableRow>
+
+</TableLayout>

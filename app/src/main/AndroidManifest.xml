@@ -125,6 +125,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.OperateRepairActivity"
+            android:windowSoftInputMode="adjustPan"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.ChoiceWorkerActivity"

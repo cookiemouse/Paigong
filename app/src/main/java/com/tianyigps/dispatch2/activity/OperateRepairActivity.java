@@ -23,7 +23,9 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.RelativeLayout;
+import android.widget.TableLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -67,9 +69,11 @@ import java.util.List;
 
 import static com.tianyigps.dispatch2.data.Data.DATA_UPLOAD_TYPE_3;
 
-public class OperateRepairActivity extends BaseActivity {
+public class OperateRepairActivity extends BaseActivity implements View.OnClickListener {
 
     private static final String TAG = "OperateRepairActivity";
+
+    private static final String SPLIT = ",";
 
     private static final int PIC_MAX = 8;
 
@@ -90,7 +94,7 @@ public class OperateRepairActivity extends BaseActivity {
 
     private RelativeLayout mRelativeLayoutReplace, mRelativeLayoutInstall, mRelativeLayoutInstallOld;
     private View mViewLineInstall;
-//    private TextView mTextViewState;
+    //    private TextView mTextViewState;
     private ImageView mImageViewState;
     private ImageView mImageViewScanner, mImageViewReplaceLocate;
     private TextView mTextViewNewDeviceTitle;
@@ -123,6 +127,7 @@ public class OperateRepairActivity extends BaseActivity {
     private String carNoG, frameNoG, typeAndNameG, positionG, positionPicG, installPicG, installNameG, installPhoneG;
     private String mDescribe;
     private String mPositionNew, mPositionPicNew, mInstallPicNew, mPositionPicUrlNew, mInstallPicUrlNew, mExplainNew, mImeiNew;
+    private String mStringChoice;
     private int mOrderTerType;
     private String mImeiOld;
     private String mLastInstaller, mLastPhoneNo;
@@ -152,6 +157,14 @@ public class OperateRepairActivity extends BaseActivity {
     private OperateInstallAdapter mOperateRepairAdapter;
     private List<AdapterOperateInstallRecyclerData> mAdapterOperateRepairRecyclerDataList;
     private int itemRecycler;   //  Recycler操作位置
+
+    //  检修说明选项
+    private TableLayout mTabLayoutExplainUnchangeable, mTabLayoutExplainChangeable;
+    private RadioButton mRadioButtonChangeable1, mRadioButtonChangeable2, mRadioButtonChangeable3;
+    private RadioButton mRadioButtonChangeable4, mRadioButtonChangeable5, mRadioButtonChangeable6;
+    private RadioButton mRadioButtonChangeable7, mRadioButtonChangeable8;
+    private RadioButton mRadioButtonUnchangeable1, mRadioButtonUnchangeable2, mRadioButtonUnchangeable3;
+    private RadioButton mRadioButtonUnchangeable4, mRadioButtonUnchangeable5, mRadioButtonUnchangeable6;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -329,6 +342,68 @@ public class OperateRepairActivity extends BaseActivity {
 //        mDatabaseManager.close();
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.rb_layout_repair_explain_changeable_1: {
+                checkRadio(R.id.rb_layout_repair_explain_changeable_1);
+                break;
+            }
+            case R.id.rb_layout_repair_explain_changeable_2: {
+                checkRadio(R.id.rb_layout_repair_explain_changeable_2);
+                break;
+            }
+            case R.id.rb_layout_repair_explain_changeable_3: {
+                checkRadio(R.id.rb_layout_repair_explain_changeable_3);
+                break;
+            }
+            case R.id.rb_layout_repair_explain_changeable_4: {
+                checkRadio(R.id.rb_layout_repair_explain_changeable_4);
+                break;
+            }
+            case R.id.rb_layout_repair_explain_changeable_5: {
+                checkRadio(R.id.rb_layout_repair_explain_changeable_5);
+                break;
+            }
+            case R.id.rb_layout_repair_explain_changeable_6: {
+                checkRadio(R.id.rb_layout_repair_explain_changeable_6);
+                break;
+            }
+            case R.id.rb_layout_repair_explain_changeable_7: {
+                checkRadio(R.id.rb_layout_repair_explain_changeable_7);
+                break;
+            }
+            case R.id.rb_layout_repair_explain_changeable_8: {
+                checkRadio(R.id.rb_layout_repair_explain_changeable_8);
+                break;
+            }
+            case R.id.rb_layout_repair_explain_unchangeable_1: {
+                checkRadio(R.id.rb_layout_repair_explain_unchangeable_1);
+                break;
+            }
+            case R.id.rb_layout_repair_explain_unchangeable_2: {
+                checkRadio(R.id.rb_layout_repair_explain_unchangeable_2);
+                break;
+            }
+            case R.id.rb_layout_repair_explain_unchangeable_3: {
+                checkRadio(R.id.rb_layout_repair_explain_unchangeable_3);
+                break;
+            }
+            case R.id.rb_layout_repair_explain_unchangeable_4: {
+                checkRadio(R.id.rb_layout_repair_explain_unchangeable_4);
+                break;
+            }
+            case R.id.rb_layout_repair_explain_unchangeable_5: {
+                checkRadio(R.id.rb_layout_repair_explain_unchangeable_5);
+                break;
+            }
+            case R.id.rb_layout_repair_explain_unchangeable_6: {
+                checkRadio(R.id.rb_layout_repair_explain_unchangeable_6);
+                break;
+            }
+        }
+    }
+
     private void init() {
         this.setTitleText("维修");
         this.setTitleRightButtonVisibilite(true);
@@ -366,6 +441,7 @@ public class OperateRepairActivity extends BaseActivity {
         mTextViewCount = findViewById(R.id.tv_activity_operate_default_install_explain_count);
 
         mEditTextPosition = findViewById(R.id.et_activity_operate_default_position_new);
+        mEditTextPosition.clearFocus();
         mEditTextExplain = findViewById(R.id.et_activity_operate_default_install_explain);
         mTextViewTip0 = findViewById(R.id.tv_activity_operate_repair_tip_0);
         mTextViewTip1 = findViewById(R.id.tv_activity_operate_repair_tip_1);
@@ -384,6 +460,23 @@ public class OperateRepairActivity extends BaseActivity {
         mImageViewReplaceLocate = findViewById(R.id.iv_activity_operate_replace_locate);
         mTextViewNewDeviceTitle = findViewById(R.id.tv_activity_operate_replace_device_no_title);
         mEditTextNewImei = findViewById(R.id.et_activity_operate_replace_device_no);
+
+        mTabLayoutExplainUnchangeable = findViewById(R.id.layout_repair_explain_unchangeable);
+        mTabLayoutExplainChangeable = findViewById(R.id.layout_repair_explain_changeable);
+        mRadioButtonChangeable1 = findViewById(R.id.rb_layout_repair_explain_changeable_1);
+        mRadioButtonChangeable2 = findViewById(R.id.rb_layout_repair_explain_changeable_2);
+        mRadioButtonChangeable3 = findViewById(R.id.rb_layout_repair_explain_changeable_3);
+        mRadioButtonChangeable4 = findViewById(R.id.rb_layout_repair_explain_changeable_4);
+        mRadioButtonChangeable5 = findViewById(R.id.rb_layout_repair_explain_changeable_5);
+        mRadioButtonChangeable6 = findViewById(R.id.rb_layout_repair_explain_changeable_6);
+        mRadioButtonChangeable7 = findViewById(R.id.rb_layout_repair_explain_changeable_7);
+        mRadioButtonChangeable8 = findViewById(R.id.rb_layout_repair_explain_changeable_8);
+        mRadioButtonUnchangeable1 = findViewById(R.id.rb_layout_repair_explain_unchangeable_1);
+        mRadioButtonUnchangeable2 = findViewById(R.id.rb_layout_repair_explain_unchangeable_2);
+        mRadioButtonUnchangeable3 = findViewById(R.id.rb_layout_repair_explain_unchangeable_3);
+        mRadioButtonUnchangeable4 = findViewById(R.id.rb_layout_repair_explain_unchangeable_4);
+        mRadioButtonUnchangeable5 = findViewById(R.id.rb_layout_repair_explain_unchangeable_5);
+        mRadioButtonUnchangeable6 = findViewById(R.id.rb_layout_repair_explain_unchangeable_6);
 
         mRecyclerView = findViewById(R.id.rv_activity_operate_repair);
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
@@ -515,12 +608,17 @@ public class OperateRepairActivity extends BaseActivity {
         mImageViewState.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                clearRadio();
                 if (mRelativeLayoutReplace.getVisibility() == View.GONE) {
                     mRelativeLayoutReplace.setVisibility(View.VISIBLE);
                     mImageViewState.setSelected(false);
+                    mTabLayoutExplainChangeable.setVisibility(View.VISIBLE);
+                    mTabLayoutExplainUnchangeable.setVisibility(View.GONE);
                 } else {
                     mRelativeLayoutReplace.setVisibility(View.GONE);
                     mImageViewState.setSelected(true);
+                    mTabLayoutExplainChangeable.setVisibility(View.GONE);
+                    mTabLayoutExplainUnchangeable.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -587,6 +685,21 @@ public class OperateRepairActivity extends BaseActivity {
                 }
             }
         });
+
+        mRadioButtonChangeable1.setOnClickListener(this);
+        mRadioButtonChangeable2.setOnClickListener(this);
+        mRadioButtonChangeable3.setOnClickListener(this);
+        mRadioButtonChangeable4.setOnClickListener(this);
+        mRadioButtonChangeable5.setOnClickListener(this);
+        mRadioButtonChangeable6.setOnClickListener(this);
+        mRadioButtonChangeable7.setOnClickListener(this);
+        mRadioButtonChangeable8.setOnClickListener(this);
+        mRadioButtonUnchangeable1.setOnClickListener(this);
+        mRadioButtonUnchangeable2.setOnClickListener(this);
+        mRadioButtonUnchangeable3.setOnClickListener(this);
+        mRadioButtonUnchangeable4.setOnClickListener(this);
+        mRadioButtonUnchangeable5.setOnClickListener(this);
+        mRadioButtonUnchangeable6.setOnClickListener(this);
 
         mOperateRepairAdapter.setOnItemOperateListener(new OperateInstallAdapter.OnItemOperateListener() {
             @Override
@@ -696,6 +809,7 @@ public class OperateRepairActivity extends BaseActivity {
                             mDatabaseManager.addRepairPositionPic(tId, mPositionPicNew, mPositionPicUrlNew);
                             mDatabaseManager.addRepairInstallPic(tId, mInstallPicNew, mInstallPicUrlNew);
 
+                            mAdapterOperateRepairRecyclerDataList.clear();
                             String pic1 = carListBean.getPic1();
                             String ossPic1 = carListBean.getOssPic1();
                             String pic2 = carListBean.getPic2();
@@ -1003,6 +1117,7 @@ public class OperateRepairActivity extends BaseActivity {
         // 2017/8/14 保存数据
         mPositionNew = mEditTextPosition.getText().toString();
         mExplainNew = mEditTextExplain.getText().toString();
+
         mImeiNew = mEditTextNewImei.getText().toString();
         Log.i(TAG, "onSignClick: mStringNewImei-->" + mImeiNew);
         if (RegularU.hadEmoji(mPositionNew + mExplainNew + mImeiNew)) {
@@ -1012,9 +1127,14 @@ public class OperateRepairActivity extends BaseActivity {
         if ("".equals(mPositionNew)) {
             mPositionNew = null;
         }
-        if ("".equals(mExplainNew)) {
-            mExplainNew = null;
-        }
+//        if ("".equals(mExplainNew)) {
+//            mExplainNew = null;
+//        }
+
+        mStringChoice = getCheckReason();
+
+        mExplainNew = mStringChoice + mExplainNew;
+        Log.i(TAG, "saveData: mExplainNew-->" + mExplainNew);
         if (mRelativeLayoutReplace.getVisibility() == View.GONE) {
             mDatabaseManager.addRepair(tId, mPositionNew, mExplainNew, null);
             mDatabaseManager.addRepair(tId, 0);
@@ -1045,7 +1165,26 @@ public class OperateRepairActivity extends BaseActivity {
             Log.i(TAG, "loadSavedData: replace-->" + replace);
 
             if (!RegularU.isEmpty(explainNew)) {
-                mEditTextExplain.setText(explainNew);
+                try {
+                    String splits[] = explainNew.split(SPLIT, 2);
+                    String choiceReason, editReason;
+                    if (splits.length > 1) {
+                        choiceReason = splits[0];
+                        Log.i(TAG, "loadSavedData: choiceReason-->" + choiceReason);
+                        editReason = splits[1];
+                        Log.i(TAG, "loadSavedData: editReason-->" + editReason);
+                        try {
+                            checkRadio(Integer.parseInt(choiceReason));
+                        } catch (Exception e) {
+                            Log.i(TAG, "loadSavedData: choiceReason-->" + choiceReason);
+                        }
+                    } else {
+                        editReason = explainNew;
+                    }
+                    mEditTextExplain.setText(editReason);
+                }catch (Exception e){
+                    Log.i(TAG, "loadSavedData: exception-->" + e);
+                }
             } else {
                 mEditTextExplain.setText(mRepaireDesc);
             }
@@ -1058,10 +1197,14 @@ public class OperateRepairActivity extends BaseActivity {
             if (0 == replace) {
                 mRelativeLayoutReplace.setVisibility(View.GONE);
                 mImageViewState.setSelected(true);
+                mTabLayoutExplainChangeable.setVisibility(View.GONE);
+                mTabLayoutExplainUnchangeable.setVisibility(View.VISIBLE);
             } else {
                 mRelativeLayoutReplace.setVisibility(View.VISIBLE);
                 setEditTextImei(mImeiNew);
                 mImageViewState.setSelected(false);
+                mTabLayoutExplainChangeable.setVisibility(View.VISIBLE);
+                mTabLayoutExplainUnchangeable.setVisibility(View.GONE);
             }
             cursor.close();
         }
@@ -1205,12 +1348,38 @@ public class OperateRepairActivity extends BaseActivity {
             Log.i(TAG, "isComplete: locateType-->" + locateType);
             Log.i(TAG, "isComplete: replace-->" + replace);
 
-            if (null == explain || "".equals(explain)) {
-                complete = false;
-                mTextViewTip3.setVisibility(View.VISIBLE);
-            } else {
-                mTextViewTip3.setVisibility(View.INVISIBLE);
+
+            try {
+                String splits[] = explain.split(SPLIT, 2);
+                String choiceReason = "", editReason;
+                Log.i(TAG, "isComplete: length-->" + splits.length);
+                if (splits.length > 1) {
+                    choiceReason = splits[0];
+                    editReason = splits[1];
+                } else {
+                    editReason = explain;
+                }
+                if (RegularU.isEmpty(choiceReason)) {
+                    complete = false;
+                    mTextViewTip3.setVisibility(View.VISIBLE);
+                    mTextViewTip3.setText("请选择检修说明选项");
+                } else if (RegularU.isEmpty(editReason)) {
+                    complete = false;
+                    mTextViewTip3.setVisibility(View.VISIBLE);
+                    mTextViewTip3.setText("原因不能为空");
+                } else {
+                    mTextViewTip3.setVisibility(View.INVISIBLE);
+                }
+            }catch (Exception e){
+                Log.i(TAG, "isComplete: exception-->" + e);
             }
+
+//            if (null == explain || "".equals(explain)) {
+//                complete = false;
+//                mTextViewTip3.setVisibility(View.VISIBLE);
+//            } else {
+//                mTextViewTip3.setVisibility(View.INVISIBLE);
+//            }
 
             if (mRelativeLayoutReplace.getVisibility() == View.VISIBLE) {
                 if (RegularU.isEmpty(newTNo)) {
@@ -1388,6 +1557,78 @@ public class OperateRepairActivity extends BaseActivity {
         return false;
     }
 
+    //  RadioButton check
+    private void checkRadio(int id) {
+        clearRadio();
+        RadioButton radioButton = findViewById(id);
+        radioButton.setChecked(true);
+    }
+
+    //  RadioButton clear
+    private void clearRadio() {
+        mRadioButtonChangeable1.setChecked(false);
+        mRadioButtonChangeable2.setChecked(false);
+        mRadioButtonChangeable3.setChecked(false);
+        mRadioButtonChangeable4.setChecked(false);
+        mRadioButtonChangeable5.setChecked(false);
+        mRadioButtonChangeable6.setChecked(false);
+        mRadioButtonChangeable7.setChecked(false);
+        mRadioButtonChangeable8.setChecked(false);
+        mRadioButtonUnchangeable1.setChecked(false);
+        mRadioButtonUnchangeable2.setChecked(false);
+        mRadioButtonUnchangeable3.setChecked(false);
+        mRadioButtonUnchangeable4.setChecked(false);
+        mRadioButtonUnchangeable5.setChecked(false);
+        mRadioButtonUnchangeable6.setChecked(false);
+    }
+
+    //  getText
+    private String getCheckReason() {
+        if (mRadioButtonChangeable1.isChecked()) {
+            return mRadioButtonChangeable1.getId() + SPLIT;
+        }
+        if (mRadioButtonChangeable2.isChecked()) {
+            return mRadioButtonChangeable2.getId() + SPLIT;
+        }
+        if (mRadioButtonChangeable3.isChecked()) {
+            return mRadioButtonChangeable3.getId() + SPLIT;
+        }
+        if (mRadioButtonChangeable4.isChecked()) {
+            return mRadioButtonChangeable4.getId() + SPLIT;
+        }
+        if (mRadioButtonChangeable5.isChecked()) {
+            return mRadioButtonChangeable5.getId() + SPLIT;
+        }
+        if (mRadioButtonChangeable6.isChecked()) {
+            return mRadioButtonChangeable6.getId() + SPLIT;
+        }
+        if (mRadioButtonChangeable7.isChecked()) {
+            return mRadioButtonChangeable7.getId() + SPLIT;
+        }
+        if (mRadioButtonChangeable8.isChecked()) {
+            return mRadioButtonChangeable8.getId() + SPLIT;
+        }
+        if (mRadioButtonUnchangeable1.isChecked()) {
+            return mRadioButtonUnchangeable1.getId() + SPLIT;
+        }
+        if (mRadioButtonUnchangeable2.isChecked()) {
+            return mRadioButtonUnchangeable2.getId() + SPLIT;
+        }
+        if (mRadioButtonUnchangeable3.isChecked()) {
+            return mRadioButtonUnchangeable3.getId() + SPLIT;
+        }
+        if (mRadioButtonUnchangeable4.isChecked()) {
+            return mRadioButtonUnchangeable4.getId() + SPLIT;
+        }
+        if (mRadioButtonUnchangeable5.isChecked()) {
+            return mRadioButtonUnchangeable5.getId() + SPLIT;
+        }
+        if (mRadioButtonUnchangeable6.isChecked()) {
+            return mRadioButtonUnchangeable6.getId() + SPLIT;
+        }
+        return "";
+    }
+
     private class MyHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
@@ -1466,6 +1707,7 @@ public class OperateRepairActivity extends BaseActivity {
 
                     if (mAdapterOperateRepairRecyclerDataList.size() <= PIC_MAX) {
                         mAdapterOperateRepairRecyclerDataList.add(new AdapterOperateInstallRecyclerData());
+                        mOperateRepairAdapter.notifyDataSetChanged();
                     }
 
                     loadSavedData();
@@ -1519,8 +1761,8 @@ public class OperateRepairActivity extends BaseActivity {
                 }
                 case Data.MSG_6: {
                     //  删除图片
-                    switch (mPicPosition){
-                        case Data.DATA_UPLOAD_TYPE_3:{
+                    switch (mPicPosition) {
+                        case Data.DATA_UPLOAD_TYPE_3: {
                             mImageViewPositionNewDelete.setVisibility(View.GONE);
                             mPositionPicUrlNew = null;
                             mDatabaseManager.addRepairPositionUrl(tId, null);
@@ -1531,7 +1773,7 @@ public class OperateRepairActivity extends BaseActivity {
                                     .into(mImageViewPositionNew);
                             break;
                         }
-                        case Data.DATA_UPLOAD_TYPE_4:{
+                        case Data.DATA_UPLOAD_TYPE_4: {
                             mImageViewInstallNewDelete.setVisibility(View.GONE);
                             mInstallPicUrlNew = null;
                             mDatabaseManager.addRepairInstallUrl(tId, null);
@@ -1542,7 +1784,7 @@ public class OperateRepairActivity extends BaseActivity {
                                     .into(mImageViewInstallNew);
                             break;
                         }
-                        case Data.DATA_UPLOAD_TYPE_5:{
+                        case Data.DATA_UPLOAD_TYPE_5: {
                             mAdapterOperateRepairRecyclerDataList.remove(itemRecycler);
                             int last = mAdapterOperateRepairRecyclerDataList.size() - 1;
                             if (null != mAdapterOperateRepairRecyclerDataList.get(last).getPath()) {
@@ -1576,8 +1818,8 @@ public class OperateRepairActivity extends BaseActivity {
                 }
                 case Data.MSG_7: {
                     //  上传图片成功
-                    switch (mPicPosition){
-                        case Data.DATA_UPLOAD_TYPE_3:{
+                    switch (mPicPosition) {
+                        case Data.DATA_UPLOAD_TYPE_3: {
                             mImageViewPositionNewDelete.setVisibility(View.VISIBLE);
                             Picasso.get()
                                     .load(mPositionPicNew)
@@ -1586,7 +1828,7 @@ public class OperateRepairActivity extends BaseActivity {
                                     .into(mImageViewPositionNew);
                             break;
                         }
-                        case Data.DATA_UPLOAD_TYPE_4:{
+                        case Data.DATA_UPLOAD_TYPE_4: {
                             mImageViewInstallNewDelete.setVisibility(View.VISIBLE);
                             Picasso.get()
                                     .load(mInstallPicNew)
@@ -1595,7 +1837,7 @@ public class OperateRepairActivity extends BaseActivity {
                                     .into(mImageViewInstallNew);
                             break;
                         }
-                        case Data.DATA_UPLOAD_TYPE_5:{
+                        case Data.DATA_UPLOAD_TYPE_5: {
                             mOperateRepairAdapter.notifyDataSetChanged();
                             break;
                         }

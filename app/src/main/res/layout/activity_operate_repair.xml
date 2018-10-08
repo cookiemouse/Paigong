@@ -332,7 +332,7 @@
                 android:layout_marginStart="@dimen/dp_40"
                 android:text="@string/tip_imei"
                 android:textColor="@color/colorOrange"
-                android:visibility="gone"></TextView>
+                android:visibility="gone"/>
         </RelativeLayout>
 
         <ImageView
@@ -413,7 +413,7 @@
             android:layout_marginStart="@dimen/dp_40"
             android:text="@string/tip_imei"
             android:textColor="@color/colorOrange"
-            android:visibility="gone"></TextView>
+            android:visibility="gone"/>
 
         <RelativeLayout
             android:id="@+id/rl_activity_operate_default_install_new"
@@ -461,7 +461,7 @@
                 android:layout_marginStart="@dimen/dp_40"
                 android:text="@string/tip_pic"
                 android:textColor="@color/colorOrange"
-                android:visibility="invisible"/>
+                android:visibility="invisible" />
 
         </RelativeLayout>
 
@@ -478,7 +478,6 @@
             android:src="@drawable/ic_delete"
             android:visibility="gone" />
 
-
         <View
             android:id="@+id/view_activity_operate_default_line_4"
             android:layout_width="match_parent"
@@ -491,7 +490,8 @@
             android:id="@+id/rv_activity_operate_repair"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/view_activity_operate_default_line_4"/>
+            android:layout_marginTop="@dimen/dp_16"
+            android:layout_below="@+id/view_activity_operate_default_line_4" />
 
         <TextView
             android:id="@+id/tv_activity_operate_default_install_explain_title"
@@ -503,11 +503,26 @@
             android:layout_marginTop="@dimen/dp_16"
             android:text="@string/explain" />
 
+        <include
+            android:id="@+id/layout_repair_explain_changeable"
+            layout="@layout/layout_repair_explain_changeable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_below="@id/tv_activity_operate_default_install_explain_title" />
+
+        <include
+            android:id="@+id/layout_repair_explain_unchangeable"
+            layout="@layout/layout_repair_explain_unchangeable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/layout_repair_explain_changeable" />
+
         <EditText
             android:id="@+id/et_activity_operate_default_install_explain"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tv_activity_operate_default_install_explain_title"
+            android:layout_below="@id/layout_repair_explain_unchangeable"
             android:layout_marginTop="@dimen/dp_8"
             android:background="@drawable/bg_edit"
             android:gravity="start|top"
@@ -523,7 +538,7 @@
             android:layout_below="@id/et_activity_operate_default_install_explain"
             android:text="@string/tip_explain"
             android:textColor="@color/colorOrange"
-            android:visibility="invisible"></TextView>
+            android:visibility="invisible" />
 
         <TextView
             android:id="@+id/tv_activity_operate_default_install_explain_count"
