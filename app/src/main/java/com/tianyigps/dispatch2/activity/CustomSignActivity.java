@@ -20,6 +20,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.baidu.mapapi.model.LatLng;
@@ -217,29 +218,29 @@ public class CustomSignActivity extends BaseActivity {
                 Log.i(TAG, "onReceive: latitude-->" + latLng.latitude);
                 Log.i(TAG, "onReceive: longitude-->" + latLng.longitude);
                 mLocateManager.stopLocate();
-                if (latLng.latitude == 4.9E-324 || latLng.longitude == 4.9E-324) {
-                    mNetworkManager.saveOrderInfo(eid
-                            , token
-                            , mOrderNo
-                            , mJson
-                            , mPartReason
-                            , mSignature
-                            , "0"
-                            , "0"
-                            , Data.LOCATE_TYPE_BAIDU
-                            , userName);
-                } else {
-                    mNetworkManager.saveOrderInfo(eid
-                            , token
-                            , mOrderNo
-                            , mJson
-                            , mPartReason
-                            , mSignature
-                            , "" + latLng.latitude
-                            , "" + latLng.longitude
-                            , Data.LOCATE_TYPE_BAIDU
-                            , userName);
-                }
+//                if (latLng.latitude == 4.9E-324 || latLng.longitude == 4.9E-324) {
+//                    mNetworkManager.saveOrderInfo(eid
+//                            , token
+//                            , mOrderNo
+//                            , mJson
+//                            , mPartReason
+//                            , mSignature
+//                            , "0"
+//                            , "0"
+//                            , Data.LOCATE_TYPE_BAIDU
+//                            , userName);
+//                } else {
+//                    mNetworkManager.saveOrderInfo(eid
+//                            , token
+//                            , mOrderNo
+//                            , mJson
+//                            , mPartReason
+//                            , mSignature
+//                            , "" + latLng.latitude
+//                            , "" + latLng.longitude
+//                            , Data.LOCATE_TYPE_BAIDU
+//                            , userName);
+//                }
             }
         });
 
@@ -451,6 +452,22 @@ public class CustomSignActivity extends BaseActivity {
                     } else {
                         model = 2;
                     }
+
+                    //  获取检修说明的选择原因
+                    try {
+                        String splits[] = explain.split(",", 2);
+                        String choiceReason, editReason;
+                        choiceReason = splits[0];
+                        editReason = splits[1];
+                        View view = LayoutInflater.from(this).inflate(R.layout.activity_operate_repair, null);
+                        int id = Integer.parseInt(choiceReason);
+                        RadioButton radioButton = view.findViewById(id);
+                        String choice = radioButton.getText().toString();
+                        explain = choice + "，" + editReason;
+                    } catch (Exception e) {
+                        Log.i(TAG, "checkRepairList: exception-->" + e);
+                    }
+
                     Log.i(TAG, "getRepairJson: tid-->" + cursorR.getInt(0));
                     Log.i(TAG, "getRepairJson: imeiOld-->" + imeiOld);
                     Log.i(TAG, "getRepairJson: positionNew-->" + positionNew);
