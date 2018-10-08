@@ -862,6 +862,21 @@ public class InstallingActivity extends BaseActivity {
                     int model = cursor.getInt(9);
                     int replace = cursor.getInt(12);
 
+                    //  检查是否有选择的检修说明
+                    try {
+                        String splits[] = explain.split(",", 2);
+                        String choiceReason;
+                        choiceReason = splits[0];
+                        int choice = Integer.parseInt(choiceReason);
+                        Log.i(TAG, "updateRepairComplete: choice-->" + choice);
+                        if (choice < 0) {
+                            explain = null;
+                        }
+                    } catch (Exception e) {
+                        Log.i(TAG, "updateRepairComplete: exception-->" + e);
+                        explain = null;
+                    }
+
                     Log.i(TAG, "checkRepairList: position-->" + position);
                     Log.i(TAG, "checkRepairList: explain-->" + explain);
                     Log.i(TAG, "checkRepairList: newImei-->" + newImei);
@@ -924,6 +939,21 @@ public class InstallingActivity extends BaseActivity {
                     String installUrl = cursor.getString(8);
                     int model = cursor.getInt(9);
                     int replace = cursor.getInt(12);
+
+                    //  检查是否有选择的检修说明
+                    try {
+                        String splits[] = explain.split(",", 2);
+                        String choiceReason;
+                        choiceReason = splits[0];
+                        int choice = Integer.parseInt(choiceReason);
+                        Log.i(TAG, "checkRepairList: choice-->" + choice);
+                        if (choice < 0) {
+                            explain = null;
+                        }
+                    } catch (Exception e) {
+                        explain = null;
+                        Log.i(TAG, "checkRepairList: exception-->" + e);
+                    }
 
                     Log.i(TAG, "checkRepairList: position-->" + position);
                     Log.i(TAG, "checkRepairList: explain-->" + explain);

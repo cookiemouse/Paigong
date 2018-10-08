@@ -663,6 +663,31 @@ public class DatabaseManager {
     }
 
     //  查，维修，重载
+    public String getRepairExplain(int idMain){
+        mSqLiteDatabase.beginTransaction();
+        try {
+            Cursor cursor = mSqLiteDatabase.query(Data.DATA_TAB_REPAIR
+                    , new String[]{"explain"}
+                    , "idMain=?"
+                    , new String[]{"" + idMain}
+                    , null, null, null);
+            mSqLiteDatabase.setTransactionSuccessful();
+
+            if (cursor.moveToFirst()) {
+                String path = cursor.getString(0);
+                cursor.close();
+                return path;
+            }
+            return null;
+        } catch (Exception e) {
+            Log.e(TAG, e + "SqliteDatabase query error");
+        } finally {
+            mSqLiteDatabase.endTransaction();
+        }
+        return null;
+    }
+
+    //  查，维修，重载
     public String getRepairPositionPic(int idMain) {
         mSqLiteDatabase.beginTransaction();
         try {

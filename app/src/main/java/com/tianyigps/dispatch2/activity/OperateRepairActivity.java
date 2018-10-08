@@ -609,6 +609,23 @@ public class OperateRepairActivity extends BaseActivity implements View.OnClickL
             @Override
             public void onClick(View view) {
                 clearRadio();
+
+                try {
+                    String explain = mDatabaseManager.getRepairExplain(tId);
+                    Log.i(TAG, "onClick: explain-->" + explain);
+                    String splits[] = explain.split(SPLIT, 2);
+                    String choiceReason, editReason;
+                    if (splits.length > 1) {
+                        choiceReason = splits[0];
+                        editReason = splits[1];
+                        int id = Integer.parseInt(choiceReason);
+                        Log.i(TAG, "onClick: editReason-->" + editReason);
+                        mDatabaseManager.modifyRepairExplain(tId, editReason);
+                    }
+                } catch (Exception e) {
+                    Log.i(TAG, "loadSavedData: exception-->" + e);
+                }
+
                 if (mRelativeLayoutReplace.getVisibility() == View.GONE) {
                     mRelativeLayoutReplace.setVisibility(View.VISIBLE);
                     mImageViewState.setSelected(false);
@@ -1182,7 +1199,7 @@ public class OperateRepairActivity extends BaseActivity implements View.OnClickL
                         editReason = explainNew;
                     }
                     mEditTextExplain.setText(editReason);
-                }catch (Exception e){
+                } catch (Exception e) {
                     Log.i(TAG, "loadSavedData: exception-->" + e);
                 }
             } else {
@@ -1370,7 +1387,7 @@ public class OperateRepairActivity extends BaseActivity implements View.OnClickL
                 } else {
                     mTextViewTip3.setVisibility(View.INVISIBLE);
                 }
-            }catch (Exception e){
+            } catch (Exception e) {
                 Log.i(TAG, "isComplete: exception-->" + e);
             }
 
