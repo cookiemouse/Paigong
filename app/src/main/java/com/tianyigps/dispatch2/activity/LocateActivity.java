@@ -98,7 +98,7 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
     private String mStringTitle, mStringContent;
     private double lat, lng;
 
-    private String wholeImei;
+    private String wholeImei = "";
     private String errMsg;
 
     private List<AdapterLocateWarnData> mAdapterLocateWarnDataList;
@@ -123,6 +123,9 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
 
     //  电量
     private int mElectricity = -1;
+
+    //  地图加载完成
+    private boolean mMapEnable = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,7 +156,10 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
             mTextViewWarn.setVisibility(View.VISIBLE);
             mTextViewFlushCycle.setVisibility(View.VISIBLE);
         }
-        myHandler.sendEmptyMessageDelayed(Data.MSG_5, 200);
+        if (mMapEnable){
+//            myHandler.sendEmptyMessage(Data.MSG_5);
+            getImeiLocation(wholeImei);
+        }
     }
 
     @Override
@@ -197,7 +203,11 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
                 mEditTextImei.clearFocus();
 
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(mEditTextImei.getWindowToken(), 0);
+                try{
+                    imm.hideSoftInputFromWindow(mEditTextImei.getWindowToken(), 0);
+                }catch (Exception e){
+                    Log.i(TAG, "onClick: e-->" + e);
+                }
                 String imei = mEditTextImei.getText().toString();
                 if (imei.length() > 7) {
                     mListViewWarn.setVisibility(View.GONE);
@@ -218,7 +228,11 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
                 mEditTextImei.clearFocus();
 
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(mEditTextImei.getWindowToken(), 0);
+                try {
+                    imm.hideSoftInputFromWindow(mEditTextImei.getWindowToken(), 0);
+                } catch (NullPointerException e) {
+                    Log.i(TAG, "onClick: e-->" + e);
+                }
                 String imei = mEditTextImei.getText().toString();
                 if (imei.length() > 7) {
                     mListViewWarn.setVisibility(View.VISIBLE);
@@ -276,12 +290,6 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
                     showToast("请至少输入IMEI号后8位数");
                 }
                 break;
-            }
-            case R.id.tv_layout_map_control_warn: {
-                // 2018/3/2 跳转到报警记录页面
-                Intent intent = new Intent(LocateActivity.this, WarnInfoActivity.class);
-                intent.putExtra(Data.DATA_INTENT_LOCATE_IMEI, wholeImei);
-                startActivity(intent);
             }
             default: {
                 Log.i(TAG, "onSignClick: default");
@@ -352,7 +360,23 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
         mTextViewNormal.setOnClickListener(this);
         mTextViewSatellate.setOnClickListener(this);
         mTextViewFlush.setOnClickListener(this);
-        mTextViewWarn.setOnClickListener(this);
+        mTextViewWarn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LocateActivity.this, WarnInfoActivity.class);
+                intent.putExtra(Data.DATA_INTENT_LOCATE_IMEI, wholeImei);
+                startActivity(intent);
+            }
+        });
+
+        mBaiduMap.setOnMapLoadedCallback(new BaiduMap.OnMapLoadedCallback() {
+            @Override
+            public void onMapLoaded() {
+                mMapEnable = true;
+//                myHandler.sendEmptyMessage(Data.MSG_5);
+                getImeiLocation(wholeImei);
+            }
+        });
 
         mLocateManager.setOnReceiveLocationListener(new LocateManager.OnReceiveLocationListener() {
             @Override
@@ -481,7 +505,7 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
                 String dianliang = redisObjBean.getDianliang();
                 if (!RegularU.isEmpty(dianliang)) {
                     mElectricity = Integer.valueOf(dianliang);
-                }else {
+                } else {
                     mElectricity = -1;
                 }
 
@@ -513,7 +537,7 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
             public void onSuccess(String result) {
                 Log.i(TAG, "onSuccess: result-->" + result);
                 Gson gson = new Gson();
-                LocateWarnBean locateWarnBean = gson.fromJson(result, LocateWarnBean.class);
+                final LocateWarnBean locateWarnBean = gson.fromJson(result, LocateWarnBean.class);
                 if (null == locateWarnBean) {
                     errMsg = Data.DEFAULT_MESSAGE;
                     myHandler.sendEmptyMessage(Data.MSG_4);
@@ -524,14 +548,14 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
                     myHandler.sendEmptyMessage(Data.MSG_4);
                     return;
                 }
-                mAdapterLocateWarnDataList.clear();
-                mAdapterLocateWarnDataList.add(new AdapterLocateWarnData("报警类型", "报警时间"));
-                for (LocateWarnBean.ObjBean objBean : locateWarnBean.getObj()) {
-                    mAdapterLocateWarnDataList.add(new AdapterLocateWarnData(objBean.getName(), new TimeFormatU().millisToDate(objBean.getCreate_time())));
-                }
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        mAdapterLocateWarnDataList.clear();
+                        mAdapterLocateWarnDataList.add(new AdapterLocateWarnData("报警类型", "报警时间"));
+                        for (LocateWarnBean.ObjBean objBean : locateWarnBean.getObj()) {
+                            mAdapterLocateWarnDataList.add(new AdapterLocateWarnData(objBean.getName(), new TimeFormatU().millisToDate(objBean.getCreate_time())));
+                        }
                         mLocateWarnAdapter.notifyDataSetChanged();
                     }
                 });
@@ -586,11 +610,11 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
         textViewTitle.setText(title);
         textViewContent.setText(content);
 
-        if (mElectricity > -1){
+        if (mElectricity > -1) {
             tvElectricity.setText(mElectricity + "%");
             flEle.setVisibility(View.VISIBLE);
             pbEle.setProgress(mElectricity);
-        }else {
+        } else {
             tvElectricity.setVisibility(View.GONE);
             flEle.setVisibility(View.GONE);
         }
@@ -604,7 +628,9 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
 
         InfoWindow mInfoWindow = new InfoWindow(viewInfo, latLng, 0);
         //显示InfoWindow
-        mBaiduMap.showInfoWindow(mInfoWindow);
+        if (mMapEnable) {
+            mBaiduMap.showInfoWindow(mInfoWindow);
+        }
     }
 
     private void moveToCenter(LatLng latLng) {
@@ -612,7 +638,9 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
         builder.target(latLng);
         MapStatus status = builder.build();
         MapStatusUpdate update = MapStatusUpdateFactory.newMapStatus(status);
-        mBaiduMap.animateMapStatus(update);
+        if (null != mBaiduMap) {
+            mBaiduMap.animateMapStatus(update);
+        }
     }
 
     //  获取完整imei
@@ -757,7 +785,8 @@ public class LocateActivity extends BaseActivity implements View.OnClickListener
                 }
                 case Data.MSG_5: {
                     //  init 获取设备信息，延时了200ms
-                    getImeiLocation(wholeImei);
+                    //  利用地图loaded，做了修改
+//                    getImeiLocation(wholeImei);
                     break;
                 }
                 case Data.MSG_6: {

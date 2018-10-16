@@ -97,7 +97,7 @@ public class WarnInfoActivity extends BaseActivity {
             public void onSuccess(String result) {
                 Log.i(TAG, "onSuccess: result-->" + result);
                 Gson gson = new Gson();
-                LocateWarnBean locateWarnBean = gson.fromJson(result, LocateWarnBean.class);
+                final LocateWarnBean locateWarnBean = gson.fromJson(result, LocateWarnBean.class);
                 if (null == locateWarnBean) {
                     mMessage = Data.DEFAULT_MESSAGE;
                     myHandler.sendEmptyMessage(Data.MSG_ERO);
@@ -108,11 +108,17 @@ public class WarnInfoActivity extends BaseActivity {
                     myHandler.sendEmptyMessage(Data.MSG_ERO);
                     return;
                 }
-                mAdapterLocateWarnDataList.clear();
-                mAdapterLocateWarnDataList.add(new AdapterLocateWarnData("报警类型", "报警时间"));
-                for (LocateWarnBean.ObjBean objBean : locateWarnBean.getObj()) {
-                    mAdapterLocateWarnDataList.add(new AdapterLocateWarnData(objBean.getName(), new TimeFormatU().millisToDate(objBean.getCreate_time())));
-                }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mAdapterLocateWarnDataList.clear();
+                        mAdapterLocateWarnDataList.add(new AdapterLocateWarnData("报警类型", "报警时间"));
+                        for (LocateWarnBean.ObjBean objBean : locateWarnBean.getObj()) {
+                            mAdapterLocateWarnDataList.add(new AdapterLocateWarnData(objBean.getName(), new TimeFormatU().millisToDate(objBean.getCreate_time())));
+                        }
+                        mLocateWarnAdapter.notifyDataSetChanged();
+                    }
+                });
                 myHandler.sendEmptyMessage(Data.MSG_1);
             }
         });
@@ -141,7 +147,7 @@ public class WarnInfoActivity extends BaseActivity {
                     break;
                 }
                 case Data.MSG_1: {
-                    mLocateWarnAdapter.notifyDataSetChanged();
+//                    mLocateWarnAdapter.notifyDataSetChanged();
                     break;
                 }
             }
