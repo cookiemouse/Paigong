@@ -478,20 +478,20 @@
             android:src="@drawable/ic_delete"
             android:visibility="gone" />
 
-        <View
-            android:id="@+id/view_activity_operate_default_line_4"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_0_5"
-            android:layout_below="@+id/rl_activity_operate_default_install_new"
-            android:layout_marginTop="@dimen/dp_8"
-            android:background="@color/colorBlueTheme" />
+        <!--<View-->
+            <!--android:id="@+id/view_activity_operate_default_line_4"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="@dimen/dp_0_5"-->
+            <!--android:layout_below="@+id/rl_activity_operate_default_install_new"-->
+            <!--android:layout_marginTop="@dimen/dp_8"-->
+            <!--android:background="@color/colorBlueTheme" />-->
 
         <com.tianyigps.dispatch2.customview.MyRecyclerView
             android:id="@+id/rv_activity_operate_repair"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_16"
-            android:layout_below="@+id/view_activity_operate_default_line_4" />
+            android:layout_below="@+id/rl_activity_operate_default_install_new" />
 
         <TextView
             android:id="@+id/tv_activity_operate_default_install_explain_title"
@@ -501,6 +501,10 @@
             android:layout_alignParentStart="true"
             android:layout_below="@+id/rv_activity_operate_repair"
             android:layout_marginTop="@dimen/dp_16"
+            android:layout_marginLeft="@dimen/dp_8"
+            android:layout_marginStart="@dimen/dp_8"
+            android:layout_marginBottom="@dimen/dp_8"
+            android:textColor="@color/colorGrayBlack"
             android:text="@string/explain" />
 
         <include

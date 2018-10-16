@@ -93,7 +93,7 @@ public class OperateRepairActivity extends BaseActivity implements View.OnClickL
     private Button mButtonSave;
 
     private RelativeLayout mRelativeLayoutReplace, mRelativeLayoutInstall, mRelativeLayoutInstallOld;
-    private View mViewLineInstall;
+//    private View mViewLineInstall;
     //    private TextView mTextViewState;
     private ImageView mImageViewState;
     private ImageView mImageViewScanner, mImageViewReplaceLocate;
@@ -455,7 +455,7 @@ public class OperateRepairActivity extends BaseActivity implements View.OnClickL
         mRelativeLayoutReplace = findViewById(R.id.rl_activity_operate_replace);
         mRelativeLayoutInstallOld = findViewById(R.id.rl_activity_operate_default_install);
         mRelativeLayoutInstall = findViewById(R.id.rl_activity_operate_default_install_new);
-        mViewLineInstall = findViewById(R.id.view_activity_operate_default_line_4);
+//        mViewLineInstall = findViewById(R.id.view_activity_operate_default_line_4);
         mImageViewScanner = findViewById(R.id.iv_activity_operate_replace_scanner);
         mImageViewReplaceLocate = findViewById(R.id.iv_activity_operate_replace_locate);
         mTextViewNewDeviceTitle = findViewById(R.id.tv_activity_operate_replace_device_no_title);
@@ -480,7 +480,7 @@ public class OperateRepairActivity extends BaseActivity implements View.OnClickL
 
         mRecyclerView = findViewById(R.id.rv_activity_operate_repair);
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+//        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
         mDatabaseManager = new DatabaseManager(OperateRepairActivity.this);
 
@@ -1671,13 +1671,13 @@ public class OperateRepairActivity extends BaseActivity implements View.OnClickL
                         mTextViewNewDeviceTitle.setText("新有线设备号");
                         mDatabaseManager.addRepairWire(tId, mOrderTerType);
                         mRelativeLayoutInstall.setVisibility(View.VISIBLE);
-                        mViewLineInstall.setVisibility(View.VISIBLE);
+//                        mViewLineInstall.setVisibility(View.VISIBLE);
                         mRelativeLayoutInstallOld.setVisibility(View.VISIBLE);
                     } else {
                         mDatabaseManager.addRepairWire(tId, 0);
                         mTextViewNewDeviceTitle.setText("新无线设备号");
                         mRelativeLayoutInstall.setVisibility(View.GONE);
-                        mViewLineInstall.setVisibility(View.GONE);
+//                        mViewLineInstall.setVisibility(View.GONE);
                         mRelativeLayoutInstallOld.setVisibility(View.GONE);
                     }
 //                    mTextViewInstallName.setText(installNameG);
@@ -1724,8 +1724,8 @@ public class OperateRepairActivity extends BaseActivity implements View.OnClickL
 
                     if (mAdapterOperateRepairRecyclerDataList.size() <= PIC_MAX) {
                         mAdapterOperateRepairRecyclerDataList.add(new AdapterOperateInstallRecyclerData());
-                        mOperateRepairAdapter.notifyDataSetChanged();
                     }
+                    mOperateRepairAdapter.notifyDataSetChanged();
 
                     loadSavedData();
                     break;

@@ -14,6 +14,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="设备电量不足"
+            android:textColor="@color/colorText"
             android:textSize="@dimen/sp_12" />
 
         <RadioButton
@@ -21,6 +22,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:textColor="@color/colorText"
             android:text="设备人为拆除"
             android:textSize="@dimen/sp_12" />
     </TableRow>
@@ -36,6 +38,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="设备自然老化"
+            android:textColor="@color/colorText"
             android:textSize="@dimen/sp_12" />
 
         <RadioButton
@@ -44,6 +47,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="设备被人为损坏，无法使用"
+            android:textColor="@color/colorText"
             android:textSize="@dimen/sp_12" />
     </TableRow>
 
@@ -58,6 +62,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="设备人为拆除，无法找到"
+            android:textColor="@color/colorText"
             android:textSize="@dimen/sp_12" />
 
         <RadioButton
@@ -66,6 +71,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="设备进水"
+            android:textColor="@color/colorText"
             android:textSize="@dimen/sp_12" />
     </TableRow>
 
@@ -80,6 +86,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="完全隐蔽安装无法维修"
+            android:textColor="@color/colorText"
             android:textSize="@dimen/sp_12" />
 
         <RadioButton
@@ -88,6 +95,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="其他"
+            android:textColor="@color/colorText"
             android:textSize="@dimen/sp_12" />
     </TableRow>
 
