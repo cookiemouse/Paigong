@@ -59,9 +59,9 @@ public class TimerU {
                     break;
                 }
                 case FLAG_END: {
-                    mOnTickListener.onEnd();
-                    mIntNow = mIntMax;
                     isStart = false;
+                    mIntNow = mIntMax;
+                    mOnTickListener.onEnd();
                     break;
                 }
                 default: {

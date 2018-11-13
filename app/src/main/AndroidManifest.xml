@@ -54,6 +54,7 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:name=".MyApplication"
         android:largeHeap="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -125,8 +126,8 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.OperateRepairActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.ChoiceWorkerActivity"
             android:screenOrientation="portrait" />
@@ -172,15 +173,15 @@
                 <data android:scheme="package" />
             </intent-filter>
         </receiver>
+
         <provider
             android:name="cn.jpush.android.service.DataProvider"
             android:authorities="com.tianyigps.dispatch2.DataProvider"
             android:exported="true" />
         <provider
-            android:authorities="com.tianyigps.dispatch2.DownloadProvider"
             android:name="cn.jpush.android.service.DownloadProvider"
-            android:exported="true"
-            />
+            android:authorities="com.tianyigps.dispatch2.DownloadProvider"
+            android:exported="true" />
         <!-- Required SDK核心功能 -->
         <!-- <service -->
         <!-- android:name="cn.jpush.android.service.DownloadService" -->
@@ -226,13 +227,18 @@
 
         <activity
             android:name=".activity.TestActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.ShowPicActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.WarnInfoActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
+
+        <service
+            android:name=".services.PositionService"
+            android:enabled="true"
+            android:exported="true"></service>
     </application>
 
 </manifest>
