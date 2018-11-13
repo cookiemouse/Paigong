@@ -22,6 +22,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
@@ -96,6 +97,10 @@ public class OperateInstallActivity extends BaseActivity {
     private int itemRecycler;   //  Recycler操作位置
     private int itemPosition;   //  listview操作位置
     private String itemPath;    //  从相册或拍照得到的图片物理位置
+
+
+    // 正在操作中的item，仅为上传图片
+    private int mItemPositionPic;
 
     private NetworkManager mNetworkManager;
     private SharedpreferenceManager mSharedpreferenceManager;
@@ -708,7 +713,7 @@ public class OperateInstallActivity extends BaseActivity {
             public void onPositionPicClick(int position) {
                 //  2017/7/31 安装位置图片
                 itemPosition = position;
-
+                mItemPositionPic = position;
                 idMainTerminal = ID_MAIN_TERMINAL + itemPosition;
 
                 picType = 1;
@@ -719,7 +724,7 @@ public class OperateInstallActivity extends BaseActivity {
             public void onInstallPicClick(int position) {
                 //  2017/7/31 接线图图片
                 itemPosition = position;
-
+                mItemPositionPic = position;
                 idMainTerminal = ID_MAIN_TERMINAL + itemPosition;
 
                 picType = 3;
@@ -1471,6 +1476,13 @@ public class OperateInstallActivity extends BaseActivity {
 
     //  上传图片
     private void uploadTerminalPic(int tId, int type, String imgUrl, String path) {
+        //  判断点击图片时的item，避免出现position错位
+        boolean check_1 = mAdapterOperateInstallListDataList.get(itemPosition).isWire();
+        boolean check_2 = mAdapterOperateInstallListDataList.get(mItemPositionPic).isWire();
+        if (mItemPositionPic != itemPosition && check_1 != check_2) {
+            showMessageDialog("请重新选择图片！");
+            return;
+        }
         //  压缩图片
         if (null == imgUrl) {
             imgUrl = "";
