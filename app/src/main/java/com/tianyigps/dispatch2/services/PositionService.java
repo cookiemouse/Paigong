@@ -127,11 +127,12 @@ public class PositionService extends Service {
         if (null == mNetworkManager) {
             return;
         }
-        int eid = mSharedpreferenceManager.getEid();
+        String eid = mSharedpreferenceManager.getEid() + "";
         String token = mSharedpreferenceManager.getToken();
         Log.i(TAG, "uploadData: eid-->" + eid);
         Log.i(TAG, "uploadData: token-->" + token);
         Log.i(TAG, "uploadData: latitude-->" + latLng.latitude);
         Log.i(TAG, "uploadData: longitude-->" + latLng.longitude);
+        mNetworkManager.postPosition(eid, token, latLng.latitude + "", latLng.longitude + "");
     }
 }

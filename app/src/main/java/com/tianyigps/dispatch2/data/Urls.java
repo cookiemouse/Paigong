@@ -50,5 +50,5 @@ public class Urls {
     public static final String URL_MANAGER_CHECK_VERSION = IP + "/dispatch4AppController/getAppVersion";
 
     //  发送手机定位
-    public static final String URL_UPDATE_POSITION = "/dispatch4AppController/sendPosition4Engineer";
+    public static final String URL_UPDATE_POSITION = IP + "/dispatch4AppController/sendPosition4Engineer";
 }

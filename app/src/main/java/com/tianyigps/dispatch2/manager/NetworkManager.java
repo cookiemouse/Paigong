@@ -45,6 +45,7 @@ import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
@@ -1493,6 +1494,34 @@ public class NetworkManager {
 
     public void setOnOnCheckVersionListener(OnCheckVersionListener listener) {
         this.mOnCheckVersionListener = listener;
+    }
+
+    //  上传定位点
+    public void postPosition(String eid, String token, String lat, String lon) {
+        FormBody.Builder builder = new FormBody.Builder();
+        builder.add("eid", eid);
+        builder.add("token", token);
+        builder.add("lat", lat);
+        builder.add("lon", lon);
+        builder.add("mapType", "bd");
+        builder.add("source", "2");
+        Request request = new Request.Builder()
+                .url(Urls.URL_UPDATE_POSITION)
+                .post(builder.build())
+                .build();
+
+        Call call = mOkHttpClient.newCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.i(TAG, "onFailure: ");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                Log.i(TAG, "onResponse: ");
+            }
+        });
     }
 
 }
