@@ -67,6 +67,8 @@ import com.zxy.tiny.callback.FileCallback;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.cookiemouse.dialogutils.ViewDialog;
+
 import static com.tianyigps.dispatch2.data.Data.DATA_UPLOAD_TYPE_3;
 
 public class OperateRepairActivity extends BaseActivity implements View.OnClickListener {
@@ -165,6 +167,9 @@ public class OperateRepairActivity extends BaseActivity implements View.OnClickL
     private RadioButton mRadioButtonChangeable7, mRadioButtonChangeable8;
     private RadioButton mRadioButtonUnchangeable1, mRadioButtonUnchangeable2, mRadioButtonUnchangeable3;
     private RadioButton mRadioButtonUnchangeable4, mRadioButtonUnchangeable5, mRadioButtonUnchangeable6;
+
+    //  展示已添加图片
+    private ViewDialog mViewDialogPic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -571,6 +576,10 @@ public class OperateRepairActivity extends BaseActivity implements View.OnClickL
             @Override
             public void onClick(View view) {
                 // 2017/7/26 选择图片或拍照
+                if (!RegularU.isEmpty(mPositionPicUrlNew)) {
+                    showPic(mPositionPicNew);
+                    return;
+                }
                 picType = 1;
                 mPicPosition = Data.DATA_UPLOAD_TYPE_3;
                 showChoiceDialog();
@@ -590,6 +599,10 @@ public class OperateRepairActivity extends BaseActivity implements View.OnClickL
             @Override
             public void onClick(View view) {
                 // 2017/7/26 选择图片或拍照
+                if (!RegularU.isEmpty(mInstallPicUrlNew)) {
+                    showPic(mInstallPicNew);
+                    return;
+                }
                 picType = 3;
                 mPicPosition = Data.DATA_UPLOAD_TYPE_4;
                 showChoiceDialog();
@@ -1644,6 +1657,19 @@ public class OperateRepairActivity extends BaseActivity implements View.OnClickL
             return mRadioButtonUnchangeable6.getId() + SPLIT;
         }
         return "";
+    }
+
+    //  显示已上传图片
+    private void showPic(String uri) {
+        if (null != mViewDialogPic) {
+            mViewDialogPic.dismiss();
+        }
+        View viewPic = LayoutInflater.from(this).inflate(R.layout.view_dialog_pic, null);
+        ImageView ivPic = viewPic.findViewById(R.id.iv_dialog_view_pic);
+        Picasso.get().load(uri).into(ivPic);
+        mViewDialogPic = ViewDialog.with(this)
+                .setView(viewPic)
+                .show();
     }
 
     private class MyHandler extends Handler {
