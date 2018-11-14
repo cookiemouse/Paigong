@@ -10,6 +10,7 @@ public class PersonBean {
      */
 
     private String person;
+    private String orderId4New;
 
     public String getPerson() {
         return person;
@@ -17,5 +18,13 @@ public class PersonBean {
 
     public void setPerson(String person) {
         this.person = person;
+    }
+
+    public String getOrderId4New() {
+        return orderId4New;
+    }
+
+    public void setOrderId4New(String orderId4New) {
+        this.orderId4New = orderId4New;
     }
 }

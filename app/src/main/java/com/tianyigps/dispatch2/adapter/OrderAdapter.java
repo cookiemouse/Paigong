@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.tianyigps.dispatch2.R;
@@ -78,6 +79,7 @@ public class OrderAdapter extends BaseAdapter {
 
             viewHolder.tvModify = contentView.findViewById(R.id.tv_item_order_modify);
             viewHolder.tvLate = contentView.findViewById(R.id.tv_item_order_late);
+            viewHolder.ivNew = contentView.findViewById(R.id.iv_item_order_new);
 
             contentView.setTag(viewHolder);
         } else {
@@ -100,6 +102,12 @@ public class OrderAdapter extends BaseAdapter {
             viewHolder.tvLate.setVisibility(View.VISIBLE);
         } else {
             viewHolder.tvLate.setVisibility(View.GONE);
+        }
+
+        if (data.isShowNew()) {
+            viewHolder.ivNew.setVisibility(View.VISIBLE);
+        } else {
+            viewHolder.ivNew.setVisibility(View.GONE);
         }
 
         String orderInfo;
@@ -134,7 +142,7 @@ public class OrderAdapter extends BaseAdapter {
             }
         }
 
-        CharSequence charSequence= Html.fromHtml(orderInfo);
+        CharSequence charSequence = Html.fromHtml(orderInfo);
         viewHolder.tvOrder.setText(charSequence);
 
         viewHolder.tvMap.setOnClickListener(new View.OnClickListener() {
@@ -215,6 +223,7 @@ public class OrderAdapter extends BaseAdapter {
         private TextView tvModify, tvLate;
         private TextView tvEngineer, tvMap, tvStart;
         private TextView tvOrder;
+        private ImageView ivNew;
     }
 
     public interface OnItemListener {

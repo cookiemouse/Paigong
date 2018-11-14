@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/ll_activity_test"
@@ -11,20 +10,22 @@
     android:orientation="vertical"
     tools:context="com.tianyigps.dispatch2.activity.TestActivity">
 
-    <ImageView
-        android:id="@+id/iv_activity_test"
-        android:layout_width="@dimen/dp_64"
-        android:layout_height="@dimen/dp_64"
-        android:background="@color/colorGray"/>
-
-    <EditText
-        android:id="@+id/et_activity_test"
+    <Button
+        android:id="@+id/btn_activity_test_add"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:text="加" />
 
-    <EditText
-        android:id="@+id/et_activity_test_2"
+    <Button
+        android:id="@+id/btn_activity_test_delete"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:text="删" />
+
+    <Button
+        android:id="@+id/btn_activity_test_get"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="查" />
 
 </LinearLayout>

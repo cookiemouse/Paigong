@@ -126,6 +126,7 @@ public class SplashActivity extends Activity {
         mImageViewSplash.setImageBitmap(mBitmap);
 
         mSharedpreferenceManager = new SharedpreferenceManager(this);
+        mSharedpreferenceManager.clearPushOrderId();
         userName = mSharedpreferenceManager.getAccount();
         token = mSharedpreferenceManager.getToken();
 

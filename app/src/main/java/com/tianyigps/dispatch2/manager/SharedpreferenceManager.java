@@ -2,8 +2,12 @@ package com.tianyigps.dispatch2.manager;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import com.tianyigps.dispatch2.data.Data;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import static com.tianyigps.dispatch2.data.Data.DATA_JSON_EID;
 import static com.tianyigps.dispatch2.data.Data.DATA_JSON_HEAD_PHONE;
@@ -201,5 +205,34 @@ public class SharedpreferenceManager {
 
     public String getWitchMap() {
         return mSharedPreferences.getString(Data.DATA_WITCH_MAP, "");
+    }
+
+    //  保存收到推送订单的Id
+    public void savePushOrderId(String orderId) {
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        Set<String> value = new HashSet<>(getPushOrderIds());
+        value.add(orderId);
+        editor.putStringSet(Data.DATA_ORDER_ID_SET, value);
+        editor.apply();
+    }
+
+    //  获取已保存推送订单Id
+    public Set<String> getPushOrderIds() {
+        return mSharedPreferences.getStringSet(Data.DATA_ORDER_ID_SET, new HashSet<String>());
+    }
+
+    //  删除一个订单Id
+    public void deletePushOrderId(String orderId) {
+        Set<String> set = getPushOrderIds();
+        if (set.contains(orderId)) {
+            set.remove(orderId);
+        }
+    }
+
+    //  删除所有订单Id
+    public void clearPushOrderId() {
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putStringSet(Data.DATA_ORDER_ID_SET, null);
+        editor.apply();
     }
 }

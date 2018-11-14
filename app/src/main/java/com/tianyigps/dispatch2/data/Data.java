@@ -80,6 +80,7 @@ public final class Data {
     public final static String DATA_JSON_IMG_BASE_URL = DATA_JSON + "img_base_url";
 
     public final static String DATA_WITCH_MAP = "witch_map";
+    public final static String DATA_ORDER_ID_SET = "order_id_set";
 
     public final static String SH_HEAD_PHONE_LIST = "head_phone_list";
 

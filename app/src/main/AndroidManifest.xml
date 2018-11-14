@@ -215,6 +215,17 @@
         </activity>
 
         <receiver
+            android:name=".receiver.GetNotificationReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="cn.jpush.android.intent.MESSAGE_RECEIVED" />
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED" />
+
+                <category android:name="com.tianyigps.dispatch2" />
+            </intent-filter>
+        </receiver>
+        <receiver
             android:name=".receiver.OpenActivityReceiver"
             android:enabled="true"
             android:exported="true">

@@ -31,7 +31,7 @@ public class PositionService extends Service {
     private PowerManager.WakeLock mWakeLock = null;
 
     public PositionService() {
-        mTimerU = new TimerU(10);
+        mTimerU = new TimerU(120);
         mNetworkManager = new NetworkManager();
 
         mTimerU.setOnTickListener(new TimerU.OnTickListener() {
@@ -129,6 +129,9 @@ public class PositionService extends Service {
         }
         String eid = mSharedpreferenceManager.getEid() + "";
         String token = mSharedpreferenceManager.getToken();
+        if ("0".equals(eid)){
+            return;
+        }
         Log.i(TAG, "uploadData: eid-->" + eid);
         Log.i(TAG, "uploadData: token-->" + token);
         Log.i(TAG, "uploadData: latitude-->" + latLng.latitude);

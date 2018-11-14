@@ -45,6 +45,7 @@ import com.tianyigps.dispatch2.utils.RegularU;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import static com.tianyigps.dispatch2.data.Data.DATA_INTENT_ADDRESS;
 import static com.tianyigps.dispatch2.data.Data.MSG_1;
@@ -347,6 +348,9 @@ public class OrderFragment extends Fragment {
 
                 mAdapterOrderDataList.clear();
 
+                Set<String> pushOrderIdSet = mSharedpreferenceManager.getPushOrderIds();
+                Log.i(TAG, "onSuccess: pushOrderIdSet-->" + pushOrderIdSet);
+
                 for (WorkerOrderBean.ObjBean objBean : workerOrderBean.getObj()) {
                     mStringContactPhone = objBean.getContactPhone();
                     mStringContactName = objBean.getContactName();
@@ -366,6 +370,11 @@ public class OrderFragment extends Fragment {
                     mIntReviseFlag = objBean.getReviseFlag();
                     mIntOrderId = objBean.getOrderId();
 
+                    boolean showNew = false;
+                    if (pushOrderIdSet.contains(mIntOrderId + "")) {
+                        showNew = true;
+                    }
+
                     mLongDoorTime = objBean.getDoorTime();
 
                     mAdapterOrderDataList.add(new AdapterOrderData(mStringOrderNum
@@ -379,7 +388,8 @@ public class OrderFragment extends Fragment {
                             , objBean.getWirelessNum()
                             , objBean.getRemoveWiredNum()
                             , objBean.getRemoveWirelessNum()
-                            , objBean.getReviseFlag()));
+                            , objBean.getReviseFlag()
+                            , showNew));
                 }
 
                 myHandler.sendEmptyMessage(Data.MSG_1);
@@ -419,7 +429,7 @@ public class OrderFragment extends Fragment {
 
     //  确认签到对话框
     private void showAskSignDialog() {
-        if (null == getContext()){
+        if (null == getContext()) {
             return;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -452,7 +462,7 @@ public class OrderFragment extends Fragment {
     }
 
     private void showMessageDialog(String message) {
-        if (null == getActivity()){
+        if (null == getActivity()) {
             return;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -476,7 +486,7 @@ public class OrderFragment extends Fragment {
 
     //  订单已被取消对话框
     private void showNotPerfectDialog() {
-        if (null == getActivity()){
+        if (null == getActivity()) {
             return;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
