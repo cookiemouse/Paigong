@@ -63,6 +63,8 @@ import com.zxy.tiny.callback.FileCallback;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.cookiemouse.dialogutils.ViewDialog;
+
 public class OperateInstallActivity extends BaseActivity {
 
     private static final String TAG = "OperateInstall";
@@ -167,6 +169,9 @@ public class OperateInstallActivity extends BaseActivity {
 
     //  是否需要校验车架号
     private boolean mIsCheckFrameNo = true;
+
+    //  展示已添加图片
+    private ViewDialog mViewDialogPic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -567,6 +572,10 @@ public class OperateInstallActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 // 2017/7/31 选择图片
+                if (!RegularU.isEmpty(mCarNoPic)) {
+                    showPic(mCarNoPic);
+                    return;
+                }
                 picType = 5;
                 showChoiceDialog();
             }
@@ -576,6 +585,10 @@ public class OperateInstallActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 //  2017/7/31 选择图片
+                if (!RegularU.isEmpty(mCarFramePic)) {
+                    showPic(mCarFramePic);
+                    return;
+                }
                 picType = 7;
                 showChoiceDialog();
             }
@@ -621,6 +634,11 @@ public class OperateInstallActivity extends BaseActivity {
             @Override
             public void onPicClick(int position) {
                 // 2017/8/1 添加图片
+                String pic = mAdapterOperateInstallRecyclerDataList.get(position).getPath();
+                if (!RegularU.isEmpty(pic)) {
+                    showPic(pic);
+                    return;
+                }
                 itemRecycler = position;
                 picType = 9;
                 showChoiceDialog();
@@ -712,6 +730,11 @@ public class OperateInstallActivity extends BaseActivity {
             @Override
             public void onPositionPicClick(int position) {
                 //  2017/7/31 安装位置图片
+                String positionPic = mAdapterOperateInstallListDataList.get(position).getPositionPic();
+                if (!RegularU.isEmpty(positionPic)) {
+                    showPic(positionPic);
+                    return;
+                }
                 itemPosition = position;
                 mItemPositionPic = position;
                 idMainTerminal = ID_MAIN_TERMINAL + itemPosition;
@@ -723,6 +746,11 @@ public class OperateInstallActivity extends BaseActivity {
             @Override
             public void onInstallPicClick(int position) {
                 //  2017/7/31 接线图图片
+                String installPic = mAdapterOperateInstallListDataList.get(position).getInstallPic();
+                if (!RegularU.isEmpty(installPic)) {
+                    showPic(installPic);
+                    return;
+                }
                 itemPosition = position;
                 mItemPositionPic = position;
                 idMainTerminal = ID_MAIN_TERMINAL + itemPosition;
@@ -1896,6 +1924,19 @@ public class OperateInstallActivity extends BaseActivity {
         }
 
         return false;
+    }
+
+    //  显示已上传图片
+    private void showPic(String uri) {
+        if (null != mViewDialogPic) {
+            mViewDialogPic.dismiss();
+        }
+        View viewPic = LayoutInflater.from(this).inflate(R.layout.view_dialog_pic, null);
+        ImageView ivPic = viewPic.findViewById(R.id.iv_dialog_view_pic);
+        Picasso.get().load(uri).into(ivPic);
+        mViewDialogPic = ViewDialog.with(this)
+                .setView(viewPic)
+                .show();
     }
 
     private class MyHandler extends Handler {
