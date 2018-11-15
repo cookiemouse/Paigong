@@ -279,6 +279,7 @@ public class OrderFragment extends Fragment {
             @Override
             public void onMapClick(int position) {
                 String address = mAdapterOrderDataList.get(position).getAddress();
+                viewModify(mAdapterOrderDataList.get(position).getOrderId());
                 if (!ChoiceMapU.toMap(getContext(), address)) {
                     Bundle bundle = new Bundle();
                     bundle.putString(DATA_INTENT_ADDRESS, mAdapterOrderDataList.get(position).getAddress());
@@ -290,12 +291,13 @@ public class OrderFragment extends Fragment {
             @Override
             public void onSignClick(int position) {
                 orderNoPosition = mAdapterOrderDataList.get(position).getId();
-
+                viewModify(mAdapterOrderDataList.get(position).getOrderId());
                 showAskSignDialog();
             }
 
             @Override
             public void onItemClick(int position) {
+                viewModify(mAdapterOrderDataList.get(position).getOrderId());
                 Intent intent = new Intent(getActivity(), OrderDetailsActivity.class);
                 intent.putExtra(Data.DATA_INTENT_ORDER_NO, mAdapterOrderDataList.get(position).getId());
                 intent.putExtra(Data.DATA_INTENT_ORDER_STATUS, mIntOrderStaus);
@@ -305,6 +307,7 @@ public class OrderFragment extends Fragment {
             @Override
             public void onCallClick(int position) {
                 AdapterOrderData data = mAdapterOrderDataList.get(position);
+                viewModify(data.getOrderId());
 
                 //  联系现场
                 mNetworkManager.contactSite(eid, token, data.getId(), data.getPhoneName(), userName);
@@ -374,6 +377,10 @@ public class OrderFragment extends Fragment {
                     if (pushOrderIdSet.contains(mIntOrderId + "")) {
                         showNew = true;
                     }
+                    boolean showModify = false;
+                    if (1 == objBean.getIs_modified()) {
+                        showModify = true;
+                    }
 
                     mLongDoorTime = objBean.getDoorTime();
 
@@ -389,7 +396,7 @@ public class OrderFragment extends Fragment {
                             , objBean.getRemoveWiredNum()
                             , objBean.getRemoveWirelessNum()
                             , objBean.getReviseFlag()
-                            , showNew));
+                            , showNew, showModify, mIntOrderId));
                 }
 
                 myHandler.sendEmptyMessage(Data.MSG_1);
@@ -482,6 +489,11 @@ public class OrderFragment extends Fragment {
         });
 
         dialog.show();
+    }
+
+    //  通知后台，订单已查看
+    private void viewModify(int orderId) {
+        mNetworkManager.viewModify(orderId);
     }
 
     //  订单已被取消对话框

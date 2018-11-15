@@ -97,6 +97,7 @@ public class WorkerOrderBean {
         private int wirelessNum;
         private int removeWiredNum;
         private int orderType;
+        private int is_modified;
         private int wiredNum;
         private int orderStatus;
         private int removeWirelessNum;
@@ -244,6 +245,14 @@ public class WorkerOrderBean {
 
         public void setOrderId(int orderId) {
             this.orderId = orderId;
+        }
+
+        public int getIs_modified() {
+            return is_modified;
+        }
+
+        public void setIs_modified(int is_modified) {
+            this.is_modified = is_modified;
         }
     }
 }

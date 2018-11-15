@@ -79,7 +79,7 @@ public class OrderAdapter extends BaseAdapter {
 
             viewHolder.tvModify = contentView.findViewById(R.id.tv_item_order_modify);
             viewHolder.tvLate = contentView.findViewById(R.id.tv_item_order_late);
-            viewHolder.ivNew = contentView.findViewById(R.id.iv_item_order_new);
+            viewHolder.ivNew = contentView.findViewById(R.id.iv_item_order_new_or_modify);
 
             contentView.setTag(viewHolder);
         } else {
@@ -106,6 +106,13 @@ public class OrderAdapter extends BaseAdapter {
 
         if (data.isShowNew()) {
             viewHolder.ivNew.setVisibility(View.VISIBLE);
+            viewHolder.ivNew.setImageResource(R.drawable.ic_new);
+        } else {
+            viewHolder.ivNew.setVisibility(View.GONE);
+        }
+        if (data.isShowModify()) {
+            viewHolder.ivNew.setVisibility(View.VISIBLE);
+            viewHolder.ivNew.setImageResource(R.drawable.ic_modify);
         } else {
             viewHolder.ivNew.setVisibility(View.GONE);
         }

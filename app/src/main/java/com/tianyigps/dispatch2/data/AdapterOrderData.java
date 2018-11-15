@@ -12,6 +12,8 @@ public class AdapterOrderData {
     private int wireRemove, wirelessRemove;
     private int reviseFlag;
     private boolean showNew;
+    private boolean showModify;
+    private int orderId;
 
     public AdapterOrderData(String name, long time, String address
             , String id, String phoneName, String phoneNumber, int orderType
@@ -44,7 +46,8 @@ public class AdapterOrderData {
     }
 
     public AdapterOrderData(String id, String name, String phoneNumber, String phoneName, long time, String address, int orderType
-            , int lineNumber, int linelessNumber, int wireRemove, int wirelessRemove, int reviseFlag, boolean showNew) {
+            , int lineNumber, int linelessNumber, int wireRemove, int wirelessRemove, int reviseFlag
+            , boolean showNew, boolean showModify, int orderId) {
         this.id = id;
         this.name = name;
         this.phoneNumber = phoneNumber;
@@ -58,6 +61,8 @@ public class AdapterOrderData {
         this.wirelessRemove = wirelessRemove;
         this.reviseFlag = reviseFlag;
         this.showNew = showNew;
+        this.showModify = showModify;
+        this.orderId = orderId;
     }
 
     public String getId() {
@@ -162,5 +167,21 @@ public class AdapterOrderData {
 
     public void setShowNew(boolean showNew) {
         this.showNew = showNew;
+    }
+
+    public boolean isShowModify() {
+        return showModify;
+    }
+
+    public void setShowModify(boolean showModify) {
+        this.showModify = showModify;
+    }
+
+    public int getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(int orderId) {
+        this.orderId = orderId;
     }
 }

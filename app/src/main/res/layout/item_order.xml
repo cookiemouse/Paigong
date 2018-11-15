@@ -112,6 +112,8 @@
         android:layout_toEndOf="@+id/iv_item_order_address"
         android:layout_toRightOf="@+id/iv_item_order_address"
         android:padding="@dimen/dp_2"
+        android:paddingRight="@dimen/dp_8"
+        android:paddingEnd="@dimen/dp_8"
         android:text="address" />
 
     <View
@@ -120,6 +122,8 @@
         android:layout_height="@dimen/px_1"
         android:layout_below="@id/tv_item_order_address"
         android:layout_marginTop="@dimen/dp_8"
+        android:layout_marginRight="@dimen/dp_8"
+        android:layout_marginEnd="@dimen/dp_8"
         android:background="@color/color_cut_line_gray" />
 
     <LinearLayout
@@ -130,6 +134,8 @@
         android:layout_alignParentStart="true"
         android:layout_below="@+id/line_item_order_1"
         android:layout_marginTop="@dimen/dp_12"
+        android:layout_marginRight="@dimen/dp_8"
+        android:layout_marginEnd="@dimen/dp_8"
         android:gravity="end|center_vertical"
         android:orientation="horizontal">
 
@@ -174,13 +180,11 @@
     </LinearLayout>
 
     <ImageView
-        android:id="@+id/iv_item_order_new"
-        android:layout_width="@dimen/dp_24"
-        android:layout_height="@dimen/dp_24"
+        android:id="@+id/iv_item_order_new_or_modify"
+        android:layout_width="@dimen/dp_32"
+        android:layout_height="@dimen/dp_32"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:layout_marginEnd="@dimen/dp_32"
-        android:layout_marginRight="@dimen/dp_32"
-        android:src="@color/colorOrange" />
+        android:src="@drawable/ic_new" />
 </RelativeLayout>

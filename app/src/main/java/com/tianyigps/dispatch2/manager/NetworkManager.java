@@ -1524,4 +1524,29 @@ public class NetworkManager {
         });
     }
 
+    //  通后后台订单已查看
+    public void viewModify(int orderId) {
+        FormBody.Builder builder = new FormBody.Builder();
+        builder.add("orderId", orderId + "");
+        Request request = new Request.Builder()
+                .url(Urls.URL_VIEW_MODIFY)
+                .post(builder.build())
+                .build();
+
+        Log.i(TAG, "viewModify: url-->" + request.url());
+
+        Call call = mOkHttpClient.newCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.i(TAG, "onFailure: ");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                Log.i(TAG, "onResponse: ");
+            }
+        });
+    }
+
 }
