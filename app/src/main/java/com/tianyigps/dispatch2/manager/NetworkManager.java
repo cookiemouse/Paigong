@@ -395,6 +395,35 @@ public class NetworkManager {
         });
     }
 
+    //  获取安装工程师进行中的订单   8
+    public void getWorkerOrderHanding(int eid, String token, String userName, String status) {
+        Request.Builder builder = new Request.Builder();
+        builder.url(Urls.URL_WORKER_ORDER_HANDING + "eid=" + eid
+                + "&userName=" + userName
+                + "&status=" + status
+                + "&token=" + token);
+        mRequest = builder.build();
+        Log.i(TAG, "getWorkerOrderHanding: url-->" + mRequest.url());
+        Call call = mOkHttpClient.newCall(mRequest);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                if (null == mOnGetWorkerOrderHandingListener) {
+                    throw new NullPointerException("OnGetWorkerOrderHandingListener is null");
+                }
+                mOnGetWorkerOrderHandingListener.onFailure();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (null == mOnGetWorkerOrderHandingListener) {
+                    throw new NullPointerException("OnGetWorkerOrderHandingListener is null");
+                }
+                mOnGetWorkerOrderHandingListener.onSuccess(response.body().string());
+            }
+        });
+    }
+
     public void setGetWorkerOrderHandingListener(OnGetWorkerOrderHandingListener listener) {
         this.mOnGetWorkerOrderHandingListener = listener;
     }

@@ -16,7 +16,6 @@
         android:id="@+id/tv_item_popup_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/colorBlueTheme"
-        android:text="1"/>
+        android:textColor="@color/colorBlueTheme"/>
 
 </LinearLayout>

@@ -14,10 +14,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -27,9 +29,13 @@ import com.tianyigps.dispatch2.activity.ManagerFragmentContentActivity;
 import com.tianyigps.dispatch2.activity.OrderDetailsActivity;
 import com.tianyigps.dispatch2.adapter.ChoicePhoneAdapter;
 import com.tianyigps.dispatch2.adapter.HandingAdapter;
+import com.tianyigps.dispatch2.adapter.Popup2Adapter;
+import com.tianyigps.dispatch2.adapter.PopupAdapter;
 import com.tianyigps.dispatch2.bean.StartHandingBean;
 import com.tianyigps.dispatch2.bean.WorkerHandingBean;
+import com.tianyigps.dispatch2.data.Adapter2PopupData;
 import com.tianyigps.dispatch2.data.AdapterHandingData;
+import com.tianyigps.dispatch2.data.AdapterPopupData;
 import com.tianyigps.dispatch2.data.Data;
 import com.tianyigps.dispatch2.dialog.LoadingDialogFragmentV4;
 import com.tianyigps.dispatch2.interfaces.OnContactSiteListener;
@@ -79,6 +85,9 @@ public class HandingFragment extends Fragment implements View.OnClickListener {
 
     //  LoadingFragment
     private LoadingDialogFragmentV4 mLoadingDialogFragment;
+
+    //  popup
+    private List<Adapter2PopupData> mAdapterPopupDataList;
 
     @Nullable
     @Override
@@ -138,6 +147,9 @@ public class HandingFragment extends Fragment implements View.OnClickListener {
         mListViewHanding = view.findViewById(R.id.lv_fragment_handling);
 
         mAdapterHandingDataList = new ArrayList<>();
+        mAdapterPopupDataList = new ArrayList<>();
+        mAdapterPopupDataList.add(new Adapter2PopupData("进行中"));
+        mAdapterPopupDataList.add(new Adapter2PopupData("待审核"));
 
         mHandingAdapter = new HandingAdapter(getContext(), mAdapterHandingDataList);
         mListViewHanding.setAdapter(mHandingAdapter);
@@ -165,7 +177,7 @@ public class HandingFragment extends Fragment implements View.OnClickListener {
     private void initTitle() {
         mTextViewTitle.setText(R.string.handling);
         mImageViewTitleLeft.setImageResource(R.drawable.ic_switch_account);
-        mImageViewTitleRight.setVisibility(View.GONE);
+        mImageViewTitleRight.setImageResource(R.drawable.ic_popup_window);
     }
 
     private void setEventListener() {
@@ -188,6 +200,13 @@ public class HandingFragment extends Fragment implements View.OnClickListener {
                 startActivity(intent);
                 getActivity().overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
                 getActivity().finish();
+            }
+        });
+
+        mImageViewTitleRight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showPopupWindow();
             }
         });
 
@@ -404,6 +423,51 @@ public class HandingFragment extends Fragment implements View.OnClickListener {
         });
 
         dialog.show();
+    }
+
+    //显示popupWindow
+    private void showPopupWindow() {
+
+        View viewPop = LayoutInflater.from(getContext()).inflate(R.layout.view_popup_window, null);
+
+        ListView listView = viewPop.findViewById(R.id.lv_view_popup);
+
+        final PopupWindow popupWindow = new PopupWindow(viewPop
+                , ViewGroup.LayoutParams.WRAP_CONTENT
+                , ViewGroup.LayoutParams.WRAP_CONTENT
+                , true);
+
+        Popup2Adapter popupAdapter = new Popup2Adapter(getContext(), mAdapterPopupDataList);
+        listView.setAdapter(popupAdapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                mSwipeRefreshLayout.setRefreshing(true);
+                String status = (i + 1) + "";
+                mNetworkManager.getWorkerOrderHanding(eid, token, userName, status);
+//                mNetworkManager.getPended(jobNo, token, "" + status, "", "", userName);
+                popupWindow.dismiss();
+            }
+        });
+
+        setBackgroundAlpha(0.5f);
+
+        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                setBackgroundAlpha(1.0f);
+            }
+        });
+
+        popupWindow.showAsDropDown(mImageViewTitleRight);
+    }
+
+    //  显示popup时背景的改变
+    private void setBackgroundAlpha(float alpha) {
+        WindowManager.LayoutParams lp = getActivity().getWindow().getAttributes();
+        lp.alpha = alpha;
+        getActivity().getWindow().setAttributes(lp);
     }
 
     //  显示信息Dialog
