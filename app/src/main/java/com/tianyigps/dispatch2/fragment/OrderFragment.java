@@ -280,6 +280,8 @@ public class OrderFragment extends Fragment {
             public void onMapClick(int position) {
                 String address = mAdapterOrderDataList.get(position).getAddress();
                 viewModify(mAdapterOrderDataList.get(position).getOrderId());
+                mAdapterOrderDataList.get(position).setShowModify(false);
+                mOrderAdapter.notifyDataSetChanged();
                 if (!ChoiceMapU.toMap(getContext(), address)) {
                     Bundle bundle = new Bundle();
                     bundle.putString(DATA_INTENT_ADDRESS, mAdapterOrderDataList.get(position).getAddress());
@@ -292,12 +294,16 @@ public class OrderFragment extends Fragment {
             public void onSignClick(int position) {
                 orderNoPosition = mAdapterOrderDataList.get(position).getId();
                 viewModify(mAdapterOrderDataList.get(position).getOrderId());
+                mAdapterOrderDataList.get(position).setShowModify(false);
+                mOrderAdapter.notifyDataSetChanged();
                 showAskSignDialog();
             }
 
             @Override
             public void onItemClick(int position) {
                 viewModify(mAdapterOrderDataList.get(position).getOrderId());
+                mAdapterOrderDataList.get(position).setShowModify(false);
+                mOrderAdapter.notifyDataSetChanged();
                 Intent intent = new Intent(getActivity(), OrderDetailsActivity.class);
                 intent.putExtra(Data.DATA_INTENT_ORDER_NO, mAdapterOrderDataList.get(position).getId());
                 intent.putExtra(Data.DATA_INTENT_ORDER_STATUS, mIntOrderStaus);
@@ -308,6 +314,8 @@ public class OrderFragment extends Fragment {
             public void onCallClick(int position) {
                 AdapterOrderData data = mAdapterOrderDataList.get(position);
                 viewModify(data.getOrderId());
+                data.setShowModify(false);
+                mOrderAdapter.notifyDataSetChanged();
 
                 //  联系现场
                 mNetworkManager.contactSite(eid, token, data.getId(), data.getPhoneName(), userName);
