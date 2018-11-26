@@ -281,6 +281,7 @@ public class OrderFragment extends Fragment {
                 String address = mAdapterOrderDataList.get(position).getAddress();
                 viewModify(mAdapterOrderDataList.get(position).getOrderId());
                 mAdapterOrderDataList.get(position).setShowModify(false);
+                mAdapterOrderDataList.get(position).setShowNew(false);
                 mOrderAdapter.notifyDataSetChanged();
                 if (!ChoiceMapU.toMap(getContext(), address)) {
                     Bundle bundle = new Bundle();
@@ -295,6 +296,7 @@ public class OrderFragment extends Fragment {
                 orderNoPosition = mAdapterOrderDataList.get(position).getId();
                 viewModify(mAdapterOrderDataList.get(position).getOrderId());
                 mAdapterOrderDataList.get(position).setShowModify(false);
+                mAdapterOrderDataList.get(position).setShowNew(false);
                 mOrderAdapter.notifyDataSetChanged();
                 showAskSignDialog();
             }
@@ -303,6 +305,7 @@ public class OrderFragment extends Fragment {
             public void onItemClick(int position) {
                 viewModify(mAdapterOrderDataList.get(position).getOrderId());
                 mAdapterOrderDataList.get(position).setShowModify(false);
+                mAdapterOrderDataList.get(position).setShowNew(false);
                 mOrderAdapter.notifyDataSetChanged();
                 Intent intent = new Intent(getActivity(), OrderDetailsActivity.class);
                 intent.putExtra(Data.DATA_INTENT_ORDER_NO, mAdapterOrderDataList.get(position).getId());
@@ -315,6 +318,7 @@ public class OrderFragment extends Fragment {
                 AdapterOrderData data = mAdapterOrderDataList.get(position);
                 viewModify(data.getOrderId());
                 data.setShowModify(false);
+                data.setShowNew(false);
                 mOrderAdapter.notifyDataSetChanged();
 
                 //  联系现场
@@ -502,6 +506,7 @@ public class OrderFragment extends Fragment {
     //  通知后台，订单已查看
     private void viewModify(int orderId) {
         mNetworkManager.viewModify(orderId);
+        mSharedpreferenceManager.deletePushOrderId(orderId + "");
     }
 
     //  订单已被取消对话框
