@@ -1666,6 +1666,12 @@ public class OperateRepairActivity extends BaseActivity implements View.OnClickL
         }
         View viewPic = LayoutInflater.from(this).inflate(R.layout.view_dialog_pic, null);
         ImageView ivPic = viewPic.findViewById(R.id.iv_dialog_view_pic);
+        ivPic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mViewDialogPic.dismiss();
+            }
+        });
         Picasso.get().load(uri).into(ivPic);
         mViewDialogPic = ViewDialog.with(this)
                 .setView(viewPic)
