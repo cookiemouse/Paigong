@@ -107,10 +107,12 @@ public class OrderAdapter extends BaseAdapter {
         if (data.isShowNew()) {
             viewHolder.ivNew.setVisibility(View.VISIBLE);
             viewHolder.ivNew.setImageResource(R.drawable.ic_new);
-        }else if (data.isShowModify()) {
+        }
+        if (data.isShowModify()) {
             viewHolder.ivNew.setVisibility(View.VISIBLE);
             viewHolder.ivNew.setImageResource(R.drawable.ic_modify);
-        } else {
+        }
+        if (!data.isShowNew() && !data.isShowModify()) {
             viewHolder.ivNew.setVisibility(View.GONE);
         }
 
